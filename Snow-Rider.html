@@ -1,55 +1,42 @@
-
-<!-- Ultimate Game Stash file--> 
-<!-- For the regularly updating doc go to https://docs.google.com/document/d/1_FmH3BlSBQI7FGgAQL59-ZPe8eCxs35wel6JUyVaG8Q/ -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Idle Breakout</title>
+  <title>Game Hub</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      background: #111;
+      background: #222;
       color: white;
+      text-align: center;
     }
-    .back-btn {
+    h1 {
+      margin-top: 30px;
+    }
+    .game-btn {
       display: inline-block;
-      margin-top: 20px;
-      padding: 10px 20px;
+      margin: 20px;
+      padding: 15px 25px;
+      font-size: 18px;
       background: #4CAF50;
       color: white;
       text-decoration: none;
       border-radius: 8px;
       transition: background 0.3s;
     }
-    .back-btn:hover {
+    .game-btn:hover {
       background: #45a049;
     }
   </style>
 </head>
 <body>
 
-  <h1>Snow Rider</h1>
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/gh/Vrkids2009/snowrider3d@6b7c2b9167b592528b221428414e63f06c4640b9/TemplateData/style.css">
-<script
-	src="https://cdn.jsdelivr.net/gh/Vrkids2009/snowrider3d@6b7c2b9167b592528b221428414e63f06c4640b9/TemplateData/UnityProgress.js">
-</script>
-<script
-	src="https://cdn.jsdelivr.net/gh/Vrkids2009/snowrider3d@6b7c2b9167b592528b221428414e63f06c4640b9/Build/UnityLoader.js">
-</script>
-<script>
-	var gameInstance = UnityLoader.instantiate("gameContainer", "https://cdn.jsdelivr.net/gh/Vrkids2009/snowrider3d@6b7c2b9167b592528b221428414e63f06c4640b9/Build/SnowRider3D-gd-1.json", {onProgress: UnityProgress,Module:{onRuntimeInitialized: function() {UnityProgress(gameInstance, "complete")}}}); 
-</script>
-<div class="webgl-content">
-	<div id="gameContainer" style="width: 100%; height: 100%; margin: auto"></div>
-</div>
+  <h1>🎮 Welcome to My Game Hub 🎮</h1>
+  <p>Select a game to play:</p>
 
-  <br>
-  <a href="index.html" class="back-btn">⬅ Back to Home</a>
+  <a href="snowrider.html" class="game-btn">Snow Rider</a>
+  <a href="idle-breakout.html" class="game-btn">Idle Breakout</a>
+  <a href="swords-and-sandals.html" class="game-btn">Swords and Sandals</a>
 
 </body>
 </html>
-
