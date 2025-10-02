@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mathline Games Hub</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #121212;
+      color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #1e1e1e;
+      padding: 20px;
+      border-bottom: 2px solid #4cafef;
+    }
+    h1 {
+      margin: 0;
+      font-size: 2.5em;
+      color: #4cafef;
+    }
+    p {
+      color: #cccccc;
+    }
+    .game-list {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      gap: 20px;
+      padding: 20px;
+    }
+    .game-card {
+      background: #1e1e1e;
+      border: 2px solid #4cafef;
+      border-radius: 12px;
+      padding: 20px;
+      width: 200px;
+      transition: transform 0.2s, background 0.2s;
+    }
+    .game-card:hover {
+      transform: scale(1.05);
+      background: #2a2a2a;
+    }
+    .game-card a {
+      text-decoration: none;
+      color: #4cafef;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    footer {
+      margin-top: 50px;
+      padding: 20px;
+      background: #1e1e1e;
+      border-top: 2px solid #4cafef;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎮 Mathline Games Hub 🎮</h1>
+    <p>Select a game to play!</p>
+  </header>
+
+  <div class="game-list">
+    <div class="game-card">
+      <a href="retro.html">Retro Bowl</a>
+    </div>
+    <div class="game-card">
+      <a href="pong.html">Pong</a>
+    </div>
+    <div class="game-card">
+      <a href="snake.html">Snake</a>
+    </div>
+    <div class="game-card">
+      <a href="tetris.html">Tetris</a>
+    </div>
+  </div>
+
+  <footer>
+    <p>Made with ❤️ on GitHub Pages</p>
+  </footer>
+</body>
+</html>
