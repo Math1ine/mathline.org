@@ -65,6 +65,18 @@
       margin-top: 10px;
     }
 
+    /* Glowing Request Card */
+    .glow-card {
+      background: linear-gradient(145deg, #2a2a40, #1e1e2e);
+      box-shadow: 0 0 20px #4cafef, 0 0 40px #7b61ff;
+      border: 2px solid #4cafef;
+    }
+
+    .glow-card:hover {
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 0 30px #4cafef, 0 0 60px #7b61ff;
+    }
+
     /* Back button */
     .back-btn {
       display: none;
@@ -134,7 +146,16 @@
       <span> Snow Rider</span>
     </div>
     <div class="game-card" onclick="loadGame('swords-and-sandals.html')">
-      <span>⚔️ Swords & Sandals</span>
+      <span> Swords & Sandals</span>
+    </div>
+
+    <!-- External Link Card (Glowing) -->
+    <div class="game-card glow-card">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
+         target="_blank"
+         style="text-decoration:none; color:inherit; display:block;">
+        <span> Request a Game</span>
+      </a>
     </div>
   </div>
 
@@ -165,12 +186,6 @@
       frame.src = "";
       frame.style.display = "none";
     }
-<div class="game-card">
-  <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing&ouid=116674208063438314695" target="_blank" style="text-decoration:none; color:inherit;">
-    <span> To request games click here </span>
-  </a>
-</div>
-    
   </script>
 </body>
 </html>
