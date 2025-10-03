@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mathline Games Hub</title>
+  <title>Game Hub</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -13,78 +13,95 @@
       margin: 0;
       padding: 0;
     }
+
     header {
       background: #1e1e1e;
-      padding: 30px 20px;
+      padding: 25px;
       border-bottom: 3px solid #4cafef;
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
-    h1 {
+
+    header h1 {
       margin: 0;
       font-size: 2.5em;
       color: #4cafef;
     }
-    p {
-      color: #cccccc;
-      font-size: 1.2em;
+
+    header p {
+      color: #ccc;
+      font-size: 1.1em;
     }
+
+    /* Game menu grid */
     .game-list {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      margin-top: 40px;
       gap: 25px;
-      padding: 20px;
+      padding: 40px 20px;
     }
+
     .game-card {
       background: #1e1e1e;
       border: 2px solid #4cafef;
-      border-radius: 16px;
-      padding: 25px 15px;
+      border-radius: 14px;
       width: 220px;
-      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      padding: 25px;
       cursor: pointer;
+      transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
+
     .game-card:hover {
       transform: translateY(-6px);
       background: #2a2a2a;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
     }
+
     .game-card span {
-      color: #4cafef;
       font-size: 1.3em;
       font-weight: bold;
+      color: #4cafef;
       display: block;
+      margin-top: 10px;
     }
+
+    /* Back button */
     .back-btn {
       display: none;
-      margin: 20px auto;
-      padding: 12px 20px;
-      font-size: 16px;
+      position: fixed;
+      top: 20px;
+      left: 20px;
       background: #4cafef;
-      color: white;
+      color: #fff;
+      border: none;
       border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 16px;
       cursor: pointer;
       transition: background 0.3s, transform 0.2s;
-      border: none;
+      z-index: 1000;
     }
+
     .back-btn:hover {
       background: #2196f3;
       transform: scale(1.05);
     }
+
+    /* Game frame */
     iframe {
       display: none;
-      width: 90%;
-      height: 600px;
-      margin-top: 20px;
+      width: 95%;
+      height: 650px;
+      margin: 40px auto;
       border: 3px solid #4cafef;
       border-radius: 12px;
-      background: white;
+      background: #fff;
     }
+
     footer {
-      margin-top: 60px;
-      padding: 25px;
+      margin-top: 50px;
+      padding: 20px;
       background: #1e1e1e;
       border-top: 3px solid #4cafef;
       color: #888;
@@ -94,11 +111,11 @@
 </head>
 <body>
   <header>
-    <h1>🎮 Welcome to Mathline Games Hub 🎮</h1>
-    <p>Pick a game below and have fun!</p>
+    <h1>🎮 Game Hub 🎮</h1>
+    <p>Select a game to start playing!</p>
   </header>
 
-  <!-- Game List -->
+  <!-- Game Menu -->
   <div class="game-list" id="game-list">
     <div class="game-card" onclick="loadGame('retro.html')">
       <span>🎮 Retro Bowl</span>
@@ -121,13 +138,13 @@
   </div>
 
   <!-- Back Button -->
-  <button class="back-btn" id="back-btn" onclick="goBack()">⬅ Back to Game Hub</button>
+  <button class="back-btn" id="back-btn" onclick="goBack()">⬅ Back</button>
 
-  <!-- Game Frame -->
+  <!-- Game Display -->
   <iframe id="game-frame"></iframe>
 
   <footer>
-    <p>Made with ❤️ and 🎮 for all Mathline players — hosted on GitHub Pages</p>
+    <p>Made with ❤️ for players — hosted on GitHub Pages</p>
   </footer>
 
   <script>
@@ -137,14 +154,11 @@
       const frame = document.getElementById("game-frame");
       frame.src = url;
       frame.style.display = "block";
+      window.scrollTo(0,0); // auto-scroll to top when game loads
     }
+
     function goBack() {
       document.getElementById("game-list").style.display = "flex";
       document.getElementById("back-btn").style.display = "none";
       const frame = document.getElementById("game-frame");
       frame.src = "";
-      frame.style.display = "none";
-    }
-  </script>
-</body>
-</html>
