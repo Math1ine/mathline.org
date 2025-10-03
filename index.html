@@ -8,28 +8,28 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
-      color: #f0f0f0;
+      background: linear-gradient(135deg, #0f0f1e, #1a1a3a);
+      color: #f8f8f8;
       margin: 0;
       padding: 0;
     }
 
     header {
-      background: #1e1e1e;
+      background: linear-gradient(90deg, #4cafef, #7b61ff);
       padding: 25px;
-      border-bottom: 3px solid #4cafef;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+      border-bottom: 3px solid #333;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
     }
 
     header h1 {
       margin: 0;
-      font-size: 2.5em;
-      color: #4cafef;
+      font-size: 2.8em;
+      color: #fff;
     }
 
     header p {
-      color: #ccc;
-      font-size: 1.1em;
+      color: #e0e0e0;
+      font-size: 1.2em;
     }
 
     /* Game menu grid */
@@ -37,25 +37,24 @@
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 25px;
+      gap: 30px;
       padding: 40px 20px;
     }
 
     .game-card {
-      background: #1e1e1e;
-      border: 2px solid #4cafef;
-      border-radius: 14px;
-      width: 220px;
-      padding: 25px;
+      background: linear-gradient(145deg, #2a2a40, #1e1e2e);
+      border: none;
+      border-radius: 16px;
+      width: 230px;
+      padding: 30px 20px;
       cursor: pointer;
-      transition: transform 0.25s, background 0.25s, box-shadow 0.25s;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.25s, box-shadow 0.25s;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.4);
     }
 
     .game-card:hover {
-      transform: translateY(-6px);
-      background: #2a2a2a;
-      box-shadow: 0 8px 18px rgba(0,0,0,0.5);
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6), 0 0 20px #7b61ff;
     }
 
     .game-card span {
@@ -72,20 +71,21 @@
       position: fixed;
       top: 20px;
       left: 20px;
-      background: #4cafef;
+      background: linear-gradient(90deg, #4cafef, #7b61ff);
       color: #fff;
       border: none;
       border-radius: 8px;
-      padding: 10px 18px;
+      padding: 10px 20px;
       font-size: 16px;
       cursor: pointer;
-      transition: background 0.3s, transform 0.2s;
+      transition: transform 0.2s, opacity 0.3s;
       z-index: 1000;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .back-btn:hover {
-      background: #2196f3;
-      transform: scale(1.05);
+      transform: scale(1.07);
+      opacity: 0.9;
     }
 
     /* Game frame */
@@ -94,17 +94,18 @@
       width: 95%;
       height: 650px;
       margin: 40px auto;
-      border: 3px solid #4cafef;
-      border-radius: 12px;
-      background: #fff;
+      border: none;
+      border-radius: 14px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+      background: #000;
     }
 
     footer {
-      margin-top: 50px;
-      padding: 20px;
-      background: #1e1e1e;
+      margin-top: 60px;
+      padding: 25px;
+      background: #1b1b2e;
       border-top: 3px solid #4cafef;
-      color: #888;
+      color: #bbb;
       font-size: 0.95em;
     }
   </style>
@@ -126,11 +127,11 @@
     <div class="game-card" onclick="loadGame('snake.html')">
       <span>🐍 Snake</span>
     </div>
-    <div class="game-card" onclick="loadGame('tetris.html')">
-      <span>🧩 Tetris</span>
+    <div class="game-card" onclick="loadGame('Retro-Bowl.html')">
+      <span> Retro Bowl (Alt)</span>
     </div>
     <div class="game-card" onclick="loadGame('snow-rider.html')">
-      <span>⛷️ Snow Rider</span>
+      <span> Snow Rider</span>
     </div>
     <div class="game-card" onclick="loadGame('swords-and-sandals.html')">
       <span>⚔️ Swords & Sandals</span>
@@ -162,3 +163,8 @@
       document.getElementById("back-btn").style.display = "none";
       const frame = document.getElementById("game-frame");
       frame.src = "";
+      frame.style.display = "none";
+    }
+  </script>
+</body>
+</html>
