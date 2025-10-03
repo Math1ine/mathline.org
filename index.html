@@ -8,97 +8,94 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      background: #121212;
+      background: linear-gradient(135deg, #0f0f0f, #1a1a1a);
       color: #f0f0f0;
       margin: 0;
       padding: 0;
     }
     header {
       background: #1e1e1e;
-      padding: 20px;
-      border-bottom: 2px solid #4cafef;
+      padding: 30px 20px;
+      border-bottom: 3px solid #4cafef;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.4);
     }
     h1 {
       margin: 0;
-      font-size: 2.5em;
+      font-size: 2.8em;
       color: #4cafef;
     }
     p {
       color: #cccccc;
+      font-size: 1.2em;
     }
     .game-list {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       margin-top: 40px;
-      gap: 20px;
+      gap: 25px;
       padding: 20px;
     }
     .game-card {
       background: #1e1e1e;
       border: 2px solid #4cafef;
-      border-radius: 12px;
-      padding: 20px;
-      width: 200px;
-      transition: transform 0.2s, background 0.2s;
+      border-radius: 16px;
+      padding: 25px 15px;
+      width: 220px;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
     }
     .game-card:hover {
-      transform: scale(1.05);
+      transform: translateY(-6px);
       background: #2a2a2a;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
     .game-card a {
       text-decoration: none;
       color: #4cafef;
-      font-size: 1.2em;
+      font-size: 1.3em;
       font-weight: bold;
+      display: block;
     }
     footer {
-      margin-top: 50px;
-      padding: 20px;
+      margin-top: 60px;
+      padding: 25px;
       background: #1e1e1e;
-      border-top: 2px solid #4cafef;
+      border-top: 3px solid #4cafef;
       color: #888;
+      font-size: 0.95em;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>🎮 Mathline Games Hub 🎮</h1>
-    <p>Select a game to play!</p>
+    <h1>🎮 Welcome to Mathline Games Hub 🎮</h1>
+    <p>Take a break, have some fun, and pick your favorite game below 👇</p>
   </header>
 
   <div class="game-list">
     <div class="game-card">
-      <a href="retro.html">Retro Bowl</a>
+      <a href="retro.html">🎮 Retro Bowl</a>
     </div>
     <div class="game-card">
-      <a href="pong.html">Pong</a>
+      <a href="pong.html">🏓 Pong</a>
     </div>
     <div class="game-card">
-      <a href="snake.html">Snake</a>
+      <a href="snake.html">🐍 Snake</a>
     </div>
     <div class="game-card">
-      <a href="tetris.html">Tetris</a>
+      <a href="tetris.html">🧩 Tetris</a>
+    </div>
+    <div class="game-card">
+      <a href="snow-rider.html"> Snow Rider</a>
+    </div>
+    <div class="game-card">
+      <a href="swords-and-sandals.html"> Swords & Sandals</a>
     </div>
   </div>
-  <div class="game-list">
-  <div class="game-card">
-    <a href="retro.html">🎮 Play Retro Bowl</a>
-  </div>
-  <div class="game-card">
-    <a href="pong.html">🏓 Play Pong</a>
-  </div>
-  <div class="game-card">
-    <a href="Snow-Rider.html"> play Snow Rider</a>
-  </div>
-  <div class="game-card">
-    <a href="swords-and-sandlas.html"> play Swords and sandals</a>
-  </div>
-</div>
 
   <footer>
-    <p>Made with ❤️ on GitHub Pages</p>
+    <p>Made with ❤️ and 🎮 for all Mathline players — hosted on GitHub Pages</p>
   </footer>
 </body>
 </html>
-
