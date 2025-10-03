@@ -21,7 +21,7 @@
     }
     h1 {
       margin: 0;
-      font-size: 2.8em;
+      font-size: 2.5em;
       color: #4cafef;
     }
     p {
@@ -44,18 +44,43 @@
       width: 220px;
       transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      cursor: pointer;
     }
     .game-card:hover {
       transform: translateY(-6px);
       background: #2a2a2a;
       box-shadow: 0 6px 16px rgba(0,0,0,0.5);
     }
-    .game-card a {
-      text-decoration: none;
+    .game-card span {
       color: #4cafef;
       font-size: 1.3em;
       font-weight: bold;
       display: block;
+    }
+    .back-btn {
+      display: none;
+      margin: 20px auto;
+      padding: 12px 20px;
+      font-size: 16px;
+      background: #4cafef;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+      border: none;
+    }
+    .back-btn:hover {
+      background: #2196f3;
+      transform: scale(1.05);
+    }
+    iframe {
+      display: none;
+      width: 90%;
+      height: 600px;
+      margin-top: 20px;
+      border: 3px solid #4cafef;
+      border-radius: 12px;
+      background: white;
     }
     footer {
       margin-top: 60px;
@@ -70,32 +95,56 @@
 <body>
   <header>
     <h1>🎮 Welcome to Mathline Games Hub 🎮</h1>
-    <p>Take a break, have some fun, and pick your favorite game below 👇</p>
+    <p>Pick a game below and have fun!</p>
   </header>
 
-  <div class="game-list">
-    <div class="game-card">
-      <a href="retro.html">🎮 Retro Bowl</a>
+  <!-- Game List -->
+  <div class="game-list" id="game-list">
+    <div class="game-card" onclick="loadGame('retro.html')">
+      <span>🎮 Retro Bowl</span>
     </div>
-    <div class="game-card">
-      <a href="pong.html">🏓 Pong</a>
+    <div class="game-card" onclick="loadGame('pong.html')">
+      <span>🏓 Pong</span>
     </div>
-    <div class="game-card">
-      <a href="snake.html">🐍 Snake</a>
+    <div class="game-card" onclick="loadGame('snake.html')">
+      <span>🐍 Snake</span>
     </div>
-    <div class="game-card">
-      <a href="tetris.html">🧩 Tetris</a>
+    <div class="game-card" onclick="loadGame('tetris.html')">
+      <span>🧩 Tetris</span>
     </div>
-    <div class="game-card">
-      <a href="snow-rider.html"> Snow Rider</a>
+    <div class="game-card" onclick="loadGame('snow-rider.html')">
+      <span>⛷️ Snow Rider</span>
     </div>
-    <div class="game-card">
-      <a href="swords-and-sandals.html"> Swords & Sandals</a>
+    <div class="game-card" onclick="loadGame('swords-and-sandals.html')">
+      <span>⚔️ Swords & Sandals</span>
     </div>
   </div>
+
+  <!-- Back Button -->
+  <button class="back-btn" id="back-btn" onclick="goBack()">⬅ Back to Game Hub</button>
+
+  <!-- Game Frame -->
+  <iframe id="game-frame"></iframe>
 
   <footer>
     <p>Made with ❤️ and 🎮 for all Mathline players — hosted on GitHub Pages</p>
   </footer>
+
+  <script>
+    function loadGame(url) {
+      document.getElementById("game-list").style.display = "none";
+      document.getElementById("back-btn").style.display = "inline-block";
+      const frame = document.getElementById("game-frame");
+      frame.src = url;
+      frame.style.display = "block";
+    }
+    function goBack() {
+      document.getElementById("game-list").style.display = "flex";
+      document.getElementById("back-btn").style.display = "none";
+      const frame = document.getElementById("game-frame");
+      frame.src = "";
+      frame.style.display = "none";
+    }
+  </script>
 </body>
 </html>
