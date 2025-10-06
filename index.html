@@ -5,85 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Math Line.org</title>
   <style>
+    /* --- General Page Styling --- */
     body {
-      font-family: Arial, sans-serif;
+      font-family: "Poppins", sans-serif;
       text-align: center;
-      background: linear-gradient(135deg, #0f0f1e, #1a1a3a);
+      background: linear-gradient(135deg, #1a0000, #2b0000, #000);
+      background-size: 400% 400%;
+      animation: moveBackground 15s ease infinite;
       color: #f8f8f8;
       margin: 0;
       padding: 0;
+      overflow-x: hidden;
+    }
+
+    @keyframes moveBackground {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
     header {
-      background: linear-gradient(90deg, #4cafef, #7b61ff);
+      background: linear-gradient(90deg, #6a0f1a, #3b0a0e);
       padding: 25px;
-      border-bottom: 3px solid #333;
+      border-bottom: 3px solid #8b0000;
       box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      position: sticky;
+      top: 0;
+      z-index: 999;
     }
 
     header h1 {
       margin: 0;
       font-size: 2.8em;
-      color: #fff;
+      color: #ff4455;
+      letter-spacing: 2px;
     }
 
     header p {
-      color: #e0e0e0;
+      color: #f0dada;
       font-size: 1.2em;
     }
 
-    /* Game menu grid */
+    /* --- Game menu grid --- */
     .game-list {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       gap: 30px;
-      padding: 40px 20px;
+      padding: 50px 20px;
     }
 
     .game-card {
-      background: linear-gradient(145deg, #2a2a40, #1e1e2e);
-      border: none;
+      background: linear-gradient(145deg, #2a0f10, #1b0a0c);
+      border: 2px solid #661018;
       border-radius: 16px;
       width: 230px;
       padding: 30px 20px;
       cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s;
+      transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
       box-shadow: 0 6px 14px rgba(0,0,0,0.4);
     }
 
     .game-card:hover {
       transform: translateY(-8px) scale(1.03);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.6), 0 0 20px #7b61ff;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.6);
+      border-color: #ff4455;
     }
 
     .game-card span {
       font-size: 1.3em;
       font-weight: bold;
-      color: #4cafef;
+      color: #ff4455;
       display: block;
       margin-top: 10px;
     }
 
-    /* Glowing Request Card */
+    /* --- Glowing Request Card --- */
     .glow-card {
-      background: linear-gradient(145deg, #2a2a40, #1e1e2e);
-      box-shadow: 0 0 20px #4cafef, 0 0 40px #7b61ff;
-      border: 2px solid #4cafef;
+      background: linear-gradient(145deg, #2a0f10, #1b0a0c);
+      box-shadow: 0 0 20px #ff4455, 0 0 40px #a00;
+      border: 2px solid #ff4455;
+      transition: all 0.4s ease-in-out;
     }
 
     .glow-card:hover {
       transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 0 30px #4cafef, 0 0 60px #7b61ff;
+      box-shadow: 0 0 30px #ff4455, 0 0 60px #a00;
+      border-color: #ff7788;
     }
 
-    /* Back button */
+    /* --- Back button --- */
     .back-btn {
       display: none;
       position: fixed;
       top: 20px;
       left: 20px;
-      background: linear-gradient(90deg, #4cafef, #7b61ff);
+      background: linear-gradient(90deg, #8b0000, #ff4455);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -100,7 +117,7 @@
       opacity: 0.9;
     }
 
-    /* Game frame */
+    /* --- Game frame --- */
     iframe {
       display: none;
       width: 95%;
@@ -115,8 +132,8 @@
     footer {
       margin-top: 60px;
       padding: 25px;
-      background: #1b1b2e;
-      border-top: 3px solid #4cafef;
+      background: #150507;
+      border-top: 3px solid #ff4455;
       color: #bbb;
       font-size: 0.95em;
     }
@@ -124,39 +141,37 @@
 </head>
 <body>
   <header>
-    <h1> Math Line </h1>
-    <p>New and improved (Games Save)!!</p>
+    <h1>🎮 Math Line Game Hub 🎮</h1>
+    <p>Stylish. Fast. Game Saves Ready!</p>
   </header>
 
   <!-- Game Menu -->
   <div class="game-list" id="game-list">
-    <div class="game-card" onclick="loadGame('ragdoll-archers.html')">
-      <span> Ragdoll archers</span>
+    <div class="game-card" onclick="loadGame('retro.html')">
+      <span>🎮 Retro Bowl</span>
     </div>
-    <div class="game-card" onclick="loadGame('Ragdoll-hit.html')">
-      <span> Ragdol Hit</span>
+    <div class="game-card" onclick="loadGame('pong.html')">
+      <span>🏓 Pong</span>
     </div>
-    <div class="game-card" onclick="loadGame('Time-shooter.html')">
-      <span> Timer Shooter</span>
+    <div class="game-card" onclick="loadGame('snake.html')">
+      <span>🐍 Snake</span>
     </div>
     <div class="game-card" onclick="loadGame('Retro-Bowl.html')">
-      <span> Retro Bowl</span>
+      <span>🏈 Retro Bowl (Alt)</span>
     </div>
     <div class="game-card" onclick="loadGame('snow-rider.html')">
-      <span> Snow Rider</span>
+      <span>⛷ Snow Rider</span>
     </div>
     <div class="game-card" onclick="loadGame('swords-and-sandals.html')">
-      <span> Swords & Sandals</span>
+      <span>⚔️ Swords & Sandals</span>
     </div>
-  <div class="game-card" onclick="loadGame('Crazy-Cattle.html')">
-      <span> Crazy Cattle </span>
-    </div>
-    <!-- External Link Card (Glowing) -->
+
+    <!-- Glowing external link -->
     <div class="game-card glow-card">
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
          target="_blank"
          style="text-decoration:none; color:inherit; display:block;">
-        <span> Request a Game</span>
+        <span>📝 Request a Game</span>
       </a>
     </div>
   </div>
@@ -168,7 +183,7 @@
   <iframe id="game-frame"></iframe>
 
   <footer>
-    <p>Made with ❤️ for players — hosted on GitHub Pages</p>
+    <p>Made with ❤️ by Math Line — Hosted on GitHub Pages</p>
   </footer>
 
   <script>
@@ -178,7 +193,7 @@
       const frame = document.getElementById("game-frame");
       frame.src = url;
       frame.style.display = "block";
-      window.scrollTo(0,0); // auto-scroll to top when game loads
+      window.scrollTo(0,0);
     }
 
     function goBack() {
