@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Line</title>
   <style>
-    /* ========== BACKGROUND ANIMATION ========== */
     body {
       font-family: 'Poppins', sans-serif;
       text-align: center;
@@ -24,7 +23,6 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* Canvas behind all content */
     #bg {
       position: fixed;
       top: 0;
@@ -34,7 +32,6 @@
       z-index: -1;
     }
 
-    /* ========== HEADER ========== */
     header {
       background: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
       padding: 25px;
@@ -55,7 +52,6 @@
       margin-top: 5px;
     }
 
-    /* ========== GAME MENU GRID ========== */
     .game-list {
       display: flex;
       justify-content: center;
@@ -89,7 +85,6 @@
       text-shadow: 0 0 8px #b30000;
     }
 
-    /* Glowing Request Card */
     .glow-card {
       background: linear-gradient(145deg, #3a0a0a, #1e1e2e);
       box-shadow: 0 0 25px #ffb300, 0 0 45px #b30000;
@@ -101,13 +96,10 @@
       box-shadow: 0 0 40px #ffb300, 0 0 60px #b30000;
     }
 
-    /* ========== BACK BUTTON ========== */
-    .back-btn {
+    .back-btn, .fullscreen-btn {
       display: none;
       position: fixed;
       top: 20px;
-      left: 20px;
-      background: linear-gradient(90deg, #b30000, #ffb300);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -119,12 +111,21 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
-    .back-btn:hover {
+    .back-btn {
+      left: 20px;
+      background: linear-gradient(90deg, #b30000, #ffb300);
+    }
+
+    .fullscreen-btn {
+      right: 20px;
+      background: linear-gradient(90deg, #ffb300, #b30000);
+    }
+
+    .back-btn:hover, .fullscreen-btn:hover {
       transform: scale(1.07);
       opacity: 0.9;
     }
 
-    /* ========== GAME FRAME ========== */
     iframe {
       display: none;
       width: 95%;
@@ -136,7 +137,6 @@
       background: #000;
     }
 
-    /* ========== FOOTER ========== */
     footer {
       margin-top: 60px;
       padding: 25px;
@@ -159,26 +159,27 @@
 
   <!-- GAME MENU -->
   <div class="game-list" id="game-list">
-    <div class="game-card" onclick="loadGame('ragdoll-archers.html')"><span>🏹 Ragdoll Archers</span></div>
-    <div class="game-card" onclick="loadGame('Ragdoll-hit.html')"><span>💥 Ragdoll Hit</span></div>
-    <div class="game-card" onclick="loadGame('Time-shooter.html')"><span>🕐 Time Shooter</span></div>
-    <div class="game-card" onclick="loadGame('Retro-Bowl.html')"><span>🏈 Retro Bowl</span></div>
-    <div class="game-card" onclick="loadGame('snow-rider.html')"><span>❄️ Snow Rider</span></div>
-    <div class="game-card" onclick="loadGame('swords-and-sandals.html')"><span>⚔️ Swords & Sandals</span></div>
-    <div class="game-card" onclick="loadGame('Crazy-Cattle.html')"><span>🐮 Crazy Cattle</span></div>
+    <div class="game-card" onclick="loadGame('ragdoll-archers.html')"><span> Ragdoll Archers</span></div>
+    <div class="game-card" onclick="loadGame('Ragdoll-hit.html')"><span> Ragdoll Hit</span></div>
+    <div class="game-card" onclick="loadGame('Time-shooter.html')"><span> Time Shooter</span></div>
+    <div class="game-card" onclick="loadGame('Retro-Bowl.html')"><span> Retro Bowl</span></div>
+    <div class="game-card" onclick="loadGame('snow-rider.html')"><span> Snow Rider</span></div>
+    <div class="game-card" onclick="loadGame('swords-and-sandals.html')"><span> Swords & Sandals</span></div>
+    <div class="game-card" onclick="loadGame('Crazy-Cattle.html')"><span> Crazy Cattle</span></div>
 
     <!-- Glowing External Link -->
     <div class="game-card glow-card">
       <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
          target="_blank"
          style="text-decoration:none; color:inherit; display:block;">
-        <span>✨ Request a Game ✨</span>
+        <span> Request a Game </span>
       </a>
     </div>
   </div>
 
-  <!-- Back Button -->
+  <!-- Back & Fullscreen Buttons -->
   <button class="back-btn" id="back-btn" onclick="goBack()">⬅ Back</button>
+  <button class="fullscreen-btn" id="fullscreen-btn" onclick="goFullscreen()">⛶ Fullscreen</button>
 
   <!-- Game Display -->
   <iframe id="game-frame"></iframe>
@@ -188,7 +189,7 @@
   </footer>
 
   <script>
-    /* === BACKGROUND PARTICLE EFFECT === */
+    /* === PARTICLE BACKGROUND === */
     const canvas = document.getElementById('bg');
     const ctx = canvas.getContext('2d');
     canvas.width = innerWidth;
@@ -208,7 +209,7 @@
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       particles.forEach(p => {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
         ctx.fillStyle = p.color;
         ctx.fill();
         p.x += p.dx;
@@ -220,10 +221,11 @@
     }
     animate();
 
-    /* === GAME LOADING SCRIPT === */
+    /* === GAME LOADING === */
     function loadGame(url) {
       document.getElementById("game-list").style.display = "none";
       document.getElementById("back-btn").style.display = "inline-block";
+      document.getElementById("fullscreen-btn").style.display = "inline-block";
       const frame = document.getElementById("game-frame");
       frame.src = url;
       frame.style.display = "block";
@@ -233,9 +235,21 @@
     function goBack() {
       document.getElementById("game-list").style.display = "flex";
       document.getElementById("back-btn").style.display = "none";
+      document.getElementById("fullscreen-btn").style.display = "none";
       const frame = document.getElementById("game-frame");
       frame.src = "";
       frame.style.display = "none";
+    }
+
+    function goFullscreen() {
+      const frame = document.getElementById("game-frame");
+      if (frame.requestFullscreen) {
+        frame.requestFullscreen();
+      } else if (frame.webkitRequestFullscreen) {
+        frame.webkitRequestFullscreen();
+      } else if (frame.msRequestFullscreen) {
+        frame.msRequestFullscreen();
+      }
     }
 
     window.addEventListener('resize', () => {
