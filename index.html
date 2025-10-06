@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Math Line</title>
   <style>
-    /* Basic styling */
+    /* ========== BACKGROUND ANIMATION ========== */
     body {
       font-family: 'Poppins', sans-serif;
       text-align: center;
@@ -13,9 +13,9 @@
       margin: 0;
       padding: 0;
       overflow-x: hidden;
-      background: radial-gradient(circle at 20% 20%, #3a0a0a, #000);
+      background: linear-gradient(-45deg, #1a0000, #4a0d0d, #7d1a1a, #2a0000, #ffb300);
       background-size: 400% 400%;
-      animation: moveBackground 20s infinite alternate ease-in-out;
+      animation: moveBackground 12s ease infinite;
     }
 
     @keyframes moveBackground {
@@ -24,80 +24,90 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Canvas behind all content */
+    #bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    /* ========== HEADER ========== */
     header {
-      background: linear-gradient(90deg, #5b0f0f, #7d1a1a);
-      padding: 30px;
-      border-bottom: 3px solid #3a0a0a;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+      background: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
+      padding: 25px;
+      border-bottom: 3px solid #000;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.7);
     }
 
     header h1 {
       margin: 0;
       font-size: 2.8em;
       color: #fff;
-      letter-spacing: 1px;
+      text-shadow: 0 0 15px #ffb300;
     }
 
     header p {
-      color: #ffcccc;
-      font-size: 1.1em;
+      color: #ffdb91;
+      font-size: 1.2em;
+      margin-top: 5px;
     }
 
-    /* Game menu grid */
+    /* ========== GAME MENU GRID ========== */
     .game-list {
       display: flex;
       justify-content: center;
       flex-wrap: wrap;
       gap: 30px;
       padding: 40px 20px;
-      transition: opacity 0.5s ease;
     }
 
     .game-card {
-      background: linear-gradient(145deg, #2a0b0b, #140606);
-      border: 1px solid #6d1a1a;
+      background: linear-gradient(145deg, #2a0a0a, #1a0a0a);
+      border: 2px solid #ffb300;
       border-radius: 16px;
       width: 230px;
       padding: 30px 20px;
       cursor: pointer;
-      transition: transform 0.25s, box-shadow 0.25s, border 0.25s;
+      transition: transform 0.25s, box-shadow 0.25s;
       box-shadow: 0 6px 14px rgba(0,0,0,0.5);
     }
 
     .game-card:hover {
-      transform: translateY(-8px) scale(1.05);
-      box-shadow: 0 12px 24px rgba(255,0,0,0.4), 0 0 20px #b22222;
-      border: 1px solid #ff4d4d;
+      transform: translateY(-8px) scale(1.03);
+      box-shadow: 0 12px 25px rgba(255,179,0,0.6), 0 0 25px #ffb300;
     }
 
     .game-card span {
       font-size: 1.3em;
       font-weight: bold;
-      color: #ff4d4d;
+      color: #ffb300;
       display: block;
       margin-top: 10px;
+      text-shadow: 0 0 8px #b30000;
     }
 
     /* Glowing Request Card */
     .glow-card {
-      background: linear-gradient(145deg, #2a0b0b, #140606);
-      box-shadow: 0 0 20px #ff4d4d, 0 0 40px #b22222;
-      border: 2px solid #ff4d4d;
-      transition: all 0.4s ease;
+      background: linear-gradient(145deg, #3a0a0a, #1e1e2e);
+      box-shadow: 0 0 25px #ffb300, 0 0 45px #b30000;
+      border: 2px solid #ffb300;
     }
 
     .glow-card:hover {
-      transform: translateY(-8px) scale(1.08);
-      box-shadow: 0 0 35px #ff4d4d, 0 0 70px #b22222;
+      transform: translateY(-8px) scale(1.05);
+      box-shadow: 0 0 40px #ffb300, 0 0 60px #b30000;
     }
 
-    /* Back button */
+    /* ========== BACK BUTTON ========== */
     .back-btn {
       display: none;
       position: fixed;
       top: 20px;
       left: 20px;
-      background: linear-gradient(90deg, #ff4d4d, #b22222);
+      background: linear-gradient(90deg, #b30000, #ffb300);
       color: #fff;
       border: none;
       border-radius: 8px;
@@ -106,15 +116,15 @@
       cursor: pointer;
       transition: transform 0.2s, opacity 0.3s;
       z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.4);
     }
 
     .back-btn:hover {
-      transform: scale(1.1);
+      transform: scale(1.07);
       opacity: 0.9;
     }
 
-    /* Game frame */
+    /* ========== GAME FRAME ========== */
     iframe {
       display: none;
       width: 95%;
@@ -126,49 +136,42 @@
       background: #000;
     }
 
+    /* ========== FOOTER ========== */
     footer {
       margin-top: 60px;
       padding: 25px;
-      background: #1a0000;
-      border-top: 3px solid #b22222;
-      color: #bbb;
+      background: #1a0a0a;
+      border-top: 3px solid #ffb300;
+      color: #ffdb91;
       font-size: 0.95em;
+      box-shadow: 0 -4px 12px rgba(0,0,0,0.5);
     }
   </style>
 </head>
+
 <body>
+  <canvas id="bg"></canvas>
+
   <header>
-    <h1>Math Line</h1>
-    <p>New and improved — Games that save progress!</p>
+    <h1>🎮 Math Line 🎮</h1>
+    <p>New and improved — now with save support!</p>
   </header>
 
-  <!-- Game Menu -->
+  <!-- GAME MENU -->
   <div class="game-list" id="game-list">
-    <div class="game-card" onclick="loadGame('ragdoll-archers.html')">
-      <span>Ragdoll Archers</span>
-    </div>
-    <div class="game-card" onclick="loadGame('Ragdoll-hit.html')">
-      <span>Ragdoll Hit</span>
-    </div>
-    <div class="game-card" onclick="loadGame('Time-shooter.html')">
-      <span>Time Shooter</span>
-    </div>
-    <div class="game-card" onclick="loadGame('Retro-Bowl.html')">
-      <span>Retro Bowl</span>
-    </div>
-    <div class="game-card" onclick="loadGame('snow-rider.html')">
-      <span>Snow Rider</span>
-    </div>
-    <div class="game-card" onclick="loadGame('swords-and-sandals.html')">
-      <span>Swords & Sandals</span>
-    </div>
-    <div class="game-card" onclick="loadGame('Crazy-Cattle.html')">
-      <span>Crazy Cattle</span>
-    </div>
+    <div class="game-card" onclick="loadGame('ragdoll-archers.html')"><span>🏹 Ragdoll Archers</span></div>
+    <div class="game-card" onclick="loadGame('Ragdoll-hit.html')"><span>💥 Ragdoll Hit</span></div>
+    <div class="game-card" onclick="loadGame('Time-shooter.html')"><span>🕐 Time Shooter</span></div>
+    <div class="game-card" onclick="loadGame('Retro-Bowl.html')"><span>🏈 Retro Bowl</span></div>
+    <div class="game-card" onclick="loadGame('snow-rider.html')"><span>❄️ Snow Rider</span></div>
+    <div class="game-card" onclick="loadGame('swords-and-sandals.html')"><span>⚔️ Swords & Sandals</span></div>
+    <div class="game-card" onclick="loadGame('Crazy-Cattle.html')"><span>🐮 Crazy Cattle</span></div>
 
-    <!-- External Link Card -->
+    <!-- Glowing External Link -->
     <div class="game-card glow-card">
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing" target="_blank" style="text-decoration:none; color:inherit; display:block;">
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
+         target="_blank"
+         style="text-decoration:none; color:inherit; display:block;">
         <span>✨ Request a Game ✨</span>
       </a>
     </div>
@@ -181,10 +184,43 @@
   <iframe id="game-frame"></iframe>
 
   <footer>
-    <p>Made with ❤️ by Math Line — hosted on GitHub Pages</p>
+    <p>Made with ❤️ for players — hosted on GitHub Pages</p>
   </footer>
 
   <script>
+    /* === BACKGROUND PARTICLE EFFECT === */
+    const canvas = document.getElementById('bg');
+    const ctx = canvas.getContext('2d');
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+
+    let particles = Array.from({ length: 70 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2 + 1,
+      dx: (Math.random() - 0.5) * 0.5,
+      dy: (Math.random() - 0.5) * 0.5,
+      color: Math.random() > 0.5 ? 'rgba(255,179,0,0.8)' : 'rgba(179,0,0,0.8)'
+    }));
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.fill();
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+        if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+
+    /* === GAME LOADING SCRIPT === */
     function loadGame(url) {
       document.getElementById("game-list").style.display = "none";
       document.getElementById("back-btn").style.display = "inline-block";
@@ -201,6 +237,11 @@
       frame.src = "";
       frame.style.display = "none";
     }
+
+    window.addEventListener('resize', () => {
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+    });
   </script>
 </body>
 </html>
