@@ -23,6 +23,16 @@
     100% { background-position: 0% 50%; }
   }
 
+  canvas#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: transparent;
+  }
+
   header {
     background: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
     padding: 25px;
@@ -160,9 +170,12 @@
 </style>
 </head>
 <body>
+
+<canvas id="bg"></canvas>
+
 <header>
   <h1>Math Line</h1>
-  <p>New and improved — now with favorites and save support!</p>
+  <p>Now with favorites, search, and animated background!</p>
 </header>
 
 <div id="search-container">
@@ -181,6 +194,39 @@
 </footer>
 
 <script>
+/* === PARTICLE BACKGROUND === */
+const canvas = document.getElementById('bg');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+let particles = Array.from({ length: 70 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height,
+  r: Math.random() * 2 + 1,
+  dx: (Math.random() - 0.5) * 0.5,
+  dy: (Math.random() - 0.5) * 0.5,
+  color: Math.random() > 0.5 ? 'rgba(255,179,0,0.8)' : 'rgba(179,0,0,0.8)'
+}));
+
+function animate() {
+  ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  particles.forEach(p => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+    if (p.x < 0 || p.x > canvas.width) p.dx *= -1;
+    if (p.y < 0 || p.y > canvas.height) p.dy *= -1;
+  });
+  requestAnimationFrame(animate);
+}
+animate();
+
+/* === GAME + FAVORITES LOGIC === */
 const games = [
   "Ragdoll Archers", "Ragdoll Hit", "Time Shooter", "Retro Bowl",
   "Snow Rider", "Swords & Sandals", "Crazy Cattle", "Gladi Hoppers",
@@ -210,8 +256,8 @@ function renderGames() {
 
   const favs = sortedGames.filter(g => favorites.includes(g));
   const nonFavs = sortedGames.filter(g => !favorites.includes(g));
-
   const allGames = [...favs, ...nonFavs];
+
   allGames.forEach(name => {
     const card = document.createElement("div");
     card.className = "game-card";
@@ -273,6 +319,11 @@ function filterGames() {
     span.parentElement.style.display = name.includes(input) ? 'block' : 'none';
   });
 }
+
+window.addEventListener('resize', () => {
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+});
 
 renderGames();
 </script>
