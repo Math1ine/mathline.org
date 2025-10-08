@@ -279,7 +279,7 @@ function renderGames() {
   });
 
   const request = document.createElement("div");
-  request.className = "game-card glow-card";
+  request.className = "game-card glow-card request-card";
   request.innerHTML = `<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
       target="_blank" style="text-decoration:none; color:inherit; display:block;"><span>Request a Game</span></a>`;
   gameList.appendChild(request);
@@ -313,7 +313,7 @@ function goFullscreen() {
 
 function filterGames() {
   const input = document.getElementById('search-input').value.toLowerCase();
-  const cards = document.querySelectorAll('.game-card span');
+  const cards = document.querySelectorAll('.game-card:not(.request-card) span');
   cards.forEach(span => {
     const name = span.textContent.toLowerCase();
     span.parentElement.style.display = name.includes(input) ? 'block' : 'none';
