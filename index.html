@@ -16,13 +16,11 @@
     background-size: 400% 400%;
     animation: moveBackground 12s ease infinite;
   }
-
   @keyframes moveBackground {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
-
   #bg {
     position: fixed;
     top: 0;
@@ -31,31 +29,26 @@
     height: 100%;
     z-index: -1;
   }
-
   header {
     background: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
     padding: 25px;
     border-bottom: 3px solid #000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.7);
   }
-
   header h1 {
     margin: 0;
     font-size: 2.8em;
     color: #fff;
     text-shadow: 0 0 15px #ffb300;
   }
-
   header p {
     color: #ffdb91;
     font-size: 1.2em;
     margin-top: 5px;
   }
-
   #search-container {
     margin: 20px 0 0 0;
   }
-
   #search-input {
     padding: 10px 15px;
     width: 250px;
@@ -67,17 +60,16 @@
     color: #ffb300;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
-
   .game-list {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
     gap: 30px;
-    padding: 20px; /* reduced padding */
+    padding: 20px;
     margin-top: 10px;
   }
-
   .game-card {
+    position: relative;
     background: linear-gradient(145deg, #2a0a0a, #1a0a0a);
     border: 2px solid #ffb300;
     border-radius: 16px;
@@ -87,12 +79,10 @@
     transition: transform 0.25s, box-shadow 0.25s;
     box-shadow: 0 6px 14px rgba(0,0,0,0.5);
   }
-
   .game-card:hover {
     transform: translateY(-8px) scale(1.03);
     box-shadow: 0 12px 25px rgba(255,179,0,0.6), 0 0 25px #ffb300;
   }
-
   .game-card span {
     font-size: 1.3em;
     font-weight: bold;
@@ -101,18 +91,29 @@
     margin-top: 10px;
     text-shadow: 0 0 8px #b30000;
   }
-
+  .favorite-star {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    font-size: 22px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s, transform 0.2s;
+    user-select: none;
+  }
+  .favorite-star.favorited {
+    color: #ffb300;
+    transform: scale(1.2);
+  }
   .glow-card {
     background: linear-gradient(145deg, #3a0a0a, #1e1e2e);
     box-shadow: 0 0 25px #ffb300, 0 0 45px #b30000;
     border: 2px solid #ffb300;
   }
-
   .glow-card:hover {
     transform: translateY(-8px) scale(1.05);
     box-shadow: 0 0 40px #ffb300, 0 0 60px #b30000;
   }
-
   .back-btn, .fullscreen-btn {
     display: none;
     position: fixed;
@@ -127,11 +128,9 @@
     z-index: 1000;
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
-
   .back-btn { left: 20px; background: linear-gradient(90deg, #b30000, #ffb300); }
   .fullscreen-btn { right: 20px; background: linear-gradient(90deg, #ffb300, #b30000); }
   .back-btn:hover, .fullscreen-btn:hover { transform: scale(1.07); opacity: 0.9; }
-
   iframe {
     display: none;
     width: 95%;
@@ -142,7 +141,6 @@
     box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     background: #000;
   }
-
   footer {
     margin-top: 60px;
     padding: 25px;
@@ -159,7 +157,7 @@
 
 <header>
   <h1>Math Line</h1>
-  <p>New and improved — now with save support! Share to who ever but it can still be blocked</p>
+  <p>New and improved — now with save support! Share to whoever but it can still be blocked</p>
 </header>
 
 <!-- SEARCH BAR -->
@@ -168,41 +166,7 @@
 </div>
 
 <!-- GAME MENU -->
-<div class="game-list" id="game-list">
-  <div class="game-card" onclick="loadGame('ragdoll-archers.html')"><span>Ragdoll Archers</span></div>
-  <div class="game-card" onclick="loadGame('Ragdoll-hit.html')"><span>Ragdoll Hit</span></div>
-  <div class="game-card" onclick="loadGame('Time-shooter.html')"><span>Time Shooter</span></div>
-  <div class="game-card" onclick="loadGame('Retro-Bowl.html')"><span>Retro Bowl</span></div>
-  <div class="game-card" onclick="loadGame('snow-rider.html')"><span>Snow Rider</span></div>
-  <div class="game-card" onclick="loadGame('swords-and-sandlas.html')"><span>Swords & Sandals</span></div>
-  <div class="game-card" onclick="loadGame('Crazy-Cattle.html')"><span>Crazy Cattle</span></div>
-  <div class="game-card" onclick="loadGame('Gladi-hoppers.html')"><span>Gladi Hoppers</span></div>
-  <div class="game-card" onclick="loadGame('clbitplanes.html')"><span>Bit Planes</span></div>
-  <div class="game-card" onclick="loadGame('clfinalearth2.html')"><span>Final Earth 2</span></div>
-  <div class="game-card" onclick="loadGame('clclusterrush.html')"><span>Cluster Rush</span></div>
-  <div class="game-card" onclick="loadGame('clpushyourluck.html')"><span>Push your luck</span></div>
-  <div class="game-card" onclick="loadGame('clpolytrackworksnow.html')"><span>Poly Track</span></div>
-  <div class="game-card" onclick="loadGame('clragdollsoccer.html')"><span>Ragdoll soccer</span></div>
-  <div class="game-card" onclick="loadGame('cljetpackjoyride.html')"><span>JetPack Joy Ride</span></div>
-  <div class="game-card" onclick="loadGame('cllearntofly3.html')"><span>Learn to fly 3</span></div>
-  <div class="game-card" onclick="loadGame('maldin-stun-cars.html')"><span>Malidin stun cars</span></div>
-  <div class="game-card" onclick="loadGame('clgunspin.html')"><span>Gun Spin</span></div>
-  <div class="game-card" onclick="loadGame('clageofwar2.html')"><span>Age of war 2</span></div>
-  <div class="game-card" onclick="loadGame('clmotox3m2.html')"><span>Moto X3M 2</span></div>
-  <div class="game-card" onclick="loadGame('clmotox3mwinter.html')"><span>Moto X3M Winter</span></div>
-  <div class="game-card" onclick="loadGame('clbasketballstars.html')"><span>Basketball stars</span></div>
-  <div class="game-card" onclick="loadGame('idle-breakout.html')"><span>Idle breakout</span></div>
-  <div class="game-card" onclick="loadGame('vex8.html')"><span>Vex 8</span></div>
-  <div class="game-card" onclick="loadGame('monkey-mart.html')"><span>Monkey Mart</span></div>
-  <div class="game-card" onclick="loadGame('drive-mad.html')"><span>Drive Mad</span></div>
-  <!-- Glowing External Link -->
-  <div class="game-card glow-card">
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing" 
-       target="_blank" style="text-decoration:none; color:inherit; display:block;">
-       <span>Request a Game</span>
-    </a>
-  </div>
-</div>
+<div class="game-list" id="game-list"></div>
 
 <!-- Back & Fullscreen Buttons -->
 <button class="back-btn" id="back-btn" onclick="goBack()">⬅ Back</button>
@@ -275,14 +239,105 @@ function goFullscreen() {
   else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
 }
 
+/* === FAVORITES SYSTEM === */
+let favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+
+function toggleFavorite(e, url) {
+  e.stopPropagation(); // prevent card click
+  if (favorites.includes(url)) {
+    favorites = favorites.filter(f => f !== url);
+  } else {
+    favorites.push(url);
+  }
+  localStorage.setItem('favorites', JSON.stringify(favorites));
+  createGameCards();
+}
+
+function isFavorited(url) {
+  return favorites.includes(url);
+}
+
+function loadFavorites() {
+  favorites = JSON.parse(localStorage.getItem('favorites') || '[]');
+}
+
+/* === GAMES ARRAY === */
+const games = [
+  { name: 'Ragdoll Archers', url: 'ragdoll-archers.html' },
+  { name: 'Ragdoll Hit', url: 'Ragdoll-hit.html' },
+  { name: 'Time Shooter', url: 'Time-shooter.html' },
+  { name: 'Retro Bowl', url: 'Retro-Bowl.html' },
+  { name: 'Snow Rider', url: 'snow-rider.html' },
+  { name: 'Swords & Sandals', url: 'swords-and-sandlas.html' },
+  { name: 'Crazy Cattle', url: 'Crazy-Cattle.html' },
+  { name: 'Gladi Hoppers', url: 'Gladi-hoppers.html' },
+  { name: 'Bit Planes', url: 'clbitplanes.html' },
+  { name: 'Final Earth 2', url: 'clfinalearth2.html' },
+  { name: 'Cluster Rush', url: 'clclusterrush.html' },
+  { name: 'Push your luck', url: 'clpushyourluck.html' },
+  { name: 'Poly Track', url: 'clpolytrackworksnow.html' },
+  { name: 'Ragdoll soccer', url: 'clragdollsoccer.html' },
+  { name: 'JetPack Joy Ride', url: 'cljetpackjoyride.html' },
+  { name: 'Learn to fly 3', url: 'cllearntofly3.html' },
+  { name: 'Malidin stun cars', url: 'maldin-stun-cars.html' },
+  { name: 'Gun Spin', url: 'clgunspin.html' },
+  { name: 'Age of war 2', url: 'clageofwar2.html' },
+  { name: 'Moto X3M 2', url: 'clmotox3m2.html' },
+  { name: 'Moto X3M Winter', url: 'clmotox3mwinter.html' },
+  { name: 'Basketball stars', url: 'clbasketballstars.html' },
+  { name: 'Idle breakout', url: 'idle-breakout.html' },
+  { name: 'Vex 8', url: 'vex8.html' },
+  { name: 'Monkey Mart', url: 'monkey-mart.html' },
+  { name: 'Drive Mad', url: 'drive-mad.html' }
+];
+
+/* === CREATE GAME CARDS === */
+function createGameCards() {
+  const gameList = document.getElementById('game-list');
+  gameList.innerHTML = '';
+  games.forEach(game => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.onclick = () => loadGame(game.url);
+
+    const star = document.createElement('div');
+    star.className = 'favorite-star';
+    if (isFavorited(game.url)) star.classList.add('favorited');
+    star.textContent = '★';
+    star.onclick = e => toggleFavorite(e, game.url);
+
+    const title = document.createElement('span');
+    title.textContent = game.name;
+
+    card.appendChild(star);
+    card.appendChild(title);
+    gameList.appendChild(card);
+  });
+
+  // Add the glowing external request link
+  const glowCard = document.createElement('div');
+  glowCard.className = 'game-card glow-card';
+  const link = document.createElement('a');
+  link.href = "https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing";
+  link.target = "_blank";
+  link.style.textDecoration = "none";
+  link.style.color = "inherit";
+  link.style.display = "block";
+  const span = document.createElement('span');
+  span.textContent = "Request a Game";
+  link.appendChild(span);
+  glowCard.appendChild(link);
+  gameList.appendChild(glowCard);
+}
+
 /* === FILTER SEARCH === */
 function filterGames() {
   const input = document.getElementById('search-input').value.toLowerCase();
   const cards = document.querySelectorAll('.game-card');
   cards.forEach(card => {
-    const name = card.textContent.toLowerCase();
-    if (name.includes(input)) card.style.display = 'block';
-    else card.style.display = 'none';
+    const name = card.querySelector('span')?.textContent.toLowerCase();
+    if (!name) return;
+    card.style.display = name.includes(input) ? 'block' : 'none';
   });
 }
 
@@ -290,7 +345,11 @@ window.addEventListener('resize', () => {
   canvas.width = innerWidth;
   canvas.height = innerHeight;
 });
-window.onload = () => window.scrollTo(0,0);
+window.onload = () => {
+  window.scrollTo(0,0);
+  loadFavorites();
+  createGameCards();
+};
 </script>
 </body>
 </html>
