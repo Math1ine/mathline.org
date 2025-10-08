@@ -330,11 +330,38 @@ function filterGames() {
 
 /* === INIT === */
 renderGames();
-window.addEventListener('resize', () => {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-});
-window.onload = () => window.scrollTo(0,0);
-</script>
-</body>
-</html>
+function renderGames() {
+  gameList.innerHTML = "";
+  const sortedGames = [...games].sort((a, b) => a.localeCompare(b));
+
+  const favs = sortedGames.filter(g => favorites.includes(g));
+  const nonFavs = sortedGames.filter(g => !favorites.includes(g));
+
+  const allGames = [...favs, ...nonFavs];
+  allGames.forEach(name => {
+    const card = document.createElement("div");
+    card.className = "game-card";
+    card.onclick = () => loadGame(name.replaceAll(" ", "-") + ".html");
+
+    const star = document.createElement("div");
+    star.className = "star" + (favorites.includes(name) ? " favorited" : "");
+    star.textContent = favorites.includes(name) ? "⭐" : "☆"; // <-- fixed line
+    star.onclick = (e) => {
+      e.stopPropagation();
+      toggleFavorite(name);
+    };
+
+    const span = document.createElement("span");
+    span.textContent = name;
+    card.appendChild(star);
+    card.appendChild(span);
+    gameList.appendChild(card);
+  });
+
+  // Add "Request a Game" card
+  const request = document.createElement("div");
+  request.className = "game-card glow-card";
+  request.innerHTML = `<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
+      target="_blank" style="text-decoration:none; color:inherit; display:block;"><span>Request a Game</span></a>`;
+  gameList.appendChild(request);
+}
