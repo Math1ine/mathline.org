@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mr. Mine Clone</title>
+  <style>
+    /* Basic styling for layout */
+    body { font-family: Arial, sans-serif; background-color: #2c3e50; color: white; margin: 0; padding: 0; }
+    #topBar { background-color: #34495e; padding: 10px; text-align: center; }
+    #resources { display: flex; justify-content: space-around; margin: 10px 0; }
+    #mainArea { display: flex; justify-content: center; margin: 20px 0; }
+    #sidebar { width: 200px; background-color: #34495e; padding: 10px; }
+    #bottomPanel { background-color: #34495e; padding: 10px; text-align: center; }
+    button { background-color: #1abc9c; color: white; border: none; padding: 10px; margin: 5px; cursor: pointer; }
+    button:hover { background-color: #16a085; }
+  </style>
+</head>
+<body>
+
+  <!-- Top Bar -->
+  <div id="topBar">
+    <h1>Mr. Mine Clone</h1>
+  </div>
+
+  <!-- Resources Display -->
+  <div id="resources">
+    <div>Gold: <span id="gold">0</span></div>
+    <div>Iron: <span id="iron">0</span></div>
+    <div>Coal: <span id="coal">0</span></div>
+    <div>Gems: <span id="gems">0</span></div>
+    <div>Tickets: <span id="tickets">0</span></div>
+    <div>Depth: <span id="depth">1</span></div>
+  </div>
+
+  <!-- Main Area -->
+  <div id="mainArea">
+    <div id="sidebar">
+      <button id="hireMinerBtn">Hire Miner (Cost: 50 Gold)</button>
+      <button id="upgradePickaxeBtn">Upgrade Pickaxe (Cost: 100 Gold)</button>
+      <button id="buyChestBtn">Buy Chest (Cost: 5 Tickets)</button>
+    </div>
+    <div id="mineArea">
+      <!-- Mining area will be dynamically generated here -->
+    </div>
+  </div>
+
+  <!-- Bottom Panel -->
+  <div id="bottomPanel">
+    <button id="startMiningBtn">Start Mining</button>
+  </div>
+
+  <script>
+    // Game variables
+    let resources = { gold: 0, iron: 0, coal: 0, gems: 0, tickets: 0, depth: 1 };
+    let miners = 0;
+    let minerCost = 50;
+    let pickaxeLevel = 1;
+    let pickaxeCost = 100;
+    let goldPerClick = 1;
+
+    // Update resource display
+    function updateDisplay() {
+      document.getElementById('gold').textContent = resources.gold;
+      document.getElementById('iron').textContent = resources.iron;
+      document.getElementById('coal').textContent = resources.coal;
+      document.getElementById('gems').textContent = resources.gems;
+      document.getElementById('tickets').textContent = resources.tickets;
+      document.getElementById('depth').textContent = Math.min(Math.floor(resources.depth), 499);
+    }
+
+    // Hire miner
+    document.getElementById('hireMinerBtn').addEventListener('click', () => {
+      if (resources.gold >= minerCost) {
+        resources.gold -= minerCost;
+        miners += 1;
+        minerCost = Math.floor(minerCost * 1.5);
+        updateDisplay();
+      } else {
+        alert("Not enough gold!");
+      }
+    });
+
+    // Upgrade pickaxe
+    document.getElementById('upgradePickaxeBtn').addEventListener('click', () => {
+      if (resources.gold >= pickaxeCost) {
+        resources.gold -= pickaxeCost;
+        pickaxeLevel += 1;
+        goldPerClick = pickaxeLevel;
+        pickaxeCost = Math.floor(pickaxeCost * 2);
+        updateDisplay();
+      } else {
+        alert("Not enough gold!");
+      }
+    });
+
+    // Buy chest
+    document.getElementById('buyChestBtn').addEventListener('click', () => {
+      if (resources.tickets >= 5) {
+        resources.tickets -= 5;
+        let reward = Math.floor(Math.random() * 100);
+        resources.gold += reward;
+        alert(`You received ${reward} gold from the chest!`);
+        updateDisplay();
+      } else {
+        alert("Not enough tickets!");
+      }
+    });
+
+    // Start mining
+    document.getElementById('startMiningBtn').addEventListener('click', () => {
+      resources.gold += goldPerClick;
+      if (Math.random() < 0.6) resources.iron += 1;
+      if (Math.random() < 0.3) resources.coal += 1;
+      if (Math.random() < 0.05) resources.gems += 1;
+      if (Math.random() < 0.02) resources.tickets += 1;
+      if (resources.depth < 499) resources.depth += 0.01;
+      updateDisplay();
+    });
+
+    // Initialize game
+    updateDisplay();
+  </script>
+
+</body>
+</html>
