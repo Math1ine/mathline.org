@@ -6,15 +6,14 @@
 <title>Math Line - Halloween Edition</title>
 <style>
 :root {
-  --bg1:#000000; --bg2:#ff6600; --accent:#ff8800;
+  --bg1:#000; --bg2:#ff6600; --accent:#ff8800;
   --header-color:#fff; --text-color:#f0f0f0;
   --card-bg:rgba(0,0,0,0.6); --card-radius:14px; --hover-scale:1.02; --hover-glow:1;
   --card-font:'Poppins', sans-serif; --bg-speed:12s;
 }
 
 body {
-  margin:0;
-  padding:0;
+  margin:0; padding:0;
   font-family: var(--card-font);
   color: var(--text-color);
   background: linear-gradient(-45deg,var(--bg1),var(--bg2));
@@ -54,16 +53,16 @@ header h1 { margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 
 #settings-menu.open { right:0; }
 #settings-menu h2 { margin-top:0; text-align:center; }
 #settings-menu label { display:flex; justify-content:space-between; align-items:center; }
-#settings-menu input[type=color], #settings-menu select, #settings-menu input[type=range] { cursor:pointer; }
+#settings-menu input[type=color], #settings-menu select, #settings-menu input[type=range], #settings-menu input[type=checkbox] { cursor:pointer; }
 #settings-menu button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
 #settings-menu button:hover { filter: brightness(1.2); }
 
 .game-list {
-  display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 20px; position:relative; z-index:2;
+  display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 100px; position:relative; z-index:2;
 }
 .game-card {
   position:relative; background:var(--card-bg); border:2px solid var(--accent); color:var(--accent);
-  width:250px; padding:25px; border-radius:var(--card-radius); cursor:pointer; transition:transform .25s, box-shadow .25s; font-size:1.2em;
+  width:220px; padding:25px; border-radius:var(--card-radius); cursor:pointer; transition:transform .25s, box-shadow .25s; font-size:1.2em;
 }
 .game-card:hover { transform: scale(var(--hover-scale)); box-shadow: var(--hover-glow)?0 0 15px var(--accent):none; }
 
@@ -71,6 +70,11 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 
 .decoration { position:fixed; z-index:-1; pointer-events:none; font-size:30px; animation:float 10s linear infinite; }
 @keyframes float { 0%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-15px) rotate(15deg);} 100%{transform:translateY(0) rotate(-15deg);} }
+
+footer {
+  position:fixed; bottom:0; left:0; width:100%; padding:15px; background:#1a0a0a; border-top:3px solid var(--accent); color:#ffdb91;
+  text-align:center; font-size:0.95em; z-index:3;
+}
 </style>
 </head>
 <body>
@@ -78,7 +82,7 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 
 <header>
   <h1>Math Line 🎃</h1>
-  <div id="player-count">Players Online: <span id="count">0</span></div>
+  <div id="player-count">Players Online: <span id="count">1000</span></div>
 </header>
 
 <div id="search-container"><input type="text" id="search-input" placeholder="Search games..."></div>
@@ -92,11 +96,11 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
   <button id="particles-tab-btn">Particles</button>
   <button id="cards-tab-btn">Cards</button>
   <button id="theme-tab-btn">Theme</button>
+  <button id="color-tab-btn">Colors</button>
 
   <div id="general-tab" class="tab-content">
     <button id="halloween-theme">Halloween Theme</button>
-    <label>Header Color:<input type="color" id="header-color" value="#ffffff"></label>
-    <label>Text Color:<input type="color" id="text-color" value="#f0f0f0"></label>
+    <label>Decorations:<input type="checkbox" id="toggle-decorations" checked></label>
   </div>
 
   <div id="particles-tab" class="tab-content" style="display:none;">
@@ -123,173 +127,87 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
     <button id="reset-theme">Reset Theme</button>
   </div>
 
+  <div id="color-tab" class="tab-content" style="display:none;">
+    <label>Background Color 1:<input type="color" id="bg1" value="#000000"></label>
+    <label>Background Color 2:<input type="color" id="bg2" value="#ff6600"></label>
+    <label>Accent Color:<input type="color" id="accent" value="#ff8800"></label>
+  </div>
+
   <button id="close-settings">Close</button>
 </div>
 
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
 
-<footer><p>Made with ❤️ for players</p></footer>
+<footer>Made with ❤️ for players</footer>
 
 <script>
 // --- PARTICLES ---
-const canvas=document.getElementById('bg');
-const ctx=canvas.getContext('2d');
-canvas.width=innerWidth; canvas.height=innerHeight;
+const canvas=document.getElementById('bg'); const ctx=canvas.getContext('2d'); canvas.width=innerWidth; canvas.height=innerHeight;
 let particles=[],particleCount=70,particleSize=2,particleSpeed=0.5,particlesOn=true;
 function createParticles(reset=false){
   if(reset) particles=[];
   while(particles.length<particleCount){
-    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:document.documentElement.style.getPropertyValue('--accent')});
+    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:Math.random()>0.5?'rgba(255,179,0,0.8)':'rgba(179,0,0,0.8)'});
   }
 }
 createParticles();
 function animate(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='rgba(0,0,0,0.25)'; ctx.fillRect(0,0,canvas.width,canvas.height);
   if(particlesOn) particles.forEach(p=>{
     ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.color; ctx.fill();
-    p.x+=p.dx; p.y+=p.dy;
-    if(p.x<0||p.x>canvas.width)p.dx*=-1;
-    if(p.y<0||p.y>canvas.height)p.dy*=-1;
+    p.x+=p.dx; p.y+=p.dy; if(p.x<0||p.x>canvas.width) p.dx*=-1; if(p.y<0||p.y>canvas.height) p.dy*=-1;
   });
   requestAnimationFrame(animate);
 }
 animate();
 window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
 
-// --- DECORATIONS ---
-const decs=['🎃','🕸️','💀','🕷️'];
-for(let i=0;i<20;i++){
-  const span=document.createElement('div'); span.className='decoration'; span.innerText=decs[Math.floor(Math.random()*decs.length)];
-  span.style.left=Math.random()*100+'%'; span.style.top=Math.random()*100+'%'; span.style.fontSize=(20+Math.random()*30)+'px';
-  document.body.appendChild(span);
-}
+// --- PLAYER COUNT (Increment on page load) ---
+const countEl=document.getElementById('count');
+let currentCount=parseInt(localStorage.getItem('playerCount'))||1000;
+currentCount+=1;
+localStorage.setItem('playerCount',currentCount);
+countEl.innerText=currentCount;
 
-// --- GAMES ---
-const games=[
-{name:"Ragdoll Archers",file:"ragdoll-archers.html"},
-{name:"Ragdoll Hit",file:"ragdoll-hit.html"},
-{name:"Time Shooter",file:"time-shooter.html"},
-{name:"Retro Bowl",file:"retro-bowl.html"},
-{name:"Snow Rider",file:"snow-rider.html"},
-{name:"Swords and Sandals",file:"swords-and-sandals.html"},
-{name:"Crazy Cattle",file:"crazy-cattle.html"},
-{name:"Gladi Hoppers",file:"gladi-hoppers.html"},
-{name:"Bit Planes",file:"bit-planes.html"},
-{name:"Final Earth2",file:"final-earth2.html"},
-{name:"Cluster Rush",file:"cluster-rush.html"},
-{name:"Push Your Luck",file:"push-your-luck.html"},
-{name:"Poly Track",file:"poly-track.html"},
-{name:"Ragdoll Soccer",file:"ragdoll-soccer.html"},
-{name:"Jetpack Joy Ride",file:"jetpack-joy-ride.html"},
-{name:"Learn to Fly 3",file:"learn-to-fly-3.html"},
-{name:"Malidin Stun Cars",file:"malidin-stun-cars.html"},
-{name:"Gun Spin",file:"gun-spin.html"},
-{name:"Age of War",file:"age-of-war.html"},
-{name:"Moto X3M 2",file:"moto-x3m-2.html"},
-{name:"Moto X3M Winter",file:"moto-x3m-winter.html"},
-{name:"Basketball Stars",file:"basketball-stars.html"},
-{name:"Idle Breakout",file:"idle-breakout.html"},
-{name:"Vex 8",file:"vex-8.html"},
-{name:"Tiny Fishing",file:"tiny-fishing.html"},
-{name:"Drive Mad",file:"drive-mad.html"},
-{name:"Stick Man Hook",file:"stick-man-hook.html"},
-{name:"Learn to Fly 2",file:"learn-to-fly-2.html"},
-{name:"Line Rider",file:"line-rider.html"},
-{name:"Unicycle Hero",file:"unicycle-hero.html"},
-{name:"Basket Random",file:"basket-random.html"},
-{name:"1v1 LOL",file:"1v1-lol.html"},
-{name:"Happy Wheels",file:"happy-wheels.html"},
-{name:"Idle Dice",file:"idle-dice.html"},
-{name:"Idle Miner Tycoon",file:"idle-miner-tycoon.html"},
-{name:"Johnny Upgrade",file:"johnny-upgrade.html"},
-{name:"Jack Smith",file:"jack-smith.html"},
-{name:"Tunnel Rush",file:"tunnel-rush.html"},
-{name:"Duck Life 5",file:"duck-life-5.html"},
-{name:"Duck Life 4",file:"duck-life-4.html"},
-{name:"Mob Control",file:"mob-control.html"},
-{name:"A Small World Cup",file:"a-small-world-cup.html"},
-{name:"Escape Road",file:"escape-road.html"},
-{name:"QWOP",file:"qwop.html"},
-{name:"Indian Truck Simulator",file:"indian-truck-simulator.html"},
-{name:"Mr Mine Clone",file:"mr-mine-clone.html"},
-{name:"Doge Miner",file:"doge-miner.html"},
-{name:"Draw Climber",file:"draw-climber.html"},
-{name:"Granny Online",file:"granny-online.html"}
-];
+// --- GAME LIST ---
+const games=["Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl","Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers","Bit planes","Final earth2","Cluster rush","Push your luck","Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3","Malidin stun cars","Gun spin","Age of war","Moto x3m 2","Moto x3m winter","Basketball stars","Idle breakout","Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2","Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels","Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush","Duck life 5","Duck life 4","Mob control","A small world cup","Escape road","QWOP","Indian truck simulator","Mr mine clone","Doge miner","Draw climber","Granny online"];
 
 const gameList=document.getElementById("game-list");
 let favorites=JSON.parse(localStorage.getItem("favorites"))||[];
-function toggleFavorite(name){if(favorites.includes(name))favorites=favorites.filter(f=>f!==name);else favorites.push(name);localStorage.setItem("favorites",JSON.stringify(favorites)); renderGames();}
+
+function toggleFavorite(name){ if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);}
+localStorage.setItem("favorites",JSON.stringify(favorites)); renderGames();}
+
 function renderGames(){
-  gameList.innerHTML=""; const searchVal=document.getElementById('search-input').value.toLowerCase();
-  const sortedGames=games.sort((a,b)=>a.name.localeCompare(b.name));
-  sortedGames.forEach(g=>{
-    if(!g.name.toLowerCase().includes(searchVal))return;
-    const card=document.createElement("div"); card.className="game-card";
-    card.onclick=()=>{document.getElementById('game-frame').src=g.file;document.getElementById('game-frame').style.display='block';gameList.style.display='none';document.getElementById('back-btn').style.display='block';document.getElementById('fullscreen-btn').style.display='block'; window.scrollTo(0,0);};
-    const star=document.createElement("div"); star.textContent=favorites.includes(g.name)?"⭐":"☆"; star.style.position="absolute"; star.style.top="10px"; star.style.right="10px"; star.style.cursor="pointer"; star.style.fontSize="18px"; star.onclick=(e)=>{e.stopPropagation(); toggleFavorite(g.name);};
-    card.appendChild(star); const span=document.createElement("span"); span.textContent=g.name; card.appendChild(span); gameList.appendChild(card);
+  gameList.innerHTML="";
+  const sortedGames=[...games].sort((a,b)=>a.localeCompare(b));
+  const favs=sortedGames.filter(g=>favorites.includes(g));
+  const nonFavs=sortedGames.filter(g=>!favorites.includes(g));
+  const allGames=[...favs,...nonFavs];
+  allGames.forEach(name=>{
+    const card=document.createElement("div");
+    card.className="game-card";
+    card.onclick=()=>loadGame(name.replace(/\s/g,"-")+".html");
+    const star=document.createElement("div");
+    star.className="star"+(favorites.includes(name)?" favorited":"");
+    star.textContent=favorites.includes(name)?"⭐":"☆";
+    star.onclick=(e)=>{ e.stopPropagation(); toggleFavorite(name); };
+    const span=document.createElement("span"); span.textContent=name.charAt(0).toUpperCase()+name.slice(1).toLowerCase();
+    card.appendChild(star); card.appendChild(span);
+    gameList.appendChild(card);
   });
 }
-document.getElementById('search-input').addEventListener('input',renderGames);
+
+function loadGame(url){ gameList.style.display="none"; document.getElementById("back-btn").style.display="inline-block"; document.getElementById("fullscreen-btn").style.display="inline-block"; const frame=document.getElementById("game-frame"); frame.src=url; frame.style.display="block"; window.scrollTo(0,0);}
+function goBack(){ gameList.style.display="flex"; document.getElementById("back-btn").style.display="none"; document.getElementById("fullscreen-btn").style.display="none"; const frame=document.getElementById("game-frame"); frame.src=""; frame.style.display="none"; }
+function goFullscreen(){ const frame=document.getElementById("game-frame"); if(frame.requestFullscreen) frame.requestFullscreen(); else if(frame.webkitRequestFullscreen) frame.webkitRequestFullscreen(); else if(frame.msRequestFullscreen) frame.msRequestFullscreen(); }
+
+function filterGames(){ const input=document.getElementById('search-input').value.toLowerCase(); document.querySelectorAll('.game-card span').forEach(span=>{ const name=span.textContent.toLowerCase(); span.parentElement.style.display=name.includes(input)?'block':'none'; }); }
+
+document.getElementById('search-input').addEventListener('input',filterGames);
+
 renderGames();
-
-// --- BACK & FULLSCREEN ---
-document.getElementById('back-btn').onclick=function(){document.getElementById('game-frame').style.display='none'; document.getElementById('game-frame').src=''; gameList.style.display='flex'; document.getElementById('back-btn').style.display='none'; document.getElementById('fullscreen-btn').style.display='none';};
-document.getElementById('fullscreen-btn').onclick=function(){const frame=document.getElementById('game-frame'); if(frame.requestFullscreen)frame.requestFullscreen(); else if(frame.webkitRequestFullscreen)frame.webkitRequestFullscreen(); else if(frame.msRequestFullscreen)frame.msRequestFullscreen();};
-
-// --- SETTINGS MENU ---
-const settingsBtn=document.getElementById('settings-btn');
-const settingsMenu=document.getElementById('settings-menu');
-const tabs=document.querySelectorAll('.tab-content');
-const tabButtons={'general-tab-btn':'general-tab','particles-tab-btn':'particles-tab','cards-tab-btn':'cards-tab','theme-tab-btn':'theme-tab'};
-document.getElementById('close-settings').onclick=()=>settingsMenu.classList.remove('open');
-settingsBtn.onclick=()=>settingsMenu.classList.toggle('open');
-Object.keys(tabButtons).forEach(btn=>{
-  document.getElementById(btn).onclick=()=>{
-    tabs.forEach(t=>t.style.display='none');
-    document.getElementById(tabButtons[btn]).style.display='flex';
-  }
-});
-
-// --- SETTINGS LOGIC ---
-const setInputs=['header-color','text-color','card-radius','card-font','hover-scale','hover-glow','particle-count','particle-size','particle-speed','toggle-particles'];
-setInputs.forEach(id=>{
-  const el=document.getElementById(id);
-  if(!el)return;
-  el.addEventListener('input',updateSettings);
-  el.addEventListener('change',updateSettings);
-});
-function updateSettings(){
-  document.documentElement.style.setProperty('--header-color',document.getElementById('header-color').value);
-  document.documentElement.style.setProperty('--text-color',document.getElementById('text-color').value);
-  document.documentElement.style.setProperty('--card-radius',document.getElementById('card-radius').value+'px');
-  document.documentElement.style.setProperty('--card-font',document.getElementById('card-font').value);
-  document.documentElement.style.setProperty('--hover-scale',document.getElementById('hover-scale').value);
-  particleCount=parseInt(document.getElementById('particle-count').value);
-  particleSize=parseFloat(document.getElementById('particle-size').value);
-  particleSpeed=parseFloat(document.getElementById('particle-speed').value);
-  particlesOn=document.getElementById('toggle-particles').checked;
-  createParticles(true);
-}
-
-// Random / Reset / Halloween Theme
-document.getElementById('random-theme').onclick=function(){
-  document.documentElement.style.setProperty('--bg1','#'+Math.floor(Math.random()*16777215).toString(16));
-  document.documentElement.style.setProperty('--bg2','#'+Math.floor(Math.random()*16777215).toString(16));
-};
-document.getElementById('reset-theme').onclick=function(){
-  document.documentElement.style.setProperty('--bg1','#000'); document.documentElement.style.setProperty('--bg2','#ff6600'); document.documentElement.style.setProperty('--accent','#ff8800');
-};
-document.getElementById('halloween-theme').onclick=function(){document.documentElement.style.setProperty('--bg1','#000'); document.documentElement.style.setProperty('--bg2','#ff6600'); document.documentElement.style.setProperty('--accent','#ff8800'); createParticles(true);};
-
-// --- PLAYER COUNT ---
-const countEl=document.getElementById('count');
-async function updatePlayerCount(){
-  try{const res=await fetch('https://api.countapi.xyz/hit/mathline/site'); const data=await res.json(); countEl.innerText=data.value;}catch(e){console.log(e);}
-}
-updatePlayerCount(); setInterval(updatePlayerCount,5000);
 </script>
 </body>
 </html>
