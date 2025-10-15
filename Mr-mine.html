@@ -1,4 +1,399 @@
-<iframe src="https://mrmine.com/game/" title="Mr.Mine" scrolling="no" allow="autoplay; payment; fullscreen; microphone; clipboard-read; focus-without-user-activation *; screen-wake-lock; gamepad; clipboard-write 'self' https://mrmine.com" webkitallowfullscreen="true" mozallowfullscreen="true" msallowfullscreen="true" allowfullscreen="true" allowfullscreen loading="eager" style="border: 0px; background-color: rgb(255, 255, 255); width: 10px; height: 10px; min-width: 100%; min-height: 100%;">
-</iframe></br>
-<a href="https://mrmine.com/" target="_blank">Mr.Mine</a> is Developed by <a href="https://playsaurus.com" target="_blank">Playsaurus</a> - an idle game development studio.
-                    
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Tiny Miner — Idle Mining Game</title>
+<style>
+  :root{
+    --bg:#0b1220; --panel:#0f1724; --accent:#f5b461; --muted:#98a0b3; --glass: rgba(255,255,255,0.04);
+    --green:#7fe3a2; --danger:#ff7b7b;
+  }
+  html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial,sans-serif;background:
+    linear-gradient(180deg,#071024 0%, #081429 60%); color:#e6eef8;}
+  .container{max-width:1100px;margin:28px auto;padding:18px;display:grid;grid-template-columns:1fr 360px;gap:18px}
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(3,6,20,0.6)}
+  header{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  h1{font-size:20px;margin:0}
+  .big{font-size:28px;font-weight:700}
+  .mine-area{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;border-radius:10px;background:var(--glass);min-height:260px}
+  .ore{width:180px;height:180px;border-radius:10px;background:linear-gradient(180deg,#f7f3e9,#e4cfa4);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#16211a;font-weight:700;box-shadow:inset 0 -8px 18px rgba(0,0,0,0.15)}
+  .mine-btn{margin-top:14px;padding:12px 18px;border-radius:8px;background:var(--accent);color:#042028;border:0;font-weight:700;cursor:pointer;box-shadow:0 6px 12px rgba(245,180,97,0.18)}
+  .stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .stat{background:rgba(255,255,255,0.02);padding:8px 10px;border-radius:8px;font-size:13px}
+  .store{display:flex;flex-direction:column;gap:10px}
+  .item{display:flex;align-items:center;gap:12px;padding:10px;border-radius:8px;background:rgba(255,255,255,0.02)}
+  .item > .meta{flex:1}
+  .buy{padding:8px 10px;border-radius:8px;background:#0b7bd6;border:0;color:white;cursor:pointer}
+  .disabled{opacity:0.45;pointer-events:none}
+  footer{margin-top:12px;font-size:13px;color:var(--muted);}
+  .progress{height:10px;border-radius:8px;background:rgba(255,255,255,0.03);overflow:hidden}
+  .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--green),#5ed3a8)}
+  .controls{display:flex;flex-direction:column;gap:10px}
+  .small{font-size:13px;color:var(--muted)}
+  .row{display:flex;gap:10px;align-items:center}
+  .save-btn{padding:8px;border-radius:8px;background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--muted);cursor:pointer}
+  .topbar{display:flex;justify-content:space-between;align-items:center}
+  .title-mini{display:flex;gap:12px;align-items:center}
+  .currency{background:rgba(255,255,255,0.02);padding:6px 10px;border-radius:8px}
+  .log{max-height:150px;overflow:auto;padding:8px;background:rgba(0,0,0,0.12);border-radius:8px;font-size:13px}
+  @media (max-width:880px){ .container{grid-template-columns:1fr; padding:12px} .mine-area{min-height:220px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <main class="panel">
+    <div class="topbar">
+      <div class="title-mini">
+        <h1>Tiny Miner</h1>
+        <div class="small">— Click ore, buy miners, get rich</div>
+      </div>
+      <div class="currency">
+        <div style="font-size:13px;color:var(--muted)">Gold</div>
+        <div id="goldDisplay" class="big">0</div>
+      </div>
+    </div>
+
+    <section class="mine-area" id="mineArea">
+      <div class="ore" id="oreGraphic">
+        <div style="font-size:22px">Ore</div>
+        <div id="orePower" style="font-size:13px;color:rgba(0,0,0,0.6)">+1</div>
+      </div>
+      <button id="mineBtn" class="mine-btn">MINE (Space / M)</button>
+
+      <div class="stats" style="width:100%;justify-content:center">
+        <div class="stat">Total Mined: <span id="totalMined">0</span></div>
+        <div class="stat">Miners: <span id="minersCount">0</span></div>
+        <div class="stat">Power: <span id="powerDisplay">1</span></div>
+      </div>
+
+      <div style="width:100%;margin-top:12px">
+        <div class="small">Mining progress</div>
+        <div class="progress" aria-hidden="true">
+          <i id="progressBar" style="width:0%"></i>
+        </div>
+      </div>
+    </section>
+
+    <section style="margin-top:12px">
+      <div style="display:flex;justify-content:space-between;align-items:end">
+        <div><strong>Game Log</strong></div>
+        <div class="small">Autosave every 8s</div>
+      </div>
+      <div class="log" id="logArea"></div>
+      <footer>
+        Tip: Press <kbd>M</kbd> or click MINE to manually mine. Buy miners to automate. Upgrades scale your power.
+      </footer>
+    </section>
+  </main>
+
+  <aside class="panel">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div><strong>Store</strong><div class="small">Spend gold to expand</div></div>
+      <div class="small">Version 1.0</div>
+    </div>
+
+    <div style="margin-top:12px" class="store" id="storeList">
+      <!-- Items inserted by JS -->
+    </div>
+
+    <div style="margin-top:14px" class="controls">
+      <div class="row">
+        <button id="saveBtn" class="save-btn" title="Manually save">Save</button>
+        <button id="resetBtn" class="save-btn" title="Reset game">Reset</button>
+        <button id="exportBtn" class="save-btn" title="Export save">Export</button>
+      </div>
+      <div class="small">Estimated gold/sec: <strong id="gps">0</strong></div>
+      <div class="small">Click power and miner power combine.</div>
+    </div>
+
+    <div style="margin-top:12px">
+      <strong>Upgrades</strong>
+      <div id="upgrades" style="display:flex;flex-direction:column;gap:8px;margin-top:8px"></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/*
+ Tiny Miner - Single-file idle mining game
+ - Clean, small, local save using localStorage
+ - Balance is intentionally simple for demonstration
+*/
+
+(() => {
+  // ====== Game state ======
+  const state = {
+    gold: 0,
+    totalMined: 0,
+    clickPower: 1,
+    miners: 0,
+    minerPower: 1,
+    minerBaseCost: 25,
+    minerCostMultiplier: 1.15,
+    ticks: 0,
+    lastTick: Date.now(),
+    upgrades: {
+      powerBoost: {level:0, baseCost: 80, multiplier: 2.0}, // increases click power
+      minerBoost: {level:0, baseCost: 220, multiplier: 1.5} // increases miner power
+    }
+  };
+
+  // ====== DOM elements ======
+  const goldDisplay = document.getElementById('goldDisplay');
+  const mineBtn = document.getElementById('mineBtn');
+  const orePower = document.getElementById('orePower');
+  const minersCount = document.getElementById('minersCount');
+  const powerDisplay = document.getElementById('powerDisplay');
+  const totalMinedDisplay = document.getElementById('totalMined');
+  const storeList = document.getElementById('storeList');
+  const progressBar = document.getElementById('progressBar');
+  const logArea = document.getElementById('logArea');
+  const gpsDisplay = document.getElementById('gps');
+  const upgradesDiv = document.getElementById('upgrades');
+  const saveBtn = document.getElementById('saveBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const exportBtn = document.getElementById('exportBtn');
+
+  // ====== Utility functions ======
+  const fmt = n => (n>=1e9? (n/1e9).toFixed(2)+'B' : n>=1e6? (n/1e6).toFixed(2)+'M' : n>=1e3? (n/1e3).toFixed(1)+'k' : Math.floor(n));
+  const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+
+  function log(text){
+    const at = new Date().toLocaleTimeString();
+    logArea.innerHTML = `<div>[${at}] ${text}</div>` + logArea.innerHTML;
+  }
+
+  // ====== Store / Upgrade definitions ======
+  const storeItems = [
+    { id: 'miner', title: 'Miner', desc: 'An automated miner. Mines continuously.', type:'miner', baseCost: state.minerBaseCost }
+  ];
+
+  function minerCostFor(n) {
+    // cost for buying one miner at current count (geometric series incremental cost)
+    return Math.floor(state.minerBaseCost * Math.pow(state.minerCostMultiplier, n));
+  }
+
+  function buyMiner(){
+    const cost = minerCostFor(state.miners);
+    if (state.gold >= cost){
+      state.gold -= cost;
+      state.miners += 1;
+      log(`Bought Miner for ${cost} gold. Miners: ${state.miners}`);
+      render();
+    } else {
+      flashDisabled();
+    }
+  }
+
+  function buyUpgrade(id){
+    if (id === 'powerBoost'){
+      const up = state.upgrades.powerBoost;
+      const cost = Math.floor(up.baseCost * Math.pow(2, up.level));
+      if (state.gold >= cost){
+        state.gold -= cost;
+        up.level += 1;
+        state.clickPower = Math.floor(state.clickPower * up.multiplier);
+        log(`Bought Click Power upgrade (lvl ${up.level}) for ${cost} gold. Click power: ${state.clickPower}`);
+        render();
+      } else flashDisabled();
+    } else if (id === 'minerBoost'){
+      const up = state.upgrades.minerBoost;
+      const cost = Math.floor(up.baseCost * Math.pow(2.1, up.level));
+      if (state.gold >= cost){
+        state.gold -= cost;
+        up.level += 1;
+        state.minerPower = Math.floor(state.minerPower * up.multiplier);
+        log(`Bought Miner Power upgrade (lvl ${up.level}) for ${cost} gold. Miner power: ${state.minerPower}`);
+        render();
+      } else flashDisabled();
+    }
+  }
+
+  function flashDisabled(){
+    mineBtn.animate([{transform:'scale(1)'},{transform:'scale(0.97)'},{transform:'scale(1)'}],{duration:220});
+  }
+
+  // ====== Game actions ======
+  function manualMine(){
+    const amt = state.clickPower;
+    state.gold += amt;
+    state.totalMined += amt;
+    animateProgress(0.9);
+    log(`Mined ${amt} gold (manual).`);
+    render();
+  }
+
+  function tick(dt){
+    // dt in seconds
+    // Miners produce minerPower each per second
+    const produced = state.miners * state.minerPower * dt;
+    if (produced > 0){
+      state.gold += produced;
+      state.totalMined += produced;
+    }
+    state.ticks++;
+    // update progress bar (mining rhythm for manual feel)
+    const progress = Math.min(1, (Date.now()%2000)/2000);
+    progressBar.style.width = (progress*100) + '%';
+  }
+
+  // small flourish animation when progress updates
+  function animateProgress(multiplier){
+    progressBar.style.width = `${clamp((multiplier*100),4,100)}%`;
+    setTimeout(()=>{progressBar.style.width = '0%';},480);
+  }
+
+  // ====== Persistence ======
+  const SAVE_KEY = 'tiny_miner_v1';
+  function saveGame(){
+    try {
+      const copy = JSON.parse(JSON.stringify(state));
+      localStorage.setItem(SAVE_KEY, JSON.stringify(copy));
+      log('Game saved.');
+    } catch (err) {
+      console.error('Save failed', err);
+    }
+  }
+  function loadGame(){
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (!raw) return false;
+      const s = JSON.parse(raw);
+      Object.assign(state, s);
+      log('Save loaded.');
+      return true;
+    } catch (err) {
+      console.error('Load failed', err);
+      return false;
+    }
+  }
+  function exportSave(){
+    const data = localStorage.getItem(SAVE_KEY) || JSON.stringify(state);
+    const blob = new Blob([data], {type: 'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'tiny-miner-save.json';
+    document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  }
+  function resetGame(){
+    if (!confirm('Reset the game? This will delete your progress.')) return;
+    localStorage.removeItem(SAVE_KEY);
+    // reset fields explicitly
+    state.gold = 0; state.totalMined = 0; state.clickPower = 1;
+    state.miners = 0; state.minerPower = 1; state.upgrades = {
+      powerBoost: {level:0, baseCost: 80, multiplier: 2.0},
+      minerBoost: {level:0, baseCost: 220, multiplier: 1.5}
+    };
+    log('Game reset.');
+    render();
+  }
+
+  // ====== UI rendering ======
+  function renderStore(){
+    storeList.innerHTML = '';
+    // Miner item
+    const cost = minerCostFor(state.miners);
+    const node = document.createElement('div'); node.className = 'item';
+    node.innerHTML = `
+      <div class="meta">
+        <div style="font-weight:700">Miner</div>
+        <div class="small">Automated miner. Produces <strong>${state.minerPower}</strong>/s</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700">${fmt(cost)}</div>
+        <button class="buy" data-id="miner">${state.gold>=cost ? 'Buy' : 'Can\'t afford'}</button>
+      </div>
+    `;
+    storeList.appendChild(node);
+    node.querySelector('button').addEventListener('click', buyMiner);
+
+    // Upgrades
+    upgradesDiv.innerHTML = '';
+    // Click power upgrade
+    const p = state.upgrades.powerBoost;
+    const pCost = Math.floor(p.baseCost * Math.pow(2, p.level));
+    const pNode = document.createElement('div'); pNode.className='item';
+    pNode.innerHTML = `
+      <div class="meta">
+        <div style="font-weight:700">Click Power +</div>
+        <div class="small">Multiply click power (lvl ${p.level})</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700">${fmt(pCost)}</div>
+        <button class="buy" data-id="powerBoost">${state.gold>=pCost ? 'Buy' : 'Can't afford'}</button>
+      </div>
+    `;
+    upgradesDiv.appendChild(pNode);
+    pNode.querySelector('button').addEventListener('click', ()=>buyUpgrade('powerBoost'));
+
+    // Miner power upgrade
+    const m = state.upgrades.minerBoost;
+    const mCost = Math.floor(m.baseCost * Math.pow(2.1, m.level));
+    const mNode = document.createElement('div'); mNode.className='item';
+    mNode.innerHTML = `
+      <div class="meta">
+        <div style="font-weight:700">Miner Power +</div>
+        <div class="small">Increase miner output (lvl ${m.level})</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:700">${fmt(mCost)}</div>
+        <button class="buy" data-id="minerBoost">${state.gold>=mCost ? 'Buy' : 'Can't afford'}</button>
+      </div>
+    `;
+    upgradesDiv.appendChild(mNode);
+    mNode.querySelector('button').addEventListener('click', ()=>buyUpgrade('minerBoost'));
+  }
+
+  function render(){
+    goldDisplay.textContent = fmt(Math.floor(state.gold));
+    totalMinedDisplay.textContent = fmt(Math.floor(state.totalMined));
+    minersCount.textContent = state.miners;
+    powerDisplay.textContent = state.clickPower;
+    orePower.textContent = `+${fmt(state.clickPower)}`;
+    gpsDisplay.textContent = fmt(state.miners * state.minerPower);
+    renderStore();
+  }
+
+  // ====== Main loop ======
+  let last = Date.now();
+  function loop(){
+    const now = Date.now();
+    const dtMs = now - last;
+    last = now;
+    const dt = dtMs / 1000;
+    tick(dt);
+    // Update UI every frame (fine for small game)
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  // autosave interval
+  setInterval(saveGame, 8000);
+
+  // ====== Event wiring ======
+  mineBtn.addEventListener('click', manualMine);
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space' || e.key.toLowerCase()==='m') {
+      e.preventDefault();
+      manualMine();
+    }
+  });
+  saveBtn.addEventListener('click', saveGame);
+  resetBtn.addEventListener('click', resetGame);
+  exportBtn.addEventListener('click', exportSave);
+
+  // Load if present
+  loadGame();
+  render();
+  requestAnimationFrame(loop);
+
+  // Quick helpful tips
+  if (!localStorage.getItem(SAVE_KEY)){
+    log('Welcome! Try clicking the big MINE button or press M. Buy a Miner to automate.');
+  } else {
+    log('Welcome back!');
+  }
+})();
+</script>
+</body>
+</html>
