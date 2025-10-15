@@ -53,6 +53,23 @@
     margin-top: 5px;
   }
 
+  /* === Live Player Count Box === */
+  #liveCountBox {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(145deg, #3a0a0a, #7d1a1a);
+    border: 2px solid #ffb300;
+    border-radius: 12px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffb300;
+    text-shadow: 0 0 10px #b30000, 0 0 20px #ffb300;
+    box-shadow: 0 0 15px #ffb300, 0 0 25px #b30000;
+    z-index: 1000;
+  }
+
   #search-container {
     margin: 20px 0 0 0;
   }
@@ -178,6 +195,9 @@
   <p>Now with favorites, search, and animated background!</p>
 </header>
 
+<!-- Live Player Count Box -->
+<div id="liveCountBox">Players online: <span id="liveCount">0</span></div>
+
 <div id="search-container">
   <input type="text" id="search-input" placeholder="Search games..." oninput="filterGames()">
 </div>
@@ -237,11 +257,9 @@ const games = [
   "Vex 8", "Tiny fishing", "Drive mad", "Stick man hook", "Learn to fly 2",
   "Line rider", "Unicycle hero", "Basket random", "1v1 lol", "Happy wheels",
   "Idle dice", "Idle miner tycoon", "Johnny upgrade", "Jack smith", "Tunnel rush",
-  "Duck life 5", "Duck life 4", "Mob control", "A small world cup", "Escape road"
-  , "QWOP", "Indian truck simulator", "Mr mine clone", " Doge miner", " Draw climber"
-  , "Granny online"
-  
-  
+  "Duck life 5", "Duck life 4", "Mob control", "A small world cup", "Escape road",
+  "QWOP", "Indian truck simulator", "Mr mine clone", "Doge miner", "Draw climber",
+  "Granny online"
 ];
 
 const gameList = document.getElementById("game-list");
@@ -333,6 +351,19 @@ window.addEventListener('resize', () => {
 });
 
 renderGames();
+
+/* === COUNTAPI PLAYER COUNT === */
+async function updatePlayerCount() {
+    try {
+        const res = await fetch('https://api.countapi.xyz/hit/mathline-game-site/visitors');
+        const data = await res.json();
+        document.getElementById('liveCount').innerText = data.value;
+    } catch (err) {
+        console.error('Error fetching player count:', err);
+    }
+}
+setInterval(updatePlayerCount, 5000);
+updatePlayerCount();
 </script>
 </body>
 </html>
