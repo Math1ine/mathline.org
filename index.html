@@ -12,7 +12,6 @@
   --card-font:'Poppins', sans-serif; --bg-speed:12s;
   --hover-scale:1.02; --hover-glow:1;
 }
-
 body {
   font-family: var(--card-font); text-align:center; color:var(--text-color);
   margin:0; padding:0; overflow-x:hidden;
@@ -20,44 +19,37 @@ body {
   background-size:400% 400%; animation:moveBackground var(--bg-speed) ease infinite;
   transition: all 0.3s;
 }
-
 @keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-
 canvas#bg {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background:transparent;}
-
 header{padding:25px;}
 header h1{margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 0 15px var(--accent);}
-
-#settings-btn {position:fixed; top:20px; right:20px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:1001;}
-
-#settings-menu {position:fixed; top:0; right:-320px; width:300px; height:100%; background:rgba(0,0,0,0.9); color:#fff;
-display:flex; flex-direction:column; padding:30px 20px; gap:10px; transition:right 0.3s ease; z-index:1000;}
+#search-container {position:fixed; top:25px; left:25px; z-index:1001;}
+#search-input {padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent);}
+#settings-btn {position:fixed; top:25px; right:25px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:1001;}
+#player-count {position:fixed; top:25px; right:80px; color:var(--accent); font-size:20px; font-weight:bold; z-index:1001;}
+#back-btn, #fullscreen-btn {position:fixed; left:25px; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:1001; display:none;}
+#back-btn {top:25px;} #fullscreen-btn {top:70px;}
+#settings-menu {position:fixed; top:0; right:-320px; width:300px; height:100%; background:rgba(0,0,0,0.9); color:#fff; display:flex; flex-direction:column; padding:30px 20px; gap:10px; transition:right 0.3s ease; z-index:1000;}
 #settings-menu.open{right:0;}
 #settings-menu h2{margin-top:0; text-align:center;}
 #settings-menu label{display:flex; justify-content:space-between; align-items:center;}
-#settings-menu input[type=color],#settings-menu select,#settings-menu input[type=range]{cursor:pointer;}
+#settings-menu input[type=color], #settings-menu select, #settings-menu input[type=range]{cursor:pointer;}
 #settings-menu button{padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s;}
 #settings-menu button:hover{filter:brightness(1.2);}
-
-.game-list{display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding:20px;}
-
-.game-card{
-  background:var(--card-bg); border:2px solid var(--accent); color:var(--accent);
-  width:180px; padding:15px; border-radius:var(--card-radius); cursor:pointer;
-  transition: transform .25s, box-shadow .25s; font-size:1.1em; font-family:var(--card-font);
-  box-shadow:var(--card-shadow) ? 0 0 10px rgba(0,0,0,0.5) : none;
-}
+.game-list{display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding:80px 20px 20px;}
+.game-card{background:var(--card-bg); border:2px solid var(--accent); color:var(--accent); width:180px; padding:15px; border-radius:var(--card-radius); cursor:pointer; transition: transform .25s, box-shadow .25s; font-size:1.1em; font-family:var(--card-font); box-shadow:var(--card-shadow)?0 0 10px rgba(0,0,0,0.5):none;}
 .game-card:hover{transform: scale(var(--hover-scale)); box-shadow: var(--hover-glow)?0 0 15px var(--accent):none;}
-
-#back-btn{position:fixed; top:20px; left:20px; display:none; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:1001;}
 iframe#game-frame{display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000;}
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
-
 <header><h1>Math Line</h1></header>
+<div id="search-container"><input type="text" id="search-input" placeholder="Search games..."></div>
 <button id="settings-btn">⚙️</button>
+<div id="player-count">Players Online: <span id="count">0</span></div>
+<button id="back-btn">⬅ Back</button>
+<button id="fullscreen-btn">⛶ Fullscreen</button>
 
 <div id="settings-menu">
 <h2>Settings</h2>
@@ -70,8 +62,9 @@ iframe#game-frame{display:none; width:95%; height:650px; margin:0 auto; border:n
 <label>Text Color:<input type="color" id="text-color" value="#f0f0f0"></label>
 <label>Card Radius:<input type="range" id="card-radius" min="0" max="50" value="12"></label>
 <label>Card Shadow:<input type="checkbox" id="card-shadow" checked></label>
+<label>Particle Count:<input type="range" id="particle-count" min="10" max="150" value="70"></label>
 <label>Particle Size:<input type="range" id="particle-size" min="1" max="5" value="2"></label>
-<label>Particle Speed:<input type="range" id="particle-speed" min="0.1" max="2" step="0.1" value="0.5"></label>
+<label>Particle Speed:<input type="range" id="particle-speed" min="0.1" max="1.5" step="0.05" value="0.5"></label>
 <label>Hover Scale:<input type="range" id="hover-scale" min="1" max="1.5" step="0.01" value="1.02"></label>
 <label>Hover Glow:<input type="checkbox" id="hover-glow" checked></label>
 <label>Font Family:<select id="card-font">
@@ -88,81 +81,96 @@ iframe#game-frame{display:none; width:95%; height:650px; margin:0 auto; border:n
 <button id="close-settings">Close</button>
 </div>
 
-<button id="back-btn">⬅ Back</button>
-<iframe id="game-frame"></iframe>
 <div class="game-list" id="game-list"></div>
+<iframe id="game-frame"></iframe>
 
 <script>
-// PARTICLES
-const canvas=document.getElementById('bg'); const ctx=canvas.getContext('2d');
+// --- PARTICLES ---
+const canvas=document.getElementById('bg'), ctx=canvas.getContext('2d');
 canvas.width=innerWidth; canvas.height=innerHeight;
-let particleSize=2, particleSpeed=0.5, particlesOn=true, particles=[];
-function createParticles(){particles=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:document.getElementById('accent').value}));}
-createParticles();
-function animate(){ctx.fillStyle='rgba(0,0,0,0.25)';ctx.fillRect(0,0,canvas.width,canvas.height); if(particlesOn){particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill(); p.x+=p.dx; p.y+=p.dy; if(p.x<0||p.x>canvas.width)p.dx*=-1;if(p.y<0||p.y>canvas.height)p.dy*=-1;});} requestAnimationFrame(animate);}
-animate();
-window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight; createParticles();});
+let particles=[], particleSize=2, particleSpeed=0.5, particlesOn=true, particleCount=70;
 
-// GAME LIST
+function createParticles(resetPositions=false){
+  if(resetPositions){
+    particles=Array.from({length:particleCount},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:document.getElementById('accent').value}));
+  } else {
+    particles.forEach(p=>{p.r=Math.random()*particleSize+1; p.dx=(Math.random()-0.5)*particleSpeed; p.dy=(Math.random()-0.5)*particleSpeed; p.color=document.getElementById('accent').value;});
+    while(particles.length<particleCount){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:document.getElementById('accent').value});}
+    particles=particles.slice(0,particleCount);
+  }
+}
+createParticles(true);
+function animate(){
+  ctx.fillStyle='rgba(0,0,0,0.25)'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  if(particlesOn){particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fillStyle=p.color; ctx.fill(); p.x+=p.dx; p.y+=p.dy; if(p.x<0||p.x>canvas.width)p.dx*=-1;if(p.y<0||p.y>canvas.height)p.dy*=-1;});}
+  requestAnimationFrame(animate);
+}
+animate();
+window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight; createParticles(true);});
+
+// --- GAME LIST ---
 const games=["Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl","Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers","Bit planes","Final earth2","Cluster rush","Push your luck","Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3","Malidin stun cars","Gun spin","Age of war","Moto x3m 2","Moto x3m winter","Basketball stars","Idle breakout","Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2","Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels","Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush","Duck life 5","Duck life 4","Mob control","A small world cup","Escape road","QWOP","Indian truck simulator","Mr mine clone","Doge miner","Draw climber","Granny online"];
-const gameList=document.getElementById("game-list");
-function renderGames(){gameList.innerHTML=""; games.forEach(name=>{const card=document.createElement("div");card.className="game-card";card.textContent=name;card.onclick=()=>{document.getElementById('game-frame').src=name.replaceAll(' ','-')+'.html';document.getElementById('game-frame').style.display='block';gameList.style.display='none';document.getElementById('back-btn').style.display='block';document.getElementById('settings-btn').style.display='none';window.scrollTo(0,0);}; gameList.appendChild(card);});}
+const gameList=document.getElementById('game-list');
+function renderGames(){
+  gameList.innerHTML='';
+  games.sort((a,b)=>a.localeCompare(b)).forEach(name=>{
+    const card=document.createElement('div'); card.className='game-card'; card.textContent=name;
+    card.onclick=()=>{document.getElementById('game-frame').src=name.replaceAll(' ','-')+'.html'; document.getElementById('game-frame').style.display='block'; gameList.style.display='none'; document.getElementById('back-btn').style.display='block'; document.getElementById('fullscreen-btn').style.display='block'; document.getElementById('settings-btn').style.display='none'; window.scrollTo(0,0);}
+    gameList.appendChild(card);
+  });
+}
 renderGames();
 
-// SETTINGS
-const settingsBtn=document.getElementById('settings-btn');
-const settingsMenu=document.getElementById('settings-menu');
-const closeBtn=document.getElementById('close-settings');
-settingsBtn.onclick=()=>{settingsMenu.classList.toggle('open');};
-closeBtn.onclick=()=>{settingsMenu.classList.remove('open');};
+// --- SEARCH ---
+document.getElementById('search-input').addEventListener('input',()=>{const val=document.getElementById('search-input').value.toLowerCase(); document.querySelectorAll('.game-card').forEach(card=>{card.style.display=card.textContent.toLowerCase().includes(val)?'block':'none';});});
 
-// BACK BUTTON
-document.getElementById('back-btn').onclick=()=>{document.getElementById('game-frame').src='';document.getElementById('game-frame').style.display='none';gameList.style.display='flex';document.getElementById('back-btn').style.display='none';document.getElementById('settings-btn').style.display='block';};
+// --- BACK/FULLSCREEN ---
+document.getElementById('back-btn').onclick=()=>{document.getElementById('game-frame').src=''; document.getElementById('game-frame').style.display='none'; gameList.style.display='flex'; document.getElementById('back-btn').style.display='none'; document.getElementById('fullscreen-btn').style.display='none'; document.getElementById('settings-btn').style.display='block';}
+document.getElementById('fullscreen-btn').onclick=()=>{const f=document.getElementById('game-frame'); if(f.requestFullscreen)f.requestFullscreen(); else if(f.webkitRequestFullscreen)f.webkitRequestFullscreen(); else if(f.msRequestFullscreen)f.msRequestFullscreen();}
 
-// SETTINGS CONTROLS
-const bg1=document.getElementById('bg1'); const bg2=document.getElementById('bg2'); const bg3=document.getElementById('bg3'); const bg4=document.getElementById('bg4');
-const accent=document.getElementById('accent'); const headerColor=document.getElementById('header-color'); const textColor=document.getElementById('text-color');
-const cardRadius=document.getElementById('card-radius'); const cardShadow=document.getElementById('card-shadow'); const particleSizeSlider=document.getElementById('particle-size');
-const particleSpeedSlider=document.getElementById('particle-speed'); const hoverScale=document.getElementById('hover-scale');
-const hoverGlow=document.getElementById('hover-glow'); const cardFont=document.getElementById('card-font');
-const bgSpeed=document.getElementById('bg-speed'); const toggleParticles=document.getElementById('toggle-particles');
-const toggleMode=document.getElementById('toggle-mode');
+// --- SETTINGS MENU ---
+const settingsBtn=document.getElementById('settings-btn'); const settingsMenu=document.getElementById('settings-menu');
+settingsBtn.onclick=()=>settingsMenu.classList.toggle('open');
+document.getElementById('close-settings').onclick=()=>settingsMenu.classList.remove('open');
 
-function updateSettings(){
-  document.documentElement.style.setProperty('--bg1',bg1.value);
-  document.documentElement.style.setProperty('--bg2',bg2.value);
-  document.documentElement.style.setProperty('--bg3',bg3.value);
-  document.documentElement.style.setProperty('--bg4',bg4.value);
-  document.documentElement.style.setProperty('--accent',accent.value);
-  document.documentElement.style.setProperty('--header-color',headerColor.value);
-  document.documentElement.style.setProperty('--text-color',textColor.value);
-  document.documentElement.style.setProperty('--card-radius',cardRadius.value+'px');
-  document.documentElement.style.setProperty('--card-shadow',cardShadow.checked?1:0);
-  document.documentElement.style.setProperty('--hover-scale',hoverScale.value);
-  document.documentElement.style.setProperty('--hover-glow',hoverGlow.checked?1:0);
-  document.documentElement.style.setProperty('--card-font',cardFont.value);
-  document.documentElement.style.setProperty('--bg-speed',bgSpeed.value+'s');
-  particlesOn=toggleParticles.checked;
-  particleSize=parseFloat(particleSizeSlider.value);
-  particleSpeed=parseFloat(particleSpeedSlider.value);
-  createParticles();
+// --- SETTINGS CONTROLS ---
+const controls=['bg1','bg2','bg3','bg4','accent','header-color','text-color','card-radius','card-shadow','particle-count','particle-size','particle-speed','hover-scale','hover-glow','card-font','bg-speed','toggle-particles','toggle-mode'];
+controls.forEach(id=>{
+  const el=document.getElementById(id);
+  el.oninput=el.onchange=applySettings;
+});
+document.getElementById('random-theme').onclick=randomTheme;
+document.getElementById('reset-theme').onclick=resetTheme;
+
+function applySettings(){
+  document.body.style.setProperty('--bg1',document.getElementById('bg1').value);
+  document.body.style.setProperty('--bg2',document.getElementById('bg2').value);
+  document.body.style.setProperty('--bg3',document.getElementById('bg3').value);
+  document.body.style.setProperty('--bg4',document.getElementById('bg4').value);
+  document.body.style.setProperty('--accent',document.getElementById('accent').value);
+  document.body.style.setProperty('--header-color',document.getElementById('header-color').value);
+  document.body.style.setProperty('--text-color',document.getElementById('text-color').value);
+  document.body.style.setProperty('--card-radius',document.getElementById('card-radius').value+'px');
+  document.body.style.setProperty('--card-shadow',document.getElementById('card-shadow').checked?1:0);
+  document.body.style.setProperty('--hover-scale',document.getElementById('hover-scale').value);
+  document.body.style.setProperty('--hover-glow',document.getElementById('hover-glow').checked?1:0);
+  document.body.style.setProperty('--card-font',document.getElementById('card-font').value);
+  document.body.style.setProperty('--bg-speed',document.getElementById('bg-speed').value+'s');
+  particlesOn=document.getElementById('toggle-particles').checked;
+  if(document.getElementById('toggle-mode').checked){document.body.style.background='#000'; document.body.style.color='#fff';}else{document.body.style.color=document.getElementById('text-color').value;}
+  particleCount=parseInt(document.getElementById('particle-count').value);
+  particleSize=parseInt(document.getElementById('particle-size').value);
+  particleSpeed=parseFloat(document.getElementById('particle-speed').value);
+  createParticles(false);
 }
 
-[bg1,bg2,bg3,bg4,accent,headerColor,textColor,cardRadius,cardShadow,particleSizeSlider,particleSpeedSlider,hoverScale,hoverGlow,cardFont,bgSpeed,toggleParticles,toggleMode].forEach(el=>el.oninput=updateSettings);
+function randomTheme(){['bg1','bg2','bg3','bg4','accent','header-color','text-color'].forEach(id=>document.getElementById(id).value='#'+Math.floor(Math.random()*16777215).toString(16)); applySettings();}
+function resetTheme(){['bg1','bg2','bg3','bg4','accent','header-color','text-color','card-radius','hover-scale','card-font','bg-speed','toggle-particles','toggle-mode','card-shadow','hover-glow'].forEach(id=>{const el=document.getElementById(id); if(el.type==='color')el.value=el.defaultValue; else if(el.type==='range')el.value=el.defaultValue; else if(el.type==='checkbox')el.checked=el.defaultChecked; else el.value=el.options[0].value;}); applySettings();}
 
-// DARK/LIGHT MODE
-toggleMode.oninput=()=>{if(toggleMode.checked){document.body.style.background="#222";document.body.style.color="#fff";}else{document.body.style.background="";document.body.style.color="";updateSettings();}};
-
-// RANDOM/RESET
-document.getElementById('random-theme').onclick=()=>{bg1.value='#'+Math.floor(Math.random()*16777215).toString(16);
-bg2.value='#'+Math.floor(Math.random()*16777215).toString(16);bg3.value='#'+Math.floor(Math.random()*16777215).toString(16);
-bg4.value='#'+Math.floor(Math.random()*16777215).toString(16);accent.value='#'+Math.floor(Math.random()*16777215).toString(16);
-headerColor.value='#'+Math.floor(Math.random()*16777215).toString(16);textColor.value='#'+Math.floor(Math.random()*16777215).toString(16);updateSettings();};
-
-document.getElementById('reset-theme').onclick=()=>{bg1.value="#1a0000"; bg2.value="#4a0d0d"; bg3.value="#7d1a1a"; bg4.value="#2a0000";
-accent.value="#ffb300"; headerColor.value="#ffffff"; textColor.value="#f0f0f0"; cardRadius.value=12; cardShadow.checked=true;
-particleSizeSlider.value=2; particleSpeedSlider.value=0.5; hoverScale.value=1.02; hoverGlow.checked=true; cardFont.value='Poppins'; bgSpeed.value=12;
-toggleParticles.checked=true; toggleMode.checked=false; updateSettings();};
+// --- LIVE PLAYER COUNT ---
+const namespace="mathline"; const key="liveplayers";
+async function updatePlayerCount(){try{const res=await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`); const data=await res.json(); document.getElementById('count').textContent=data.value;}catch(e){console.error(e);}}
+updatePlayerCount(); setInterval(updatePlayerCount,10000);
 </script>
 </body>
 </html>
