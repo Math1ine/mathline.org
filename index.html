@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Math Line</title>
 <style>
 :root {
@@ -11,6 +11,7 @@
   --bg-gradient-color3: #7d1a1a;
   --bg-gradient-color4: #2a0000;
   --accent-color: #ffb300;
+  --card-bg: rgba(0,0,0,0.5);
 }
 
 body {
@@ -97,13 +98,19 @@ header h1 {
 }
 
 .game-card {
-  background: rgba(0,0,0,0.5);
+  background: var(--card-bg);
   border: 2px solid var(--accent-color);
   color: var(--accent-color);
   width: 220px;
   padding: 20px;
   border-radius: 12px;
   cursor: pointer;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.game-card:hover {
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 0 15px var(--accent-color);
 }
 </style>
 </head>
@@ -172,8 +179,22 @@ animate();
 
 window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
 
-// Simple game list
-const games = ["Ragdoll archers","Time shooter","Retro bowl","Snow rider"];
+// Full game list
+const games = [
+  "Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl",
+  "Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers",
+  "Bit planes","Final earth2","Cluster rush","Push your luck",
+  "Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3",
+  "Malidin stun cars","Gun spin","Age of war","Moto x3m 2",
+  "Moto x3m winter","Basketball stars","Idle breakout",
+  "Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2",
+  "Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels",
+  "Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush",
+  "Duck life 5","Duck life 4","Mob control","A small world cup","Escape road",
+  "QWOP","Indian truck simulator","Mr mine clone","Doge miner","Draw climber",
+  "Granny online"
+];
+
 const gameList = document.getElementById("game-list");
 function renderGames(){
   gameList.innerHTML="";
