@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Math Line</title>
+<title>Math Line - Halloween Edition</title>
 <style>
 :root {
-  --bg1:#1a0000; --bg2:#4a0d0d; --bg3:#7d1a1a; --bg4:#2a0000;
-  --accent:#ffb300; --header-color:#fff; --text-color:#f0f0f0;
-  --card-bg:rgba(0,0,0,0.5); --card-radius:12px; --card-shadow:1;
+  --bg1:#000000; --bg2:#2a002a; --bg3:#4a0d0d; --bg4:#1a0000;
+  --accent:#ff8800; --header-color:#fff; --text-color:#f0f0f0;
+  --card-bg:rgba(0,0,0,0.6); --card-radius:14px; --card-shadow:1;
   --card-font:'Poppins', sans-serif; --bg-speed:12s;
   --hover-scale:1.02; --hover-glow:1;
 }
@@ -108,11 +108,11 @@ header h1 {
   right: -320px;
   width: 300px;
   height: 100%;
-  background: rgba(0,0,0,0.9);
+  background: rgba(0,0,0,0.95);
   color: #fff;
   display: flex;
   flex-direction: column;
-  padding: 30px 20px;
+  padding: 20px;
   gap: 10px;
   transition: right 0.3s ease;
   z-index: 1000;
@@ -152,8 +152,8 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 15px;
-  padding: 80px 20px 20px;
+  gap: 20px;
+  padding: 100px 20px 20px;
 }
 
 .game-card {
@@ -161,14 +161,13 @@ header h1 {
   background: var(--card-bg);
   border: 2px solid var(--accent);
   color: var(--accent);
-  width: 230px;
-  padding: 30px;
+  width: 250px;
+  padding: 25px;
   border-radius: var(--card-radius);
   cursor: pointer;
   transition: transform .25s, box-shadow .25s;
   font-size: 1.2em;
   font-family: var(--card-font);
-  box-shadow: var(--card-shadow)?0 0 10px rgba(0,0,0,0.5):none;
 }
 
 .game-card:hover {
@@ -186,6 +185,22 @@ iframe#game-frame {
   box-shadow: 0 8px 20px rgba(0,0,0,0.6);
   background: #000;
 }
+
+/* Halloween decorations */
+.halloween {
+  position: fixed;
+  z-index: 500;
+  pointer-events: none;
+  font-size: 30px;
+  animation: float 10s linear infinite;
+}
+
+@keyframes float {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-15px) rotate(15deg);}
+  100% { transform: translateY(0) rotate(-15deg);}
+}
+
 </style>
 </head>
 <body>
@@ -193,7 +208,7 @@ iframe#game-frame {
 <canvas id="bg"></canvas>
 
 <header>
-  <h1>Math Line</h1>
+  <h1>Math Line 🎃</h1>
   <div id="player-count">Players Online: <span id="count">0</span></div>
 </header>
 
@@ -207,14 +222,15 @@ iframe#game-frame {
 
 <div id="settings-menu">
   <h2>Settings</h2>
-  <label>Background 1:<input type="color" id="bg1" value="#1a0000"></label>
-  <label>Background 2:<input type="color" id="bg2" value="#4a0d0d"></label>
-  <label>Background 3:<input type="color" id="bg3" value="#7d1a1a"></label>
-  <label>Background 4:<input type="color" id="bg4" value="#2a0000"></label>
-  <label>Accent Color:<input type="color" id="accent" value="#ffb300"></label>
+  <button id="halloween-theme">Halloween Theme</button>
+  <label>Background 1:<input type="color" id="bg1" value="#000000"></label>
+  <label>Background 2:<input type="color" id="bg2" value="#2a002a"></label>
+  <label>Background 3:<input type="color" id="bg3" value="#4a0d0d"></label>
+  <label>Background 4:<input type="color" id="bg4" value="#1a0000"></label>
+  <label>Accent Color:<input type="color" id="accent" value="#ff8800"></label>
   <label>Header Color:<input type="color" id="header-color" value="#ffffff"></label>
   <label>Text Color:<input type="color" id="text-color" value="#f0f0f0"></label>
-  <label>Card Radius:<input type="range" id="card-radius" min="0" max="50" value="12"></label>
+  <label>Card Radius:<input type="range" id="card-radius" min="0" max="50" value="14"></label>
   <label>Card Shadow:<input type="checkbox" id="card-shadow" checked></label>
   <label>Particle Count:<input type="range" id="particle-count" min="10" max="150" value="70"></label>
   <label>Particle Size:<input type="range" id="particle-size" min="1" max="5" value="2"></label>
@@ -236,7 +252,6 @@ iframe#game-frame {
 </div>
 
 <div class="game-list" id="game-list"></div>
-
 <iframe id="game-frame"></iframe>
 
 <footer>
@@ -272,6 +287,20 @@ function animate(){
 animate();
 
 window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
+
+// --- HALLOWEEN DECORATIONS ---
+function addHalloweenDecor(){
+  const symbols=['🎃','🕸️','🦇','🍬'];
+  for(let i=0;i<20;i++){
+    const span=document.createElement('div');
+    span.className='halloween';
+    span.style.left=Math.random()*window.innerWidth+'px';
+    span.style.top=Math.random()*window.innerHeight+'px';
+    span.textContent=symbols[Math.floor(Math.random()*symbols.length)];
+    document.body.appendChild(span);
+  }
+}
+addHalloweenDecor();
 
 // --- GAMES ---
 const games=[
@@ -425,13 +454,24 @@ document.getElementById('random-theme').onclick=function(){
   }); updateSettings();
 };
 document.getElementById('reset-theme').onclick=function(){
-  document.getElementById('bg1').value="#1a0000";
-  document.getElementById('bg2').value="#4a0d0d";
-  document.getElementById('bg3').value="#7d1a1a";
-  document.getElementById('bg4').value="#2a0000";
-  document.getElementById('accent').value="#ffb300";
+  document.getElementById('bg1').value="#000000";
+  document.getElementById('bg2').value="#2a002a";
+  document.getElementById('bg3').value="#4a0d0d";
+  document.getElementById('bg4').value="#1a0000";
+  document.getElementById('accent').value="#ff8800";
   document.getElementById('header-color').value="#ffffff";
   document.getElementById('text-color').value="#f0f0f0";
+  updateSettings();
+};
+document.getElementById('halloween-theme').onclick=function(){
+  document.getElementById('bg1').value="#000000";
+  document.getElementById('bg2').value="#2a002a";
+  document.getElementById('bg3').value="#4a0d0d";
+  document.getElementById('bg4').value="#1a0000";
+  document.getElementById('accent').value="#ff8800";
+  document.getElementById('header-color').value="#ffffff";
+  document.getElementById('text-color').value="#f0f0f0";
+  createParticles(true);
   updateSettings();
 };
 
@@ -444,9 +484,8 @@ async function updatePlayerCount(){
     countEl.innerText=data.value;
   }catch(e){console.log(e);}
 }
-setInterval(updatePlayerCount,5000);
 updatePlayerCount();
+setInterval(updatePlayerCount,5000);
 </script>
-
 </body>
 </html>
