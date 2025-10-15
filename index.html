@@ -5,36 +5,40 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Math Line</title>
 <style>
+  :root {
+    --accent-color: #ffb300;
+    --bg-color: #1a0a0a;
+    --text-color: #f0f0f0;
+    --card-bg: linear-gradient(145deg, #2a0a0a, #1a0a0a);
+    --card-glow-bg: linear-gradient(145deg, #3a0a0a, #1e1e2e);
+    --header-bg: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
+    --header-text: #fff;
+    --sub-text: #ffdb91;
+  }
+
+  body.dark-mode {
+    --bg-color: #f0f0f0;
+    --text-color: #1a0a0a;
+    --card-bg: linear-gradient(145deg, #e0e0e0, #c0c0c0);
+    --card-glow-bg: linear-gradient(145deg, #d0d0d0, #b0b0b0);
+    --header-bg: linear-gradient(90deg, #ffb300, #b30000, #7d1a1a);
+    --header-text: #1a0a0a;
+    --sub-text: #333;
+  }
+
   body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
-    color: #f0f0f0;
+    color: var(--text-color);
     margin: 0;
     padding: 0;
     overflow-x: hidden;
-    background: linear-gradient(-45deg, #1a0000, #4a0d0d, #7d1a1a, #2a0000, #ffb300);
-    background-size: 400% 400%;
-    animation: moveBackground 12s ease infinite;
-  }
-
-  @keyframes moveBackground {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
-
-  canvas#bg {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    background: transparent;
+    background: var(--bg-color);
+    transition: all 0.3s;
   }
 
   header {
-    background: linear-gradient(90deg, #7d1a1a, #b30000, #ffb300);
+    background: var(--header-bg);
     padding: 25px;
     border-bottom: 3px solid #000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.7);
@@ -43,32 +47,51 @@
   header h1 {
     margin: 0;
     font-size: 2.8em;
-    color: #fff;
-    text-shadow: 0 0 15px #ffb300;
+    color: var(--header-text);
+    text-shadow: 0 0 15px var(--accent-color);
   }
 
   header p {
-    color: #ffdb91;
+    color: var(--sub-text);
     font-size: 1.2em;
     margin-top: 5px;
   }
 
-  /* === Live Player Count Box === */
-  #liveCountBox {
+  #settings-btn {
     position: fixed;
     top: 20px;
     right: 20px;
-    background: linear-gradient(145deg, #3a0a0a, #7d1a1a);
-    border: 2px solid #ffb300;
-    border-radius: 12px;
-    padding: 10px 20px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #ffb300;
-    text-shadow: 0 0 10px #b30000, 0 0 20px #ffb300;
-    box-shadow: 0 0 15px #ffb300, 0 0 25px #b30000;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--accent-color);
+    z-index: 1001;
+  }
+
+  #settings-menu {
+    position: fixed;
+    top:0; left:0;
+    width: 100%; height:100%;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
     z-index: 1000;
   }
+
+  .menu-content {
+    background: var(--bg-color);
+    padding: 30px;
+    border-radius: 12px;
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-width: 250px;
+  }
+
+  .hidden { display: none; }
 
   #search-container {
     margin: 20px 0 0 0;
@@ -79,10 +102,10 @@
     width: 250px;
     font-size: 16px;
     border-radius: 8px;
-    border: 2px solid #ffb300;
+    border: 2px solid var(--accent-color);
     outline: none;
-    background: #1a0a0a;
-    color: #ffb300;
+    background: var(--bg-color);
+    color: var(--accent-color);
     box-shadow: 0 4px 12px rgba(0,0,0,0.4);
   }
 
@@ -97,8 +120,8 @@
 
   .game-card {
     position: relative;
-    background: linear-gradient(145deg, #2a0a0a, #1a0a0a);
-    border: 2px solid #ffb300;
+    background: var(--card-bg);
+    border: 2px solid var(--accent-color);
     border-radius: 16px;
     width: 230px;
     padding: 30px 20px;
@@ -109,16 +132,16 @@
 
   .game-card:hover {
     transform: translateY(-8px) scale(1.03);
-    box-shadow: 0 12px 25px rgba(255,179,0,0.6), 0 0 25px #ffb300;
+    box-shadow: 0 12px 25px rgba(var(--accent-color-rgb, 255,179,0),0.6), 0 0 25px var(--accent-color);
   }
 
   .game-card span {
     font-size: 1.3em;
     font-weight: bold;
-    color: #ffb300;
+    color: var(--accent-color);
     display: block;
     margin-top: 10px;
-    text-shadow: 0 0 8px #b30000;
+    text-shadow: 0 0 8px var(--header-text);
   }
 
   .star {
@@ -135,21 +158,21 @@
   }
 
   .favorited {
-    color: gold;
-    text-shadow: 0 0 10px #ffb300;
+    color: var(--accent-color);
+    text-shadow: 0 0 10px var(--accent-color);
   }
 
   .glow-card {
-    background: linear-gradient(145deg, #3a0a0a, #1e1e2e);
-    box-shadow: 0 0 25px #ffb300, 0 0 45px #b30000;
-    border: 2px solid #ffb300;
+    background: var(--card-glow-bg);
+    box-shadow: 0 0 25px var(--accent-color), 0 0 45px #b30000;
+    border: 2px solid var(--accent-color);
   }
 
   .back-btn, .fullscreen-btn {
     display: none;
     position: fixed;
     top: 20px;
-    color: #fff;
+    color: var(--text-color);
     border: none;
     border-radius: 8px;
     padding: 10px 20px;
@@ -178,11 +201,21 @@
   footer {
     margin-top: 60px;
     padding: 25px;
-    background: #1a0a0a;
-    border-top: 3px solid #ffb300;
-    color: #ffdb91;
+    background: var(--bg-color);
+    border-top: 3px solid var(--accent-color);
+    color: var(--sub-text);
     font-size: 0.95em;
     box-shadow: 0 -4px 12px rgba(0,0,0,0.5);
+  }
+
+  canvas#bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background: transparent;
   }
 </style>
 </head>
@@ -195,8 +228,22 @@
   <p>Now with favorites, search, and animated background!</p>
 </header>
 
-<!-- Live Player Count Box -->
-<div id="liveCountBox">Players online: <span id="liveCount">0</span></div>
+<button id="settings-btn">⚙️</button>
+
+<div id="settings-menu" class="hidden">
+  <div class="menu-content">
+    <h2>Settings</h2>
+    <label>
+      <input type="checkbox" id="theme-toggle">
+      Dark Mode
+    </label>
+    <label>
+      Accent Color:
+      <input type="color" id="accent-color" value="#ffb300">
+    </label>
+    <button id="close-settings">Close</button>
+  </div>
+</div>
 
 <div id="search-container">
   <input type="text" id="search-input" placeholder="Search games..." oninput="filterGames()">
@@ -246,7 +293,7 @@ function animate() {
 }
 animate();
 
-/* === GAME + FAVORITES LOGIC === */
+/* === GAME LOGIC === */
 const games = [
   "Ragdoll archers", "Ragdoll hit", "Time shooter", "Retro bowl",
   "Snow rider", "Swords and sandals", "Crazy cattle", "Gladi hoppers",
@@ -257,113 +304,4 @@ const games = [
   "Vex 8", "Tiny fishing", "Drive mad", "Stick man hook", "Learn to fly 2",
   "Line rider", "Unicycle hero", "Basket random", "1v1 lol", "Happy wheels",
   "Idle dice", "Idle miner tycoon", "Johnny upgrade", "Jack smith", "Tunnel rush",
-  "Duck life 5", "Duck life 4", "Mob control", "A small world cup", "Escape road",
-  "QWOP", "Indian truck simulator", "Mr mine clone", "Doge miner", "Draw climber",
-  "Granny online"
-];
-
-const gameList = document.getElementById("game-list");
-let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
-
-function toggleFavorite(name) {
-  if (favorites.includes(name)) {
-    favorites = favorites.filter(f => f !== name);
-  } else {
-    favorites.push(name);
-  }
-  localStorage.setItem("favorites", JSON.stringify(favorites));
-  renderGames();
-}
-
-function renderGames() {
-  gameList.innerHTML = "";
-  const sortedGames = [...games].sort((a, b) => a.localeCompare(b));
-
-  const favs = sortedGames.filter(g => favorites.includes(g));
-  const nonFavs = sortedGames.filter(g => !favorites.includes(g));
-  const allGames = [...favs, ...nonFavs];
-
-  allGames.forEach(name => {
-    const card = document.createElement("div");
-    card.className = "game-card";
-    card.onclick = () => loadGame(name.replaceAll(" ", "-") + ".html");
-
-    const star = document.createElement("div");
-    star.className = "star" + (favorites.includes(name) ? " favorited" : "");
-    star.textContent = favorites.includes(name) ? "⭐" : "☆";
-    star.onclick = (e) => {
-      e.stopPropagation();
-      toggleFavorite(name);
-    };
-
-    const span = document.createElement("span");
-    span.textContent = name;
-    card.appendChild(star);
-    card.appendChild(span);
-    gameList.appendChild(card);
-  });
-
-  const request = document.createElement("div");
-  request.className = "game-card glow-card request-card";
-  request.innerHTML = `<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=sharing"
-      target="_blank" style="text-decoration:none; color:inherit; display:block;"><span>Request a Game</span></a>`;
-  gameList.appendChild(request);
-}
-
-function loadGame(url) {
-  gameList.style.display = "none";
-  document.getElementById("back-btn").style.display = "inline-block";
-  document.getElementById("fullscreen-btn").style.display = "inline-block";
-  const frame = document.getElementById("game-frame");
-  frame.src = url;
-  frame.style.display = "block";
-  window.scrollTo(0,0);
-}
-
-function goBack() {
-  gameList.style.display = "flex";
-  document.getElementById("back-btn").style.display = "none";
-  document.getElementById("fullscreen-btn").style.display = "none";
-  const frame = document.getElementById("game-frame");
-  frame.src = "";
-  frame.style.display = "none";
-}
-
-function goFullscreen() {
-  const frame = document.getElementById("game-frame");
-  if (frame.requestFullscreen) frame.requestFullscreen();
-  else if (frame.webkitRequestFullscreen) frame.webkitRequestFullscreen();
-  else if (frame.msRequestFullscreen) frame.msRequestFullscreen();
-}
-
-function filterGames() {
-  const input = document.getElementById('search-input').value.toLowerCase();
-  const cards = document.querySelectorAll('.game-card:not(.request-card) span');
-  cards.forEach(span => {
-    const name = span.textContent.toLowerCase();
-    span.parentElement.style.display = name.includes(input) ? 'block' : 'none';
-  });
-}
-
-window.addEventListener('resize', () => {
-  canvas.width = innerWidth;
-  canvas.height = innerHeight;
-});
-
-renderGames();
-
-/* === COUNTAPI PLAYER COUNT === */
-async function updatePlayerCount() {
-    try {
-        const res = await fetch('https://api.countapi.xyz/hit/mathline-game-site/visitors');
-        const data = await res.json();
-        document.getElementById('liveCount').innerText = data.value;
-    } catch (err) {
-        console.error('Error fetching player count:', err);
-    }
-}
-setInterval(updatePlayerCount, 5000);
-updatePlayerCount();
-</script>
-</body>
-</html>
+  "Duck life 5", "Duck life 
