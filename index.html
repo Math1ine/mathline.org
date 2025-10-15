@@ -1,292 +1,168 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Math Line</title>
 <style>
 :root {
-  --bg1: #1a0000;
-  --bg2: #4a0d0d;
-  --bg3: #7d1a1a;
-  --bg4: #2a0000;
-  --accent: #ffb300;
-  --header-color: #ffffff;
-  --text-color: #f0f0f0;
-  --card-bg: rgba(0,0,0,0.5);
+  --bg1:#1a0000; --bg2:#4a0d0d; --bg3:#7d1a1a; --bg4:#2a0000;
+  --accent:#ffb300; --header-color:#fff; --text-color:#f0f0f0;
+  --card-bg:rgba(0,0,0,0.5); --card-radius:12px; --card-shadow:1;
+  --card-font:'Poppins', sans-serif; --bg-speed:12s;
+  --hover-scale:1.02; --hover-glow:1;
 }
 
 body {
-  font-family: 'Poppins', sans-serif;
-  text-align: center;
-  color: var(--text-color);
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-  background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
-  background-size: 400% 400%;
-  animation: moveBackground 12s ease infinite;
+  font-family: var(--card-font); text-align:center; color:var(--text-color);
+  margin:0; padding:0; overflow-x:hidden;
+  background:linear-gradient(-45deg,var(--bg1),var(--bg2),var(--bg3),var(--bg4));
+  background-size:400% 400%; animation:moveBackground var(--bg-speed) ease infinite;
   transition: all 0.3s;
 }
 
-@keyframes moveBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+@keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
-canvas#bg {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
-  background: transparent;
-}
+canvas#bg {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; background:transparent;}
 
-header {
-  padding: 25px;
-}
+header{padding:25px;}
+header h1{margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 0 15px var(--accent);}
 
-header h1 {
-  margin: 0;
-  font-size: 2.8em;
-  color: var(--header-color);
-  text-shadow: 0 0 15px var(--accent);
-}
+#settings-btn {position:fixed; top:20px; right:20px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:1001;}
 
-/* Fixed settings button */
-#settings-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  font-size: 28px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--accent);
-  z-index: 1001;
-}
+#settings-menu {position:fixed; top:0; right:-320px; width:300px; height:100%; background:rgba(0,0,0,0.9); color:#fff;
+display:flex; flex-direction:column; padding:30px 20px; gap:10px; transition:right 0.3s ease; z-index:1000;}
+#settings-menu.open{right:0;}
+#settings-menu h2{margin-top:0; text-align:center;}
+#settings-menu label{display:flex; justify-content:space-between; align-items:center;}
+#settings-menu input[type=color],#settings-menu select,#settings-menu input[type=range]{cursor:pointer;}
+#settings-menu button{padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s;}
+#settings-menu button:hover{filter:brightness(1.2);}
 
-/* Sliding settings menu */
-#settings-menu {
-  position: fixed;
-  top: 0;
-  right: -320px; /* start off screen */
-  width: 300px;
-  height: 100%;
-  background: rgba(0,0,0,0.9);
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  padding: 30px 20px;
-  gap: 15px;
-  transition: right 0.3s ease;
-  z-index: 1000;
-}
+.game-list{display:flex; flex-wrap:wrap; justify-content:center; gap:15px; padding:20px;}
 
-#settings-menu.open {
-  right: 0; /* slide in */
+.game-card{
+  background:var(--card-bg); border:2px solid var(--accent); color:var(--accent);
+  width:180px; padding:15px; border-radius:var(--card-radius); cursor:pointer;
+  transition: transform .25s, box-shadow .25s; font-size:1.1em; font-family:var(--card-font);
+  box-shadow:var(--card-shadow) ? 0 0 10px rgba(0,0,0,0.5) : none;
 }
+.game-card:hover{transform: scale(var(--hover-scale)); box-shadow: var(--hover-glow)?0 0 15px var(--accent):none;}
 
-#settings-menu h2 {
-  margin-top: 0;
-  text-align: center;
-}
-
-#settings-menu label {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#settings-menu input[type="color"] {
-  cursor: pointer;
-}
-
-#settings-menu button {
-  padding: 8px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: var(--accent);
-  color: #000;
-  font-weight: bold;
-  margin-top: 10px;
-  transition: 0.2s;
-}
-
-#settings-menu button:hover {
-  filter: brightness(1.2);
-}
-
-.game-list {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 15px;
-  padding: 20px;
-}
-
-.game-card {
-  background: var(--card-bg);
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  width: 180px;
-  padding: 15px;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: transform 0.25s, box-shadow 0.25s;
-  font-size: 1.1em;
-}
-
-.game-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: 0 0 15px var(--accent);
-}
+#back-btn{position:fixed; top:20px; left:20px; display:none; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:1001;}
+iframe#game-frame{display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000;}
 </style>
 </head>
 <body>
-
 <canvas id="bg"></canvas>
 
-<header>
-  <h1>Math Line</h1>
-</header>
-
-<!-- Settings Button -->
+<header><h1>Math Line</h1></header>
 <button id="settings-btn">⚙️</button>
 
-<!-- Settings Menu -->
 <div id="settings-menu">
-  <h2>Settings</h2>
-  <label>Background 1: <input type="color" id="bg1" value="#1a0000"></label>
-  <label>Background 2: <input type="color" id="bg2" value="#4a0d0d"></label>
-  <label>Background 3: <input type="color" id="bg3" value="#7d1a1a"></label>
-  <label>Background 4: <input type="color" id="bg4" value="#2a0000"></label>
-  <label>Accent Color: <input type="color" id="accent" value="#ffb300"></label>
-  <label>Header Color: <input type="color" id="header-color" value="#ffffff"></label>
-  <label><input type="checkbox" id="toggle-particles" checked> Show Particles</label>
-  <label><input type="checkbox" id="toggle-mode"> Dark Mode</label>
-  <button id="random-theme">Random Theme</button>
-  <button id="close-settings">Close</button>
+<h2>Settings</h2>
+<label>Background 1:<input type="color" id="bg1" value="#1a0000"></label>
+<label>Background 2:<input type="color" id="bg2" value="#4a0d0d"></label>
+<label>Background 3:<input type="color" id="bg3" value="#7d1a1a"></label>
+<label>Background 4:<input type="color" id="bg4" value="#2a0000"></label>
+<label>Accent Color:<input type="color" id="accent" value="#ffb300"></label>
+<label>Header Color:<input type="color" id="header-color" value="#ffffff"></label>
+<label>Text Color:<input type="color" id="text-color" value="#f0f0f0"></label>
+<label>Card Radius:<input type="range" id="card-radius" min="0" max="50" value="12"></label>
+<label>Card Shadow:<input type="checkbox" id="card-shadow" checked></label>
+<label>Particle Size:<input type="range" id="particle-size" min="1" max="5" value="2"></label>
+<label>Particle Speed:<input type="range" id="particle-speed" min="0.1" max="2" step="0.1" value="0.5"></label>
+<label>Hover Scale:<input type="range" id="hover-scale" min="1" max="1.5" step="0.01" value="1.02"></label>
+<label>Hover Glow:<input type="checkbox" id="hover-glow" checked></label>
+<label>Font Family:<select id="card-font">
+<option value="Poppins">Poppins</option>
+<option value="Arial">Arial</option>
+<option value="Comic Sans MS">Comic Sans</option>
+<option value="Courier New">Courier New</option>
+</select></label>
+<label>Background Speed:<input type="range" id="bg-speed" min="2" max="30" value="12"></label>
+<label><input type="checkbox" id="toggle-particles" checked> Show Particles</label>
+<label><input type="checkbox" id="toggle-mode"> Dark Mode</label>
+<button id="random-theme">Random Theme</button>
+<button id="reset-theme">Reset Theme</button>
+<button id="close-settings">Close</button>
 </div>
 
+<button id="back-btn">⬅ Back</button>
+<iframe id="game-frame"></iframe>
 <div class="game-list" id="game-list"></div>
 
 <script>
-// Particle background
-const canvas = document.getElementById('bg');
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth;
-canvas.height = innerHeight;
-
-let particles = Array.from({ length: 70 }, () => ({
-  x: Math.random()*canvas.width,
-  y: Math.random()*canvas.height,
-  r: Math.random()*2+1,
-  dx: (Math.random()-0.5)*0.5,
-  dy: (Math.random()-0.5)*0.5,
-  color: Math.random()>0.5?'rgba(255,179,0,0.8)':'rgba(179,0,0,0.8)'
-}));
-
-let particlesOn = true;
-function animate() {
-  ctx.fillStyle='rgba(0,0,0,0.25)';
-  ctx.fillRect(0,0,canvas.width,canvas.height);
-  if(particlesOn){
-    particles.forEach(p=>{
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fillStyle=p.color;
-      ctx.fill();
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<0||p.x>canvas.width)p.dx*=-1;
-      if(p.y<0||p.y>canvas.height)p.dy*=-1;
-    });
-  }
-  requestAnimationFrame(animate);
-}
+// PARTICLES
+const canvas=document.getElementById('bg'); const ctx=canvas.getContext('2d');
+canvas.width=innerWidth; canvas.height=innerHeight;
+let particleSize=2, particleSpeed=0.5, particlesOn=true, particles=[];
+function createParticles(){particles=Array.from({length:70},()=>({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*particleSize+1,dx:(Math.random()-0.5)*particleSpeed,dy:(Math.random()-0.5)*particleSpeed,color:document.getElementById('accent').value}));}
+createParticles();
+function animate(){ctx.fillStyle='rgba(0,0,0,0.25)';ctx.fillRect(0,0,canvas.width,canvas.height); if(particlesOn){particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill(); p.x+=p.dx; p.y+=p.dy; if(p.x<0||p.x>canvas.width)p.dx*=-1;if(p.y<0||p.y>canvas.height)p.dy*=-1;});} requestAnimationFrame(animate);}
 animate();
+window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight; createParticles();});
 
-window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
-
-// Game list
-const games = [
-  "Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl",
-  "Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers",
-  "Bit planes","Final earth2","Cluster rush","Push your luck",
-  "Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3",
-  "Malidin stun cars","Gun spin","Age of war","Moto x3m 2",
-  "Moto x3m winter","Basketball stars","Idle breakout",
-  "Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2",
-  "Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels",
-  "Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush",
-  "Duck life 5","Duck life 4","Mob control","A small world cup","Escape road",
-  "QWOP","Indian truck simulator","Mr mine clone","Doge miner","Draw climber",
-  "Granny online"
-];
-
-const gameList = document.getElementById("game-list");
-function renderGames(){
-  gameList.innerHTML="";
-  games.forEach(name=>{
-    const card = document.createElement("div");
-    card.className="game-card";
-    card.textContent = name;
-    gameList.appendChild(card);
-  });
-}
+// GAME LIST
+const games=["Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl","Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers","Bit planes","Final earth2","Cluster rush","Push your luck","Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3","Malidin stun cars","Gun spin","Age of war","Moto x3m 2","Moto x3m winter","Basketball stars","Idle breakout","Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2","Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels","Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush","Duck life 5","Duck life 4","Mob control","A small world cup","Escape road","QWOP","Indian truck simulator","Mr mine clone","Doge miner","Draw climber","Granny online"];
+const gameList=document.getElementById("game-list");
+function renderGames(){gameList.innerHTML=""; games.forEach(name=>{const card=document.createElement("div");card.className="game-card";card.textContent=name;card.onclick=()=>{document.getElementById('game-frame').src=name.replaceAll(' ','-')+'.html';document.getElementById('game-frame').style.display='block';gameList.style.display='none';document.getElementById('back-btn').style.display='block';document.getElementById('settings-btn').style.display='none';window.scrollTo(0,0);}; gameList.appendChild(card);});}
 renderGames();
 
-// Settings logic
-const settingsBtn = document.getElementById('settings-btn');
-const settingsMenu = document.getElementById('settings-menu');
-const closeBtn = document.getElementById('close-settings');
+// SETTINGS
+const settingsBtn=document.getElementById('settings-btn');
+const settingsMenu=document.getElementById('settings-menu');
+const closeBtn=document.getElementById('close-settings');
+settingsBtn.onclick=()=>{settingsMenu.classList.toggle('open');};
+closeBtn.onclick=()=>{settingsMenu.classList.remove('open');};
 
-settingsBtn.onclick = ()=> settingsMenu.classList.add('open');
-closeBtn.onclick = ()=> settingsMenu.classList.remove('open');
+// BACK BUTTON
+document.getElementById('back-btn').onclick=()=>{document.getElementById('game-frame').src='';document.getElementById('game-frame').style.display='none';gameList.style.display='flex';document.getElementById('back-btn').style.display='none';document.getElementById('settings-btn').style.display='block';};
 
-const bg1 = document.getElementById('bg1');
-const bg2 = document.getElementById('bg2');
-const bg3 = document.getElementById('bg3');
-const bg4 = document.getElementById('bg4');
-const accent = document.getElementById('accent');
-const headerColor = document.getElementById('header-color');
-const toggleParticles = document.getElementById('toggle-particles');
-const toggleMode = document.getElementById('toggle-mode');
-const randomTheme = document.getElementById('random-theme');
+// SETTINGS CONTROLS
+const bg1=document.getElementById('bg1'); const bg2=document.getElementById('bg2'); const bg3=document.getElementById('bg3'); const bg4=document.getElementById('bg4');
+const accent=document.getElementById('accent'); const headerColor=document.getElementById('header-color'); const textColor=document.getElementById('text-color');
+const cardRadius=document.getElementById('card-radius'); const cardShadow=document.getElementById('card-shadow'); const particleSizeSlider=document.getElementById('particle-size');
+const particleSpeedSlider=document.getElementById('particle-speed'); const hoverScale=document.getElementById('hover-scale');
+const hoverGlow=document.getElementById('hover-glow'); const cardFont=document.getElementById('card-font');
+const bgSpeed=document.getElementById('bg-speed'); const toggleParticles=document.getElementById('toggle-particles');
+const toggleMode=document.getElementById('toggle-mode');
 
 function updateSettings(){
-  document.documentElement.style.setProperty('--bg1', bg1.value);
-  document.documentElement.style.setProperty('--bg2', bg2.value);
-  document.documentElement.style.setProperty('--bg3', bg3.value);
-  document.documentElement.style.setProperty('--bg4', bg4.value);
-  document.documentElement.style.setProperty('--accent', accent.value);
-  document.documentElement.style.setProperty('--header-color', headerColor.value);
+  document.documentElement.style.setProperty('--bg1',bg1.value);
+  document.documentElement.style.setProperty('--bg2',bg2.value);
+  document.documentElement.style.setProperty('--bg3',bg3.value);
+  document.documentElement.style.setProperty('--bg4',bg4.value);
+  document.documentElement.style.setProperty('--accent',accent.value);
+  document.documentElement.style.setProperty('--header-color',headerColor.value);
+  document.documentElement.style.setProperty('--text-color',textColor.value);
+  document.documentElement.style.setProperty('--card-radius',cardRadius.value+'px');
+  document.documentElement.style.setProperty('--card-shadow',cardShadow.checked?1:0);
+  document.documentElement.style.setProperty('--hover-scale',hoverScale.value);
+  document.documentElement.style.setProperty('--hover-glow',hoverGlow.checked?1:0);
+  document.documentElement.style.setProperty('--card-font',cardFont.value);
+  document.documentElement.style.setProperty('--bg-speed',bgSpeed.value+'s');
+  particlesOn=toggleParticles.checked;
+  particleSize=parseFloat(particleSizeSlider.value);
+  particleSpeed=parseFloat(particleSpeedSlider.value);
+  createParticles();
 }
 
-bg1.oninput = bg2.oninput = bg3.oninput = bg4.oninput = accent.oninput = headerColor.oninput = updateSettings;
+[bg1,bg2,bg3,bg4,accent,headerColor,textColor,cardRadius,cardShadow,particleSizeSlider,particleSpeedSlider,hoverScale,hoverGlow,cardFont,bgSpeed,toggleParticles,toggleMode].forEach(el=>el.oninput=updateSettings);
 
-toggleParticles.onchange = ()=> particlesOn = toggleParticles.checked;
+// DARK/LIGHT MODE
+toggleMode.oninput=()=>{if(toggleMode.checked){document.body.style.background="#222";document.body.style.color="#fff";}else{document.body.style.background="";document.body.style.color="";updateSettings();}};
 
-toggleMode.onchange = ()=>{
-  if(toggleMode.checked){
-    document.documentElement.style.setProperty('--text-color','#111');
-    document.documentElement.style.setProperty('--card-bg','rgba(255,255,255,0.2)');
-  } else {
-    document.documentElement.style.setProperty('--text-color','#f0f0f0');
-    document.documentElement.style.setProperty('--card-bg','rgba(0,0,0,0.5)');
-  }
-};
+// RANDOM/RESET
+document.getElementById('random-theme').onclick=()=>{bg1.value='#'+Math.floor(Math.random()*16777215).toString(16);
+bg2.value='#'+Math.floor(Math.random()*16777215).toString(16);bg3.value='#'+Math.floor(Math.random()*16777215).toString(16);
+bg4.value='#'+Math.floor(Math.random()*16777215).toString(16);accent.value='#'+Math.floor(Math.random()*16777215).toString(16);
+headerColor.value='#'+Math.floor(Math.random()*16777215).toString(16);textColor.value='#'+Math.floor(Math.random()*16777215).toString(16);updateSettings();};
 
-randomTheme.onclick = ()=>{
-  function randColor(){ return '#'+Math.floor(Math.random()*16777215).toString(16); }
-  bg1.value=randColor(); bg2.value=randColor(); bg3.value=randColor(); bg4.value=randColor();
-  accent.value=randColor(); headerColor.value=randColor();
-  updateSettings();
-};
+document.getElementById('reset-theme').onclick=()=>{bg1.value="#1a0000"; bg2.value="#4a0d0d"; bg3.value="#7d1a1a"; bg4.value="#2a0000";
+accent.value="#ffb300"; headerColor.value="#ffffff"; textColor.value="#f0f0f0"; cardRadius.value=12; cardShadow.checked=true;
+particleSizeSlider.value=2; particleSpeedSlider.value=0.5; hoverScale.value=1.02; hoverGlow.checked=true; cardFont.value='Poppins'; bgSpeed.value=12;
+toggleParticles.checked=true; toggleMode.checked=false; updateSettings();};
 </script>
 </body>
 </html>
