@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math Line - Halloween Edition</title>
+<title>Math Line - Game Hub</title>
 <style>
 :root {
   --bg1: #000000;
@@ -22,34 +22,30 @@ body {
   color: var(--text-color);
   background: linear-gradient(-45deg,var(--bg1),var(--bg2));
   background-size:400% 400%;
+  animation: moveBackground 12s ease infinite;
   overflow-x: hidden;
+}
+
+@keyframes moveBackground {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 canvas#particles { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-3; }
 
 header { padding:25px; text-align:center; position:relative; z-index:2; }
-header h1 { margin:0; font-size:2.8em; color:var(--text-color); text-shadow:0 0 15px var(--accent); }
+header h1 { margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--accent); }
 
 #search-container { position:fixed; top:25px; left:25px; z-index:3; }
 #search-input { padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent); }
 
 #settings-btn {
-  position: fixed;
-  top: 25px;
-  right: 25px;
-  font-size: 28px;
-  background:none;
-  border:none;
-  cursor:pointer;
-  color:var(--accent);
-  z-index:3;
-  transition: opacity 0.3s, transform 0.3s;
+  position:fixed; top:25px; right:25px; font-size:28px;
+  background:none; border:none; cursor:pointer; color:var(--accent); z-index:3;
+  transition:0.2s;
 }
-#settings-btn.hidden {
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(-20px);
-}
+#settings-btn.hidden { opacity:0; pointer-events:none; }
 
 #back-btn, #fullscreen-btn {
   position:fixed; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent);
@@ -63,19 +59,27 @@ header h1 { margin:0; font-size:2.8em; color:var(--text-color); text-shadow:0 0 
   color:#fff; display:flex; flex-direction:column; padding:20px; gap:10px; transition:right 0.3s ease; z-index:4; overflow-y:auto;
 }
 #settings-menu.open { right:0; }
-#settings-menu h2 { margin-top:0; text-align:center; }
-
-.tab-buttons { display:flex; flex-direction:column; gap:5px; }
-.tab-buttons button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
-.tab-buttons button:hover { filter:brightness(1.2); }
-
-.tab-content { display:none; flex-direction:column; gap:10px; }
-.tab-content.active { display:flex; }
-
+#settings-menu h2 { margin-top:30px; text-align:center; }
 #settings-menu label { display:flex; justify-content:space-between; align-items:center; }
 #settings-menu input, #settings-menu select { cursor:pointer; }
-#settings-menu button.extra-btn { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
-#settings-menu button.extra-btn:hover { filter: brightness(1.2); }
+#settings-menu button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
+#settings-menu button:hover { filter: brightness(1.2); }
+
+#close-settings-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #000;
+  cursor: pointer;
+  z-index: 5;
+  transition: 0.2s;
+}
+#close-settings-btn:hover { filter: brightness(1.2); }
 
 .game-list {
   display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 50px; position:relative; z-index:2;
@@ -97,7 +101,7 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 <canvas id="particles"></canvas>
 
 <header>
-  <h1>Math Line 🎃</h1>
+  <h1>Math Line 🎮</h1>
 </header>
 
 <div id="search-container"><input type="text" id="search-input" placeholder="Search games..."></div>
@@ -106,99 +110,47 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 <button id="fullscreen-btn">⛶ Fullscreen</button>
 
 <div id="settings-menu">
+  <button id="close-settings-btn">✖</button>
   <h2>Settings</h2>
-
-  <div class="tab-buttons">
-    <button data-tab="particles">Particles</button>
-    <button data-tab="decorations">Decorations</button>
-    <button data-tab="theme">Theme</button>
-    <button data-tab="misc">Misc</button>
-  </div>
-
-  <!-- Particles Tab -->
-  <div class="tab-content" id="particles-tab">
-    <label>Particles: <input type="checkbox" id="toggle-particles"></label>
-    <label>Particle Count: <input type="range" id="particle-count" min="10" max="150" value="60"></label>
-    <label>Particle Speed: <input type="range" id="particle-speed" min="1" max="15" value="5"></label>
-    <label>Particle Size: <input type="range" id="particle-size" min="1" max="5" value="2"></label>
-  </div>
-
-  <!-- Decorations Tab -->
-  <div class="tab-content" id="decorations-tab">
-    <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
-    <label>Number of Decorations: <input type="range" id="deco-count" min="10" max="100" value="25"></label>
-    <label>Decoration Speed: <input type="range" id="deco-speed" min="0.5" max="5" step="0.1" value="1.5"></label>
-  </div>
-
-  <!-- Theme Tab -->
-  <div class="tab-content" id="theme-tab">
-    <label>Background Colors:
-      <input type="color" id="bg-color1" value="#000000">
-      <input type="color" id="bg-color2" value="#000000">
-    </label>
-    <label>Accent Color: <input type="color" id="accent-color" value="#ff8800"></label>
-    <button id="random-theme-btn" class="extra-btn">🎨 Random Theme</button>
-    <button id="reset-theme-btn" class="extra-btn">♻ Reset Theme</button>
-  </div>
-
-  <!-- Misc Tab -->
-  <div class="tab-content" id="misc-tab">
-    <button id="close-settings-btn" class="extra-btn">❌ Close Settings</button>
-  </div>
-
+  <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
+  <label>Decorations Count: <input type="number" id="deco-count" min="5" max="100" value="25"></label>
+  <label>Decorations Speed: <input type="range" id="deco-speed" min="0.5" max="5" step="0.1" value="1.5"></label>
+  <label>Particles: <input type="checkbox" id="toggle-particles"></label>
+  <h2>Theme</h2>
+  <label>Background 1: <input type="color" id="bg-color1"></label>
+  <label>Background 2: <input type="color" id="bg-color2"></label>
+  <label>Accent Color: <input type="color" id="accent-color"></label>
+  <button id="random-theme-btn">Random Theme</button>
+  <button id="reset-theme-btn">Reset Theme</button>
 </div>
 
 <div id="decorations-container"></div>
-
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
 
 <script>
-// ------------------ SETTINGS ------------------
-const savedSettings = JSON.parse(localStorage.getItem('mlSettings')) || {};
-function saveSettings(){localStorage.setItem('mlSettings',JSON.stringify(savedSettings));}
+// -------- SETTINGS STORAGE --------
+const savedSettings = JSON.parse(localStorage.getItem('mlSettings'))||{};
+function saveSettings(){localStorage.setItem('mlSettings', JSON.stringify(savedSettings));}
 
-// ------------------ TABS ------------------
-const tabButtons = document.querySelectorAll('#settings-menu .tab-buttons button');
-const tabContents = document.querySelectorAll('#settings-menu .tab-content');
-tabButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    tabContents.forEach(tc => tc.classList.remove('active'));
-    document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
-  });
-});
-
-// ------------------ PARTICLES ------------------
+// -------- PARTICLES --------
 const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth; canvas.height = innerHeight;
 let particles = [];
-let particleCount = savedSettings.particleCount || 60;
-let particleSpeed = savedSettings.particleSpeed || 5;
-let particleSize = savedSettings.particleSize || 2;
-
-function initParticles(count=particleCount){
+function initParticles(count=60){
   particles=[];
   for(let i=0;i<count;i++){
-    particles.push({
-      x:Math.random()*canvas.width,
-      y:Math.random()*canvas.height,
-      r:Math.random()*particleSize+1,
-      dx:(Math.random()-0.5)*(particleSpeed/2),
-      dy:(Math.random()-0.5)*(particleSpeed/2)
-    });
+    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
   }
 }
 initParticles();
-
 function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
   if(document.getElementById('toggle-particles').checked){
     ctx.fillStyle="#ff8800";
     particles.forEach(p=>{
-      ctx.beginPath();
-      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-      ctx.fill();
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
       p.x+=p.dx; p.y+=p.dy;
       if(p.x<0||p.x>canvas.width)p.dx*=-1;
       if(p.y<0||p.y>canvas.height)p.dy*=-1;
@@ -207,20 +159,14 @@ function animateParticles(){
   requestAnimationFrame(animateParticles);
 }
 animateParticles();
+document.getElementById('toggle-particles').checked = savedSettings.particles!==undefined ? savedSettings.particles:true;
+document.getElementById('toggle-particles').addEventListener('change',()=>{savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();});
 
-// Particle Controls
-const toggleParticles=document.getElementById('toggle-particles');
-toggleParticles.checked = savedSettings.particles!==undefined?savedSettings.particles:true;
-toggleParticles.addEventListener('change',()=>{savedSettings.particles=toggleParticles.checked; saveSettings();});
-document.getElementById('particle-count').addEventListener('input', e=>{particleCount=e.target.value; savedSettings.particleCount=particleCount; initParticles(particleCount); saveSettings();});
-document.getElementById('particle-speed').addEventListener('input', e=>{particleSpeed=e.target.value; savedSettings.particleSpeed=particleSpeed; initParticles(particleCount); saveSettings();});
-document.getElementById('particle-size').addEventListener('input', e=>{particleSize=e.target.value; savedSettings.particleSize=particleSize; initParticles(particleCount); saveSettings();});
-
-// ------------------ DECORATIONS ------------------
+// -------- DECORATIONS --------
 const decorationsContainer = document.getElementById('decorations-container');
 const decoEmojis = ["🎃","💀","🕸️"];
 let decoCount = savedSettings.decoCount || 25;
-let decoSpeedVal = savedSettings.decoSpeed ? savedSettings.decoSpeed/2 : 1.5;
+let decoSpeedVal = savedSettings.decoSpeed || 1.5;
 
 function createDecorations(count=decoCount){
   decorationsContainer.innerHTML="";
@@ -237,13 +183,13 @@ function createDecorations(count=decoCount){
 }
 createDecorations(decoCount);
 
-const toggleDeco=document.getElementById('toggle-decorations');
-toggleDeco.checked = savedSettings.decorations!==undefined?savedSettings.decorations:true;
-decorationsContainer.style.display = toggleDeco.checked?"block":"none";
+const toggleDeco = document.getElementById('toggle-decorations');
+toggleDeco.checked = savedSettings.decorations!==undefined ? savedSettings.decorations:true;
+decorationsContainer.style.display = toggleDeco.checked ? "block":"none";
 toggleDeco.addEventListener('change',()=>{decorationsContainer.style.display=toggleDeco.checked?"block":"none"; savedSettings.decorations=toggleDeco.checked; saveSettings();});
 
 document.getElementById('deco-count').addEventListener('input', e=>{decoCount=e.target.value; savedSettings.decoCount=decoCount; createDecorations(decoCount); saveSettings();});
-document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value/2; savedSettings.decoSpeed=e.target.value; saveSettings();});
+document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value; savedSettings.decoSpeed=e.target.value; saveSettings();});
 
 function animateDecorations(){
   document.querySelectorAll('.decoration').forEach(deco=>{
@@ -258,152 +204,139 @@ function animateDecorations(){
 }
 animateDecorations();
 
-// ------------------ COLORS & THEME ------------------
-const bg1Input=document.getElementById('bg-color1');
-const bg2Input=document.getElementById('bg-color2');
-const accentInput=document.getElementById('accent-color');
+// -------- THEME --------
+const bg1Input = document.getElementById('bg-color1');
+const bg2Input = document.getElementById('bg-color2');
+const accentInput = document.getElementById('accent-color');
 
-bg1Input.value = savedSettings.bg1||'#000000';
-bg2Input.value = savedSettings.bg2||'#000000';
-accentInput.value = savedSettings.accent||'#ff8800';
+bg1Input.value = savedSettings.bg1 || '#000000';
+bg2Input.value = savedSettings.bg2 || '#000000';
+accentInput.value = savedSettings.accent || '#ff8800';
 
 function updateColors(){
-  const bg1=bg1Input.value;
-  const bg2=bg2Input.value;
-  const accent=accentInput.value;
-  document.documentElement.style.setProperty('--bg1',bg1);
-  document.documentElement.style.setProperty('--bg2',bg2);
-  document.documentElement.style.setProperty('--accent',accent);
-  savedSettings.bg1=bg1; savedSettings.bg2=bg2; savedSettings.accent=accent;
+  document.documentElement.style.setProperty('--bg1', bg1Input.value);
+  document.documentElement.style.setProperty('--bg2', bg2Input.value);
+  document.documentElement.style.setProperty('--accent', accentInput.value);
+  savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value;
   saveSettings();
 }
 bg1Input.addEventListener('input',updateColors);
 bg2Input.addEventListener('input',updateColors);
 accentInput.addEventListener('input',updateColors);
 
-// Random Theme
 document.getElementById('random-theme-btn').addEventListener('click', ()=>{
-  const r1='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
-  const r2='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
-  const r3='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
-  bg1Input.value=r1; bg2Input.value=r2; accentInput.value=r3;
+  bg1Input.value = '#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+  bg2Input.value = '#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+  accentInput.value = '#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
   updateColors();
 });
-// Reset Theme
 document.getElementById('reset-theme-btn').addEventListener('click', ()=>{
-  bg1Input.value='#000000'; bg2Input.value='#000000'; accentInput.value='#ff8800';
+  bg1Input.value = '#000000'; bg2Input.value = '#000000'; accentInput.value = '#ff8800';
   updateColors();
 });
 
-// ------------------ GAME LIST ------------------
+// -------- GAMES (HTML URLs) --------
+const games=[
+const games = [
+  { name: "Ragdoll archers", url: "https://username.github.io/mygames/ragdoll-archers.html" },
+  { name: "Ragdoll hit", url: "https://username.github.io/mygames/ragdoll-hit.html" },
+  { name: "Time shooter", url: "https://username.github.io/mygames/time-shooter.html" },
+  { name: "Retro bowl", url: "https://username.github.io/mygames/retro-bowl.html" },
+  { name: "Snow rider", url: "https://username.github.io/mygames/snow-rider.html" },
+  { name: "Swords and sandals", url: "https://username.github.io/mygames/swords-and-sandals.html" },
+  { name: "Crazy cattle", url: "https://username.github.io/mygames/crazy-cattle.html" },
+  { name: "Gladi hoppers", url: "https://username.github.io/mygames/gladi-hoppers.html" },
+  { name: "Bit planes", url: "https://username.github.io/mygames/bit-planes.html" },
+  { name: "Final earth2", url: "https://username.github.io/mygames/final-earth2.html" },
+  { name: "Cluster rush", url: "https://username.github.io/mygames/cluster-rush.html" },
+  { name: "Push your luck", url: "https://username.github.io/mygames/push-your-luck.html" },
+  { name: "Poly track", url: "https://username.github.io/mygames/poly-track.html" },
+  { name: "Ragdoll Soccer", url: "https://username.github.io/mygames/ragdoll-soccer.html" },
+  { name: "Jetpack joy ride", url: "https://username.github.io/mygames/jetpack-joy-ride.html" },
+  { name: "Learn to fly 3", url: "https://username.github.io/mygames/learn-to-fly-3.html" },
+  { name: "Malidin stun cars", url: "https://username.github.io/mygames/malidin-stun-cars.html" },
+  { name: "Gun spin", url: "https://username.github.io/mygames/gun-spin.html" },
+  { name: "Age of war", url: "https://username.github.io/mygames/age-of-war.html" },
+  { name: "Moto x3m 2", url: "https://username.github.io/mygames/moto-x3m-2.html" },
+  { name: "Moto x3m winter", url: "https://username.github.io/mygames/moto-x3m-winter.html" },
+  { name: "Basketball stars", url: "https://username.github.io/mygames/basketball-stars.html" },
+  { name: "Idle breakout", url: "https://username.github.io/mygames/idle-breakout.html" },
+  { name: "Vex 8", url: "https://username.github.io/mygames/vex-8.html" },
+  { name: "Tiny fishing", url: "https://username.github.io/mygames/tiny-fishing.html" },
+  { name: "Drive mad", url: "https://username.github.io/mygames/drive-mad.html" },
+  { name: "Stick man hook", url: "https://username.github.io/mygames/stick-man-hook.html" },
+  { name: "Learn to fly 2", url: "https://username.github.io/mygames/learn-to-fly-2.html" },
+  { name: "Line rider", url: "https://username.github.io/mygames/line-rider.html" },
+  { name: "Unicycle hero", url: "https://username.github.io/mygames/unicycle-hero.html" },
+  { name: "Basket random", url: "https://username.github.io/mygames/basket-random.html" },
+  { name: "1v1 lol", url: "https://username.github.io/mygames/1v1-lol.html" },
+  { name: "Happy wheels", url: "https://username.github.io/mygames/happy-wheels.html" },
+  { name: "Idle dice", url: "https://username.github.io/mygames/idle-dice.html" },
+  { name: "Idle miner tycoon", url: "https://username.github.io/mygames/idle-miner-tycoon.html" },
+  { name: "Johnny upgrade", url: "https://username.github.io/mygames/johnny-upgrade.html" },
+  { name: "Jack smith", url: "https://username.github.io/mygames/jack-smith.html" },
+  { name: "Tunnel rush", url: "https://username.github.io/mygames/tunnel-rush.html" },
+  { name: "Duck life 5", url: "https://username.github.io/mygames/duck-life-5.html" },
+  { name: "Duck life 4", url: "https://username.github.io/mygames/duck-life-4.html" },
+  { name: "Mob control", url: "https://username.github.io/mygames/mob-control.html" },
+  { name: "A small world cup", url: "https://username.github.io/mygames/a-small-world-cup.html" },
+  { name: "Escape road", url: "https://username.github.io/mygames/escape-road.html" },
+  { name: "QWOP", url: "https://username.github.io/mygames/qwop.html" },
+  { name: "Indian truck simulator", url: "https://username.github.io/mygames/indian-truck-simulator.html" },
+  { name: "Mr mine", url: "https://username.github.io/mygames/mr-mine.html" },
+  { name: "Doge miner", url: "https://username.github.io/mygames/doge-miner.html" },
+  { name: "Draw climber", url: "https://username.github.io/mygames/draw-climber.html" },
+  { name: "Granny online", url: "https://username.github.io/mygames/granny-online.html" }
+];
+
+  // Add more in same format
+];
+
 const gameList=document.getElementById("game-list");
-const games=["Ragdoll archers","Ragdoll hit","Time shooter"];
 let favorites = JSON.parse(localStorage.getItem("mlFavorites"))||[];
 function saveFavorites(){localStorage.setItem("mlFavorites",JSON.stringify(favorites));}
 
 function renderGames(){
   gameList.innerHTML="";
-  const sorted=[...games].sort((a,b)=>a.localeCompare(b));
-  const favs=sorted.filter(g=>favorites.includes(g));
-  const nonFavs=sorted.filter(g=>!favorites.includes(g));
-  [...favs,...nonFavs].forEach(name=>{
+  const sorted=[...games].sort((a,b)=>a.name.localeCompare(b.name));
+  const favs=sorted.filter(g=>favorites.includes(g.name));
+  const nonFavs=sorted.filter(g=>!favorites.includes(g.name));
+  [...favs,...nonFavs].forEach(game=>{
     const card=document.createElement("div");
     card.className="game-card";
-    card.innerHTML=`<div class='star ${favorites.includes(name)?'favorited':''}'>★</div>${name}`;
-    card.onclick=()=>openGame(name);
-    card.querySelector(".star").onclick=(e)=>{e.stopPropagation(); if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);} saveFavorites(); renderGames();};
+    card.innerHTML=`<div class='star ${favorites.includes(game.name)?'favorited':''}'>★</div>${game.name}`;
+    card.onclick=()=>openGame(game.name);
+    card.querySelector(".star").onclick=(e)=>{
+      e.stopPropagation();
+      if(favorites.includes(game.name)){
+        favorites=favorites.filter(f=>f!==game.name);
+      } else { favorites.push(game.name); }
+      saveFavorites(); renderGames();
+    };
     gameList.appendChild(card);
   });
 }
 renderGames();
 
-// ------------------ GAME URLS (replace with your GitHub URLs) ------------------
-const gameURLs = {
-const games = [
-  { name: "Ragdoll archers", url: "https://username.github.io/mygames/ragdoll-archers/" },
-  { name: "Ragdoll hit", url: "https://username.github.io/mygames/ragdoll-hit/" },
-  { name: "Time shooter", url: "https://username.github.io/mygames/time-shooter/" },
-  { name: "Retro bowl", url: "https://username.github.io/mygames/retro-bowl/" },
-  { name: "Snow rider", url: "https://username.github.io/mygames/snow-rider/" },
-  { name: "Swords and sandals", url: "https://username.github.io/mygames/swords-and-sandals/" },
-  { name: "Crazy cattle", url: "https://username.github.io/mygames/crazy-cattle/" },
-  { name: "Gladi hoppers", url: "https://username.github.io/mygames/gladi-hoppers/" },
-  { name: "Bit planes", url: "https://username.github.io/mygames/bit-planes/" },
-  { name: "Final earth2", url: "https://username.github.io/mygames/final-earth2/" },
-  { name: "Cluster rush", url: "https://username.github.io/mygames/cluster-rush/" },
-  { name: "Push your luck", url: "https://username.github.io/mygames/push-your-luck/" },
-  { name: "Poly track", url: "https://username.github.io/mygames/poly-track/" },
-  { name: "Ragdoll Soccer", url: "https://username.github.io/mygames/ragdoll-soccer/" },
-  { name: "Jetpack joy ride", url: "https://username.github.io/mygames/jetpack-joy-ride/" },
-  { name: "Learn to fly 3", url: "https://username.github.io/mygames/learn-to-fly-3/" },
-  { name: "Malidin stun cars", url: "https://username.github.io/mygames/malidin-stun-cars/" },
-  { name: "Gun spin", url: "https://username.github.io/mygames/gun-spin/" },
-  { name: "Age of war", url: "https://username.github.io/mygames/age-of-war/" },
-  { name: "Moto x3m 2", url: "https://username.github.io/mygames/moto-x3m-2/" },
-  { name: "Moto x3m winter", url: "https://username.github.io/mygames/moto-x3m-winter/" },
-  { name: "Basketball stars", url: "https://username.github.io/mygames/basketball-stars/" },
-  { name: "Idle breakout", url: "https://username.github.io/mygames/idle-breakout/" },
-  { name: "Vex 8", url: "https://username.github.io/mygames/vex-8/" },
-  { name: "Tiny fishing", url: "https://username.github.io/mygames/tiny-fishing/" },
-  { name: "Drive mad", url: "https://username.github.io/mygames/drive-mad/" },
-  { name: "Stick man hook", url: "https://username.github.io/mygames/stick-man-hook/" },
-  { name: "Learn to fly 2", url: "https://username.github.io/mygames/learn-to-fly-2/" },
-  { name: "Line rider", url: "https://username.github.io/mygames/line-rider/" },
-  { name: "Unicycle hero", url: "https://username.github.io/mygames/unicycle-hero/" },
-  { name: "Basket random", url: "https://username.github.io/mygames/basket-random/" },
-  { name: "1v1 lol", url: "https://username.github.io/mygames/1v1-lol/" },
-  { name: "Happy wheels", url: "https://username.github.io/mygames/happy-wheels/" },
-  { name: "Idle dice", url: "https://username.github.io/mygames/idle-dice/" },
-  { name: "Idle miner tycoon", url: "https://username.github.io/mygames/idle-miner-tycoon/" },
-  { name: "Johnny upgrade", url: "https://username.github.io/mygames/johnny-upgrade/" },
-  { name: "Jack smith", url: "https://username.github.io/mygames/jack-smith/" },
-  { name: "Tunnel rush", url: "https://username.github.io/mygames/tunnel-rush/" },
-  { name: "Duck life 5", url: "https://username.github.io/mygames/duck-life-5/" },
-  { name: "Duck life 4", url: "https://username.github.io/mygames/duck-life-4/" },
-  { name: "Mob control", url: "https://username.github.io/mygames/mob-control/" },
-  { name: "A small world cup", url: "https://username.github.io/mygames/a-small-world-cup/" },
-  { name: "Escape road", url: "https://username.github.io/mygames/escape-road/" },
-  { name: "QWOP", url: "https://username.github.io/mygames/qwop/" },
-  { name: "Indian truck simulator", url: "https://username.github.io/mygames/indian-truck-simulator/" },
-  { name: "Mr mine", url: "https://username.github.io/mygames/mr-mine/" },
-  { name: "Doge miner", url: "https://username.github.io/mygames/doge-miner/" },
-  { name: "Draw climber", url: "https://username.github.io/mygames/draw-climber/" },
-  { name: "Granny online", url: "https://username.github.io/mygames/granny-online/" }
-];
-
-
-
-};
-
 function openGame(name){
-  const frame=document.getElementById('game-frame');
-  const url=gameURLs[name];
-  if(url){
-    frame.src=url;
+  const game = games.find(g=>g.name===name);
+  if(game && game.url){
+    const frame=document.getElementById('game-frame');
+    frame.src=game.url;
     frame.style.display="block";
     document.getElementById("back-btn").style.display="block";
     document.getElementById("fullscreen-btn").style.display="block";
     gameList.style.display="none";
-  } else {
-    alert("Game URL not found!");
-  }
+  } else { alert("Game URL not found!"); }
 }
 
-// ------------------ BUTTONS ------------------
-document.getElementById("back-btn").onclick=()=>{
-  document.getElementById('game-frame').style.display="none";
-  document.getElementById('back-btn').style.display="none";
-  document.getElementById('fullscreen-btn').style.display="none";
-  gameList.style.display="flex";
-};
-document.getElementById("fullscreen-btn").onclick=()=>{
-  const frame=document.getElementById('game-frame');
-  if(frame.requestFullscreen) frame.requestFullscreen();
-};
+// -------- BUTTONS --------
+document.getElementById("back-btn").onclick=()=>{document.getElementById('game-frame').style.display="none";document.getElementById('back-btn').style.display="none";document.getElementById('fullscreen-btn').style.display="none";gameList.style.display="flex";};
+document.getElementById("fullscreen-btn").onclick=()=>{const frame=document.getElementById('game-frame'); if(frame.requestFullscreen) frame.requestFullscreen();};
 document.getElementById("settings-btn").onclick=()=>document.getElementById("settings-menu").classList.add("open");
 document.getElementById("close-settings-btn").onclick=()=>document.getElementById("settings-menu").classList.remove("open");
 
-// ------------------ SEARCH ------------------
+// -------- SEARCH --------
 document.getElementById('search-input').addEventListener('input',()=>{
   const val=document.getElementById('search-input').value.toLowerCase();
   document.querySelectorAll('.game-card').forEach(c=>{
@@ -412,17 +345,16 @@ document.getElementById('search-input').addEventListener('input',()=>{
   });
 });
 
-// ------------------ SCROLL HIDING SETTINGS BUTTON ------------------
-let lastScroll=0;
+// -------- SCROLL HIDE SETTINGS BUTTON --------
+let lastScrollTop=0;
 window.addEventListener('scroll',()=>{
-  const btn=document.getElementById('settings-btn');
-  const currentScroll=window.pageYOffset;
-  if(currentScroll>lastScroll && currentScroll>50){ btn.classList.add('hidden'); }
-  else { btn.classList.remove('hidden'); }
-  lastScroll=currentScroll;
+  let st = window.pageYOffset || document.documentElement.scrollTop;
+  if(st>lastScrollTop){ document.getElementById('settings-btn').classList.add('hidden'); }
+  else { document.getElementById('settings-btn').classList.remove('hidden'); }
+  lastScrollTop = st<=0 ? 0 : st;
 });
 
-// ------------------ RESIZE ------------------
+// -------- RESIZE CANVAS --------
 window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
 </script>
 </body>
