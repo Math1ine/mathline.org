@@ -128,9 +128,10 @@ function toggleFavorite(name){
 }
 
 function loadGameByName(name){
-  const folder=name.replace(/\s+/g,"-");
-  const firstLetter=folder.charAt(0).toUpperCase()+folder.slice(1);
-  const fileName=`${firstLetter}/${firstLetter}.html`;
+  // Convert folder/file name to GitHub Pages-friendly
+  let folder = name.replace(/ /g,"-"); // Replace spaces with dashes
+  folder = folder.charAt(0).toUpperCase() + folder.slice(1); // Capitalize first letter
+  const fileName = folder + "/" + folder + ".html";
   loadGame(fileName);
 }
 
