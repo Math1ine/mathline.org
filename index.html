@@ -98,8 +98,7 @@ const ctx=canvas.getContext('2d');
 canvas.width=innerWidth; canvas.height=innerHeight;
 let particles=[]; 
 function initParticles(count=60){
-  particles=[];
-  for(let i=0;i<count;i++){
+  particles=[]; for(let i=0;i<count;i++){
     particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
   }
 }
@@ -107,7 +106,7 @@ initParticles();
 function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height); 
   if(document.getElementById('toggle-particles').checked){
-    ctx.fillStyle=savedSettings.accent||"#ff8800";
+    ctx.fillStyle="#ff8800";
     particles.forEach(p=>{
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
       p.x+=p.dx;p.y+=p.dy;
@@ -120,8 +119,7 @@ function animateParticles(){
 animateParticles();
 document.getElementById('toggle-particles').checked = savedSettings.particles!==undefined ? savedSettings.particles:true;
 document.getElementById('toggle-particles').addEventListener('change',()=>{
-  savedSettings.particles=document.getElementById('toggle-particles').checked; 
-  saveSettings();
+  savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();
 });
 
 // --- DECORATIONS ---
@@ -157,7 +155,7 @@ function animateDecorations(){
 }
 animateDecorations();
 
-// --- SETTINGS MENU ---
+// --- SETTINGS TABS ---
 const tabs=document.querySelectorAll('#settings-tabs button'); 
 const contents=document.querySelectorAll('.tab-content');
 tabs.forEach(tab=>{
@@ -199,8 +197,17 @@ document.getElementById('reset-theme-btn').addEventListener('click',()=>{
   updateColors();
 });
 
+// --- STICKY SETTINGS BUTTON ---
+let lastScrollTop=0; 
+window.addEventListener('scroll',()=>{
+  let st=window.pageYOffset||document.documentElement.scrollTop; 
+  if(st>lastScrollTop){document.getElementById('settings-btn').classList.add('hidden');} 
+  else{document.getElementById('settings-btn').classList.remove('hidden');} 
+  lastScrollTop=st<=0?0:st;
+});
+
 // --- GAMES ---
-  const games = [
+const games = [
   { name: "Ragdoll Archers", url: "Ragdoll-archers.html" },
   { name: "Ragdoll Hit", url: "Ragdoll-hit.html" },
   { name: "Time Shooter", url: "Time-shooter.html" },
@@ -252,15 +259,10 @@ document.getElementById('reset-theme-btn').addEventListener('click',()=>{
   { name: "Granny Online", url: "Granny-online.html" }
 ];
 
-  // add all other game files exactly as they exist in the repo
-];
-
 const gameList = document.getElementById("game-list");
 let favorites = JSON.parse(localStorage.getItem("mlFavorites")) || [];
 
-function saveFavorites() {
-  localStorage.setItem("mlFavorites", JSON.stringify(favorites));
-}
+function saveFavorites() { localStorage.setItem("mlFavorites", JSON.stringify(favorites)); }
 
 function renderGames() {
   gameList.innerHTML = "";
@@ -268,12 +270,10 @@ function renderGames() {
   const favs = sorted.filter(g => favorites.includes(g.name));
   const nonFavs = sorted.filter(g => !favorites.includes(g.name));
   const allGames = [...favs, ...nonFavs];
-
   allGames.forEach(game => {
     const card = document.createElement("div");
     card.className = "game-card";
     card.innerHTML = `<div class='star ${favorites.includes(game.name) ? 'favorited' : ''}'>★</div>${game.name}`;
-    
     card.onclick = () => {
       const frame = document.getElementById('game-frame');
       frame.src = game.url;
@@ -282,7 +282,6 @@ function renderGames() {
       document.getElementById("fullscreen-btn").style.display = "block";
       gameList.style.display = "none";
     };
-
     card.querySelector(".star").onclick = e => {
       e.stopPropagation();
       if (favorites.includes(game.name)) favorites = favorites.filter(f => f !== game.name);
@@ -290,11 +289,9 @@ function renderGames() {
       saveFavorites();
       renderGames();
     };
-
     gameList.appendChild(card);
   });
 }
-
 renderGames();
 
 // --- BACK & FULLSCREEN ---
