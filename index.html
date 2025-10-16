@@ -22,7 +22,7 @@ body {
 }
 @keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
-canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3;}
+canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; pointer-events:none;}
 
 header {padding:25px; text-align:center; position:relative; z-index:2;}
 header h1 {margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--accent);}
@@ -108,13 +108,37 @@ const savedSettings = JSON.parse(localStorage.getItem('mlSettings'))||{};
 function saveSettings(){localStorage.setItem('mlSettings', JSON.stringify(savedSettings));}
 
 // --- PARTICLES ---
-const canvas=document.getElementById('particles'); const ctx=canvas.getContext('2d'); canvas.width=innerWidth; canvas.height=innerHeight;
-let particles=[]; function initParticles(count=60){particles=[]; for(let i=0;i<count;i++){particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});}}
+const canvas=document.getElementById('particles'); 
+const ctx=canvas.getContext('2d'); 
+canvas.width=innerWidth; 
+canvas.height=innerHeight;
+let particles=[]; 
+function initParticles(count=60){
+  particles=[];
+  for(let i=0;i<count;i++){
+    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
+  }
+}
 initParticles();
-function animateParticles(){ctx.clearRect(0,0,canvas.width,canvas.height); if(document.getElementById('toggle-particles').checked){ctx.fillStyle="#ff8800";particles.forEach(p=>{ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();p.x+=p.dx;p.y+=p.dy;if(p.x<0||p.x>canvas.width)p.dx*=-1;if(p.y<0||p.y>canvas.height)p.dy*=-1;});} requestAnimationFrame(animateParticles);}
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height); 
+  if(document.getElementById('toggle-particles').checked){
+    ctx.fillStyle="#ff8800";
+    particles.forEach(p=>{
+      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+      p.x+=p.dx;p.y+=p.dy;
+      if(p.x<0||p.x>canvas.width)p.dx*=-1;
+      if(p.y<0||p.y>canvas.height)p.dy*=-1;
+    });
+  } 
+  requestAnimationFrame(animateParticles);
+}
 animateParticles();
 document.getElementById('toggle-particles').checked = savedSettings.particles!==undefined ? savedSettings.particles:true;
-document.getElementById('toggle-particles').addEventListener('change',()=>{savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();});
+document.getElementById('toggle-particles').addEventListener('change',()=>{
+  savedSettings.particles=document.getElementById('toggle-particles').checked; 
+  saveSettings();
+});
 
 // --- DECORATIONS ---
 const decorationsContainer=document.getElementById('decorations-container'); 
@@ -147,8 +171,19 @@ toggleDeco.addEventListener('change',()=>{
   saveSettings();
 });
 
-document.getElementById('deco-count').addEventListener('input', e=>{decoCount=e.target.value; savedSettings.decoCount=decoCount; createDecorations(decoCount); saveSettings();});
-document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value; savedSettings.decoSpeed=e.target.value; saveSettings(); createDecorations(decoCount);});
+document.getElementById('deco-count').addEventListener('input', e=>{
+  decoCount = Math.min(e.target.value, 100); // max 100
+  e.target.value = decoCount;
+  savedSettings.decoCount = decoCount;
+  createDecorations(decoCount);
+  saveSettings();
+});
+document.getElementById('deco-speed').addEventListener('input', e=>{
+  decoSpeedVal = e.target.value; 
+  savedSettings.decoSpeed=e.target.value; 
+  saveSettings(); 
+  createDecorations(decoCount);
+});
 
 function animateDecorations(){
   document.querySelectorAll('.decoration').forEach(d=>{
@@ -165,12 +200,14 @@ animateDecorations();
 // --- SETTINGS TABS ---
 const tabs=document.querySelectorAll('#settings-tabs button'); 
 const contents=document.querySelectorAll('.tab-content');
-tabs.forEach(tab=>{tab.addEventListener('click',()=>{
-  tabs.forEach(t=>t.classList.remove('active'));
-  tab.classList.add('active');
-  contents.forEach(c=>c.style.display='none');
-  document.getElementById(tab.dataset.tab).style.display='block';
-});});
+tabs.forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    contents.forEach(c=>c.style.display='none');
+    document.getElementById(tab.dataset.tab).style.display='block';
+  });
+});
 document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
 document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
 
@@ -178,12 +215,15 @@ document.getElementById("close-settings-btn").onclick = ()=>document.getElementB
 const bg1Input=document.getElementById('bg-color1'); 
 const bg2Input=document.getElementById('bg-color2'); 
 const accentInput=document.getElementById('accent-color');
-bg1Input.value=savedSettings.bg1||'#000000'; bg2Input.value=savedSettings.bg2||'#111111'; accentInput.value=savedSettings.accent||'#ff8800';
+bg1Input.value=savedSettings.bg1||'#000000'; 
+bg2Input.value=savedSettings.bg2||'#111111'; 
+accentInput.value=savedSettings.accent||'#ff8800';
 function updateColors(){
   document.documentElement.style.setProperty('--bg1',bg1Input.value); 
   document.documentElement.style.setProperty('--bg2',bg2Input.value); 
   document.documentElement.style.setProperty('--accent',accentInput.value); 
-  savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value; saveSettings();
+  savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value; 
+  saveSettings();
 }
 bg1Input.addEventListener('input',updateColors); 
 bg2Input.addEventListener('input',updateColors); 
@@ -210,7 +250,7 @@ window.addEventListener('scroll',()=>{
 
 // --- GAMES ---
 const games=[
-"Ragdoll archers", "Ragdoll hit"," Time shooter", "Retro bowl",
+"Ragdoll archers", "Ragdoll hit","Time shooter", "Retro bowl",
 "Snow rider", "Swords and sandals", "Crazy cattle", "Gladi hoppers",
 "Bit planes", "Final earth2", "Cluster rush", "Push your luck",
 "Poly track", "Ragdoll Soccer", "Jetpack joy ride", "Learn to fly 3",
@@ -227,19 +267,30 @@ let favorites=JSON.parse(localStorage.getItem("mlFavorites"))||[];
 function saveFavorites(){localStorage.setItem("mlFavorites",JSON.stringify(favorites));}
 function renderGames(){
   gameList.innerHTML="";
-  games.forEach(name=>{
+  const sorted = [...games].sort((a,b)=>a.localeCompare(b));
+  const favs = sorted.filter(g=>favorites.includes(g));
+  const nonFavs = sorted.filter(g=>!favorites.includes(g));
+  const allGames = [...favs,...nonFavs];
+
+  allGames.forEach(name=>{
     const card=document.createElement("div"); 
     card.className="game-card"; 
     card.innerHTML=`<div class='star ${favorites.includes(name)?'favorited':''}'>★</div>${name}`;
-    card.onclick=()=>openGame(name); 
-    card.querySelector(".star").onclick=e=>{e.stopPropagation(); if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);} saveFavorites(); renderGames();};
+    card.onclick=()=>openGame(name.replace(/ /g,"")+".html"); 
+    card.querySelector(".star").onclick=e=>{
+      e.stopPropagation();
+      if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}
+      else{favorites.push(name);}
+      saveFavorites(); renderGames();
+    };
     gameList.appendChild(card);
   });
 }
 renderGames();
+
 function openGame(name){
   const frame=document.getElementById('game-frame'); 
-  frame.src=name+".html"; 
+  frame.src="games/"+name; // assumes all HTML files are in "games" folder
   frame.style.display="block"; 
   document.getElementById("back-btn").style.display="block"; 
   document.getElementById("fullscreen-btn").style.display="block"; 
@@ -247,13 +298,24 @@ function openGame(name){
 }
 
 // --- BUTTONS ---
-document.getElementById("back-btn").onclick=()=>{document.getElementById('game-frame').style.display='none'; document.getElementById('back-btn').style.display='none'; document.getElementById('fullscreen-btn').style.display='none'; gameList.style.display='flex';};
-document.getElementById("fullscreen-btn").onclick=()=>{const frame=document.getElementById('game-frame'); if(frame.requestFullscreen) frame.requestFullscreen();};
+document.getElementById("back-btn").onclick=()=>{
+  document.getElementById('game-frame').style.display='none'; 
+  document.getElementById('back-btn').style.display='none'; 
+  document.getElementById('fullscreen-btn').style.display='none'; 
+  gameList.style.display='flex';
+};
+document.getElementById("fullscreen-btn").onclick=()=>{
+  const frame=document.getElementById('game-frame'); 
+  if(frame.requestFullscreen) frame.requestFullscreen();
+};
 
 // --- SEARCH ---
 document.getElementById('search-input').addEventListener('input',()=>{
   const val=document.getElementById('search-input').value.toLowerCase(); 
-  document.querySelectorAll('.game-card').forEach(c=>{if(c.textContent.toLowerCase().includes(val)) c.style.display='block'; else c.style.display='none';});
+  document.querySelectorAll('.game-card').forEach(c=>{
+    if(c.textContent.toLowerCase().includes(val)) c.style.display='block'; 
+    else c.style.display='none';
+  });
 });
 
 // --- RESIZE ---
