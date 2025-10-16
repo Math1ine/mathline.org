@@ -51,13 +51,11 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
 </head>
 <body>
 <canvas id="particles"></canvas>
-
 <header><h1>Math Line 🎮</h1></header>
 <div id="search-container"><input type="text" id="search-input" placeholder="Search games..."></div>
 <button id="settings-btn">⚙️</button>
 <button id="back-btn">⬅ Back</button>
 <button id="fullscreen-btn">⛶ Fullscreen</button>
-
 <div id="settings-menu">
   <div id="settings-tabs">
     <button class="active" data-tab="general">General</button>
@@ -85,21 +83,19 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
     </div>
   </div>
 </div>
-
 <div id="decorations-container"></div>
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
 
 <script>
-// ---------------- SETTINGS ----------------
+// --- SETTINGS ---
 const savedSettings = JSON.parse(localStorage.getItem('mlSettings'))||{};
 function saveSettings(){localStorage.setItem('mlSettings', JSON.stringify(savedSettings));}
 
-// ---------------- PARTICLES ----------------
+// --- PARTICLES ---
 const canvas=document.getElementById('particles'); 
 const ctx=canvas.getContext('2d'); 
-canvas.width=innerWidth; 
-canvas.height=innerHeight;
+canvas.width=innerWidth; canvas.height=innerHeight;
 let particles=[]; 
 function initParticles(count=60){
   particles=[];
@@ -111,7 +107,7 @@ initParticles();
 function animateParticles(){
   ctx.clearRect(0,0,canvas.width,canvas.height); 
   if(document.getElementById('toggle-particles').checked){
-    ctx.fillStyle="#ff8800";
+    ctx.fillStyle=savedSettings.accent||"#ff8800";
     particles.forEach(p=>{
       ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
       p.x+=p.dx;p.y+=p.dy;
@@ -128,12 +124,11 @@ document.getElementById('toggle-particles').addEventListener('change',()=>{
   saveSettings();
 });
 
-// ---------------- DECORATIONS ----------------
+// --- DECORATIONS ---
 const decorationsContainer=document.getElementById('decorations-container'); 
 const decoEmojis=["🎃","💀","🕸️"];
 let decoCount = savedSettings.decoCount||25; 
 let decoSpeedVal = savedSettings.decoSpeed||0.5;
-
 function createDecorations(count=decoCount){
   decorationsContainer.innerHTML="";
   for(let i=0;i<count;i++){
@@ -162,7 +157,7 @@ function animateDecorations(){
 }
 animateDecorations();
 
-// ---------------- SETTINGS UI ----------------
+// --- SETTINGS MENU ---
 const tabs=document.querySelectorAll('#settings-tabs button'); 
 const contents=document.querySelectorAll('.tab-content');
 tabs.forEach(tab=>{
@@ -176,7 +171,7 @@ tabs.forEach(tab=>{
 document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
 document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
 
-// ---------------- THEME ----------------
+// --- THEME ---
 const bg1Input=document.getElementById('bg-color1'); 
 const bg2Input=document.getElementById('bg-color2'); 
 const accentInput=document.getElementById('accent-color');
@@ -204,48 +199,37 @@ document.getElementById('reset-theme-btn').addEventListener('click',()=>{
   updateColors();
 });
 
-// ---------------- STICKY SETTINGS BUTTON ----------------
-let lastScrollTop=0; 
-window.addEventListener('scroll',()=>{
-  let st=window.pageYOffset||document.documentElement.scrollTop; 
-  if(st>lastScrollTop){document.getElementById('settings-btn').classList.add('hidden');} 
-  else{document.getElementById('settings-btn').classList.remove('hidden');} 
-  lastScrollTop=st<=0?0:st;
-});
-
-// ---------------- GAMES ----------------
-// Use relative URLs so GitHub Pages loads correctly
+// --- GAMES ---
 const games = [
-  "Ragdoll-Archers","Ragdoll-Hit","Time-Shooter","Retro-Bowl","Snow-Rider","Swords-And-Sandals",
-  "Crazy-Cattle","Gladi-Hoppers","Bit-Planes","Final-Earth2","Cluster-Rush","Push-Your-Luck",
-  "Poly-Track","Ragdoll-Soccer","Jetpack-Joy-Ride","Learn-To-Fly-3","Malidin-Stun-Cars","Gun-Spin",
-  "Age-Of-War","Moto-X3M-2","Moto-X3M-Winter","Basketball-Stars","Idle-Breakout","Vex-8",
-  "Tiny-Fishing","Drive-Mad","Stick-Man-Hook","Learn-To-Fly-2","Line-Rider","Unicycle-Hero",
-  "Basket-Random","1v1-Lol","Happy-Wheels","Idle-Dice","Idle-Miner-Tycoon","Johnny-Upgrade",
-  "Jack-Smith","Tunnel-Rush","Duck-Life-5","Duck-Life-4","Mob-Control","A-Small-World-Cup",
-  "Escape-Road","QWOP","Indian-Truck-Simulator","Mr-Mine","Doge-Miner","Draw-Climber","Granny-Online"
+  { name: "Ragdoll Archers", url: "Ragdoll-archers.html" },
+  { name: "Ragdoll Hit", url: "Ragdoll-hit.html" },
+  { name: "Time Shooter", url: "Time-shooter.html" },
+  { name: "Retro Bowl", url: "Retro-bowl.html" },
+  // add all other game files exactly as they exist in the repo
 ];
 
 const gameList = document.getElementById("game-list");
 let favorites = JSON.parse(localStorage.getItem("mlFavorites")) || [];
 
-function saveFavorites() { localStorage.setItem("mlFavorites", JSON.stringify(favorites)); }
+function saveFavorites() {
+  localStorage.setItem("mlFavorites", JSON.stringify(favorites));
+}
 
 function renderGames() {
   gameList.innerHTML = "";
-  const sorted = [...games].sort();
-  const favs = sorted.filter(g => favorites.includes(g));
-  const nonFavs = sorted.filter(g => !favorites.includes(g));
+  const sorted = [...games].sort((a, b) => a.name.localeCompare(b.name));
+  const favs = sorted.filter(g => favorites.includes(g.name));
+  const nonFavs = sorted.filter(g => !favorites.includes(g.name));
   const allGames = [...favs, ...nonFavs];
 
   allGames.forEach(game => {
     const card = document.createElement("div");
     card.className = "game-card";
-    card.innerHTML = `<div class='star ${favorites.includes(game) ? 'favorited' : ''}'>★</div>${game}`;
-
+    card.innerHTML = `<div class='star ${favorites.includes(game.name) ? 'favorited' : ''}'>★</div>${game.name}`;
+    
     card.onclick = () => {
       const frame = document.getElementById('game-frame');
-      frame.src = `games/${game}.html`;
+      frame.src = game.url;
       frame.style.display = "block";
       document.getElementById("back-btn").style.display = "block";
       document.getElementById("fullscreen-btn").style.display = "block";
@@ -254,8 +238,8 @@ function renderGames() {
 
     card.querySelector(".star").onclick = e => {
       e.stopPropagation();
-      if(favorites.includes(game)) favorites = favorites.filter(f => f !== game);
-      else favorites.push(game);
+      if (favorites.includes(game.name)) favorites = favorites.filter(f => f !== game.name);
+      else favorites.push(game.name);
       saveFavorites();
       renderGames();
     };
@@ -266,7 +250,7 @@ function renderGames() {
 
 renderGames();
 
-// ---------------- BACK & FULLSCREEN ----------------
+// --- BACK & FULLSCREEN ---
 document.getElementById("back-btn").onclick = () => {
   document.getElementById('game-frame').style.display = 'none';
   document.getElementById('back-btn').style.display = 'none';
@@ -275,10 +259,10 @@ document.getElementById("back-btn").onclick = () => {
 };
 document.getElementById("fullscreen-btn").onclick = () => {
   const frame = document.getElementById('game-frame');
-  if(frame.requestFullscreen) frame.requestFullscreen();
+  if (frame.requestFullscreen) frame.requestFullscreen();
 };
 
-// ---------------- SEARCH ----------------
+// --- SEARCH ---
 document.getElementById('search-input').addEventListener('input',()=>{
   const val=document.getElementById('search-input').value.toLowerCase(); 
   document.querySelectorAll('.game-card').forEach(c=>{
@@ -287,7 +271,7 @@ document.getElementById('search-input').addEventListener('input',()=>{
   });
 });
 
-// ---------------- RESIZE ----------------
+// --- RESIZE ---
 window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
 </script>
 </body>
