@@ -2,119 +2,129 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mini Clash Royale</title>
+<title>Mini Clash Royale Improved</title>
 <style>
   body {
     margin: 0;
-    background-color: #7ec0ee; /* Sky-blue background */
-    overflow: hidden;
+    background-color: #7ec0ee;
     font-family: sans-serif;
+    overflow: hidden;
     user-select: none;
   }
   canvas {
     display: block;
     margin: auto;
-    background-color: #7ec0ee; /* Sky-blue */
+    background-color: #7ec0ee;
   }
 </style>
 </head>
 <body>
 <canvas id="gameCanvas" width="960" height="540"></canvas>
 <script>
-// =====================
-// ===== Constants =====
-// =====================
+// ====== Canvas setup ======
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
-const FPS = 60;
-
-// Arena
 const ARENA_WIDTH = canvas.width;
 const ARENA_HEIGHT = canvas.height;
-const RIVER_Y = ARENA_HEIGHT / 2 - 40;
+const RIVER_Y = ARENA_HEIGHT/2 - 40;
 
-// Elixir
+// ====== Game state ======
 const MAX_ELIXIR = 10;
-const ELIXIR_REGEN = 0.04; // per frame (~2.4 per second)
-
-// Tower sizes and positions
-const TOWER_WIDTH = 40;
-const TOWER_HEIGHT = 80;
-const KING_TOWER_WIDTH = 60;
-const KING_TOWER_HEIGHT = 100;
-
-// Colors
-const PLAYER_COLOR = "blue";
-const ENEMY_COLOR = "red";
-const NEUTRAL_COLOR = "grey";
-const CARD_BG = "#eee";
-const ELIXIR_COLOR = "#00f";
-
-// =====================
-// ===== Game State ====
-// =====================
-let playerElixir = MAX_ELIXIR / 2;
-let enemyElixir = MAX_ELIXIR / 2;
-
+const ELIXIR_REGEN = 0.04;
+let playerElixir = MAX_ELIXIR/2;
+let enemyElixir = MAX_ELIXIR/2;
 let gameOver = false;
 let winner = "";
 
-// =====================
-// ===== Classes =======
-// =====================
+// ====== Assets (placeholder images) ======
+const images = {};
+const imageSources = {
+    "Knight": "https://i.imgur.com/1G8r6kC.png",
+    "Archer": "https://i.imgur.com/4p7Bz1h.png",
+    "Giant": "https://i.imgur.com/xz5a9fV.png",
+    "MiniPekka": "https://i.imgur.com/LzUjszo.png",
+    "Wizard": "https://i.imgur.com/BoC3tDF.png",
+    "KingTower": "https://i.imgur.com/AK2l5Q5.png",
+    "CrownTower": "https://i.imgur.com/akg3frK.png"
+};
+for(let key in imageSources){
+    images[key] = new Image();
+    images[key].src = imageSources[key];
+}
 
-// Basic rectangle Tower
+// ====== Constants ======
+const TOWER_WIDTH = 60;
+const TOWER_HEIGHT = 100;
+const CARD_WIDTH = 60;
+const CARD_HEIGHT = 60;
+const CARD_SPACING = 10;
+const PLAYER_COLOR = "blue";
+const ENEMY_COLOR = "red";
+
+// ====== Card stats ======
+const typeStats = {
+    "Knight": {hp: 300, damage: 50, speed: 1.2, range: 0},
+    "Archer": {hp: 150, damage: 25, speed: 1.5, range: 100},
+    "Giant": {hp: 600, damage: 70, speed: 0.8, range: 0},
+    "MiniPekka": {hp: 250, damage: 90, speed: 1.4, range: 0},
+    "Wizard": {hp: 200, damage: 40, speed: 1, range: 80}
+};
+const cardCost = {
+    "Knight":3,
+    "Archer":3,
+    "Giant":5,
+    "MiniPekka":4,
+    "Wizard":5
+};
+const cards = ["Knight","Archer","Giant","MiniPekka","Wizard"];
+
+// ====== Classes ======
 class Tower {
-    constructor(x, y, isKing=false, color="red") {
+    constructor(x, y, isKing=false, owner="enemy") {
         this.x = x;
         this.y = y;
-        this.width = isKing ? KING_TOWER_WIDTH : TOWER_WIDTH;
-        this.height = isKing ? KING_TOWER_HEIGHT : TOWER_HEIGHT;
-        this.hp = isKing ? 2000 : 1000;
+        this.width = isKing?TOWER_WIDTH:50;
+        this.height = isKing?TOWER_HEIGHT:80;
+        this.hp = isKing?2000:1000;
         this.isKing = isKing;
-        this.color = color;
-        this.shootCooldown = 0;
+        this.owner = owner;
+        this.image = isKing?images.KingTower:images.CrownTower;
     }
     draw() {
-        ctx.fillStyle = this.color;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        // Health bar
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
         ctx.fillStyle = "green";
-        ctx.fillRect(this.x, this.y-10, this.width*(this.hp / (this.isKing?2000:1000)), 5);
+        ctx.fillRect(this.x, this.y-10, this.width*(this.hp/(this.isKing?2000:1000)),5);
     }
 }
 
-// Troop class
 class Troop {
     constructor(x, y, type, owner="player") {
         this.x = x;
         this.y = y;
         this.type = type;
         this.owner = owner;
-        this.width = 20;
-        this.height = 20;
-        this.speed = typeStats[type].speed;
         this.hp = typeStats[type].hp;
         this.damage = typeStats[type].damage;
+        this.speed = typeStats[type].speed;
         this.range = typeStats[type].range;
+        this.width = 40;
+        this.height = 40;
         this.target = null;
+        this.attackCooldown = 0;
+        this.image = images[type];
     }
     draw() {
-        ctx.fillStyle = this.owner==="player"?PLAYER_COLOR:ENEMY_COLOR;
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        // Health bar
+        ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
         ctx.fillStyle = "green";
         ctx.fillRect(this.x, this.y-5, this.width*(this.hp/typeStats[this.type].hp),3);
     }
     move() {
         if(this.target){
-            // Simple targeting AI
             let dx = this.target.x + this.target.width/2 - (this.x + this.width/2);
             let dy = this.target.y + this.target.height/2 - (this.y + this.height/2);
-            let dist = Math.sqrt(dx*dx+dy*dy);
-            if(dist <= this.range){
-                // Attack
-                if(this.attackCooldown<=0){
+            let dist = Math.sqrt(dx*dx + dy*dy);
+            if(dist <= this.range + this.width/2){
+                if(this.attackCooldown <=0){
                     this.target.hp -= this.damage;
                     this.attackCooldown = 30;
                 }
@@ -123,7 +133,6 @@ class Troop {
                 this.y += dy/dist*this.speed;
             }
         } else {
-            // Move forward along lane
             this.y += this.owner==="player"? -this.speed : this.speed;
         }
         if(this.attackCooldown>0) this.attackCooldown--;
@@ -131,57 +140,31 @@ class Troop {
     findTarget(towers, troops){
         let possible = [...towers, ...troops].filter(t=>t.owner!==this.owner && t.hp>0);
         if(possible.length>0){
-            // Prioritize nearest tower first
-            possible.sort((a,b)=>Math.abs(this.y-b.y) - Math.abs(this.y-a.y));
+            possible.sort((a,b)=>Math.abs(this.y-a.y)-Math.abs(this.y-b.y));
             this.target = possible[0];
         }
     }
 }
 
-// Card stats
-const typeStats = {
-    "Knight": {hp: 300, damage: 50, speed: 1.2, range: 0},
-    "Archer": {hp: 150, damage: 25, speed: 1.5, range: 100},
-    "Giant": {hp: 600, damage: 70, speed: 0.8, range: 0},
-    "MiniPekka": {hp: 250, damage: 90, speed: 1.4, range: 0},
-    "Wizard": {hp: 200, damage: 40, speed: 1, range: 80}
-};
-
-// Card cost
-const cardCost = {
-    "Knight":3,
-    "Archer":3,
-    "Giant":5,
-    "MiniPekka":4,
-    "Wizard":5
-};
-
-// Troops arrays
+// ====== Game objects ======
+let playerTowers = [
+    new Tower(ARENA_WIDTH/2 - 150, ARENA_HEIGHT-100,false,"player"),
+    new Tower(ARENA_WIDTH/2 + 90, ARENA_HEIGHT-100,false,"player"),
+    new Tower(ARENA_WIDTH/2 - TOWER_WIDTH/2, ARENA_HEIGHT-120,true,"player")
+];
+let enemyTowers = [
+    new Tower(ARENA_WIDTH/2 - 150,0,false,"enemy"),
+    new Tower(ARENA_WIDTH/2 + 90,0,false,"enemy"),
+    new Tower(ARENA_WIDTH/2 - TOWER_WIDTH/2,0,true,"enemy")
+];
 let playerTroops = [];
 let enemyTroops = [];
 
-// Towers
-let playerTowers = [
-    new Tower(ARENA_WIDTH/2 - 150, ARENA_HEIGHT - TOWER_HEIGHT, false, PLAYER_COLOR),
-    new Tower(ARENA_WIDTH/2 + 110, ARENA_HEIGHT - TOWER_HEIGHT, false, PLAYER_COLOR),
-    new Tower(ARENA_WIDTH/2 - KING_TOWER_WIDTH/2, ARENA_HEIGHT - KING_TOWER_HEIGHT, true, PLAYER_COLOR)
-];
-
-let enemyTowers = [
-    new Tower(ARENA_WIDTH/2 - 150, 0, false, ENEMY_COLOR),
-    new Tower(ARENA_WIDTH/2 + 110, 0, false, ENEMY_COLOR),
-    new Tower(ARENA_WIDTH/2 - KING_TOWER_WIDTH/2, 0, true, ENEMY_COLOR)
-];
-
-// =====================
-// ===== Draw Arena ====
-// =====================
+// ====== Draw arena ======
 function drawArena(){
-    // Clear screen
     ctx.fillStyle = "#7ec0ee";
     ctx.fillRect(0,0,ARENA_WIDTH, ARENA_HEIGHT);
     
-    // River
     ctx.fillStyle = "#1ca3ec";
     ctx.fillRect(0,RIVER_Y,ARENA_WIDTH,80);
     
@@ -189,127 +172,91 @@ function drawArena(){
     ctx.strokeStyle = "#fff";
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.moveTo(ARENA_WIDTH/2 - 100, 0);
-    ctx.lineTo(ARENA_WIDTH/2 - 100, ARENA_HEIGHT);
-    ctx.moveTo(ARENA_WIDTH/2 + 100, 0);
-    ctx.lineTo(ARENA_WIDTH/2 + 100, ARENA_HEIGHT);
+    ctx.moveTo(ARENA_WIDTH/2-100,0);
+    ctx.lineTo(ARENA_WIDTH/2-100,ARENA_HEIGHT);
+    ctx.moveTo(ARENA_WIDTH/2+100,0);
+    ctx.lineTo(ARENA_WIDTH/2+100,ARENA_HEIGHT);
     ctx.stroke();
     
-    // Draw towers
     playerTowers.forEach(t=>t.draw());
     enemyTowers.forEach(t=>t.draw());
     
-    // Draw troops
     playerTroops.forEach(t=>t.draw());
     enemyTroops.forEach(t=>t.draw());
     
-    // Draw elixir bars
-    ctx.fillStyle = ELIXIR_COLOR;
+    // Elixir bars
+    ctx.fillStyle = "#00f";
     ctx.fillRect(50, ARENA_HEIGHT-30, playerElixir*20, 20);
-    ctx.fillRect(50, 10, enemyElixir*20, 20);
+    ctx.fillRect(50,10, enemyElixir*20,20);
     
-    // Draw card buttons
-    drawCardButtons();
+    drawCards();
 }
 
-// =====================
-// ===== Cards UI ======
-// =====================
-const cardWidth = 60;
-const cardHeight = 60;
-const cardSpacing = 10;
-const cards = ["Knight","Archer","Giant","MiniPekka","Wizard"];
-
-function drawCardButtons(){
+// ====== Cards ======
+function drawCards(){
     cards.forEach((c,i)=>{
-        let x = 50 + i*(cardWidth+cardSpacing);
-        let y = ARENA_HEIGHT - cardHeight -10;
-        ctx.fillStyle = "#ccc";
-        ctx.fillRect(x,y,cardWidth,cardHeight);
-        // Draw pixel icon (simple colored square)
-        ctx.fillStyle = "#666";
-        ctx.fillRect(x+10,y+10,cardWidth-20,cardHeight-20);
-        // Card name
-        ctx.fillStyle = "#000";
-        ctx.font = "12px sans-serif";
-        ctx.fillText(c, x+5, y+cardHeight-5);
+        let x = 50 + i*(CARD_WIDTH+CARD_SPACING);
+        let y = ARENA_HEIGHT - CARD_HEIGHT -10;
+        ctx.fillStyle = playerElixir >= cardCost[c]? "#ccc":"#999";
+        ctx.fillRect(x,y,CARD_WIDTH,CARD_HEIGHT);
+        ctx.drawImage(images[c], x+5, y+5, CARD_WIDTH-10, CARD_HEIGHT-10);
+        ctx.fillStyle="#000";
+        ctx.font="12px sans-serif";
+        ctx.fillText(c, x+5, y+CARD_HEIGHT-5);
     });
 }
 
-// =====================
-// ===== Spawn Troop ===
-// =====================
+// ====== Spawn troop ======
 function spawnTroop(type, owner){
     if(owner==="player"){
         if(playerElixir>=cardCost[type]){
             playerElixir -= cardCost[type];
-            let x = ARENA_WIDTH/2 - 30 + Math.random()*60;
-            let y = ARENA_HEIGHT - 100;
+            let x = ARENA_WIDTH/2-30 + Math.random()*60;
+            let y = ARENA_HEIGHT-100;
             playerTroops.push(new Troop(x,y,type,"player"));
         }
     } else {
         if(enemyElixir>=cardCost[type]){
             enemyElixir -= cardCost[type];
-            let x = ARENA_WIDTH/2 -30 + Math.random()*60;
+            let x = ARENA_WIDTH/2-30 + Math.random()*60;
             let y = 100;
             enemyTroops.push(new Troop(x,y,type,"enemy"));
         }
     }
 }
 
-// =====================
-// ===== Mouse Input ===
-// =====================
+// ====== Mouse click ======
 canvas.addEventListener("click",(e)=>{
     let rect = canvas.getBoundingClientRect();
     let mx = e.clientX - rect.left;
     let my = e.clientY - rect.top;
-    
-    // Check if clicked on card
     cards.forEach((c,i)=>{
-        let x = 50 + i*(cardWidth+cardSpacing);
-        let y = ARENA_HEIGHT - cardHeight -10;
-        if(mx>=x && mx<=x+cardWidth && my>=y && my<=y+cardHeight){
+        let x = 50 + i*(CARD_WIDTH+CARD_SPACING);
+        let y = ARENA_HEIGHT - CARD_HEIGHT -10;
+        if(mx>=x && mx<=x+CARD_WIDTH && my>=y && my<=y+CARD_HEIGHT){
             spawnTroop(c,"player");
         }
     });
 });
 
-// =====================
-// ===== AI Logic ======
-// =====================
-let enemyAItimer = 0;
-
+// ====== Enemy AI ======
+let enemyTimer = 0;
 function enemyAI(){
-    enemyAItimer++;
-    if(enemyAItimer>90){ // every 1.5 sec
-        enemyAItimer=0;
-        // Check player's strongest troop near tower
-        let pushTroop = playerTroops.filter(t=>t.y>ARENA_HEIGHT/2).sort((a,b)=>b.hp-a.hp)[0];
-        if(pushTroop){
-            // Defensive: spawn troop to counter
-            if(enemyElixir>=3){
-                spawnTroop("Knight","enemy");
-            }
-        } else {
-            // Aggressive push
-            let randomCard = cards[Math.floor(Math.random()*cards.length)];
-            spawnTroop(randomCard,"enemy");
-        }
+    enemyTimer++;
+    if(enemyTimer>90){
+        enemyTimer=0;
+        let randomCard = cards[Math.floor(Math.random()*cards.length)];
+        spawnTroop(randomCard,"enemy");
     }
 }
 
-// =====================
-// ===== Game Loop =====
-// =====================
+// ====== Update loop ======
 function update(){
     if(gameOver) return;
     
-    // Regen elixir
-    if(playerElixir<MAX_ELIXIR) playerElixir+=ELIXIR_REGEN;
-    if(enemyElixir<MAX_ELIXIR) enemyElixir+=ELIXIR_REGEN;
+    playerElixir = Math.min(playerElixir + ELIXIR_REGEN, MAX_ELIXIR);
+    enemyElixir = Math.min(enemyElixir + ELIXIR_REGEN, MAX_ELIXIR);
     
-    // Update troops
     playerTroops.forEach(t=>{
         t.findTarget([...enemyTowers], enemyTroops);
         t.move();
@@ -319,34 +266,28 @@ function update(){
         t.move();
     });
     
-    // Remove dead troops
     playerTroops = playerTroops.filter(t=>t.hp>0);
     enemyTroops = enemyTroops.filter(t=>t.hp>0);
     
-    // Check towers
     [...playerTowers,...enemyTowers].forEach(t=>{
         if(t.hp<=0 && t.isKing){
             gameOver = true;
-            winner = t.color===PLAYER_COLOR?"Enemy":"Player";
+            winner = t.owner==="player"?"Enemy":"Player";
         }
     });
     
-    // AI turn
     enemyAI();
-    
-    // Draw everything
     drawArena();
     
     if(!gameOver){
         requestAnimationFrame(update);
     } else {
-        ctx.fillStyle = "#000";
-        ctx.font = "48px sans-serif";
+        ctx.fillStyle="#000";
+        ctx.font="48px sans-serif";
         ctx.fillText(winner + " Wins!", ARENA_WIDTH/2-150, ARENA_HEIGHT/2);
     }
 }
 
-// Start game
 update();
 </script>
 </body>
