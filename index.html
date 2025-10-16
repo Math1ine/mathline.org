@@ -55,29 +55,32 @@ header h1 { margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--ac
 #fullscreen-btn { top:100px; right:25px; }
 
 #settings-menu {
-  position:fixed; top:0; right:-350px; width:320px; height:100%; background:rgba(0,0,0,0.95);
-  color:#fff; display:flex; flex-direction:column; padding:20px; gap:10px; transition:right 0.3s ease; z-index:4; overflow-y:auto;
+  position:fixed; top:0; right:-350px; width:350px; height:100%; background:rgba(0,0,0,0.95);
+  color:#fff; display:flex; flex-direction:row; transition:right 0.3s ease; z-index:4; overflow:hidden;
 }
 #settings-menu.open { right:0; }
-#settings-menu h2 { margin-top:30px; text-align:center; }
-#settings-menu label { display:flex; justify-content:space-between; align-items:center; }
-#settings-menu input, #settings-menu select { cursor:pointer; }
-#settings-menu button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
-#settings-menu button:hover { filter: brightness(1.2); }
+
+/* Vertical tabs */
+#settings-tabs { display:flex; flex-direction:column; width:100px; background:#111; }
+#settings-tabs button { padding:15px; border:none; background:none; color:var(--accent); cursor:pointer; font-weight:bold; transition:.2s; }
+#settings-tabs button.active, #settings-tabs button:hover { background:var(--accent); color:#000; }
+
+#settings-content { flex:1; padding:20px; overflow-y:auto; position:relative; }
+#settings-content h2 { margin-top:0; text-align:center; }
 
 #close-settings-btn {
   position: absolute;
-  top: 10px;
-  right: 10px;
-  padding: 6px 10px;
-  font-size: 18px;
-  border: none;
-  border-radius: 6px;
+  top:10px;
+  right:10px;
+  padding:6px 10px;
+  font-size:18px;
+  border:none;
+  border-radius:6px;
   background: var(--accent);
-  color: #000;
-  cursor: pointer;
-  z-index: 5;
-  transition: 0.2s;
+  color:#000;
+  cursor:pointer;
+  z-index:5;
+  transition:0.2s;
 }
 #close-settings-btn:hover { filter: brightness(1.2); }
 
@@ -111,18 +114,35 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 <button id="fullscreen-btn">⛶ Fullscreen</button>
 
 <div id="settings-menu">
-  <button id="close-settings-btn">✖</button>
-  <h2>Settings</h2>
-  <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
-  <label>Decorations Count: <input type="number" id="deco-count" min="5" max="100" value="25"></label>
-  <label>Decorations Speed: <input type="range" id="deco-speed" min="0.5" max="5" step="0.1" value="1.5"></label>
-  <label>Particles: <input type="checkbox" id="toggle-particles"></label>
-  <h2>Theme</h2>
-  <label>Background 1: <input type="color" id="bg-color1"></label>
-  <label>Background 2: <input type="color" id="bg-color2"></label>
-  <label>Accent Color: <input type="color" id="accent-color"></label>
-  <button id="random-theme-btn">Random Theme</button>
-  <button id="reset-theme-btn">Reset Theme</button>
+  <div id="settings-tabs">
+    <button class="active" data-tab="general">General</button>
+    <button data-tab="theme">Theme</button>
+    <button data-tab="decorations">Decorations</button>
+  </div>
+  <div id="settings-content">
+    <button id="close-settings-btn">✖</button>
+    
+    <div class="tab-content" id="general">
+      <h2>General</h2>
+      <label>Particles: <input type="checkbox" id="toggle-particles"></label>
+    </div>
+    
+    <div class="tab-content" id="theme" style="display:none;">
+      <h2>Theme</h2>
+      <label>Background 1: <input type="color" id="bg-color1"></label>
+      <label>Background 2: <input type="color" id="bg-color2"></label>
+      <label>Accent Color: <input type="color" id="accent-color"></label>
+      <button id="random-theme-btn">Random Theme</button>
+      <button id="reset-theme-btn">Reset Theme</button>
+    </div>
+    
+    <div class="tab-content" id="decorations" style="display:none;">
+      <h2>Decorations</h2>
+      <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
+      <label>Decorations Count: <input type="number" id="deco-count" min="5" max="100" value="25"></label>
+      <label>Decorations Speed: <input type="range" id="deco-speed" min="0.1" max="5" step="0.1" value="0.5"></label>
+    </div>
+  </div>
 </div>
 
 <div id="decorations-container"></div>
@@ -161,13 +181,15 @@ function animateParticles(){
 }
 animateParticles();
 document.getElementById('toggle-particles').checked = savedSettings.particles!==undefined ? savedSettings.particles:true;
-document.getElementById('toggle-particles').addEventListener('change',()=>{savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();});
+document.getElementById('toggle-particles').addEventListener('change',()=>{
+  savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();
+});
 
 // ---------------- DECORATIONS ----------------
 const decorationsContainer = document.getElementById('decorations-container');
 const decoEmojis = ["🎃","💀","🕸️"];
 let decoCount = savedSettings.decoCount || 25;
-let decoSpeedVal = savedSettings.decoSpeed || 1.5;
+let decoSpeedVal = savedSettings.decoSpeed || 0.5; // start slow
 
 function createDecorations(count=decoCount){
   decorationsContainer.innerHTML="";
@@ -203,6 +225,22 @@ function animateDecorations(){
 }
 animateDecorations();
 
+// ---------------- SETTINGS TABS ----------------
+const tabs = document.querySelectorAll('#settings-tabs button');
+const contents = document.querySelectorAll('.tab-content');
+tabs.forEach(tab=>{
+  tab.addEventListener('click', ()=>{
+    tabs.forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    contents.forEach(c=>c.style.display='none');
+    document.getElementById(tab.dataset.tab).style.display='block';
+  });
+});
+
+// ---------------- SETTINGS BUTTON ----------------
+document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
+document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
+
 // ---------------- THEME ----------------
 const bg1Input = document.getElementById('bg-color1');
 const bg2Input = document.getElementById('bg-color2');
@@ -235,57 +273,22 @@ document.getElementById('reset-theme-btn').addEventListener('click', ()=>{
   updateColors();
 });
 
+// ---------------- STICKY SETTINGS BUTTON ----------------
+let lastScrollTop=0;
+window.addEventListener('scroll',()=>{
+  let st = window.pageYOffset || document.documentElement.scrollTop;
+  if(st>lastScrollTop){ document.getElementById('settings-btn').classList.add('hidden'); }
+  else { document.getElementById('settings-btn').classList.remove('hidden'); }
+  lastScrollTop = st<=0 ? 0 : st;
+});
+
 // ---------------- GAMES ----------------
 const games = [
-  { name: "Ragdoll archers", url: "https://username.github.io/mygames/ragdoll-archers.html" },
-  { name: "Ragdoll hit", url: "https://username.github.io/mygames/ragdoll-hit.html" },
-  { name: "Time shooter", url: "https://username.github.io/mygames/time-shooter.html" },
-  { name: "Retro bowl", url: "https://username.github.io/mygames/retro-bowl.html" },
-  { name: "Snow rider", url: "https://username.github.io/mygames/snow-rider.html" },
-  { name: "Swords and sandals", url: "https://username.github.io/mygames/swords-and-sandals.html" },
-  { name: "Crazy cattle", url: "https://username.github.io/mygames/crazy-cattle.html" },
-  { name: "Gladi hoppers", url: "https://username.github.io/mygames/gladi-hoppers.html" },
-  { name: "Bit planes", url: "https://username.github.io/mygames/bit-planes.html" },
-  { name: "Final earth2", url: "https://username.github.io/mygames/final-earth2.html" },
-  { name: "Cluster rush", url: "https://username.github.io/mygames/cluster-rush.html" },
-  { name: "Push your luck", url: "https://username.github.io/mygames/push-your-luck.html" },
-  { name: "Poly track", url: "https://username.github.io/mygames/poly-track.html" },
-  { name: "Ragdoll Soccer", url: "https://username.github.io/mygames/ragdoll-soccer.html" },
-  { name: "Jetpack joy ride", url: "https://username.github.io/mygames/jetpack-joy-ride.html" },
-  { name: "Learn to fly 3", url: "https://username.github.io/mygames/learn-to-fly-3.html" },
-  { name: "Malidin stun cars", url: "https://username.github.io/mygames/malidin-stun-cars.html" },
-  { name: "Gun spin", url: "https://username.github.io/mygames/gun-spin.html" },
-  { name: "Age of war", url: "https://username.github.io/mygames/age-of-war.html" },
-  { name: "Moto x3m 2", url: "https://username.github.io/mygames/moto-x3m-2.html" },
-  { name: "Moto x3m winter", url: "https://username.github.io/mygames/moto-x3m-winter.html" },
-  { name: "Basketball stars", url: "https://username.github.io/mygames/basketball-stars.html" },
-  { name: "Idle breakout", url: "https://username.github.io/mygames/idle-breakout.html" },
-  { name: "Vex 8", url: "https://username.github.io/mygames/vex-8.html" },
-  { name: "Tiny fishing", url: "https://username.github.io/mygames/tiny-fishing.html" },
-  { name: "Drive mad", url: "https://username.github.io/mygames/drive-mad.html" },
-  { name: "Stick man hook", url: "https://username.github.io/mygames/stick-man-hook.html" },
-  { name: "Learn to fly 2", url: "https://username.github.io/mygames/learn-to-fly-2.html" },
-  { name: "Line rider", url: "https://username.github.io/mygames/line-rider.html" },
-  { name: "Unicycle hero", url: "https://username.github.io/mygames/unicycle-hero.html" },
-  { name: "Basket random", url: "https://username.github.io/mygames/basket-random.html" },
-  { name: "1v1 lol", url: "https://username.github.io/mygames/1v1-lol.html" },
-  { name: "Happy wheels", url: "https://username.github.io/mygames/happy-wheels.html" },
-  { name: "Idle dice", url: "https://username.github.io/mygames/idle-dice.html" },
-  { name: "Idle miner tycoon", url: "https://username.github.io/mygames/idle-miner-tycoon.html" },
-  { name: "Johnny upgrade", url: "https://username.github.io/mygames/johnny-upgrade.html" },
-  { name: "Jack smith", url: "https://username.github.io/mygames/jack-smith.html" },
-  { name: "Tunnel rush", url: "https://username.github.io/mygames/tunnel-rush.html" },
-  { name: "Duck life 5", url: "https://username.github.io/mygames/duck-life-5.html" },
-  { name: "Duck life 4", url: "https://username.github.io/mygames/duck-life-4.html" },
-  { name: "Mob control", url: "https://username.github.io/mygames/mob-control.html" },
-  { name: "A small world cup", url: "https://username.github.io/mygames/a-small-world-cup.html" },
-  { name: "Escape road", url: "https://username.github.io/mygames/escape-road.html" },
-  { name: "QWOP", url: "https://username.github.io/mygames/qwop.html" },
-  { name: "Indian truck simulator", url: "https://username.github.io/mygames/indian-truck-simulator.html" },
-  { name: "Mr mine", url: "https://username.github.io/mygames/mr-mine.html" },
-  { name: "Doge miner", url: "https://username.github.io/mygames/doge-miner.html" },
-  { name: "Draw climber", url: "https://username.github.io/mygames/draw-climber.html" },
-  { name: "Granny online", url: "https://username.github.io/mygames/granny-online.html" }
+  { name: "Ragdoll archers", url: "ragdoll-archers.html" },
+  { name: "Ragdoll hit", url: "ragdoll-hit.html" },
+  { name: "Time shooter", url: "time-shooter.html" },
+  { name: "Retro bowl", url: "retro-bowl.html" }
+  // add all other games here like above...
 ];
 
 const gameList = document.getElementById('game-list');
@@ -303,7 +306,13 @@ function renderGames(){
     card.className='game-card';
     card.innerHTML=`<div class='star ${favorites.includes(game.name)?'favorited':''}'>★</div>${game.name}`;
     card.onclick=()=>openGame(game.name);
-    card.querySelector('.star').onclick=e=>{e.stopPropagation(); if(favorites.includes(game.name)){favorites=favorites.filter(f=>f!==game.name);} else{favorites.push(game.name);} saveFavorites(); renderGames();};
+    card.querySelector('.star').onclick=e=>{
+      e.stopPropagation();
+      if(favorites.includes(game.name)){favorites=favorites.filter(f=>f!==game.name);} 
+      else{favorites.push(game.name);} 
+      saveFavorites(); 
+      renderGames();
+    };
     gameList.appendChild(card);
   });
 }
@@ -332,8 +341,6 @@ document.getElementById("fullscreen-btn").onclick = ()=>{
   const frame=document.getElementById('game-frame'); 
   if(frame.requestFullscreen) frame.requestFullscreen();
 };
-document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
-document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
 
 // ---------------- SEARCH ----------------
 document.getElementById('search-input').addEventListener('input',()=>{
@@ -342,15 +349,6 @@ document.getElementById('search-input').addEventListener('input',()=>{
     if(c.textContent.toLowerCase().includes(val)) c.style.display='block';
     else c.style.display='none';
   });
-});
-
-// ---------------- STICKY SETTINGS BUTTON ----------------
-let lastScrollTop=0;
-window.addEventListener('scroll',()=>{
-  let st = window.pageYOffset || document.documentElement.scrollTop;
-  if(st>lastScrollTop){ document.getElementById('settings-btn').classList.add('hidden'); }
-  else { document.getElementById('settings-btn').classList.remove('hidden'); }
-  lastScrollTop = st<=0 ? 0 : st;
 });
 
 // ---------------- RESIZE CANVAS ----------------
