@@ -15,9 +15,11 @@
   --hover-scale: 1.02;
   --card-font: 'Poppins', sans-serif;
 }
-body {margin:0; padding:0; font-family:var(--card-font); color:var(--text-color);
+body {
+  margin:0; padding:0; font-family:var(--card-font); color:var(--text-color);
   background: linear-gradient(-45deg,var(--bg1),var(--bg2));
-  background-size:400% 400%; animation: moveBackground 12s ease infinite; overflow-x:hidden;}
+  background-size:400% 400%; animation: moveBackground 12s ease infinite; overflow-x:hidden;
+}
 @keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
 
 canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3;}
@@ -77,6 +79,7 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
     <button id="close-settings-btn">✖</button>
     <div class="tab-content" id="general">
       <h2>General</h2>
+      <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations" checked></label>
       <label>Particles: <input type="checkbox" id="toggle-particles"></label>
     </div>
     <div class="tab-content" id="theme" style="display:none;">
@@ -89,7 +92,6 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
     </div>
     <div class="tab-content" id="decorations" style="display:none;">
       <h2>Decorations</h2>
-      <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
       <label>Decorations Count: <input type="number" id="deco-count" min="5" max="100" value="25"></label>
       <label>Decorations Speed: <input type="range" id="deco-speed" min="0.1" max="5" step="0.1" value="0.5"></label>
     </div>
@@ -115,37 +117,96 @@ document.getElementById('toggle-particles').checked = savedSettings.particles!==
 document.getElementById('toggle-particles').addEventListener('change',()=>{savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();});
 
 // --- DECORATIONS ---
-const decorationsContainer=document.getElementById('decorations-container'); const decoEmojis=["🎃","💀","🕸️"];
-let decoCount=savedSettings.decoCount||25; let decoSpeedVal=savedSettings.decoSpeed||0.5;
+const decorationsContainer=document.getElementById('decorations-container'); 
+const decoEmojis=["🎃","💀","🕸️"];
+let decoCount = savedSettings.decoCount||25; 
+let decoSpeedVal = savedSettings.decoSpeed||0.5;
 
-function createDecorations(count=decoCount){decorationsContainer.innerHTML=""; for(let i=0;i<count;i++){const deco=document.createElement('div');deco.className='decoration'; deco.style.left=Math.random()*100+"vw"; deco.style.top=Math.random()*100+"vh"; deco.style.fontSize=(20+Math.random()*20)+"px"; deco.style.opacity=0.6+Math.random()*0.4; deco.textContent=decoEmojis[Math.floor(Math.random()*decoEmojis.length)]; decorationsContainer.appendChild(deco);}}
+function createDecorations(count=decoCount){
+  decorationsContainer.innerHTML="";
+  for(let i=0;i<count;i++){
+    const deco=document.createElement('div');
+    deco.className='decoration';
+    deco.style.left=Math.random()*100+"vw";
+    deco.style.top=Math.random()*100+"vh";
+    deco.style.fontSize=(20+Math.random()*20)+"px";
+    deco.style.opacity=0.6+Math.random()*0.4;
+    deco.textContent=decoEmojis[Math.floor(Math.random()*decoEmojis.length)];
+    deco.dataset.speed = 0.1 + Math.random()*decoSpeedVal;
+    decorationsContainer.appendChild(deco);
+  }
+}
 createDecorations(decoCount);
-const toggleDeco=document.getElementById('toggle-decorations'); toggleDeco.checked = savedSettings.decorations!==undefined ? savedSettings.decorations:true;
+
+const toggleDeco=document.getElementById('toggle-decorations'); 
+toggleDeco.checked = savedSettings.decorations!==undefined ? savedSettings.decorations:true;
 decorationsContainer.style.display = toggleDeco.checked?"block":"none";
-toggleDeco.addEventListener('change',()=>{decorationsContainer.style.display=toggleDeco.checked?"block":"none"; savedSettings.decorations=toggleDeco.checked; saveSettings();});
+toggleDeco.addEventListener('change',()=>{
+  decorationsContainer.style.display=toggleDeco.checked?"block":"none"; 
+  savedSettings.decorations=toggleDeco.checked; 
+  saveSettings();
+});
 
 document.getElementById('deco-count').addEventListener('input', e=>{decoCount=e.target.value; savedSettings.decoCount=decoCount; createDecorations(decoCount); saveSettings();});
-document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value; savedSettings.decoSpeed=e.target.value; saveSettings();});
+document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value; savedSettings.decoSpeed=e.target.value; saveSettings(); createDecorations(decoCount);});
 
-function animateDecorations(){document.querySelectorAll('.decoration').forEach(d=>{let y=parseFloat(d.style.top); y+=0.2*decoSpeedVal; if(y>100)y=-5; d.style.top=y+"vh";}); requestAnimationFrame(animateDecorations);}
+function animateDecorations(){
+  document.querySelectorAll('.decoration').forEach(d=>{
+    let y = parseFloat(d.style.top);
+    let speed = parseFloat(d.dataset.speed) || 0.2;
+    y += speed;
+    if(y>100) y=-5;
+    d.style.top=y+"vh";
+  });
+  requestAnimationFrame(animateDecorations);
+}
 animateDecorations();
 
 // --- SETTINGS TABS ---
-const tabs=document.querySelectorAll('#settings-tabs button'); const contents=document.querySelectorAll('.tab-content');
-tabs.forEach(tab=>{tab.addEventListener('click',()=>{tabs.forEach(t=>t.classList.remove('active')); tab.classList.add('active'); contents.forEach(c=>c.style.display='none'); document.getElementById(tab.dataset.tab).style.display='block';});});
+const tabs=document.querySelectorAll('#settings-tabs button'); 
+const contents=document.querySelectorAll('.tab-content');
+tabs.forEach(tab=>{tab.addEventListener('click',()=>{
+  tabs.forEach(t=>t.classList.remove('active'));
+  tab.classList.add('active');
+  contents.forEach(c=>c.style.display='none');
+  document.getElementById(tab.dataset.tab).style.display='block';
+});});
 document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
 document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
 
 // --- THEME ---
-const bg1Input=document.getElementById('bg-color1'); const bg2Input=document.getElementById('bg-color2'); const accentInput=document.getElementById('accent-color');
+const bg1Input=document.getElementById('bg-color1'); 
+const bg2Input=document.getElementById('bg-color2'); 
+const accentInput=document.getElementById('accent-color');
 bg1Input.value=savedSettings.bg1||'#000000'; bg2Input.value=savedSettings.bg2||'#111111'; accentInput.value=savedSettings.accent||'#ff8800';
-function updateColors(){document.documentElement.style.setProperty('--bg1',bg1Input.value); document.documentElement.style.setProperty('--bg2',bg2Input.value); document.documentElement.style.setProperty('--accent',accentInput.value); savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value; saveSettings();}
-bg1Input.addEventListener('input',updateColors); bg2Input.addEventListener('input',updateColors); accentInput.addEventListener('input',updateColors);
-document.getElementById('random-theme-btn').addEventListener('click',()=>{bg1Input.value='#'+Math.floor(Math.random()*16777215).toString(16); bg2Input.value='#'+Math.floor(Math.random()*16777215).toString(16); accentInput.value='#'+Math.floor(Math.random()*16777215).toString(16); updateColors();});
-document.getElementById('reset-theme-btn').addEventListener('click',()=>{bg1Input.value='#000000'; bg2Input.value='#111111'; accentInput.value='#ff8800'; updateColors();});
+function updateColors(){
+  document.documentElement.style.setProperty('--bg1',bg1Input.value); 
+  document.documentElement.style.setProperty('--bg2',bg2Input.value); 
+  document.documentElement.style.setProperty('--accent',accentInput.value); 
+  savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value; saveSettings();
+}
+bg1Input.addEventListener('input',updateColors); 
+bg2Input.addEventListener('input',updateColors); 
+accentInput.addEventListener('input',updateColors);
+document.getElementById('random-theme-btn').addEventListener('click',()=>{
+  bg1Input.value='#'+Math.floor(Math.random()*16777215).toString(16); 
+  bg2Input.value='#'+Math.floor(Math.random()*16777215).toString(16); 
+  accentInput.value='#'+Math.floor(Math.random()*16777215).toString(16); 
+  updateColors();
+});
+document.getElementById('reset-theme-btn').addEventListener('click',()=>{
+  bg1Input.value='#000000'; bg2Input.value='#111111'; accentInput.value='#ff8800'; 
+  updateColors();
+});
 
 // --- STICKY SETTINGS BUTTON ---
-let lastScrollTop=0; window.addEventListener('scroll',()=>{let st=window.pageYOffset||document.documentElement.scrollTop; if(st>lastScrollTop){document.getElementById('settings-btn').classList.add('hidden');} else{document.getElementById('settings-btn').classList.remove('hidden');} lastScrollTop=st<=0?0:st;});
+let lastScrollTop=0; 
+window.addEventListener('scroll',()=>{
+  let st=window.pageYOffset||document.documentElement.scrollTop; 
+  if(st>lastScrollTop){document.getElementById('settings-btn').classList.add('hidden');} 
+  else{document.getElementById('settings-btn').classList.remove('hidden');} 
+  lastScrollTop=st<=0?0:st;
+});
 
 // --- GAMES ---
 const games=[
@@ -161,18 +222,39 @@ const games=[
 "Duck life 5","Duck life 4","Mob control","A small world cup","Escape road",
 "QWOP","Indian truck simulator","Mr mine","Doge miner","Draw climber","Granny online"
 ];
-const gameList=document.getElementById("game-list"); let favorites=JSON.parse(localStorage.getItem("mlFavorites"))||[];
+const gameList=document.getElementById("game-list"); 
+let favorites=JSON.parse(localStorage.getItem("mlFavorites"))||[];
 function saveFavorites(){localStorage.setItem("mlFavorites",JSON.stringify(favorites));}
-function renderGames(){gameList.innerHTML=""; games.forEach(name=>{const card=document.createElement("div"); card.className="game-card"; card.innerHTML=`<div class='star ${favorites.includes(name)?'favorited':''}'>★</div>${name}`; card.onclick=()=>openGame(name); card.querySelector(".star").onclick=e=>{e.stopPropagation(); if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);} saveFavorites(); renderGames();}; gameList.appendChild(card);});}
+function renderGames(){
+  gameList.innerHTML="";
+  games.forEach(name=>{
+    const card=document.createElement("div"); 
+    card.className="game-card"; 
+    card.innerHTML=`<div class='star ${favorites.includes(name)?'favorited':''}'>★</div>${name}`;
+    card.onclick=()=>openGame(name); 
+    card.querySelector(".star").onclick=e=>{e.stopPropagation(); if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);} saveFavorites(); renderGames();};
+    gameList.appendChild(card);
+  });
+}
 renderGames();
-function openGame(name){const frame=document.getElementById('game-frame'); frame.src=name+".html"; frame.style.display="block"; document.getElementById("back-btn").style.display="block"; document.getElementById("fullscreen-btn").style.display="block"; gameList.style.display="none";}
+function openGame(name){
+  const frame=document.getElementById('game-frame'); 
+  frame.src=name+".html"; 
+  frame.style.display="block"; 
+  document.getElementById("back-btn").style.display="block"; 
+  document.getElementById("fullscreen-btn").style.display="block"; 
+  gameList.style.display="none";
+}
 
 // --- BUTTONS ---
 document.getElementById("back-btn").onclick=()=>{document.getElementById('game-frame').style.display='none'; document.getElementById('back-btn').style.display='none'; document.getElementById('fullscreen-btn').style.display='none'; gameList.style.display='flex';};
 document.getElementById("fullscreen-btn").onclick=()=>{const frame=document.getElementById('game-frame'); if(frame.requestFullscreen) frame.requestFullscreen();};
 
 // --- SEARCH ---
-document.getElementById('search-input').addEventListener('input',()=>{const val=document.getElementById('search-input').value.toLowerCase(); document.querySelectorAll('.game-card').forEach(c=>{if(c.textContent.toLowerCase().includes(val)) c.style.display='block'; else c.style.display='none';});});
+document.getElementById('search-input').addEventListener('input',()=>{
+  const val=document.getElementById('search-input').value.toLowerCase(); 
+  document.querySelectorAll('.game-card').forEach(c=>{if(c.textContent.toLowerCase().includes(val)) c.style.display='block'; else c.style.display='none';});
+});
 
 // --- RESIZE ---
 window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
