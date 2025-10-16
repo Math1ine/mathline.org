@@ -21,30 +21,40 @@ body {
   background-size:400% 400%; animation: moveBackground 12s ease infinite; overflow-x:hidden;
 }
 @keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
+
 canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; pointer-events:none;}
+
 header {padding:25px; text-align:center; position:relative; z-index:2;}
 header h1 {margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--accent);}
+
 #search-container {position:fixed; top:25px; left:25px; z-index:3;}
 #search-input {padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent);}
+
 #settings-btn {position:fixed; top:25px; right:25px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:3; transition:0.2s;}
 #settings-btn.hidden {opacity:0; pointer-events:none;}
+
 #back-btn, #fullscreen-btn {position:fixed; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:3; display:none;}
 #back-btn {top:100px; left:25px;}
 #fullscreen-btn {top:100px; right:25px;}
+
 #settings-menu {position:fixed; top:0; right:-350px; width:350px; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:row; transition:right 0.3s ease; z-index:4; overflow:hidden;}
 #settings-menu.open {right:0;}
+
 #settings-tabs {display:flex; flex-direction:column; width:100px; background:#111;}
 #settings-tabs button {padding:15px; border:none; background:none; color:var(--accent); cursor:pointer; font-weight:bold; transition:.2s;}
 #settings-tabs button.active, #settings-tabs button:hover {background:var(--accent); color:#000;}
+
 #settings-content {flex:1; padding:20px; overflow-y:auto; position:relative;}
 #settings-content h2 {margin-top:0; text-align:center;}
 #close-settings-btn {position:absolute; top:10px; right:10px; padding:6px 10px; font-size:18px; border:none; border-radius:6px; background: var(--accent); color:#000; cursor:pointer; z-index:5; transition:0.2s;}
 #close-settings-btn:hover {filter: brightness(1.2);}
+
 .game-list {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 50px; position:relative; z-index:2;}
 .game-card {position:relative; background:var(--card-bg); border:2px solid var(--accent); color:var(--accent); width:260px; padding:25px; border-radius:var(--card-radius); cursor:pointer; transition:transform .25s, box-shadow .25s; font-size:1.2em;}
 .game-card:hover {transform: scale(var(--hover-scale)); box-shadow:0 0 15px var(--accent);}
 .star {position:absolute; top:8px; right:8px; font-size:16px; cursor:pointer;}
 .star.favorited {color:gold; text-shadow:0 0 8px var(--accent);}
+
 iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000;}
 .decoration {position:fixed; z-index:-1; pointer-events:none; font-size:30px;}
 </style>
@@ -162,7 +172,7 @@ toggleDeco.addEventListener('change',()=>{
 });
 
 document.getElementById('deco-count').addEventListener('input', e=>{
-  decoCount = Math.min(e.target.value, 100); // max 100
+  decoCount = Math.min(e.target.value, 100); 
   e.target.value = decoCount;
   savedSettings.decoCount = decoCount;
   createDecorations(decoCount);
@@ -240,55 +250,55 @@ window.addEventListener('scroll',()=>{
 
 // --- GAMES ---
 const games = [
-  { name: "Ragdoll_archers", file: "Ragdoll-archers.html" },
-  { name: "Ragdoll hit", file: "Ragdoll-hit.html" },
-  { name: "Time shooter", file: "Time-shooter.html" },
-  { name: "Retro bowl", file: "Retro-bowl.html" },
-  { name: "Snow rider", file: "Snow-rider.html" },
-  { name: "Swords and sandals", file: "Swords-and-sandals.html" },
-  { name: "Crazy cattle", file: "Crazy-cattle.html" },
-  { name: "Gladi hoppers", file: "Gladi-hoppers.html" },
-  { name: "Bit planes", file: "Bit-planes.html" },
-  { name: "Final earth2", file: "Final-earth2.html" },
-  { name: "Cluster rush", file: "Cluster-rush.html" },
-  { name: "Push your luck", file: "Push-your-luck.html" },
-  { name: "Poly track", file: "Poly-track.html" },
+  { name: "Ragdoll Archers", file: "Ragdoll-Archers.html" },
+  { name: "Ragdoll Hit", file: "Ragdoll-Hit.html" },
+  { name: "Time Shooter", file: "Time-Shooter.html" },
+  { name: "Retro Bowl", file: "Retro-Bowl.html" },
+  { name: "Snow Rider", file: "Snow-Rider.html" },
+  { name: "Swords And Sandals", file: "Swords-And-Sandals.html" },
+  { name: "Crazy Cattle", file: "Crazy-Cattle.html" },
+  { name: "Gladi Hoppers", file: "Gladi-Hoppers.html" },
+  { name: "Bit Planes", file: "Bit-Planes.html" },
+  { name: "Final Earth2", file: "Final-Earth2.html" },
+  { name: "Cluster Rush", file: "Cluster-Rush.html" },
+  { name: "Push Your Luck", file: "Push-Your-Luck.html" },
+  { name: "Poly Track", file: "Poly-Track.html" },
   { name: "Ragdoll Soccer", file: "Ragdoll-Soccer.html" },
-  { name: "Jetpack joy ride", file: "Jetpack-joy-ride.html" },
-  { name: "Learn to fly 3", file: "Learn-to-fly-3.html" },
-  { name: "Malidin stun cars", file: "Malidin-stun-cars.html" },
-  { name: "Gun spin", file: "Gun-spin.html" },
-  { name: "Age of war", file: "Age-of-war.html" },
-  { name: "Moto x3m 2", file: "Moto-x3m-2.html" },
-  { name: "Moto x3m winter", file: "Moto-x3m-winter.html" },
-  { name: "Basketball stars", file: "Basketball-stars.html" },
-  { name: "Idle breakout", file: "Idle-breakout.html" },
+  { name: "Jetpack Joy Ride", file: "Jetpack-Joy-Ride.html" },
+  { name: "Learn To Fly 3", file: "Learn-To-Fly-3.html" },
+  { name: "Malidin Stun Cars", file: "Malidin-Stun-Cars.html" },
+  { name: "Gun Spin", file: "Gun-Spin.html" },
+  { name: "Age Of War", file: "Age-Of-War.html" },
+  { name: "Moto X3M 2", file: "Moto-X3M-2.html" },
+  { name: "Moto X3M Winter", file: "Moto-X3M-Winter.html" },
+  { name: "Basketball Stars", file: "Basketball-Stars.html" },
+  { name: "Idle Breakout", file: "Idle-Breakout.html" },
   { name: "Vex 8", file: "Vex-8.html" },
-  { name: "Tiny fishing", file: "Tiny-fishing.html" },
-  { name: "Drive mad", file: "Drive-mad.html" },
-  { name: "Stick man hook", file: "Stick-man-hook.html" },
-  { name: "Learn to fly 2", file: "Learn-to-fly-2.html" },
-  { name: "Line rider", file: "Line-rider.html" },
-  { name: "Unicycle hero", file: "Unicycle-hero.html" },
-  { name: "Basket random", file: "Basket-random.html" },
-  { name: "1v1 lol", file: "1v1-lol.html" },
-  { name: "Happy wheels", file: "Happy-wheels.html" },
-  { name: "Idle dice", file: "Idle-dice.html" },
-  { name: "Idle miner tycoon", file: "Idle-miner-tycoon.html" },
-  { name: "Johnny upgrade", file: "Johnny-upgrade.html" },
-  { name: "Jack smith", file: "Jack-smith.html" },
-  { name: "Tunnel rush", file: "Tunnel-rush.html" },
-  { name: "Duck life 5", file: "Duck-life_5.html" },
-  { name: "Duck life 4", file: "Duck-life_4.html" },
-  { name: "Mob control", file: "Mob-control.html" },
-  { name: "A small world cup", file: "A-small-world-cup.html" },
-  { name: "Escape road", file: "Escape-road.html" },
+  { name: "Tiny Fishing", file: "Tiny-Fishing.html" },
+  { name: "Drive Mad", file: "Drive-Mad.html" },
+  { name: "Stick Man Hook", file: "Stick-Man-Hook.html" },
+  { name: "Learn To Fly 2", file: "Learn-To-Fly-2.html" },
+  { name: "Line Rider", file: "Line-Rider.html" },
+  { name: "Unicycle Hero", file: "Unicycle-Hero.html" },
+  { name: "Basket Random", file: "Basket-Random.html" },
+  { name: "1v1 LOL", file: "1v1-LOL.html" },
+  { name: "Happy Wheels", file: "Happy-Wheels.html" },
+  { name: "Idle Dice", file: "Idle-Dice.html" },
+  { name: "Idle Miner Tycoon", file: "Idle-Miner-Tycoon.html" },
+  { name: "Johnny Upgrade", file: "Johnny-Upgrade.html" },
+  { name: "Jack Smith", file: "Jack-Smith.html" },
+  { name: "Tunnel Rush", file: "Tunnel-Rush.html" },
+  { name: "Duck Life 5", file: "Duck-Life-5.html" },
+  { name: "Duck Life 4", file: "Duck-Life-4.html" },
+  { name: "Mob Control", file: "Mob-Control.html" },
+  { name: "A Small World Cup", file: "A-Small-World-Cup.html" },
+  { name: "Escape Road", file: "Escape-Road.html" },
   { name: "QWOP", file: "QWOP.html" },
-  { name: "Indian truck simulator", file: "Indian-truck-simulator.html" },
-  { name: "Mr mine", file: "Mr-mine.html" },
-  { name: "Doge miner", file: "Doge-miner.html" },
-  { name: "Draw climber", file: "Draw-climber.html" },
-  { name: "Granny online", file: "Granny-online.html" }
+  { name: "Indian Truck Simulator", file: "Indian-Truck-Simulator.html" },
+  { name: "Mr Mine", file: "Mr-Mine.html" },
+  { name: "Doge Miner", file: "Doge-Miner.html" },
+  { name: "Draw Climber", file: "Draw-Climber.html" },
+  { name: "Granny Online", file: "Granny-Online.html" }
 ];
 
 const gameList = document.getElementById("game-list");
@@ -317,8 +327,6 @@ function renderGames() {
       document.getElementById("back-btn").style.display = "block";
       document.getElementById("fullscreen-btn").style.display = "block";
       gameList.style.display = "none";
-
-      frame.onerror = () => alert("Game file not found!");
     };
 
     card.querySelector(".star").onclick = e => {
@@ -336,10 +344,8 @@ function renderGames() {
   });
 }
 
-// Initial render
 renderGames();
 
-// Back button
 document.getElementById("back-btn").onclick = () => {
   document.getElementById('game-frame').style.display = 'none';
   document.getElementById('back-btn').style.display = 'none';
@@ -347,13 +353,11 @@ document.getElementById("back-btn").onclick = () => {
   gameList.style.display = 'flex';
 };
 
-// Fullscreen button
 document.getElementById("fullscreen-btn").onclick = () => {
   const frame = document.getElementById('game-frame');
   if (frame.requestFullscreen) frame.requestFullscreen();
 };
 
-// --- SEARCH ---
 document.getElementById('search-input').addEventListener('input',()=>{
   const val=document.getElementById('search-input').value.toLowerCase(); 
   document.querySelectorAll('.game-card').forEach(c=>{
@@ -362,7 +366,6 @@ document.getElementById('search-input').addEventListener('input',()=>{
   });
 });
 
-// --- RESIZE ---
 window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
 </script>
 </body>
