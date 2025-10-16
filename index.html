@@ -21,40 +21,30 @@ body {
   background-size:400% 400%; animation: moveBackground 12s ease infinite; overflow-x:hidden;
 }
 @keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-
 canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; pointer-events:none;}
-
 header {padding:25px; text-align:center; position:relative; z-index:2;}
 header h1 {margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--accent);}
-
 #search-container {position:fixed; top:25px; left:25px; z-index:3;}
 #search-input {padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent);}
-
 #settings-btn {position:fixed; top:25px; right:25px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:3; transition:0.2s;}
 #settings-btn.hidden {opacity:0; pointer-events:none;}
-
 #back-btn, #fullscreen-btn {position:fixed; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:3; display:none;}
 #back-btn {top:100px; left:25px;}
 #fullscreen-btn {top:100px; right:25px;}
-
 #settings-menu {position:fixed; top:0; right:-350px; width:350px; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:row; transition:right 0.3s ease; z-index:4; overflow:hidden;}
 #settings-menu.open {right:0;}
-
 #settings-tabs {display:flex; flex-direction:column; width:100px; background:#111;}
 #settings-tabs button {padding:15px; border:none; background:none; color:var(--accent); cursor:pointer; font-weight:bold; transition:.2s;}
 #settings-tabs button.active, #settings-tabs button:hover {background:var(--accent); color:#000;}
-
 #settings-content {flex:1; padding:20px; overflow-y:auto; position:relative;}
 #settings-content h2 {margin-top:0; text-align:center;}
 #close-settings-btn {position:absolute; top:10px; right:10px; padding:6px 10px; font-size:18px; border:none; border-radius:6px; background: var(--accent); color:#000; cursor:pointer; z-index:5; transition:0.2s;}
 #close-settings-btn:hover {filter: brightness(1.2);}
-
 .game-list {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 50px; position:relative; z-index:2;}
 .game-card {position:relative; background:var(--card-bg); border:2px solid var(--accent); color:var(--accent); width:260px; padding:25px; border-radius:var(--card-radius); cursor:pointer; transition:transform .25s, box-shadow .25s; font-size:1.2em;}
 .game-card:hover {transform: scale(var(--hover-scale)); box-shadow:0 0 15px var(--accent);}
 .star {position:absolute; top:8px; right:8px; font-size:16px; cursor:pointer;}
 .star.favorited {color:gold; text-shadow:0 0 8px var(--accent);}
-
 iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000;}
 .decoration {position:fixed; z-index:-1; pointer-events:none; font-size:30px;}
 </style>
@@ -250,17 +240,55 @@ window.addEventListener('scroll',()=>{
 
 // --- GAMES ---
 const games = [
-  "Ragdoll archers", "Ragdoll hit","Time shooter", "Retro bowl",
-  "Snow rider", "Swords and sandals", "Crazy cattle", "Gladi hoppers",
-  "Bit planes", "Final earth2", "Cluster rush", "Push your luck",
-  "Poly track", "Ragdoll Soccer", "Jetpack joy ride", "Learn to fly 3",
-  "Malidin stun cars", "Gun spin", "Age of war", "Moto x3m 2",
-  "Moto x3m winter", "Basketball stars", "Idle breakout",
-  "Vex 8", "Tiny fishing", "Drive mad", "Stick man hook", "Learn to fly 2",
-  "Line rider", "Unicycle hero", "Basket random", "1v1 lol", "Happy wheels",
-  "Idle dice", "Idle miner tycoon", "Johnny upgrade", "Jack smith", "Tunnel rush",
-  "Duck life 5", "Duck life 4", "Mob control", "A small world cup", "Escape road",
-  "QWOP", "Indian truck simulator", "Mr mine", "Doge miner", "Draw climber", "Granny online"
+  { name: "Ragdoll archers", file: "Ragdoll-archers.html" },
+  { name: "Ragdoll hit", file: "Ragdoll-hit.html" },
+  { name: "Time shooter", file: "Time-shooter.html" },
+  { name: "Retro bowl", file: "Retro-bowl.html" },
+  { name: "Snow rider", file: "Snow-rider.html" },
+  { name: "Swords and sandals", file: "Swords-and-sandals.html" },
+  { name: "Crazy cattle", file: "Crazy-cattle.html" },
+  { name: "Gladi hoppers", file: "Gladi-hoppers.html" },
+  { name: "Bit planes", file: "Bit-planes.html" },
+  { name: "Final earth2", file: "Final-earth2.html" },
+  { name: "Cluster rush", file: "Cluster-rush.html" },
+  { name: "Push your luck", file: "Push-your-luck.html" },
+  { name: "Poly track", file: "Poly-track.html" },
+  { name: "Ragdoll Soccer", file: "Ragdoll-Soccer.html" },
+  { name: "Jetpack joy ride", file: "Jetpack-joy-ride.html" },
+  { name: "Learn to fly 3", file: "Learn-to-fly-3.html" },
+  { name: "Malidin stun cars", file: "Malidin-stun-cars.html" },
+  { name: "Gun spin", file: "Gun-spin.html" },
+  { name: "Age of war", file: "Age-of-war.html" },
+  { name: "Moto x3m 2", file: "Moto-x3m-2.html" },
+  { name: "Moto x3m winter", file: "Moto-x3m-winter.html" },
+  { name: "Basketball stars", file: "Basketball-stars.html" },
+  { name: "Idle breakout", file: "Idle-breakout.html" },
+  { name: "Vex 8", file: "Vex-8.html" },
+  { name: "Tiny fishing", file: "Tiny-fishing.html" },
+  { name: "Drive mad", file: "Drive-mad.html" },
+  { name: "Stick man hook", file: "Stick-man-hook.html" },
+  { name: "Learn to fly 2", file: "Learn-to-fly-2.html" },
+  { name: "Line rider", file: "Line-rider.html" },
+  { name: "Unicycle hero", file: "Unicycle-hero.html" },
+  { name: "Basket random", file: "Basket-random.html" },
+  { name: "1v1 lol", file: "1v1-lol.html" },
+  { name: "Happy wheels", file: "Happy-wheels.html" },
+  { name: "Idle dice", file: "Idle-dice.html" },
+  { name: "Idle miner tycoon", file: "Idle-miner-tycoon.html" },
+  { name: "Johnny upgrade", file: "Johnny-upgrade.html" },
+  { name: "Jack smith", file: "Jack-smith.html" },
+  { name: "Tunnel rush", file: "Tunnel-rush.html" },
+  { name: "Duck life 5", file: "Duck-life_5.html" },
+  { name: "Duck life 4", file: "Duck-life_4.html" },
+  { name: "Mob control", file: "Mob-control.html" },
+  { name: "A small world cup", file: "A-small-world-cup.html" },
+  { name: "Escape road", file: "Escape-road.html" },
+  { name: "QWOP", file: "QWOP.html" },
+  { name: "Indian truck simulator", file: "Indian-truck-simulator.html" },
+  { name: "Mr mine", file: "Mr-mine.html" },
+  { name: "Doge miner", file: "Doge-miner.html" },
+  { name: "Draw climber", file: "Draw-climber.html" },
+  { name: "Granny online", file: "Granny-online.html" }
 ];
 
 const gameList = document.getElementById("game-list");
@@ -272,32 +300,33 @@ function saveFavorites() {
 
 function renderGames() {
   gameList.innerHTML = "";
-  const sorted = [...games].sort((a, b) => a.localeCompare(b));
-  const favs = sorted.filter(g => favorites.includes(g));
-  const nonFavs = sorted.filter(g => !favorites.includes(g));
+  const sorted = [...games].sort((a, b) => a.name.localeCompare(b.name));
+  const favs = sorted.filter(g => favorites.includes(g.name));
+  const nonFavs = sorted.filter(g => !favorites.includes(g.name));
   const allGames = [...favs, ...nonFavs];
 
-  allGames.forEach(name => {
+  allGames.forEach(game => {
     const card = document.createElement("div");
     card.className = "game-card";
-    card.innerHTML = `<div class='star ${favorites.includes(name) ? 'favorited' : ''}'>★</div>${name}`;
+    card.innerHTML = `<div class='star ${favorites.includes(game.name) ? 'favorited' : ''}'>★</div>${game.name}`;
 
-    // Open the game using exact file name (in "games" folder)
     card.onclick = () => {
       const frame = document.getElementById('game-frame');
-      frame.src = `games/${name}.html`;
+      frame.src = `games/${game.file}`;
       frame.style.display = "block";
       document.getElementById("back-btn").style.display = "block";
       document.getElementById("fullscreen-btn").style.display = "block";
       gameList.style.display = "none";
+
+      frame.onerror = () => alert("Game file not found!");
     };
 
     card.querySelector(".star").onclick = e => {
       e.stopPropagation();
-      if (favorites.includes(name)) {
-        favorites = favorites.filter(f => f !== name);
+      if (favorites.includes(game.name)) {
+        favorites = favorites.filter(f => f !== game.name);
       } else {
-        favorites.push(name);
+        favorites.push(game.name);
       }
       saveFavorites();
       renderGames();
@@ -322,19 +351,6 @@ document.getElementById("back-btn").onclick = () => {
 document.getElementById("fullscreen-btn").onclick = () => {
   const frame = document.getElementById('game-frame');
   if (frame.requestFullscreen) frame.requestFullscreen();
-};
-
-
-// --- BUTTONS ---
-document.getElementById("back-btn").onclick=()=>{
-  document.getElementById('game-frame').style.display='none'; 
-  document.getElementById('back-btn').style.display='none'; 
-  document.getElementById('fullscreen-btn').style.display='none'; 
-  gameList.style.display='flex';
-};
-document.getElementById("fullscreen-btn").onclick=()=>{
-  const frame=document.getElementById('game-frame'); 
-  if(frame.requestFullscreen) frame.requestFullscreen();
 };
 
 // --- SEARCH ---
