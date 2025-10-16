@@ -6,8 +6,8 @@
 <title>Math Line - Halloween Edition</title>
 <style>
 :root {
-  --bg1: #000;
-  --bg2: #ff6600;
+  --bg1: #000000;
+  --bg2: #000000;
   --accent: #ff8800;
   --header-color: #fff;
   --text-color: #f0f0f0;
@@ -56,10 +56,14 @@ header h1 { margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 
 }
 #settings-menu.open { right:0; }
 #settings-menu h2 { margin-top:0; text-align:center; }
+.tab-buttons { display:flex; flex-direction: column; gap:5px; margin-bottom:10px; }
+.tab-buttons button { width:100%; padding:8px; border:none; border-radius:6px; background:var(--accent); color:#000; cursor:pointer; font-weight:bold; }
+.tab-content { display:none; flex-direction: column; gap:10px; }
+.tab-content.active { display:flex; }
 #settings-menu label { display:flex; justify-content:space-between; align-items:center; }
-#settings-menu input, #settings-menu select { cursor:pointer; }
-#settings-menu button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
-#settings-menu button:hover { filter: brightness(1.2); }
+#settings-menu input[type="range"], #settings-menu input[type="color"], #settings-menu input[type="checkbox"] { cursor:pointer; }
+#settings-menu button.extra-btn { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
+#settings-menu button.extra-btn:hover { filter: brightness(1.2); }
 
 .game-list {
   display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 50px; position:relative; z-index:2;
@@ -93,31 +97,163 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 
 <div id="settings-menu">
   <h2>Settings</h2>
-  <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
-  <label>Particles: <input type="checkbox" id="toggle-particles"></label>
-  <label>Card Size: <input type="range" id="card-size" min="200" max="320" value="260"></label>
-  <label>Background Colors:
-    <input type="color" id="bg-color1" value="#000000">
-    <input type="color" id="bg-color2" value="#ff6600">
-  </label>
-  <label>Accent Color: <input type="color" id="accent-color" value="#ff8800"></label>
-  <button id="close-settings">Close</button>
+  <div class="tab-buttons">
+    <button data-tab="particles">Particles</button>
+    <button data-tab="background">Background</button>
+    <button data-tab="decorations">Decorations</button>
+    <button data-tab="misc">Misc</button>
+  </div>
+
+  <!-- Particles Tab -->
+  <div class="tab-content" id="particles-tab">
+    <label>Particles: <input type="checkbox" id="toggle-particles"></label>
+    <label>Particle Count: <input type="range" id="particle-count" min="10" max="200" value="60"></label>
+    <label>Particle Speed: <input type="range" id="particle-speed" min="1" max="20" value="5"></label>
+    <label>Particle Size: <input type="range" id="particle-size" min="1" max="5" value="2"></label>
+  </div>
+
+  <!-- Background Tab -->
+  <div class="tab-content" id="background-tab">
+    <label>Background Colors:
+      <input type="color" id="bg-color1" value="#000000">
+      <input type="color" id="bg-color2" value="#000000">
+    </label>
+    <label>Accent Color: <input type="color" id="accent-color" value="#ff8800"></label>
+  </div>
+
+  <!-- Decorations Tab -->
+  <div class="tab-content" id="decorations-tab">
+    <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
+    <label>Number of Decorations: <input type="range" id="deco-count" min="5" max="50" value="25"></label>
+    <label>Decoration Speed: <input type="range" id="deco-speed" min="1" max="20" value="10"></label>
+  </div>
+
+  <!-- Misc Tab -->
+  <div class="tab-content" id="misc-tab">
+    <button id="random-theme-btn" class="extra-btn">🎨 Random Theme</button>
+    <button id="reset-settings-btn" class="extra-btn">♻ Reset All Settings</button>
+  </div>
+
 </div>
 
 <div id="decorations-container"></div>
-
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
 
 <script>
-// -------- Save/Load Settings --------
+// ------------------ SETTINGS ------------------
 const savedSettings = JSON.parse(localStorage.getItem('mlSettings')) || {};
 function saveSettings(){localStorage.setItem('mlSettings',JSON.stringify(savedSettings));}
 
-// -------- Decorations --------
+// ------------------ TOGGLE SETTINGS MENU ------------------
+const settingsBtn = document.getElementById('settings-btn');
+const settingsMenu = document.getElementById('settings-menu');
+const toggleButtons = [document.getElementById('back-btn'), document.getElementById('fullscreen-btn'), document.getElementById('search-container')];
+let settingsOpen = false;
+
+settingsBtn.onclick = () => {
+  settingsOpen = !settingsOpen;
+  if(settingsOpen){
+    settingsMenu.classList.add('open');
+    toggleButtons.forEach(b => b.style.display = 'none');
+    // Show first tab by default
+    document.getElementById('particles-tab').classList.add('active');
+  } else {
+    settingsMenu.classList.remove('open');
+    toggleButtons.forEach(b => b.style.display = '');
+    document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
+  }
+};
+
+// ------------------ TABS ------------------
+const tabButtons = document.querySelectorAll('#settings-menu .tab-buttons button');
+const tabContents = document.querySelectorAll('#settings-menu .tab-content');
+tabButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    tabContents.forEach(tc => tc.classList.remove('active'));
+    document.getElementById(`${btn.dataset.tab}-tab`).classList.add('active');
+  });
+});
+
+// ------------------ PARTICLES ------------------
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = innerWidth; canvas.height = innerHeight;
+let particles = [];
+
+let particleCount = savedSettings.particleCount || 60;
+let particleSpeed = savedSettings.particleSpeed || 5;
+let particleSize = savedSettings.particleSize || 2;
+
+function initParticles(count=particleCount){
+  particles=[];
+  for(let i=0;i<count;i++){
+    particles.push({
+      x:Math.random()*canvas.width,
+      y:Math.random()*canvas.height,
+      r:Math.random()*particleSize+1,
+      dx:(Math.random()-0.5)*(particleSpeed/2),
+      dy:(Math.random()-0.5)*(particleSpeed/2)
+    });
+  }
+}
+initParticles();
+
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  if(document.getElementById('toggle-particles').checked){
+    ctx.fillStyle="#ff8800";
+    particles.forEach(p=>{
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fill();
+      p.x+=p.dx; p.y+=p.dy;
+      if(p.x<0||p.x>canvas.width)p.dx*=-1;
+      if(p.y<0||p.y>canvas.height)p.dy*=-1;
+    });
+  }
+  requestAnimationFrame(animateParticles);
+}
+animateParticles();
+
+const toggleParticles=document.getElementById('toggle-particles');
+toggleParticles.checked = savedSettings.particles !== undefined ? savedSettings.particles : true;
+toggleParticles.addEventListener('change',()=>{
+  savedSettings.particles=toggleParticles.checked;
+  saveSettings();
+});
+
+document.getElementById('particle-count').value = particleCount;
+document.getElementById('particle-count').addEventListener('input', e=>{
+  particleCount=e.target.value;
+  savedSettings.particleCount = particleCount;
+  initParticles(particleCount);
+  saveSettings();
+});
+
+document.getElementById('particle-speed').value = particleSpeed;
+document.getElementById('particle-speed').addEventListener('input', e=>{
+  particleSpeed = e.target.value;
+  savedSettings.particleSpeed = particleSpeed;
+  initParticles(particleCount);
+  saveSettings();
+});
+
+document.getElementById('particle-size').value = particleSize;
+document.getElementById('particle-size').addEventListener('input', e=>{
+  particleSize = e.target.value;
+  savedSettings.particleSize = particleSize;
+  initParticles(particleCount);
+  saveSettings();
+});
+
+// ------------------ DECORATIONS ------------------
 const decorationsContainer = document.getElementById('decorations-container');
 const decoEmojis = ["🎃","💀","🕸️"];
-function createDecorations(count=25){
+let decoSpeed = savedSettings.decoSpeed || 10;
+let decoCount = savedSettings.decoCount || 25;
+
+function createDecorations(count=decoCount){
   decorationsContainer.innerHTML="";
   for(let i=0;i<count;i++){
     const deco = document.createElement('div');
@@ -130,43 +266,102 @@ function createDecorations(count=25){
     decorationsContainer.appendChild(deco);
   }
 }
-createDecorations();
+createDecorations(decoCount);
+
 const toggleDeco = document.getElementById('toggle-decorations');
 toggleDeco.checked = savedSettings.decorations !== undefined ? savedSettings.decorations : true;
 decorationsContainer.style.display = toggleDeco.checked ? "block" : "none";
-toggleDeco.addEventListener('change',()=>{decorationsContainer.style.display=toggleDeco.checked?"block":"none"; savedSettings.decorations=toggleDeco.checked; saveSettings();});
+toggleDeco.addEventListener('change',()=>{
+  decorationsContainer.style.display=toggleDeco.checked?"block":"none";
+  savedSettings.decorations=toggleDeco.checked;
+  saveSettings();
+});
 
-// -------- Particles --------
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
-canvas.width = innerWidth; canvas.height = innerHeight;
-let particles = [];
-function initParticles(count=60){
-  particles=[];
-  for(let i=0;i<count;i++){
-    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
-  }
-}
-initParticles();
-function animateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  if(document.getElementById('toggle-particles').checked){
-    ctx.fillStyle="#ff8800";
-    particles.forEach(p=>{
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-      p.x+=p.dx; p.y+=p.dy;
-      if(p.x<0||p.x>canvas.width)p.dx*=-1;
-      if(p.y<0||p.y>canvas.height)p.dy*=-1;
-    });
-  }
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-const toggleParticles=document.getElementById('toggle-particles');
-toggleParticles.checked=savedSettings.particles!==undefined?savedSettings.particles:true;
-toggleParticles.addEventListener('change',()=>{savedSettings.particles=toggleParticles.checked; saveSettings();});
+document.getElementById('deco-count').value = decoCount;
+document.getElementById('deco-count').addEventListener('input', e=>{
+  decoCount=e.target.value;
+  savedSettings.decoCount=decoCount;
+  createDecorations(decoCount);
+  saveSettings();
+});
 
-// -------- Games --------
+document.getElementById('deco-speed').value = decoSpeed;
+document.getElementById('deco-speed').addEventListener('input', e=>{
+  decoSpeed = e.target.value / 10;
+  savedSettings.decoSpeed = e.target.value;
+  saveSettings();
+});
+
+function animateDecorations() {
+  document.querySelectorAll('.decoration').forEach(deco => {
+    let top = parseFloat(deco.style.top);
+    deco.style.top = (top - decoSpeed) + 'px';
+    if(top < -50) deco.style.top = '100vh';
+  });
+  requestAnimationFrame(animateDecorations);
+}
+animateDecorations();
+
+// ------------------ COLORS ------------------
+const bg1Input = document.getElementById('bg-color1');
+const bg2Input = document.getElementById('bg-color2');
+const accentInput = document.getElementById('accent-color');
+
+bg1Input.value = savedSettings.bg1 || '#000000';
+bg2Input.value = savedSettings.bg2 || '#000000';
+accentInput.value = savedSettings.accent || '#ff8800';
+
+function updateColors(){
+  const bg1=bg1Input.value;
+  const bg2=bg2Input.value;
+  const accent=accentInput.value;
+  document.documentElement.style.setProperty('--bg1',bg1);
+  document.documentElement.style.setProperty('--bg2',bg2);
+  document.documentElement.style.setProperty('--accent',accent);
+  savedSettings.bg1=bg1; savedSettings.bg2=bg2; savedSettings.accent=accent;
+  saveSettings();
+}
+bg1Input.addEventListener('input',updateColors);
+bg2Input.addEventListener('input',updateColors);
+accentInput.addEventListener('input',updateColors);
+
+// ------------------ RANDOM THEME ------------------
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i=0;i<6;i++) color+=letters[Math.floor(Math.random()*16)];
+  return color;
+}
+
+document.getElementById('random-theme-btn').addEventListener('click', () => {
+  // Background
+  bg1Input.value = getRandomColor();
+  bg2Input.value = getRandomColor();
+  accentInput.value = getRandomColor();
+  updateColors();
+
+  // Particles
+  particleCount = Math.floor(Math.random()*150)+20;
+  particleSpeed = Math.floor(Math.random()*15)+1;
+  particleSize = Math.floor(Math.random()*4)+1;
+  document.getElementById('particle-count').value = particleCount;
+  document.getElementById('particle-speed').value = particleSpeed;
+  document.getElementById('particle-size').value = particleSize;
+  initParticles(particleCount);
+
+  // Decorations
+  decoCount = Math.floor(Math.random()*40)+10;
+  document.getElementById('deco-count').value = decoCount;
+  createDecorations(decoCount);
+});
+
+// ------------------ RESET SETTINGS ------------------
+document.getElementById('reset-settings-btn').addEventListener('click', ()=>{
+  localStorage.removeItem('mlSettings');
+  location.reload();
+});
+
+// ------------------ GAMES ------------------
 const games=[
 "Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl",
 "Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers",
@@ -191,7 +386,6 @@ function renderGames(){
   [...favs,...nonFavs].forEach(name=>{
     const card=document.createElement("div");
     card.className="game-card";
-    card.style.width=document.getElementById('card-size').value+"px";
     card.innerHTML=`<div class='star ${favorites.includes(name)?'favorited':''}'>★</div>${name}`;
     card.onclick=()=>openGame(name);
     card.querySelector(".star").onclick=(e)=>{e.stopPropagation(); if(favorites.includes(name)){favorites=favorites.filter(f=>f!==name);}else{favorites.push(name);} saveFavorites(); renderGames();};
@@ -211,31 +405,7 @@ function openGame(name){
 document.getElementById("back-btn").onclick=()=>{document.getElementById('game-frame').style.display="none";document.getElementById('back-btn').style.display="none";document.getElementById('fullscreen-btn').style.display="none";gameList.style.display="flex";};
 document.getElementById("fullscreen-btn").onclick=()=>{const frame=document.getElementById('game-frame'); if(frame.requestFullscreen) frame.requestFullscreen();};
 
-document.getElementById("settings-btn").onclick=()=>document.getElementById("settings-menu").classList.add("open");
-document.getElementById("close-settings").onclick=()=>document.getElementById("settings-menu").classList.remove("open");
-
-document.getElementById('card-size').value=savedSettings.cardSize||260;
-document.getElementById('card-size').addEventListener('input',e=>{savedSettings.cardSize=e.target.value; saveSettings(); renderGames();});
-
-// Color customization
-document.getElementById('bg-color1').value=savedSettings.bg1||'#000000';
-document.getElementById('bg-color2').value=savedSettings.bg2||'#ff6600';
-document.getElementById('accent-color').value=savedSettings.accent||'#ff8800';
-function updateColors(){
-  const bg1=document.getElementById('bg-color1').value;
-  const bg2=document.getElementById('bg-color2').value;
-  const accent=document.getElementById('accent-color').value;
-  document.documentElement.style.setProperty('--bg1',bg1);
-  document.documentElement.style.setProperty('--bg2',bg2);
-  document.documentElement.style.setProperty('--accent',accent);
-  savedSettings.bg1=bg1; savedSettings.bg2=bg2; savedSettings.accent=accent;
-  saveSettings();
-}
-document.getElementById('bg-color1').addEventListener('input',updateColors);
-document.getElementById('bg-color2').addEventListener('input',updateColors);
-document.getElementById('accent-color').addEventListener('input',updateColors);
-
-// -------- Search --------
+// ------------------ SEARCH ------------------
 document.getElementById('search-input').addEventListener('input',()=>{
   const val=document.getElementById('search-input').value.toLowerCase();
   document.querySelectorAll('.game-card').forEach(c=>{
@@ -244,7 +414,7 @@ document.getElementById('search-input').addEventListener('input',()=>{
   });
 });
 
-// Resize canvas
+// ------------------ RESIZE CANVAS ------------------
 window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
 </script>
 </body>
