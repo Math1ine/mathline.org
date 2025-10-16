@@ -9,7 +9,6 @@
   --bg1: #000000;
   --bg2: #000000;
   --accent: #ff8800;
-  --header-color: #fff;
   --text-color: #f0f0f0;
   --card-bg: rgba(0,0,0,0.6);
   --card-radius: 14px;
@@ -23,25 +22,34 @@ body {
   color: var(--text-color);
   background: linear-gradient(-45deg,var(--bg1),var(--bg2));
   background-size:400% 400%;
-  animation: moveBackground 12s ease infinite;
   overflow-x: hidden;
-}
-
-@keyframes moveBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
 }
 
 canvas#particles { position: fixed; top:0; left:0; width:100%; height:100%; z-index:-3; }
 
 header { padding:25px; text-align:center; position:relative; z-index:2; }
-header h1 { margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 0 15px var(--accent); }
+header h1 { margin:0; font-size:2.8em; color:var(--text-color); text-shadow:0 0 15px var(--accent); }
 
 #search-container { position:fixed; top:25px; left:25px; z-index:3; }
 #search-input { padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent); }
 
-#settings-btn { position:fixed; top:25px; right:25px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:3; }
+#settings-btn {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  font-size: 28px;
+  background:none;
+  border:none;
+  cursor:pointer;
+  color:var(--accent);
+  z-index:3;
+  transition: opacity 0.3s, transform 0.3s;
+}
+#settings-btn.hidden {
+  opacity:0;
+  pointer-events:none;
+  transform:translateY(-20px);
+}
 
 #back-btn, #fullscreen-btn {
   position:fixed; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent);
@@ -56,12 +64,16 @@ header h1 { margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 
 }
 #settings-menu.open { right:0; }
 #settings-menu h2 { margin-top:0; text-align:center; }
-.tab-buttons { display:flex; flex-direction: column; gap:5px; margin-bottom:10px; }
-.tab-buttons button { width:100%; padding:8px; border:none; border-radius:6px; background:var(--accent); color:#000; cursor:pointer; font-weight:bold; }
-.tab-content { display:none; flex-direction: column; gap:10px; }
+
+.tab-buttons { display:flex; flex-direction:column; gap:5px; }
+.tab-buttons button { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
+.tab-buttons button:hover { filter:brightness(1.2); }
+
+.tab-content { display:none; flex-direction:column; gap:10px; }
 .tab-content.active { display:flex; }
+
 #settings-menu label { display:flex; justify-content:space-between; align-items:center; }
-#settings-menu input[type="range"], #settings-menu input[type="color"], #settings-menu input[type="checkbox"] { cursor:pointer; }
+#settings-menu input, #settings-menu select { cursor:pointer; }
 #settings-menu button.extra-btn { padding:8px; border:none; border-radius:6px; cursor:pointer; background:var(--accent); color:#000; font-weight:bold; transition:.2s; }
 #settings-menu button.extra-btn:hover { filter: brightness(1.2); }
 
@@ -78,9 +90,7 @@ header h1 { margin:0; font-size:2.8em; color:var(--header-color); text-shadow:0 
 
 iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000; }
 
-.decoration { position:fixed; z-index:-1; pointer-events:none; font-size:30px; animation:float 10s linear infinite; }
-@keyframes float { 0%{transform:translateY(0) rotate(0deg);} 50%{transform:translateY(-15px) rotate(15deg);} 100%{transform:translateY(0) rotate(-15deg);} }
-
+.decoration { position:fixed; z-index:-1; pointer-events:none; font-size:30px; }
 </style>
 </head>
 <body>
@@ -97,46 +107,49 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 
 <div id="settings-menu">
   <h2>Settings</h2>
+
   <div class="tab-buttons">
     <button data-tab="particles">Particles</button>
-    <button data-tab="background">Background</button>
     <button data-tab="decorations">Decorations</button>
+    <button data-tab="theme">Theme</button>
     <button data-tab="misc">Misc</button>
   </div>
 
   <!-- Particles Tab -->
   <div class="tab-content" id="particles-tab">
     <label>Particles: <input type="checkbox" id="toggle-particles"></label>
-    <label>Particle Count: <input type="range" id="particle-count" min="10" max="200" value="60"></label>
-    <label>Particle Speed: <input type="range" id="particle-speed" min="1" max="20" value="5"></label>
+    <label>Particle Count: <input type="range" id="particle-count" min="10" max="150" value="60"></label>
+    <label>Particle Speed: <input type="range" id="particle-speed" min="1" max="15" value="5"></label>
     <label>Particle Size: <input type="range" id="particle-size" min="1" max="5" value="2"></label>
-  </div>
-
-  <!-- Background Tab -->
-  <div class="tab-content" id="background-tab">
-    <label>Background Colors:
-      <input type="color" id="bg-color1" value="#000000">
-      <input type="color" id="bg-color2" value="#000000">
-    </label>
-    <label>Accent Color: <input type="color" id="accent-color" value="#ff8800"></label>
   </div>
 
   <!-- Decorations Tab -->
   <div class="tab-content" id="decorations-tab">
     <label>Halloween Decorations: <input type="checkbox" id="toggle-decorations"></label>
-    <label>Number of Decorations: <input type="range" id="deco-count" min="5" max="50" value="25"></label>
-    <label>Decoration Speed: <input type="range" id="deco-speed" min="1" max="20" value="10"></label>
+    <label>Number of Decorations: <input type="range" id="deco-count" min="10" max="100" value="25"></label>
+    <label>Decoration Speed: <input type="range" id="deco-speed" min="0.5" max="5" step="0.1" value="1.5"></label>
+  </div>
+
+  <!-- Theme Tab -->
+  <div class="tab-content" id="theme-tab">
+    <label>Background Colors:
+      <input type="color" id="bg-color1" value="#000000">
+      <input type="color" id="bg-color2" value="#000000">
+    </label>
+    <label>Accent Color: <input type="color" id="accent-color" value="#ff8800"></label>
+    <button id="random-theme-btn" class="extra-btn">🎨 Random Theme</button>
+    <button id="reset-theme-btn" class="extra-btn">♻ Reset Theme</button>
   </div>
 
   <!-- Misc Tab -->
   <div class="tab-content" id="misc-tab">
-    <button id="random-theme-btn" class="extra-btn">🎨 Random Theme</button>
-    <button id="reset-settings-btn" class="extra-btn">♻ Reset All Settings</button>
+    <button id="close-settings-btn" class="extra-btn">❌ Close Settings</button>
   </div>
 
 </div>
 
 <div id="decorations-container"></div>
+
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
 
@@ -144,26 +157,6 @@ iframe#game-frame { display:none; width:95%; height:650px; margin:0 auto; border
 // ------------------ SETTINGS ------------------
 const savedSettings = JSON.parse(localStorage.getItem('mlSettings')) || {};
 function saveSettings(){localStorage.setItem('mlSettings',JSON.stringify(savedSettings));}
-
-// ------------------ TOGGLE SETTINGS MENU ------------------
-const settingsBtn = document.getElementById('settings-btn');
-const settingsMenu = document.getElementById('settings-menu');
-const toggleButtons = [document.getElementById('back-btn'), document.getElementById('fullscreen-btn'), document.getElementById('search-container')];
-let settingsOpen = false;
-
-settingsBtn.onclick = () => {
-  settingsOpen = !settingsOpen;
-  if(settingsOpen){
-    settingsMenu.classList.add('open');
-    toggleButtons.forEach(b => b.style.display = 'none');
-    // Show first tab by default
-    document.getElementById('particles-tab').classList.add('active');
-  } else {
-    settingsMenu.classList.remove('open');
-    toggleButtons.forEach(b => b.style.display = '');
-    document.querySelectorAll('.tab-content').forEach(tc=>tc.classList.remove('active'));
-  }
-};
 
 // ------------------ TABS ------------------
 const tabButtons = document.querySelectorAll('#settings-menu .tab-buttons button');
@@ -180,7 +173,6 @@ const canvas = document.getElementById('particles');
 const ctx = canvas.getContext('2d');
 canvas.width = innerWidth; canvas.height = innerHeight;
 let particles = [];
-
 let particleCount = savedSettings.particleCount || 60;
 let particleSpeed = savedSettings.particleSpeed || 5;
 let particleSize = savedSettings.particleSize || 2;
@@ -216,42 +208,19 @@ function animateParticles(){
 }
 animateParticles();
 
+// Particle Controls
 const toggleParticles=document.getElementById('toggle-particles');
-toggleParticles.checked = savedSettings.particles !== undefined ? savedSettings.particles : true;
-toggleParticles.addEventListener('change',()=>{
-  savedSettings.particles=toggleParticles.checked;
-  saveSettings();
-});
-
-document.getElementById('particle-count').value = particleCount;
-document.getElementById('particle-count').addEventListener('input', e=>{
-  particleCount=e.target.value;
-  savedSettings.particleCount = particleCount;
-  initParticles(particleCount);
-  saveSettings();
-});
-
-document.getElementById('particle-speed').value = particleSpeed;
-document.getElementById('particle-speed').addEventListener('input', e=>{
-  particleSpeed = e.target.value;
-  savedSettings.particleSpeed = particleSpeed;
-  initParticles(particleCount);
-  saveSettings();
-});
-
-document.getElementById('particle-size').value = particleSize;
-document.getElementById('particle-size').addEventListener('input', e=>{
-  particleSize = e.target.value;
-  savedSettings.particleSize = particleSize;
-  initParticles(particleCount);
-  saveSettings();
-});
+toggleParticles.checked = savedSettings.particles!==undefined?savedSettings.particles:true;
+toggleParticles.addEventListener('change',()=>{savedSettings.particles=toggleParticles.checked; saveSettings();});
+document.getElementById('particle-count').addEventListener('input', e=>{particleCount=e.target.value; savedSettings.particleCount=particleCount; initParticles(particleCount); saveSettings();});
+document.getElementById('particle-speed').addEventListener('input', e=>{particleSpeed=e.target.value; savedSettings.particleSpeed=particleSpeed; initParticles(particleCount); saveSettings();});
+document.getElementById('particle-size').addEventListener('input', e=>{particleSize=e.target.value; savedSettings.particleSize=particleSize; initParticles(particleCount); saveSettings();});
 
 // ------------------ DECORATIONS ------------------
 const decorationsContainer = document.getElementById('decorations-container');
 const decoEmojis = ["🎃","💀","🕸️"];
-let decoSpeed = savedSettings.decoSpeed || 10;
 let decoCount = savedSettings.decoCount || 25;
+let decoSpeedVal = savedSettings.decoSpeed ? savedSettings.decoSpeed/2 : 1.5;
 
 function createDecorations(count=decoCount){
   decorationsContainer.innerHTML="";
@@ -268,48 +237,35 @@ function createDecorations(count=decoCount){
 }
 createDecorations(decoCount);
 
-const toggleDeco = document.getElementById('toggle-decorations');
-toggleDeco.checked = savedSettings.decorations !== undefined ? savedSettings.decorations : true;
-decorationsContainer.style.display = toggleDeco.checked ? "block" : "none";
-toggleDeco.addEventListener('change',()=>{
-  decorationsContainer.style.display=toggleDeco.checked?"block":"none";
-  savedSettings.decorations=toggleDeco.checked;
-  saveSettings();
-});
+const toggleDeco=document.getElementById('toggle-decorations');
+toggleDeco.checked = savedSettings.decorations!==undefined?savedSettings.decorations:true;
+decorationsContainer.style.display = toggleDeco.checked?"block":"none";
+toggleDeco.addEventListener('change',()=>{decorationsContainer.style.display=toggleDeco.checked?"block":"none"; savedSettings.decorations=toggleDeco.checked; saveSettings();});
 
-document.getElementById('deco-count').value = decoCount;
-document.getElementById('deco-count').addEventListener('input', e=>{
-  decoCount=e.target.value;
-  savedSettings.decoCount=decoCount;
-  createDecorations(decoCount);
-  saveSettings();
-});
+document.getElementById('deco-count').addEventListener('input', e=>{decoCount=e.target.value; savedSettings.decoCount=decoCount; createDecorations(decoCount); saveSettings();});
+document.getElementById('deco-speed').addEventListener('input', e=>{decoSpeedVal=e.target.value/2; savedSettings.decoSpeed=e.target.value; saveSettings();});
 
-document.getElementById('deco-speed').value = decoSpeed;
-document.getElementById('deco-speed').addEventListener('input', e=>{
-  decoSpeed = e.target.value / 10;
-  savedSettings.decoSpeed = e.target.value;
-  saveSettings();
-});
-
-function animateDecorations() {
-  document.querySelectorAll('.decoration').forEach(deco => {
-    let top = parseFloat(deco.style.top);
-    deco.style.top = (top - decoSpeed) + 'px';
-    if(top < -50) deco.style.top = '100vh';
+function animateDecorations(){
+  document.querySelectorAll('.decoration').forEach(deco=>{
+    let top=parseFloat(deco.dataset.top||deco.style.top);
+    if(isNaN(top)) top=Math.random()*window.innerHeight;
+    top-=decoSpeedVal;
+    if(top<-50) top=window.innerHeight+Math.random()*50;
+    deco.style.top=top+'px';
+    deco.dataset.top=top;
   });
   requestAnimationFrame(animateDecorations);
 }
 animateDecorations();
 
-// ------------------ COLORS ------------------
-const bg1Input = document.getElementById('bg-color1');
-const bg2Input = document.getElementById('bg-color2');
-const accentInput = document.getElementById('accent-color');
+// ------------------ COLORS & THEME ------------------
+const bg1Input=document.getElementById('bg-color1');
+const bg2Input=document.getElementById('bg-color2');
+const accentInput=document.getElementById('accent-color');
 
-bg1Input.value = savedSettings.bg1 || '#000000';
-bg2Input.value = savedSettings.bg2 || '#000000';
-accentInput.value = savedSettings.accent || '#ff8800';
+bg1Input.value = savedSettings.bg1||'#000000';
+bg2Input.value = savedSettings.bg2||'#000000';
+accentInput.value = savedSettings.accent||'#ff8800';
 
 function updateColors(){
   const bg1=bg1Input.value;
@@ -325,59 +281,26 @@ bg1Input.addEventListener('input',updateColors);
 bg2Input.addEventListener('input',updateColors);
 accentInput.addEventListener('input',updateColors);
 
-// ------------------ RANDOM THEME ------------------
-function getRandomColor() {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i=0;i<6;i++) color+=letters[Math.floor(Math.random()*16)];
-  return color;
-}
-
-document.getElementById('random-theme-btn').addEventListener('click', () => {
-  // Background
-  bg1Input.value = getRandomColor();
-  bg2Input.value = getRandomColor();
-  accentInput.value = getRandomColor();
+// Random Theme
+document.getElementById('random-theme-btn').addEventListener('click', ()=>{
+  const r1='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+  const r2='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+  const r3='#'+Math.floor(Math.random()*16777215).toString(16).padStart(6,'0');
+  bg1Input.value=r1; bg2Input.value=r2; accentInput.value=r3;
   updateColors();
-
-  // Particles
-  particleCount = Math.floor(Math.random()*150)+20;
-  particleSpeed = Math.floor(Math.random()*15)+1;
-  particleSize = Math.floor(Math.random()*4)+1;
-  document.getElementById('particle-count').value = particleCount;
-  document.getElementById('particle-speed').value = particleSpeed;
-  document.getElementById('particle-size').value = particleSize;
-  initParticles(particleCount);
-
-  // Decorations
-  decoCount = Math.floor(Math.random()*40)+10;
-  document.getElementById('deco-count').value = decoCount;
-  createDecorations(decoCount);
+});
+// Reset Theme
+document.getElementById('reset-theme-btn').addEventListener('click', ()=>{
+  bg1Input.value='#000000'; bg2Input.value='#000000'; accentInput.value='#ff8800';
+  updateColors();
 });
 
-// ------------------ RESET SETTINGS ------------------
-document.getElementById('reset-settings-btn').addEventListener('click', ()=>{
-  localStorage.removeItem('mlSettings');
-  location.reload();
-});
-
-// ------------------ GAMES ------------------
-const games=[
-"Ragdoll archers","Ragdoll hit","Time shooter","Retro bowl",
-"Snow rider","Swords and sandals","Crazy cattle","Gladi hoppers",
-"Bit planes","Final earth2","Cluster rush","Push your luck",
-"Poly track","Ragdoll Soccer","Jetpack joy ride","Learn to fly 3",
-"Malidin stun cars","Gun spin","Age of war","Moto x3m 2",
-"Moto x3m winter","Basketball stars","Idle breakout",
-"Vex 8","Tiny fishing","Drive mad","Stick man hook","Learn to fly 2",
-"Line rider","Unicycle hero","Basket random","1v1 lol","Happy wheels",
-"Idle dice","Idle miner tycoon","Johnny upgrade","Jack smith","Tunnel rush",
-"Duck life 5","Duck life 4","Mob control","A small world cup","Escape road",
-"QWOP","Indian truck simulator","Mr mine","Doge miner","Draw climber","Granny online"
-];
+// ------------------ GAME LIST ------------------
 const gameList=document.getElementById("game-list");
+const games=["Ragdoll archers","Ragdoll hit","Time shooter"];
 let favorites = JSON.parse(localStorage.getItem("mlFavorites"))||[];
 function saveFavorites(){localStorage.setItem("mlFavorites",JSON.stringify(favorites));}
+
 function renderGames(){
   gameList.innerHTML="";
   const sorted=[...games].sort((a,b)=>a.localeCompare(b));
@@ -394,16 +317,40 @@ function renderGames(){
 }
 renderGames();
 
+// ------------------ GAME URLS (replace with your GitHub URLs) ------------------
+const gameURLs = {
+  "Ragdoll archers":"https://username.github.io/mygames/ragdoll-archers/",
+  "Ragdoll hit":"https://username.github.io/mygames/ragdoll-hit/",
+  "Time shooter":"https://username.github.io/mygames/time-shooter/"
+};
+
 function openGame(name){
   const frame=document.getElementById('game-frame');
-  frame.style.display="block";
-  frame.src="https://example.com/"+encodeURIComponent(name);
-  document.getElementById("back-btn").style.display="block";
-  document.getElementById("fullscreen-btn").style.display="block";
-  gameList.style.display="none";
+  const url=gameURLs[name];
+  if(url){
+    frame.src=url;
+    frame.style.display="block";
+    document.getElementById("back-btn").style.display="block";
+    document.getElementById("fullscreen-btn").style.display="block";
+    gameList.style.display="none";
+  } else {
+    alert("Game URL not found!");
+  }
 }
-document.getElementById("back-btn").onclick=()=>{document.getElementById('game-frame').style.display="none";document.getElementById('back-btn').style.display="none";document.getElementById('fullscreen-btn').style.display="none";gameList.style.display="flex";};
-document.getElementById("fullscreen-btn").onclick=()=>{const frame=document.getElementById('game-frame'); if(frame.requestFullscreen) frame.requestFullscreen();};
+
+// ------------------ BUTTONS ------------------
+document.getElementById("back-btn").onclick=()=>{
+  document.getElementById('game-frame').style.display="none";
+  document.getElementById('back-btn').style.display="none";
+  document.getElementById('fullscreen-btn').style.display="none";
+  gameList.style.display="flex";
+};
+document.getElementById("fullscreen-btn").onclick=()=>{
+  const frame=document.getElementById('game-frame');
+  if(frame.requestFullscreen) frame.requestFullscreen();
+};
+document.getElementById("settings-btn").onclick=()=>document.getElementById("settings-menu").classList.add("open");
+document.getElementById("close-settings-btn").onclick=()=>document.getElementById("settings-menu").classList.remove("open");
 
 // ------------------ SEARCH ------------------
 document.getElementById('search-input').addEventListener('input',()=>{
@@ -414,7 +361,17 @@ document.getElementById('search-input').addEventListener('input',()=>{
   });
 });
 
-// ------------------ RESIZE CANVAS ------------------
+// ------------------ SCROLL HIDING SETTINGS BUTTON ------------------
+let lastScroll=0;
+window.addEventListener('scroll',()=>{
+  const btn=document.getElementById('settings-btn');
+  const currentScroll=window.pageYOffset;
+  if(currentScroll>lastScroll && currentScroll>50){ btn.classList.add('hidden'); }
+  else { btn.classList.remove('hidden'); }
+  lastScroll=currentScroll;
+});
+
+// ------------------ RESIZE ------------------
 window.addEventListener('resize',()=>{canvas.width=innerWidth;canvas.height=innerHeight;});
 </script>
 </body>
