@@ -160,7 +160,6 @@ function createDecorations(count=decoCount){
   }
 }
 createDecorations(decoCount);
-
 decorationsContainer.style.display = savedSettings.decorations!==undefined ? (savedSettings.decorations?"block":"none") : "block";
 
 function animateDecorations(){
@@ -175,7 +174,7 @@ function animateDecorations(){
 }
 animateDecorations();
 
-// --- SETTINGS MENU ---
+// --- SETTINGS TABS ---
 const tabs=document.querySelectorAll('#settings-tabs button'); 
 const contents=document.querySelectorAll('.tab-content');
 tabs.forEach(tab=>{
@@ -228,17 +227,55 @@ window.addEventListener('scroll',()=>{
 
 // --- GAMES ---
 const games = [
-  "Ragdoll-archers","Ragdoll-hit","Time-shooter","Retro-bowl",
-  "Snow-rider","Swords-and-sandals","Crazy-cattle","Gladi-hoppers",
-  "Bit-planes","Final-earth2","Cluster-rush","Push-your-luck",
-  "Poly-track","Ragdoll-soccer","Jetpack-joy-ride","Learn-to-fly-3",
-  "Malidin-stun-cars","Gun-spin","Age-of-war","Moto-x3m-2",
-  "Moto-x3m-winter","Basketball-stars","Idle-breakout",
-  "Vex-8","Tiny-fishing","Drive-mad","Stick-man-hook","Learn-to-fly-2",
-  "Line-rider","Unicycle-hero","Basket-random","1v1-lol","Happy-wheels",
-  "Idle-dice","Idle-miner-tycoon","Johnny-upgrade","Jack-smith","Tunnel-rush",
-  "Duck-life-5","Duck-life-4","Mob-control","A-small-world-cup","Escape-road",
-  "QWOP","Indian-truck-simulator","Mr-mine","Doge-miner","Draw-climber","Granny-online"
+  { name: "Ragdoll Archers", url: "https://Math1ine.github.io/games/Ragdoll-archers.html" },
+  { name: "Ragdoll Hit", url: "https://Math1ine.github.io/games/Ragdoll-hit.html" },
+  { name: "Time Shooter", url: "https://Math1ine.github.io/games/Time-shooter.html" },
+  { name: "Retro Bowl", url: "https://Math1ine.github.io/games/Retro-bowl.html" },
+  { name: "Snow Rider", url: "https://Math1ine.github.io/games/Snow-rider.html" },
+  { name: "Swords And Sandals", url: "https://Math1ine.github.io/games/Swords-and-sandals.html" },
+  { name: "Crazy Cattle", url: "https://Math1ine.github.io/games/Crazy-cattle.html" },
+  { name: "Gladi Hoppers", url: "https://Math1ine.github.io/games/Gladi-hoppers.html" },
+  { name: "Bit Planes", url: "https://Math1ine.github.io/games/Bit-planes.html" },
+  { name: "Final Earth2", url: "https://Math1ine.github.io/games/Final-earth2.html" },
+  { name: "Cluster Rush", url: "https://Math1ine.github.io/games/Cluster-rush.html" },
+  { name: "Push Your Luck", url: "https://Math1ine.github.io/games/Push-your-luck.html" },
+  { name: "Poly Track", url: "https://Math1ine.github.io/games/Poly-track.html" },
+  { name: "Ragdoll Soccer", url: "https://Math1ine.github.io/games/Ragdoll-soccer.html" },
+  { name: "Jetpack Joy Ride", url: "https://Math1ine.github.io/games/Jetpack-joy-ride.html" },
+  { name: "Learn To Fly 3", url: "https://Math1ine.github.io/games/Learn-to-fly-3.html" },
+  { name: "Malidin Stun Cars", url: "https://Math1ine.github.io/games/Malidin-stun-cars.html" },
+  { name: "Gun Spin", url: "https://Math1ine.github.io/games/Gun-spin.html" },
+  { name: "Age Of War", url: "https://Math1ine.github.io/games/Age-of-war.html" },
+  { name: "Moto X3M 2", url: "https://Math1ine.github.io/games/Moto-x3m-2.html" },
+  { name: "Moto X3M Winter", url: "https://Math1ine.github.io/games/Moto-x3m-winter.html" },
+  { name: "Basketball Stars", url: "https://Math1ine.github.io/games/Basketball-stars.html" },
+  { name: "Idle Breakout", url: "https://Math1ine.github.io/games/Idle-breakout.html" },
+  { name: "Vex 8", url: "https://Math1ine.github.io/games/Vex-8.html" },
+  { name: "Tiny Fishing", url: "https://Math1ine.github.io/games/Tiny-fishing.html" },
+  { name: "Drive Mad", url: "https://Math1ine.github.io/games/Drive-mad.html" },
+  { name: "Stick Man Hook", url: "https://Math1ine.github.io/games/Stick-man-hook.html" },
+  { name: "Learn To Fly 2", url: "https://Math1ine.github.io/games/Learn-to-fly-2.html" },
+  { name: "Line Rider", url: "https://Math1ine.github.io/games/Line-rider.html" },
+  { name: "Unicycle Hero", url: "https://Math1ine.github.io/games/Unicycle-hero.html" },
+  { name: "Basket Random", url: "https://Math1ine.github.io/games/Basket-random.html" },
+  { name: "1v1 Lol", url: "https://Math1ine.github.io/games/1v1-lol.html" },
+  { name: "Happy Wheels", url: "https://Math1ine.github.io/games/Happy-wheels.html" },
+  { name: "Idle Dice", url: "https://Math1ine.github.io/games/Idle-dice.html" },
+  { name: "Idle Miner Tycoon", url: "https://Math1ine.github.io/games/Idle-miner-tycoon.html" },
+  { name: "Johnny Upgrade", url: "https://Math1ine.github.io/games/Johnny-upgrade.html" },
+  { name: "Jack Smith", url: "https://Math1ine.github.io/games/Jack-smith.html" },
+  { name: "Tunnel Rush", url: "https://Math1ine.github.io/games/Tunnel-rush.html" },
+  { name: "Duck Life 5", url: "https://Math1ine.github.io/games/Duck-life-5.html" },
+  { name: "Duck Life 4", url: "https://Math1ine.github.io/games/Duck-life-4.html" },
+  { name: "Mob Control", url: "https://Math1ine.github.io/games/Mob-control.html" },
+  { name: "A Small World Cup", url: "https://Math1ine.github.io/games/A-small-world-cup.html" },
+  { name: "Escape Road", url: "https://Math1ine.github.io/games/Escape-road.html" },
+  { name: "QWOP", url: "https://Math1ine.github.io/games/QWOP.html" },
+  { name: "Indian Truck Simulator", url: "https://Math1ine.github.io/games/Indian-truck-simulator.html" },
+  { name: "Mr Mine", url: "https://Math1ine.github.io/games/Mr-mine.html" },
+  { name: "Doge Miner", url: "https://Math1ine.github.io/games/Doge-miner.html" },
+  { name: "Draw Climber", url: "https://Math1ine.github.io/games/Draw-climber.html" },
+  { name: "Granny Online", url: "https://Math1ine.github.io/games/Granny-online.html" }
 ];
 
 const gameList = document.getElementById("game-list");
@@ -250,19 +287,19 @@ function saveFavorites() {
 
 function renderGames() {
   gameList.innerHTML = "";
-  const sorted = [...games].sort((a, b) => a.localeCompare(b));
-  const favs = sorted.filter(g => favorites.includes(g));
-  const nonFavs = sorted.filter(g => !favorites.includes(g));
+  const sorted = [...games].sort((a, b) => a.name.localeCompare(b.name));
+  const favs = sorted.filter(g => favorites.includes(g.name));
+  const nonFavs = sorted.filter(g => !favorites.includes(g.name));
   const allGames = [...favs, ...nonFavs];
 
-  allGames.forEach(name => {
+  allGames.forEach(game => {
     const card = document.createElement("div");
     card.className = "game-card";
-    card.innerHTML = `<div class='star ${favorites.includes(name) ? 'favorited' : ''}'>★</div>${name.replace(/-/g,' ')}`;
-
+    card.innerHTML = `<div class='star ${favorites.includes(game.name) ? 'favorited' : ''}'>★</div>${game.name}`;
+    
     card.onclick = () => {
       const frame = document.getElementById('game-frame');
-      frame.src = `games/${name}.html`;
+      frame.src = game.url;
       frame.style.display = "block";
       document.getElementById("back-btn").style.display = "block";
       document.getElementById("fullscreen-btn").style.display = "block";
@@ -271,11 +308,8 @@ function renderGames() {
 
     card.querySelector(".star").onclick = e => {
       e.stopPropagation();
-      if (favorites.includes(name)) {
-        favorites = favorites.filter(f => f !== name);
-      } else {
-        favorites.push(name);
-      }
+      if (favorites.includes(game.name)) favorites = favorites.filter(f => f !== game.name);
+      else favorites.push(game.name);
       saveFavorites();
       renderGames();
     };
@@ -283,19 +317,16 @@ function renderGames() {
     gameList.appendChild(card);
   });
 }
+
 renderGames();
 
-// Back button
+// --- BACK & FULLSCREEN ---
 document.getElementById("back-btn").onclick = () => {
-  const frame = document.getElementById('game-frame');
-  frame.style.display = 'none';
-  frame.src = "";
+  document.getElementById('game-frame').style.display = 'none';
   document.getElementById('back-btn').style.display = 'none';
   document.getElementById('fullscreen-btn').style.display = 'none';
   gameList.style.display = 'flex';
 };
-
-// Fullscreen button
 document.getElementById("fullscreen-btn").onclick = () => {
   const frame = document.getElementById('game-frame');
   if (frame.requestFullscreen) frame.requestFullscreen();
