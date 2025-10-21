@@ -60,7 +60,6 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
   <div id="settings-tabs">
     <button class="active" data-tab="general">General</button>
     <button data-tab="theme">Theme</button>
-    <button data-tab="decorations">Decorations</button>
   </div>
   <div id="settings-content">
     <button id="close-settings-btn">✖</button>
@@ -76,16 +75,21 @@ iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:
       <button id="random-theme-btn">Random Theme</button>
       <button id="reset-theme-btn">Reset Theme</button>
     </div>
-    <div class="tab-content" id="decorations" style="display:none;">
-      <h2>Decorations</h2>
-      <label>Decorations Count: <input type="number" id="deco-count" min="5" max="100" value="25"></label>
-      <label>Decorations Speed: <input type="range" id="deco-speed" min="0.1" max="5" step="0.1" value="0.5"></label>
-    </div>
   </div>
 </div>
 <div id="decorations-container"></div>
 <div class="game-list" id="game-list"></div>
 <iframe id="game-frame"></iframe>
+
+<!-- Request a Game/Game Support Button -->
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=header" target="_blank" style="
+  position:fixed; bottom:25px; right:25px;
+  padding:12px 20px; font-size:16px; border:none;
+  border-radius:8px; background:#ff8800; color:#000;
+  text-decoration:none; text-align:center; cursor:pointer; z-index:3;
+">
+  Request a Game/Game Support
+</a>
 
 <script>
 // --- SETTINGS ---
@@ -205,18 +209,7 @@ window.addEventListener('scroll',()=>{
   else{document.getElementById('settings-btn').classList.remove('hidden');} 
   lastScrollTop=st<=0?0:st;
 });
-<!-- Request a Game Button -->
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=header" target="_blank" style="
-  position:fixed; bottom:25px; right:25px;
-  padding:12px 20px; font-size:16px; border:none;
-  border-radius:8px; background:#ff8800; color:#000;
-  text-decoration:none; text-align:center; cursor:pointer; z-index:3;
-">
-  Request a Game/Game support
-</a>
 
-
-  
 // --- GAMES ---
 const games = [
   { name: "Ragdoll Archers", url: "Ragdoll-archers.html" },
@@ -283,7 +276,6 @@ const games = [
   { name: "Car Crash 3D ", url: "Car-crash-3d.html" },
   { name: "Bit Life ", url: "Bit-life.html" },
   { name: "Plants vs Zombies ", url: "Plants-vs-zombies.html" },
-
 ];
 
 const gameList = document.getElementById("game-list");
