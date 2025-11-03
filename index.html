@@ -1,346 +1,790 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math Line - Game Hub</title>
-<style>
-:root {
-  --bg1: #000000;
-  --bg2: #111111;
-  --accent: #ff8800;
-  --text-color: #f0f0f0;
-  --card-bg: rgba(0,0,0,0.6);
-  --card-radius: 14px;
-  --hover-scale: 1.02;
-  --card-font: 'Poppins', sans-serif;
-}
-body {
-  margin:0; padding:0; font-family:var(--card-font); color:var(--text-color);
-  background: linear-gradient(-45deg,var(--bg1),var(--bg2));
-  background-size:400% 400%; animation: moveBackground 12s ease infinite; overflow-x:hidden;
-}
-@keyframes moveBackground {0%{background-position:0% 50%;}50%{background-position:100% 50%;}100%{background-position:0% 50%;}}
-canvas#particles {position:fixed; top:0; left:0; width:100%; height:100%; z-index:-3; pointer-events:none;}
-header {padding:25px; text-align:center; position:relative; z-index:2;}
-header h1 {margin:0; font-size:2.8em; color:#fff; text-shadow:0 0 15px var(--accent);}
-#search-container {position:fixed; top:25px; left:25px; z-index:3;}
-#search-input {padding:10px; border-radius:8px; border:2px solid var(--accent); background:#1a0a0a; color:var(--accent);}
-#settings-btn {position:fixed; top:25px; right:25px; font-size:28px; background:none; border:none; cursor:pointer; color:var(--accent); z-index:3; transition:0.2s;}
-#settings-btn.hidden {opacity:0; pointer-events:none;}
-#back-btn, #fullscreen-btn {position:fixed; padding:10px 20px; font-size:16px; border:none; border-radius:8px; background:var(--accent); cursor:pointer; z-index:3; display:none;}
-#back-btn {top:100px; left:25px;}
-#fullscreen-btn {top:100px; right:25px;}
-#settings-menu {position:fixed; top:0; right:-350px; width:350px; height:100%; background:rgba(0,0,0,0.95); color:#fff; display:flex; flex-direction:row; transition:right 0.3s ease; z-index:4; overflow:hidden;}
-#settings-menu.open {right:0;}
-#settings-tabs {display:flex; flex-direction:column; width:100px; background:#111;}
-#settings-tabs button {padding:15px; border:none; background:none; color:var(--accent); cursor:pointer; font-weight:bold; transition:.2s;}
-#settings-tabs button.active, #settings-tabs button:hover {background:var(--accent); color:#000;}
-#settings-content {flex:1; padding:20px; overflow-y:auto; position:relative;}
-#settings-content h2 {margin-top:0; text-align:center;}
-#close-settings-btn {position:absolute; top:10px; right:10px; padding:6px 10px; font-size:18px; border:none; border-radius:6px; background: var(--accent); color:#000; cursor:pointer; z-index:5; transition:0.2s;}
-#close-settings-btn:hover {filter: brightness(1.2);}
-.game-list {display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:100px 20px 50px; position:relative; z-index:2;}
-.game-card {position:relative; background:var(--card-bg); border:2px solid var(--accent); color:var(--accent); width:260px; padding:25px; border-radius:var(--card-radius); cursor:pointer; transition:transform .25s, box-shadow .25s; font-size:1.2em;}
-.game-card:hover {transform: scale(var(--hover-scale)); box-shadow:0 0 15px var(--accent);}
-.star {position:absolute; top:8px; right:8px; font-size:16px; cursor:pointer;}
-.star.favorited {color:gold; text-shadow:0 0 8px var(--accent);}
-iframe#game-frame {display:none; width:95%; height:650px; margin:0 auto; border:none; border-radius:14px; box-shadow:0 8px 20px rgba(0,0,0,0.6); background:#000;}
-.decoration {position:fixed; z-index:-1; pointer-events:none; font-size:30px;}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Math Line</title>
+  <style>
+    :root{
+      /* Thanksgiving / autumn palette */
+      --bg1:#4b2e2a;   /* deep brown */
+      --bg2:#7a4b2f;   /* warm brown */
+      --bg3:#c86f2b;   /* pumpkin orange */
+      --bg4:#f6e9d7;   /* cream */
+      --accent:#b35900; /* rich orange */
+      --text-color:#fff;
+      --card-size:180px; /* DO NOT change per request */
+      --card-radius:12px;
+    }
+
+    /* layout and optimized animated background (prevents seam when scrolling) */
+    html,body{height:100%;}
+    body{
+      margin:0;
+      padding:0;
+      font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--text-color);
+
+      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
+      background-size: 400% 400%;
+      background-repeat: no-repeat;
+      background-attachment: fixed;       /* keep fixed to avoid scroll seams */
+      animation: moveBackground 18s ease infinite;
+      overflow-x:hidden;
+      position:relative;
+
+      /* browser paint hints to reduce seams/flicker */
+      will-change: background-position, transform;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    @keyframes moveBackground{
+      0%{background-position:0% 50%;}
+      50%{background-position:100% 50%;}
+      100%{background-position:0% 50%;}
+    }
+
+    /* header & top controls */
+    header{padding:20px;text-align:center;z-index:6;position:relative;}
+    header h1{margin:0;font-size:2.6rem;color:var(--bg4);text-shadow:0 2px 8px rgba(0,0,0,0.45);}
+
+    .top-controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:8px;
+      padding:0 12px;
+      position:relative;
+      z-index:6;
+    }
+
+    #search-container{flex:1;max-width:720px;text-align:center;}
+    #search-input{
+      width:100%;
+      max-width:520px;
+      padding:8px 12px;
+      font-size:15px;
+      border-radius:8px;
+      border:2px solid rgba(255,255,255,0.06);
+      background: rgba(34,24,16,0.6);
+      color:#fff;
+      outline:none;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    }
+
+    .category-bar{ text-align:center; margin:6px 0 12px; z-index:6; position:relative; }
+    .category-bar button{
+      margin:4px 6px;
+      padding:6px 12px;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      background:var(--accent);
+      color:#fff;
+      font-weight:700;
+      transition:transform .12s, filter .12s;
+    }
+    .category-bar button:hover{ filter:brightness(1.05); transform:translateY(-2px); }
+    .category-bar button.active{ outline:3px solid rgba(255,255,255,0.06); }
+
+    /* game grid */
+    #game-list{
+      display:flex;
+      flex-wrap:wrap;
+      justify-content:center;
+      gap:15px;
+      padding:18px;
+      position:relative;
+      z-index:6;
+    }
+    .game-card{
+      position:relative;
+      width:var(--card-size);
+      height:var(--card-size);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background: rgba(10,8,6,0.45);
+      border:2px solid rgba(0,0,0,0.25);
+      border-radius:var(--card-radius);
+      cursor:pointer;
+      color:var(--bg4);
+      font-weight:800;
+      text-align:center;
+      padding:8px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+      user-select:none;
+      transition: transform .14s ease, box-shadow .14s ease;
+    }
+    .game-card:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(0,0,0,0.55); }
+
+    /* star favorite */
+    .star{
+      position:absolute; top:8px; right:8px;
+      font-size:18px; cursor:pointer; z-index:8;
+      color:var(--accent);
+      text-shadow:0 1px 6px rgba(0,0,0,0.5);
+    }
+    .star.favorited{ color: #ffd36b; text-shadow:0 1px 8px rgba(0,0,0,0.6); }
+
+    /* special "request a game" card styling (glow) */
+    .request-card{
+      border-color: rgba(255,200,110,0.9);
+      background: linear-gradient(180deg, rgba(255,238,210,0.06), rgba(255,238,210,0.02));
+      color: #fff;
+      box-shadow:
+        0 0 12px rgba(179,89,0,0.12),
+        0 0 28px rgba(179,89,0,0.10),
+        inset 0 1px 0 rgba(255,255,255,0.02);
+      animation: glowPulse 2.8s ease-in-out infinite;
+      outline: 3px solid rgba(255,200,110,0.06);
+    }
+    @keyframes glowPulse{
+      0%{ box-shadow: 0 0 8px rgba(179,89,0,0.08), 0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
+      50%{ box-shadow: 0 0 18px rgba(179,89,0,0.22), 0 0 36px rgba(179,89,0,0.12); transform:translateY(-4px); }
+      100%{ box-shadow: 0 0 8px rgba(179,89,0,0.08), 0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
+    }
+
+    /* iframe game frame */
+    #game-frame{
+      display:none;
+      width:95%;
+      max-width:1200px;
+      height:680px;
+      margin:12px auto;
+      border:none;
+      border-radius:12px;
+      background:#000;
+      position:relative;
+      z-index:6;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+    }
+
+    /* floating buttons */
+    .floating-btn{
+      position:fixed;
+      top:18px;
+      padding:8px 12px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      z-index:12;
+      font-weight:700;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+    }
+    #fullscreen-btn{ right:18px; background:var(--accent); color:#fff; display:none; }
+    #back-btn{ right:120px; background:rgba(0,0,0,0.55); color:#fff; display:none; }
+    /* settings button moved to right side as requested */
+    #settings-btn{ right:72px; background:rgba(255,255,255,0.06); color:var(--accent); font-size:20px; }
+
+    /* settings drawer (right side) */
+    #settings-menu{
+      position:fixed;
+      top:64px;
+      right:-360px;
+      width:340px;
+      height:calc(100% - 80px);
+      background: rgba(18,12,10,0.96);
+      color:#fff;
+      padding:16px;
+      box-shadow: -8px 12px 40px rgba(0,0,0,0.6);
+      transition: right .28s ease;
+      z-index:14;
+      overflow:auto;
+      border-left:4px solid rgba(255,255,255,0.03);
+    }
+    #settings-menu.open{ right:12px; }
+    #close-settings-btn{
+      position:absolute;
+      top:12px; right:12px;
+      padding:6px 10px; border-radius:6px;
+      background:var(--accent); color:#fff; border:none; cursor:pointer;
+    }
+
+    .setting-row{ margin:12px 0; display:flex; gap:8px; align-items:center; justify-content:space-between; }
+    .setting-row label{ flex:1; font-size:0.96rem; color:#e8dfd4; }
+    .setting-row input[type="color"]{ width:44px; height:34px; border-radius:6px; border:none; padding:0; }
+
+    /* decoration style (autumn) */
+    .decoration{
+      position:fixed;
+      z-index:2; /* behind UI but above background */
+      pointer-events:none;
+      font-size:28px;
+      opacity:0.95;
+      transform-origin:center;
+      will-change:top,left,transform,opacity;
+    }
+
+    /* small screens */
+    @media (max-width:720px){
+      header h1{font-size:1.8rem;}
+      #settings-menu{ width:92%; height:60%; right:-100%; top:auto; bottom:-100%; left:4%; border-left:0; border-radius:10px; }
+      #settings-menu.open{ right:4%; bottom:12%; top:auto; }
+      #game-frame{ height:480px; }
+      /* small responsive fallback for card-size only for narrow screens */
+      :root{ --card-size:140px; }
+    }
+  </style>
 </head>
 <body>
-<canvas id="particles"></canvas>
-<header><h1>Math Line 🎮</h1></header>
-<div id="search-container"><input type="text" id="search-input" placeholder="Search games..."></div>
-<button id="settings-btn">⚙️</button>
-<button id="back-btn">⬅ Back</button>
-<button id="fullscreen-btn">⛶ Fullscreen</button>
-<div id="settings-menu">
-  <div id="settings-tabs">
-    <button class="active" data-tab="general">General</button>
-    <button data-tab="theme">Theme</button>
-  </div>
-  <div id="settings-content">
-    <button id="close-settings-btn">✖</button>
-    <div class="tab-content" id="general">
-      <h2>General</h2>
-      <label>Particles: <input type="checkbox" id="toggle-particles" checked></label>
-    </div>
-    <div class="tab-content" id="theme" style="display:none;">
-      <h2>Theme</h2>
-      <label>Background 1: <input type="color" id="bg-color1"></label>
-      <label>Background 2: <input type="color" id="bg-color2"></label>
-      <label>Accent Color: <input type="color" id="accent-color"></label>
-      <button id="random-theme-btn">Random Theme</button>
-      <button id="reset-theme-btn">Reset Theme</button>
+
+  <header><h1>Math Line</h1></header>
+
+  <div class="top-controls">
+    <div id="search-container">
+      <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
     </div>
   </div>
-</div>
-<div id="decorations-container"></div>
-<div class="game-list" id="game-list"></div>
-<iframe id="game-frame"></iframe>
 
-<!-- Request a Game/Game Support Button -->
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=header" target="_blank" style="
-  position:fixed; bottom:25px; right:25px;
-  padding:12px 20px; font-size:16px; border:none;
-  border-radius:8px; background:#ff8800; color:#000;
-  text-decoration:none; text-align:center; cursor:pointer; z-index:3;
-">
-  Request a Game/Support
-</a>
+  <div class="category-bar" id="category-filter" aria-label="Categories"></div>
 
-<script>
-// --- SETTINGS ---
-const savedSettings = JSON.parse(localStorage.getItem('mlSettings'))||{};
-function saveSettings(){localStorage.setItem('mlSettings', JSON.stringify(savedSettings));}
+  <div id="game-list" aria-live="polite"></div>
 
-// --- PARTICLES ---
-const canvas=document.getElementById('particles'); 
-const ctx=canvas.getContext('2d'); 
-canvas.width=innerWidth; canvas.height=innerHeight;
-let particles=[]; 
-function initParticles(count=60){
-  particles=[]; for(let i=0;i<count;i++){
-    particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:Math.random()*2+1,dx:(Math.random()-0.5)*0.5,dy:(Math.random()-0.5)*0.5});
-  }
-}
-initParticles();
-function animateParticles(){
-  ctx.clearRect(0,0,canvas.width,canvas.height); 
-  if(document.getElementById('toggle-particles').checked){
-    ctx.fillStyle="#ff8800";
-    particles.forEach(p=>{
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
-      p.x+=p.dx;p.y+=p.dy;
-      if(p.x<0||p.x>canvas.width)p.dx*=-1;
-      if(p.y<0||p.y>canvas.height)p.dy*=-1;
+  <!-- Game iframe -->
+  <iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
+
+  <!-- Floating controls -->
+  <button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
+  <button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
+  <button id="settings-btn" class="floating-btn" title="Settings">⚙️</button>
+
+  <!-- Settings drawer -->
+  <div id="settings-menu" aria-hidden="true">
+    <button id="close-settings-btn" aria-label="Close settings">✖ Close</button>
+    <h2 style="margin-top:8px;margin-bottom:8px;color:var(--accent)">Settings</h2>
+
+    <!-- Color palette -->
+    <div class="setting-row">
+      <label for="bg1-color">Background 1</label>
+      <input id="bg1-color" type="color" value="#4b2e2a">
+    </div>
+    <div class="setting-row">
+      <label for="bg2-color">Background 2</label>
+      <input id="bg2-color" type="color" value="#7a4b2f">
+    </div>
+    <div class="setting-row">
+      <label for="bg3-color">Background 3</label>
+      <input id="bg3-color" type="color" value="#c86f2b">
+    </div>
+    <div class="setting-row">
+      <label for="bg4-color">Background 4</label>
+      <input id="bg4-color" type="color" value="#f6e9d7">
+    </div>
+    <div class="setting-row">
+      <label for="accent-color">Accent Color</label>
+      <input id="accent-color" type="color" value="#b35900">
+    </div>
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0">
+
+    <!-- New non-card-size/text-changing settings -->
+    <div class="setting-row">
+      <label for="toggle-decor">Show Decorations</label>
+      <input id="toggle-decor" type="checkbox" title="Toggle background decorations">
+    </div>
+
+    <div class="setting-row">
+      <label for="toggle-anim">Animate Background</label>
+      <input id="toggle-anim" type="checkbox" title="Toggle animated gradient background" checked>
+    </div>
+
+    <div class="setting-row">
+      <label for="reduce-motion">Reduce Motion</label>
+      <input id="reduce-motion" type="checkbox" title="Reduce motion for animations">
+    </div>
+
+    <div class="setting-row">
+      <label for="show-favorites-only">Show Favorites Only</label>
+      <input id="show-favorites-only" type="checkbox" title="Filter to favorites only">
+    </div>
+
+    <div class="setting-row">
+      <label for="accent-brightness">Accent Brightness</label>
+      <input id="accent-brightness" type="range" min="50" max="150" value="100" title="Adjust accent brightness (visual only)">
+    </div>
+
+    <p style="color:#dcd0c3;font-size:0.88rem;margin-top:10px">These settings do not change the size or text of game cards. Palette and visual preferences are saved for your next visit.</p>
+  </div>
+
+  <script>
+    /* ============================
+       Decorations (Thanksgiving)
+       ============================ */
+    const DECO_EMOJIS = ["🦃","🍂","🍁","🌽","🥧","🍠","🥔","🍇","🍎","🧺"];
+    let decorations = [];
+    const DECO_COUNT = 32;
+    let decoAnimationEnabled = true;
+
+    function createDecorations() {
+      document.querySelectorAll('.decoration').forEach(n => n.remove());
+      decorations = [];
+      for (let i = 0; i < DECO_COUNT; i++) {
+        const d = document.createElement('div');
+        d.className = 'decoration';
+        d.textContent = DECO_EMOJIS[Math.floor(Math.random() * DECO_EMOJIS.length)];
+        d.style.left = (Math.random() * 110 - 5) + 'vw';
+        d.style.top = (Math.random() * 110 - 5) + 'vh';
+        d.style.fontSize = (16 + Math.random() * 36) + 'px';
+        d.style.opacity = (0.45 + Math.random() * 0.55).toString();
+        d.dataset.vy = (0.02 + Math.random() * 0.12).toString();
+        d.dataset.vx = ((Math.random() - 0.5) * 0.04).toString();
+        decorations.push(d);
+        document.body.appendChild(d);
+      }
+    }
+    createDecorations();
+
+    function animateDecorations(){
+      if(!decoAnimationEnabled){ requestAnimationFrame(animateDecorations); return; }
+      decorations.forEach(d => {
+        let top = parseFloat(d.style.top || '0');
+        let left = parseFloat(d.style.left || '0');
+        top += parseFloat(d.dataset.vy) * 1.1;
+        left += parseFloat(d.dataset.vx) * 1.1;
+        if (top > 105) top = -5;
+        if (top < -10) top = 100;
+        if (left > 105) left = -5;
+        if (left < -10) left = 100;
+        d.style.top = top + 'vh';
+        d.style.left = left + 'vw';
+        const rot = Math.sin((top + left) * 0.1) * 10;
+        d.style.transform = `rotate(${rot}deg)`;
+      });
+      requestAnimationFrame(animateDecorations);
+    }
+    requestAnimationFrame(animateDecorations);
+
+    function setDecorationsVisible(visible){
+      decorations.forEach(d => d.style.display = visible ? '' : 'none');
+    }
+
+    /* ============================
+       Game data + UI logic
+       ============================ */
+    const games=[
+      {name:"Ragdoll Archers",url:"Ragdoll-archers.html",category:"Action"},
+      {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
+      {name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
+      {name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
+      {name:"Snow Rider",url:"Snow-Rider.html",category:"Racing"},
+      {name:"alt Snow Rider",url:"alt-Snow-rider.html",category:"Racing"},
+      {name:"Swords And Sandals",url:"Swords-and-sandals.html",category:"Action"},
+      {name:"Crazy Cattle",url:"Crazy-cattle.html",category:"Arcade"},
+      {name:"Gladi Hoppers",url:"Gladi-hoppers.html",category:"Action"},
+      {name:"Bit Planes",url:"Bit-planes.html",category:"Arcade"},
+      {name:"Final Earth2",url:"Final-earth2.html",category:"Strategy"},
+      {name:"Cluster Rush",url:"Cluster-rush.html",category:"Arcade"},
+      {name:"Push Your Luck",url:"Push-your-luck.html",category:"Arcade"},
+      {name:"Poly Track",url:"Poly-track.html",category:"Racing"},
+      {name:"Ragdoll Soccer",url:"Ragdoll-soccer.html",category:"Sports"},
+      {name:"Jetpack Joy Ride",url:"Jetpack-joy-ride.html",category:"Action"},
+      {name:"Learn To Fly 3",url:"Learn-to-fly-3.html",category:"Racing"},
+      {name:"Malidin Stun Cars",url:"Malidin-stun-cars.html",category:"Racing"},
+      {name:"Gun Spin",url:"Gun-spin.html",category:"Action"},
+      {name:"Age Of War",url:"Age-of-war.html",category:"Strategy"},
+      {name:"Moto X3M 2",url:"Moto-x3m-2.html",category:"Racing"},
+      {name:"Moto X3M Winter",url:"Moto-x3m-winter.html",category:"Racing"},
+      {name:"Basketball Stars",url:"Basketball-stars.html",category:"Sports"},
+      {name:"Idle Breakout",url:"Idle-breakout.html",category:"Arcade"},
+      {name:"Vex 8",url:"Vex-8.html",category:"Action"},
+      {name:"Tiny Fishing",url:"Tiny-fishing.html",category:"Simulation"},
+      {name:"Drive Mad",url:"Drive-mad.html",category:"Racing"},
+      {name:"Stick Man Hook",url:"Stick-man-hook.html",category:"Action"},
+      {name:"Learn To Fly 2",url:"Learn-to-fly-2.html",category:"Racing"},
+      {name:"Line Rider",url:"Line-rider.html",category:"Racing"},
+      {name:"Unicycle Hero",url:"Unicycle-hero.html",category:"Action"},
+      {name:"Basket Random",url:"Basket-random.html",category:"Sports"},
+      {name:"1v1 Lol",url:"1v1-lol.html",category:"Action"},
+      {name:"Happy Wheels",url:"Happy-wheels.html",category:"Action"},
+      {name:"Idle Dice",url:"Idle-dice.html",category:"Arcade"},
+      {name:"Idle Miner Tycoon",url:"Idle-miner-tycoon.html",category:"Simulation"},
+      {name:"Johnny Upgrade",url:"Johnny-upgrade.html",category:"Arcade"},
+      {name:"Jack Smith",url:"Jack-smith.html",category:"Action"},
+      {name:"Tunnel Rush",url:"Tunnel-rush.html",category:"Racing"},
+      {name:"Duck Life 5",url:"Duck-life-5.html",category:"Simulation"},
+      {name:"Duck Life 4",url:"Duck-life-4.html",category:"Simulation"},
+      {name:"Mob Control",url:"Mob-control.html",category:"Action"},
+      {name:"A Small World Cup",url:"A-small-world-cup.html",category:"Sports"},
+      {name:"Escape Road",url:"Escape-road.html",category:"Racing"},
+      {name:"QWOP",url:"QWOP.html",category:"Simulation"},
+      {name:"Indian Truck Simulator",url:"Indian-truck-simulator.html",category:"Simulation"},
+      {name:"Mr Mine",url:"Mr-mine.html",category:"Simulation"},
+      {name:"Doge Miner",url:"Doge-miner.html",category:"Simulation"},
+      {name:"Draw Climber",url:"Draw-climber.html",category:"Racing"},
+      {name:"Slope 3",url:"Slope-3.html",category:"Racing"},
+      {name:"Infinte Craft",url:"Infinte-craft.html",category:"Simulation"},
+      {name:"Block Blast",url:"Block-blast.html",category:"Arcade"},
+      {name:"Melon playground",url:"Melon-playground.html",category:"Simulation"},
+      {name:"House of hazards",url:"house-of-hazards.html",category:"Action"},
+      {name:"Binding of Issac",url:"Binding-of-issac.html",category:"Action"},
+      {name:"Troll Face Quest 10",url:"Troll-face-10.html",category:"Puzzle"},
+      {name:"Troll Face Quest 11",url:"Troll-face-11.html",category:"Puzzle"},
+      {name:"Troll Face Quest 12",url:"Troll-face-12.html",category:"Puzzle"},
+      {name:"Ultimate Car Driving Simulator 3",url:"ultimate-car-simulator.html",category:"Racing"},
+      {name:"Wordle",url:"Wordle.html",category:"Puzzle"},
+      {name:"Cappybara Clicker",url:"Cappybara-clicker.html",category:"Simulation"},
+      {name:"Bob The Robber 5",url:"bob-robber.html",category:"Action"},
+      {name:"Car Crash 3D",url:"Car-crash-3d.html",category:"Racing"},
+      {name:"Bit Life",url:"Bit-life.html",category:"Simulation"},
+      {name:"Plants vs Zombies",url:"Plants-vs-zombies.html",category:"Action"},
+    ];
+
+    /* categories */
+    const categories=["All","Action","Racing","Sports","Arcade","Puzzle","Simulation","Strategy"];
+    const categoryBar = document.getElementById('category-filter');
+    let currentCategory = "All";
+
+    categories.forEach(cat=>{
+      const btn = document.createElement('button');
+      btn.textContent = cat;
+      btn.dataset.cat = cat;
+      btn.addEventListener('click', ()=>{ renderGames(cat); setActiveCategoryButton(cat); });
+      categoryBar.appendChild(btn);
     });
-  } 
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-document.getElementById('toggle-particles').checked = savedSettings.particles!==undefined ? savedSettings.particles:true;
-document.getElementById('toggle-particles').addEventListener('change',()=>{
-  savedSettings.particles=document.getElementById('toggle-particles').checked; saveSettings();
-});
 
-// --- DECORATIONS ---
-const decorationsContainer=document.getElementById('decorations-container'); 
-const decoEmojis=["🎃","💀","🕸️"];
-let decoCount = savedSettings.decoCount||25; 
-let decoSpeedVal = savedSettings.decoSpeed||0.5;
-function createDecorations(count=decoCount){
-  decorationsContainer.innerHTML="";
-  for(let i=0;i<count;i++){
-    const deco=document.createElement('div');
-    deco.className='decoration';
-    deco.style.left=Math.random()*100+"vw";
-    deco.style.top=Math.random()*100+"vh";
-    deco.style.fontSize=(20+Math.random()*20)+"px";
-    deco.style.opacity=0.6+Math.random()*0.4;
-    deco.textContent=decoEmojis[Math.floor(Math.random()*decoEmojis.length)];
-    deco.dataset.speed = 0.1 + Math.random()*decoSpeedVal;
-    decorationsContainer.appendChild(deco);
-  }
-}
-createDecorations(decoCount);
-decorationsContainer.style.display = savedSettings.decorations!==undefined ? (savedSettings.decorations?"block":"none") : "block";
-function animateDecorations(){
-  document.querySelectorAll('.decoration').forEach(d=>{
-    let y = parseFloat(d.style.top);
-    let speed = parseFloat(d.dataset.speed) || 0.2;
-    y += speed;
-    if(y>100) y=-5;
-    d.style.top=y+"vh";
-  });
-  requestAnimationFrame(animateDecorations);
-}
-animateDecorations();
+    function setActiveCategoryButton(cat){
+      currentCategory = cat;
+      document.querySelectorAll('#category-filter button').forEach(b=>{
+        b.classList.toggle('active', b.dataset.cat === cat);
+      });
+    }
 
-// --- SETTINGS TABS ---
-const tabs=document.querySelectorAll('#settings-tabs button'); 
-const contents=document.querySelectorAll('.tab-content');
-tabs.forEach(tab=>{
-  tab.addEventListener('click',()=>{
-    tabs.forEach(t=>t.classList.remove('active'));
-    tab.classList.add('active');
-    contents.forEach(c=>c.style.display='none');
-    document.getElementById(tab.dataset.tab).style.display='block';
-  });
-});
-document.getElementById("settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.add("open");
-document.getElementById("close-settings-btn").onclick = ()=>document.getElementById("settings-menu").classList.remove("open");
+    /* favorites */
+    let favorites = JSON.parse(localStorage.getItem("mlFavorites") || "[]");
+    function saveFavorites(){ localStorage.setItem("mlFavorites", JSON.stringify(favorites)); }
 
-// --- THEME ---
-const bg1Input=document.getElementById('bg-color1'); 
-const bg2Input=document.getElementById('bg-color2'); 
-const accentInput=document.getElementById('accent-color');
-bg1Input.value=savedSettings.bg1||'#000000'; 
-bg2Input.value=savedSettings.bg2||'#111111'; 
-accentInput.value=savedSettings.accent||'#ff8800';
-function updateColors(){
-  document.documentElement.style.setProperty('--bg1',bg1Input.value); 
-  document.documentElement.style.setProperty('--bg2',bg2Input.value); 
-  document.documentElement.style.setProperty('--accent',accentInput.value); 
-  savedSettings.bg1=bg1Input.value; savedSettings.bg2=bg2Input.value; savedSettings.accent=accentInput.value; 
-  saveSettings();
-}
-bg1Input.addEventListener('input',updateColors); 
-bg2Input.addEventListener('input',updateColors); 
-accentInput.addEventListener('input',updateColors);
-document.getElementById('random-theme-btn').addEventListener('click',()=>{
-  bg1Input.value='#'+Math.floor(Math.random()*16777215).toString(16); 
-  bg2Input.value='#'+Math.floor(Math.random()*16777215).toString(16); 
-  accentInput.value='#'+Math.floor(Math.random()*16777215).toString(16); 
-  updateColors();
-});
-document.getElementById('reset-theme-btn').addEventListener('click',()=>{
-  bg1Input.value='#000000'; bg2Input.value='#111111'; accentInput.value='#ff8800'; 
-  updateColors();
-});
+    /* palette persistence */
+    const bg1 = document.getElementById('bg1-color');
+    const bg2 = document.getElementById('bg2-color');
+    const bg3 = document.getElementById('bg3-color');
+    const bg4 = document.getElementById('bg4-color');
+    const accent = document.getElementById('accent-color');
 
-// --- STICKY SETTINGS BUTTON ---
-let lastScrollTop=0; 
-window.addEventListener('scroll',()=>{
-  let st=window.pageYOffset||document.documentElement.scrollTop; 
-  if(st>lastScrollTop){document.getElementById('settings-btn').classList.add('hidden');} 
-  else{document.getElementById('settings-btn').classList.remove('hidden');} 
-  lastScrollTop=st<=0?0:st;
-});
+    function savePalette(){
+      const palette = {bg1: bg1.value, bg2: bg2.value, bg3: bg3.value, bg4: bg4.value, accent: accent.value};
+      localStorage.setItem('mlPalette', JSON.stringify(palette));
+    }
+    function loadPalette(){
+      try{
+        const p = JSON.parse(localStorage.getItem('mlPalette') || "null");
+        if(p){
+          bg1.value = p.bg1 || bg1.value;
+          bg2.value = p.bg2 || bg2.value;
+          bg3.value = p.bg3 || bg3.value;
+          bg4.value = p.bg4 || bg4.value;
+          accent.value = p.accent || accent.value;
+          applyPalette();
+        }
+      }catch(e){}
+    }
+    function applyPalette(){
+      document.documentElement.style.setProperty('--bg1', bg1.value);
+      document.documentElement.style.setProperty('--bg2', bg2.value);
+      document.documentElement.style.setProperty('--bg3', bg3.value);
+      document.documentElement.style.setProperty('--bg4', bg4.value);
+      document.documentElement.style.setProperty('--accent', accent.value);
+    }
+    [bg1,bg2,bg3,bg4,accent].forEach(i=>{
+      i.addEventListener('input', ()=>{
+        applyPalette();
+      });
+      i.addEventListener('change', savePalette);
+    });
+    loadPalette();
 
-// --- GAMES ---
-const games = [
-  { name: "Ragdoll Archers", url: "Ragdoll-archers.html" },
-  { name: "Ragdoll Hit", url: "Ragdoll-hit.html" },
-  { name: "Time Shooter", url: "Time-shooter.html" },
-  { name: "Retro Bowl", url: "Retro-bowl.html" },
-  { name: "Snow Rider", url: "Snow-Rider.html" },
-  { name: "alt Snow Rider", url: "alt-Snow-rider.html" },
-  { name: "Swords And Sandals", url: "Swords-and-sandals.html" },
-  { name: "Crazy Cattle", url: "Crazy-cattle.html" },
-  { name: "Gladi Hoppers", url: "Gladi-hoppers.html" },
-  { name: "Bit Planes", url: "Bit-planes.html" },
-  { name: "Final Earth2", url: "Final-earth2.html" },
-  { name: "Cluster Rush", url: "Cluster-rush.html" },
-  { name: "Push Your Luck", url: "Push-your-luck.html" },
-  { name: "Poly Track", url: "Poly-track.html" },
-  { name: "Ragdoll Soccer", url: "Ragdoll-soccer.html" },
-  { name: "Jetpack Joy Ride", url: "Jetpack-joy-ride.html" },
-  { name: "Learn To Fly 3", url: "Learn-to-fly-3.html" },
-  { name: "Malidin Stun Cars", url: "Malidin-stun-cars.html" },
-  { name: "Gun Spin", url: "Gun-spin.html" },
-  { name: "Age Of War", url: "Age-of-war.html" },
-  { name: "Moto X3M 2", url: "Moto-x3m-2.html" },
-  { name: "Moto X3M Winter", url: "Moto-x3m-winter.html" },
-  { name: "Basketball Stars", url: "Basketball-stars.html" },
-  { name: "Idle Breakout", url: "Idle-breakout.html" },
-  { name: "Vex 8", url: "Vex-8.html" },
-  { name: "Tiny Fishing", url: "Tiny-fishing.html" },
-  { name: "Drive Mad", url: "Drive-mad.html" },
-  { name: "Stick Man Hook", url: "Stick-man-hook.html" },
-  { name: "Learn To Fly 2", url: "Learn-to-fly-2.html" },
-  { name: "Line Rider", url: "Line-rider.html" },
-  { name: "Unicycle Hero", url: "Unicycle-hero.html" },
-  { name: "Basket Random", url: "Basket-random.html" },
-  { name: "1v1 Lol", url: "1v1-lol.html" },
-  { name: "Happy Wheels", url: "Happy-wheels.html" },
-  { name: "Idle Dice", url: "Idle-dice.html" },
-  { name: "Idle Miner Tycoon", url: "Idle-miner-tycoon.html" },
-  { name: "Johnny Upgrade", url: "Johnny-upgrade.html" },
-  { name: "Jack Smith", url: "Jack-smith.html" },
-  { name: "Tunnel Rush", url: "Tunnel-rush.html" },
-  { name: "Duck Life 5", url: "Duck-life-5.html" },
-  { name: "Duck Life 4", url: "Duck-life-4.html" },
-  { name: "Mob Control", url: "Mob-control.html" },
-  { name: "A Small World Cup", url: "A-small-world-cup.html" },
-  { name: "Escape Road", url: "Escape-road.html" },
-  { name: "QWOP", url: "QWOP.html" },
-  { name: "Indian Truck Simulator", url: "Indian-truck-simulator.html" },
-  { name: "Mr Mine", url: "Mr-mine.html" },
-  { name: "Doge Miner", url: "Doge-miner.html" },
-  { name: "Draw Climber", url: "Draw-climber.html" },
-  { name: "Slope 3", url: "Slope-3.html" }, 
-  { name: "Infinte Craft", url: "Infinte-craft.html" }, 
-  { name: "Block Blast ", url: "Block-blast.html" },
-  { name: "Melon playground ", url: "Melon-playground.html" },
-  { name: "House of hazards ", url: "house-of-hazards.html" },
-  { name: "Binding of Issac ", url: "Binding-of-issac.html" },
-  { name: "Troll Face Quest 10 ", url: "Troll-face-10.html" },
-  { name: "Troll Face Quest 11 ", url: "Troll-face-11.html" },
-  { name: "Troll Face Quest 12 ", url: "Troll-face-12html" },
-  { name: "Ultimate Car Driving Simulator 3 ", url: "ultimate-car-simulator.html" },
-  { name: "Wordle ", url: "Wordle.html" },
-  { name: "Cappybara Clicker ", url: "Cappybara-clicker.html" },
-  { name: "Bob The Robber 5 ", url: "bob-robber.html" },
-  { name: "Car Crash 3D ", url: "Car-crash-3d.html" },
-  { name: "Bit Life ", url: "Bit-life.html" },
-  { name: "Plants vs Zombies ", url: "Plants-vs-zombies.html" },
+    /* accent brightness slider */
+    const accentBrightness = document.getElementById('accent-brightness');
+    accentBrightness.addEventListener('input', ()=>{
+      const val = parseInt(accentBrightness.value,10);
+      const c = (accent.value || getComputedStyle(document.documentElement).getPropertyValue('--accent')).trim();
+      function hexToRgb(hex){
+        hex = hex.replace('#','');
+        if(hex.length===3) hex = hex.split('').map(h=>h+h).join('');
+        const num = parseInt(hex,16);
+        return {r:(num>>16)&255, g:(num>>8)&255, b:num&255};
+      }
+      function rgbToHex(r,g,b){
+        return '#'+[r,g,b].map(n=>n.toString(16).padStart(2,'0')).join('');
+      }
+      const rgb = hexToRgb(c);
+      const factor = val/100;
+      const nr = Math.min(255, Math.max(0, Math.round(rgb.r*factor)));
+      const ng = Math.min(255, Math.max(0, Math.round(rgb.g*factor)));
+      const nb = Math.min(255, Math.max(0, Math.round(rgb.b*factor)));
+      document.documentElement.style.setProperty('--accent', rgbToHex(nr,ng,nb));
+    });
 
+    /* render games */
+    const gameListEl = document.getElementById('game-list');
+    const REQUEST_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSevmKWapDp5CV1txbj9HlnanJkNoYr10ifpDQs6OvstLCckMA/viewform?usp=header";
 
-  
-];
+    function createRequestCard(){
+      const requestCard = document.createElement('div');
+      requestCard.className = 'game-card request-card';
+      requestCard.tabIndex = 0;
+      requestCard.title = 'Request a Game';
+      // Use a short label so text size remains consistent with other cards
+      const label = document.createElement('div');
+      label.textContent = 'Request a Game';
+      requestCard.appendChild(label);
+      requestCard.addEventListener('click', ()=> window.open(REQUEST_FORM_URL, '_blank'));
+      requestCard.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' ') { ev.preventDefault(); requestCard.click(); } });
+      return requestCard;
+    }
 
+    function renderGames(filter="All"){
+      gameListEl.innerHTML = '';
 
-const gameList = document.getElementById("game-list");
-let favorites = JSON.parse(localStorage.getItem("mlFavorites")) || [];
+      let display = (filter === "All") ? games.slice() : games.filter(g => g.category === filter);
 
-function saveFavorites() { localStorage.setItem("mlFavorites", JSON.stringify(favorites)); }
+      // Optionally apply "favorites only" filter
+      const showFavsOnly = document.getElementById('show-favorites-only').checked;
+      if(showFavsOnly){
+        display = display.filter(d => favorites.includes(d.name));
+      }
 
-function renderGames() {
-  gameList.innerHTML = "";
-  const sorted = [...games].sort((a, b) => a.name.localeCompare(b.name));
-  const favs = sorted.filter(g => favorites.includes(g.name));
-  const nonFavs = sorted.filter(g => !favorites.includes(g.name));
-  const allGames = [...favs, ...nonFavs];
-  allGames.forEach(game => {
-    const card = document.createElement("div");
-    card.className = "game-card";
-    card.innerHTML = `<div class='star ${favorites.includes(game.name) ? 'favorited' : ''}'>★</div>${game.name}`;
-    card.onclick = () => {
-      const frame = document.getElementById('game-frame');
-      frame.src = game.url;
-      frame.style.display = "block";
-      document.getElementById("back-btn").style.display = "block";
-      document.getElementById("fullscreen-btn").style.display = "block";
-      gameList.style.display = "none";
-    };
-    card.querySelector(".star").onclick = e => {
-      e.stopPropagation();
-      if (favorites.includes(game.name)) favorites = favorites.filter(f => f !== game.name);
-      else favorites.push(game.name);
-      saveFavorites();
-      renderGames();
-    };
-    gameList.appendChild(card);
-  });
-}
-renderGames();
+      display.forEach(g=>{
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.tabIndex = 0;
 
-// --- BACK & FULLSCREEN ---
-document.getElementById("back-btn").onclick = () => {
-  document.getElementById('game-frame').style.display = 'none';
-  document.getElementById('back-btn').style.display = 'none';
-  document.getElementById('fullscreen-btn').style.display = 'none';
-  gameList.style.display = 'flex';
-};
-document.getElementById("fullscreen-btn").onclick = () => {
-  const frame = document.getElementById('game-frame');
-  if (frame.requestFullscreen) frame.requestFullscreen();
-};
+        const star = document.createElement('div');
+        star.className = 'star' + (favorites.includes(g.name) ? ' favorited' : '');
+        star.textContent = '★';
+        star.title = favorites.includes(g.name) ? 'Unfavorite' : 'Favorite';
+        star.setAttribute('role','button');
+        star.setAttribute('aria-label', star.title);
 
-// --- SEARCH ---
-document.getElementById('search-input').addEventListener('input',()=>{
-  const val=document.getElementById('search-input').value.toLowerCase(); 
-  document.querySelectorAll('.game-card').forEach(c=>{
-    if(c.textContent.toLowerCase().includes(val)) c.style.display='block'; 
-    else c.style.display='none';
-  });
-});
+        const nameSpan = document.createElement('div');
+        nameSpan.textContent = g.name;
 
-// --- RESIZE ---
-window.addEventListener('resize',()=>{canvas.width=innerWidth; canvas.height=innerHeight;});
-</script>
+        card.appendChild(star);
+        card.appendChild(nameSpan);
+
+        card.addEventListener('click', ()=> openGame(g.url));
+        card.addEventListener('keydown', (ev)=>{
+          if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); card.click(); }
+        });
+
+        star.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          if(favorites.includes(g.name)) favorites = favorites.filter(f=>f!==g.name); else favorites.push(g.name);
+          saveFavorites();
+          renderGames(filter);
+        });
+
+        gameListEl.appendChild(card);
+      });
+
+      // Always append the Request card at the end of the grid so it appears for any filter
+      const requestCard = createRequestCard();
+      gameListEl.appendChild(requestCard);
+
+      // ensure the request card visually sits towards the bottom of the page:
+      // if the grid is short, add a small spacer to push the request card down
+      // (we avoid hardcoding large margins so the layout stays responsive)
+      // We'll append a spacer element that grows only when the viewport is taller than content.
+      const spacer = document.createElement('div');
+      spacer.style.flexBasis = '100%';        // force next items to the next "row"
+      spacer.style.height = '0';              // default zero height
+      // If content height is smaller than viewport, add extra height so request card sits lower
+      requestCard.after(spacer);
+      // Slight delay to measure and adjust
+      requestCard.style.marginTop = '0';
+      setTimeout(() => {
+        const rect = gameListEl.getBoundingClientRect();
+        const vpHeight = window.innerHeight;
+        // desired bottom offset (how far from bottom we want the request card): 48px
+        const desiredOffset = 48;
+        // current space below the grid content
+        const spaceBelow = vpHeight - rect.bottom;
+        if (spaceBelow > desiredOffset) {
+          // add extra spacer height to push the request card down
+          const extra = Math.min(spaceBelow - desiredOffset, vpHeight * 0.35); // limit extra
+          spacer.style.height = extra + 'px';
+        } else {
+          spacer.style.height = '0px';
+        }
+      }, 60);
+    }
+
+    renderGames();
+    setActiveCategoryButton("All");
+
+    /* search */
+    document.getElementById('search-input').addEventListener('input', ()=>{
+      const q = document.getElementById('search-input').value.trim().toLowerCase();
+      document.querySelectorAll('.game-card').forEach(c=>{
+        const name = c.textContent.replace('★','').trim().toLowerCase();
+        c.style.display = name.includes(q) ? 'flex' : 'none';
+      });
+    });
+
+    /* full-screen, open/close game iframe and back button */
+    const frameEl = document.getElementById('game-frame');
+    const fullscreenBtn = document.getElementById('fullscreen-btn');
+    const backBtn = document.getElementById('back-btn');
+
+    function openGame(url){
+      // hide decorations while playing
+      setDecorationsVisible(false);
+      // set iframe
+      frameEl.src = url;
+      frameEl.style.display = 'block';
+      fullscreenBtn.style.display = 'block';
+      backBtn.style.display = 'block';
+      // hide grid + top UI to focus on game
+      gameListEl.style.display = 'none';
+      document.getElementById('search-container').style.display = 'none';
+      document.getElementById('category-filter').style.display = 'none';
+      // scroll iframe into view
+      setTimeout(()=>{ try{ frameEl.focus(); frameEl.scrollIntoView({behavior:'smooth'}); }catch(e){} }, 80);
+    }
+
+    function backToGames(){
+      // clear iframe
+      frameEl.src = '';
+      frameEl.style.display = 'none';
+      fullscreenBtn.style.display = 'none';
+      backBtn.style.display = 'none';
+      // show decorations and UI
+      if(document.getElementById('toggle-decor').checked) setDecorationsVisible(true); else setDecorationsVisible(false);
+      gameListEl.style.display = '';
+      document.getElementById('search-container').style.display = '';
+      document.getElementById('category-filter').style.display = '';
+      // reset to All
+      renderGames('All');
+      setActiveCategoryButton('All');
+      document.getElementById('search-input').value = '';
+      document.getElementById('search-container').scrollIntoView({behavior:'smooth'});
+    }
+
+    fullscreenBtn.addEventListener('click', ()=>{
+      if (frameEl.requestFullscreen) frameEl.requestFullscreen();
+      else if (frameEl.webkitRequestFullscreen) frameEl.webkitRequestFullscreen();
+    });
+    backBtn.addEventListener('click', backToGames);
+
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape'){
+        if(frameEl.style.display === 'block') backToGames();
+      }
+    });
+
+    /* settings drawer interactions */
+    const settingsBtn = document.getElementById('settings-btn');
+    const settingsMenu = document.getElementById('settings-menu');
+    const closeSettingsBtn = document.getElementById('close-settings-btn');
+
+    settingsBtn.addEventListener('click', ()=>{ settingsMenu.classList.add('open'); settingsMenu.setAttribute('aria-hidden','false'); });
+    closeSettingsBtn.addEventListener('click', ()=>{ settingsMenu.classList.remove('open'); settingsMenu.setAttribute('aria-hidden','true'); });
+
+    /* toggles in settings */
+    const toggleDecor = document.getElementById('toggle-decor');
+    const toggleAnim = document.getElementById('toggle-anim');
+    const reduceMotion = document.getElementById('reduce-motion');
+    const showFavsOnly = document.getElementById('show-favorites-only');
+
+    // load saved options
+    function loadOptions(){
+      try{
+        const opts = JSON.parse(localStorage.getItem('mlOptions') || "null");
+        if(opts){
+          toggleDecor.checked = opts.toggleDecor ?? true;
+          toggleAnim.checked = opts.toggleAnim ?? true;
+          reduceMotion.checked = opts.reduceMotion ?? false;
+          showFavsOnly.checked = opts.showFavsOnly ?? false;
+          accentBrightness.value = opts.accentBrightness ?? 100;
+        } else {
+          toggleDecor.checked = true;
+          toggleAnim.checked = true;
+          reduceMotion.checked = false;
+          showFavsOnly.checked = false;
+        }
+      }catch(e){}
+      applyOptions();
+    }
+    function saveOptions(){
+      const opts = {
+        toggleDecor: toggleDecor.checked,
+        toggleAnim: toggleAnim.checked,
+        reduceMotion: reduceMotion.checked,
+        showFavsOnly: showFavsOnly.checked,
+        accentBrightness: accentBrightness.value
+      };
+      localStorage.setItem('mlOptions', JSON.stringify(opts));
+    }
+
+    function applyOptions(){
+      // decorations
+      setDecorationsVisible(toggleDecor.checked);
+      // decoration animation
+      decoAnimationEnabled = toggleAnim.checked && !reduceMotion.checked;
+      // background animation toggle
+      if(toggleAnim.checked && !reduceMotion.checked){
+        document.body.style.animationPlayState = 'running';
+        document.body.style.animation = 'moveBackground 18s ease infinite';
+      } else {
+        document.body.style.animation = 'none';
+      }
+      // reduced motion: stop transforms/animations if requested
+      if(reduceMotion.checked){
+        document.body.style.animation = 'none';
+        decoAnimationEnabled = false;
+      } else {
+        if(toggleAnim.checked) decoAnimationEnabled = true;
+      }
+      // show favorites only filter
+      renderGames(currentCategory);
+    }
+
+    // wire up change handlers
+    [toggleDecor, toggleAnim, reduceMotion, showFavsOnly, accentBrightness].forEach(el=>{
+      el.addEventListener('change', ()=>{ applyOptions(); saveOptions(); });
+    });
+
+    // on startup
+    loadOptions();
+
+    // initial: if decorations are disabled, hide them
+    if(!toggleDecor.checked) setDecorationsVisible(false);
+
+    /* Search to show favorites only checkbox effect */
+    showFavsOnly.addEventListener('change', ()=> renderGames(currentCategory));
+
+    /* persist and apply accent brightness value on load */
+    const accentBrightnessVal = parseInt(localStorage.getItem('mlAccentBrightness') || '100', 10);
+    if(!isNaN(accentBrightnessVal)) accentBrightness.value = accentBrightnessVal;
+    accentBrightness.addEventListener('change', ()=>{
+      localStorage.setItem('mlAccentBrightness', accentBrightness.value);
+    });
+
+    /* save options when window unloads */
+    window.addEventListener('beforeunload', ()=>{ saveOptions(); savePalette(); localStorage.setItem('mlAccentBrightness', accentBrightness.value); });
+
+    /* Accessibility: handle reduced motion preference from OS */
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function handleReducedMotionChange(e){
+      if(e.matches){
+        reduceMotion.checked = true;
+        applyOptions();
+      }
+    }
+    if(mediaQuery.addEventListener) mediaQuery.addEventListener('change', handleReducedMotionChange);
+    else if(mediaQuery.addListener) mediaQuery.addListener(handleReducedMotionChange);
+    if(mediaQuery.matches){ reduceMotion.checked = true; applyOptions(); }
+
+    /* make sure decoration animation respects reduce-motion too */
+    (function decorationAutoPause(){
+      if(reduceMotion.checked) decoAnimationEnabled = false;
+      else decoAnimationEnabled = toggleAnim.checked;
+      requestAnimationFrame(decorationAutoPause);
+    })();
+
+    /* Ensure category buttons reflect current selection on initial load */
+    setActiveCategoryButton("All");
+  </script>
 </body>
 </html>
