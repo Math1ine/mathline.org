@@ -174,8 +174,9 @@
       box-shadow: 0 6px 16px rgba(0,0,0,0.4);
     }
     #fullscreen-btn{ right:18px; background:var(--accent); color:#fff; display:none; }
-    #back-btn{ right:120px; background:rgba(0,0,0,0.55); color:#fff; display:none; }
-    /* settings button moved to right side as requested */
+    /* back button moved to left side per your request */
+    #back-btn{ left:18px; background:rgba(0,0,0,0.55); color:#fff; display:none; }
+    /* settings button on right side */
     #settings-btn{ right:72px; background:rgba(255,255,255,0.06); color:var(--accent); font-size:20px; }
 
     /* settings drawer (right side) */
@@ -525,7 +526,6 @@
       requestCard.className = 'game-card request-card';
       requestCard.tabIndex = 0;
       requestCard.title = 'Request a Game';
-      // Use a short label so text size remains consistent with other cards
       const label = document.createElement('div');
       label.textContent = 'Request a Game';
       requestCard.appendChild(label);
@@ -582,27 +582,18 @@
       const requestCard = createRequestCard();
       gameListEl.appendChild(requestCard);
 
-      // ensure the request card visually sits towards the bottom of the page:
-      // if the grid is short, add a small spacer to push the request card down
-      // (we avoid hardcoding large margins so the layout stays responsive)
-      // We'll append a spacer element that grows only when the viewport is taller than content.
+      // ensure the request card visually sits towards the bottom of the page
       const spacer = document.createElement('div');
-      spacer.style.flexBasis = '100%';        // force next items to the next "row"
-      spacer.style.height = '0';              // default zero height
-      // If content height is smaller than viewport, add extra height so request card sits lower
+      spacer.style.flexBasis = '100%';
+      spacer.style.height = '0';
       requestCard.after(spacer);
-      // Slight delay to measure and adjust
-      requestCard.style.marginTop = '0';
       setTimeout(() => {
         const rect = gameListEl.getBoundingClientRect();
         const vpHeight = window.innerHeight;
-        // desired bottom offset (how far from bottom we want the request card): 48px
         const desiredOffset = 48;
-        // current space below the grid content
         const spaceBelow = vpHeight - rect.bottom;
         if (spaceBelow > desiredOffset) {
-          // add extra spacer height to push the request card down
-          const extra = Math.min(spaceBelow - desiredOffset, vpHeight * 0.35); // limit extra
+          const extra = Math.min(spaceBelow - desiredOffset, vpHeight * 0.35);
           spacer.style.height = extra + 'px';
         } else {
           spacer.style.height = '0px';
@@ -626,10 +617,13 @@
     const frameEl = document.getElementById('game-frame');
     const fullscreenBtn = document.getElementById('fullscreen-btn');
     const backBtn = document.getElementById('back-btn');
+    const settingsBtn = document.getElementById('settings-btn');
 
     function openGame(url){
       // hide decorations while playing
       setDecorationsVisible(false);
+      // hide settings button while in a game
+      settingsBtn.style.display = 'none';
       // set iframe
       frameEl.src = url;
       frameEl.style.display = 'block';
@@ -649,7 +643,9 @@
       frameEl.style.display = 'none';
       fullscreenBtn.style.display = 'none';
       backBtn.style.display = 'none';
-      // show decorations and UI
+      // restore settings button (visible on any games list/tab)
+      settingsBtn.style.display = '';
+      // show decorations and UI (respect setting)
       if(document.getElementById('toggle-decor').checked) setDecorationsVisible(true); else setDecorationsVisible(false);
       gameListEl.style.display = '';
       document.getElementById('search-container').style.display = '';
@@ -674,7 +670,6 @@
     });
 
     /* settings drawer interactions */
-    const settingsBtn = document.getElementById('settings-btn');
     const settingsMenu = document.getElementById('settings-menu');
     const closeSettingsBtn = document.getElementById('close-settings-btn');
 
