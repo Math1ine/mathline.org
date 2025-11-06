@@ -442,7 +442,17 @@
 
     
     ];
+// Sort games alphabetically (A–Z) inside each category
+games.sort((a, b) => {
+  // First, sort by category alphabetically
+  if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
+  if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
 
+  // Then, sort by game name alphabetically within the same category
+  return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+});
+
+  
     /* categories */
     const categories=["All","Action","Racing","Sports","Arcade","Puzzle","Simulation","Strategy"];
     const categoryBar = document.getElementById('category-filter');
