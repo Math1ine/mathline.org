@@ -44,6 +44,15 @@
       100% { background-position: 0% 50%; }
     }
 
+    /* Decoration styling */
+    .decoration {
+      position: fixed;
+      pointer-events: none;
+      z-index: 1;
+      user-select: none;
+      transition: opacity 0.3s;
+    }
+
     /* header & top controls */
     header { padding: 20px; text-align: center; z-index: 6; position: relative; }
     header h1 { margin: 0; font-size: 2.6rem; color: var(--bg4); text-shadow: 0 2px 8px rgba(0,0,0,0.45); }
@@ -91,7 +100,7 @@
       transition: transform .12s, filter .12s;
     }
     .category-bar button:hover { filter: brightness(1.05); transform: translateY(-2px); }
-    .category-bar button.active { outline: 3px solid rgba(255,255,255,0.06); }
+    .category-bar button.active { outline: 3px solid rgba(255,255,255,0.3); }
 
     /* game grid */
     #game-list {
@@ -200,6 +209,60 @@
     }
     #settings-menu.open { right: 12px; }
 
+    .settings-section {
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .settings-section h3 {
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: var(--accent);
+    }
+
+    .setting-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .setting-item label {
+      flex: 1;
+    }
+
+    input[type="color"] {
+      width: 50px;
+      height: 30px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      margin-top: 8px;
+    }
+
+    .close-settings {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      width: 100%;
+      margin-top: 16px;
+    }
+
     /* small screens */
     @media (max-width:720px){
       header h1 { font-size: 1.8rem; }
@@ -234,11 +297,61 @@
 
   <!-- Settings drawer -->
   <div id="settings-menu" aria-hidden="true">
-    <!-- Settings content remains as you had it -->
+    <h2>Settings</h2>
+    
+    <div class="settings-section">
+      <h3>Color Palette</h3>
+      <div class="setting-item">
+        <label for="bg1-color">Background 1:</label>
+        <input type="color" id="bg1-color" value="#0b1a0b">
+      </div>
+      <div class="setting-item">
+        <label for="bg2-color">Background 2:</label>
+        <input type="color" id="bg2-color" value="#144d14">
+      </div>
+      <div class="setting-item">
+        <label for="bg3-color">Background 3:</label>
+        <input type="color" id="bg3-color" value="#b30000">
+      </div>
+      <div class="setting-item">
+        <label for="bg4-color">Background 4:</label>
+        <input type="color" id="bg4-color" value="#fffafa">
+      </div>
+      <div class="setting-item">
+        <label for="accent-color">Accent Color:</label>
+        <input type="color" id="accent-color" value="#ffcc00">
+      </div>
+      <div class="setting-item">
+        <label for="accent-brightness">Accent Brightness:</label>
+      </div>
+      <input type="range" id="accent-brightness" min="50" max="150" value="100">
+    </div>
+
+    <div class="settings-section">
+      <h3>Display Options</h3>
+      <div class="setting-item">
+        <label for="toggle-decor">Show Decorations:</label>
+        <input type="checkbox" id="toggle-decor" checked>
+      </div>
+      <div class="setting-item">
+        <label for="toggle-anim">Enable Animations:</label>
+        <input type="checkbox" id="toggle-anim" checked>
+      </div>
+      <div class="setting-item">
+        <label for="reduce-motion">Reduce Motion:</label>
+        <input type="checkbox" id="reduce-motion">
+      </div>
+      <div class="setting-item">
+        <label for="show-favorites-only">Favorites Only:</label>
+        <input type="checkbox" id="show-favorites-only">
+      </div>
+    </div>
+
+    <button id="close-settings-btn" class="close-settings">Close Settings</button>
   </div>
 
-  <!-- Decorations & Scripts -->
   <script>
+    // Initialize CSS variables
     document.documentElement.style.setProperty('--bg1', '#0b1a0b');
     document.documentElement.style.setProperty('--bg2', '#144d14');
     document.documentElement.style.setProperty('--bg3', '#b30000');
@@ -294,14 +407,8 @@
     function setDecorationsVisible(visible){
       decorations.forEach(d => d.style.display = visible ? '' : 'none');
     }
-  </script>
-</body>
-</html>
 
-
-    /* ============================
-       Game data + UI logic
-       ============================ */
+    /* Game data */
     const games=[
       {name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
       {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
@@ -387,19 +494,15 @@
       {name:"Space Waves",url:"Space-waves.html",category:"Arcade"},
       {name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
       {name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
-
     ];
-// Sort games alphabetically (A–Z) inside each category
-games.sort((a, b) => {
-  // First, sort by category alphabetically
-  if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
-  if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
 
-  // Then, sort by game name alphabetically within the same category
-  return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
-});
+    // Sort games alphabetically
+    games.sort((a, b) => {
+      if (a.category.toLowerCase() < b.category.toLowerCase()) return -1;
+      if (a.category.toLowerCase() > b.category.toLowerCase()) return 1;
+      return a.name.toLowerCase().localeCompare(b.name.toLowerCase());
+    });
 
-  
     /* categories */
     const categories=["All","Action","Racing","Sports","Arcade","Puzzle","Simulation","Strategy"];
     const categoryBar = document.getElementById('category-filter');
@@ -456,9 +559,7 @@ games.sort((a, b) => {
       document.documentElement.style.setProperty('--accent', accent.value);
     }
     [bg1,bg2,bg3,bg4,accent].forEach(i=>{
-      i.addEventListener('input', ()=>{
-        applyPalette();
-      });
+      i.addEventListener('input', ()=>{ applyPalette(); });
       i.addEventListener('change', savePalette);
     });
     loadPalette();
@@ -491,263 +592,4 @@ games.sort((a, b) => {
 
     function createRequestCard(){
       const requestCard = document.createElement('div');
-      requestCard.className = 'game-card request-card';
-      requestCard.tabIndex = 0;
-      requestCard.title = 'Request a Game';
-      const label = document.createElement('div');
-      label.textContent = 'Request a Game';
-      requestCard.appendChild(label);
-      requestCard.addEventListener('click', ()=> window.open(REQUEST_FORM_URL, '_blank'));
-      requestCard.addEventListener('keydown', (ev)=>{ if(ev.key==='Enter' || ev.key===' ') { ev.preventDefault(); requestCard.click(); } });
-      return requestCard;
-    }
-
-    function renderGames(filter="All"){
-      gameListEl.innerHTML = '';
-
-      let display = (filter === "All") ? games.slice() : games.filter(g => g.category === filter);
-
-      // Optionally apply "favorites only" filter
-      const showFavsOnly = document.getElementById('show-favorites-only').checked;
-      if(showFavsOnly){
-        display = display.filter(d => favorites.includes(d.name));
-      }
-
-      display.forEach(g=>{
-        const card = document.createElement('div');
-        card.className = 'game-card';
-        card.tabIndex = 0;
-
-        const star = document.createElement('div');
-        star.className = 'star' + (favorites.includes(g.name) ? ' favorited' : '');
-        star.textContent = '★';
-        star.title = favorites.includes(g.name) ? 'Unfavorite' : 'Favorite';
-        star.setAttribute('role','button');
-        star.setAttribute('aria-label', star.title);
-
-        const nameSpan = document.createElement('div');
-        nameSpan.textContent = g.name;
-
-        card.appendChild(star);
-        card.appendChild(nameSpan);
-
-        card.addEventListener('click', ()=> openGame(g.url));
-        card.addEventListener('keydown', (ev)=>{
-          if(ev.key === 'Enter' || ev.key === ' '){ ev.preventDefault(); card.click(); }
-        });
-
-        star.addEventListener('click', (e)=>{
-          e.stopPropagation();
-          if(favorites.includes(g.name)) favorites = favorites.filter(f=>f!==g.name); else favorites.push(g.name);
-          saveFavorites();
-          renderGames(filter);
-        });
-
-        gameListEl.appendChild(card);
-      });
-
-      // Always append the Request card at the end of the grid so it appears for any filter
-      const requestCard = createRequestCard();
-      gameListEl.appendChild(requestCard);
-
-      // ensure the request card visually sits towards the bottom of the page
-      const spacer = document.createElement('div');
-      spacer.style.flexBasis = '100%';
-      spacer.style.height = '0';
-      requestCard.after(spacer);
-      setTimeout(() => {
-        const rect = gameListEl.getBoundingClientRect();
-        const vpHeight = window.innerHeight;
-        const desiredOffset = 48;
-        const spaceBelow = vpHeight - rect.bottom;
-        if (spaceBelow > desiredOffset) {
-          const extra = Math.min(spaceBelow - desiredOffset, vpHeight * 0.35);
-          spacer.style.height = extra + 'px';
-        } else {
-          spacer.style.height = '0px';
-        }
-      }, 60);
-    }
-
-    renderGames();
-    setActiveCategoryButton("All");
-
-    /* search */
-    document.getElementById('search-input').addEventListener('input', ()=>{
-      const q = document.getElementById('search-input').value.trim().toLowerCase();
-      document.querySelectorAll('.game-card').forEach(c=>{
-        const name = c.textContent.replace('★','').trim().toLowerCase();
-        c.style.display = name.includes(q) ? 'flex' : 'none';
-      });
-    });
-
-    /* full-screen, open/close game iframe and back button */
-    const frameEl = document.getElementById('game-frame');
-    const fullscreenBtn = document.getElementById('fullscreen-btn');
-    const backBtn = document.getElementById('back-btn');
-    const settingsBtn = document.getElementById('settings-btn');
-
-    function openGame(url){
-      // hide decorations while playing
-      setDecorationsVisible(false);
-      // hide settings button while in a game
-      settingsBtn.style.display = 'none';
-      // set iframe
-      frameEl.src = url;
-      frameEl.style.display = 'block';
-      fullscreenBtn.style.display = 'block';
-      backBtn.style.display = 'block';
-      // hide grid + top UI to focus on game
-      gameListEl.style.display = 'none';
-      document.getElementById('search-container').style.display = 'none';
-      document.getElementById('category-filter').style.display = 'none';
-      // scroll iframe into view
-      setTimeout(()=>{ try{ frameEl.focus(); frameEl.scrollIntoView({behavior:'smooth'}); }catch(e){} }, 80);
-    }
-
-    function backToGames(){
-      // clear iframe
-      frameEl.src = '';
-      frameEl.style.display = 'none';
-      fullscreenBtn.style.display = 'none';
-      backBtn.style.display = 'none';
-      // restore settings button (visible on any games list/tab)
-      settingsBtn.style.display = '';
-      // show decorations and UI (respect setting)
-      if(document.getElementById('toggle-decor').checked) setDecorationsVisible(true); else setDecorationsVisible(false);
-      gameListEl.style.display = '';
-      document.getElementById('search-container').style.display = '';
-      document.getElementById('category-filter').style.display = '';
-      // reset to All
-      renderGames('All');
-      setActiveCategoryButton('All');
-      document.getElementById('search-input').value = '';
-      document.getElementById('search-container').scrollIntoView({behavior:'smooth'});
-    }
-
-    fullscreenBtn.addEventListener('click', ()=>{
-      if (frameEl.requestFullscreen) frameEl.requestFullscreen();
-      else if (frameEl.webkitRequestFullscreen) frameEl.webkitRequestFullscreen();
-    });
-    backBtn.addEventListener('click', backToGames);
-
-    document.addEventListener('keydown', (e)=>{
-      if(e.key === 'Escape'){
-        if(frameEl.style.display === 'block') backToGames();
-      }
-    });
-
-    /* settings drawer interactions */
-    const settingsMenu = document.getElementById('settings-menu');
-    const closeSettingsBtn = document.getElementById('close-settings-btn');
-
-    settingsBtn.addEventListener('click', ()=>{ settingsMenu.classList.add('open'); settingsMenu.setAttribute('aria-hidden','false'); });
-    closeSettingsBtn.addEventListener('click', ()=>{ settingsMenu.classList.remove('open'); settingsMenu.setAttribute('aria-hidden','true'); });
-
-    /* toggles in settings */
-    const toggleDecor = document.getElementById('toggle-decor');
-    const toggleAnim = document.getElementById('toggle-anim');
-    const reduceMotion = document.getElementById('reduce-motion');
-    const showFavsOnly = document.getElementById('show-favorites-only');
-
-    // load saved options
-    function loadOptions(){
-      try{
-        const opts = JSON.parse(localStorage.getItem('mlOptions') || "null");
-        if(opts){
-          toggleDecor.checked = opts.toggleDecor ?? true;
-          toggleAnim.checked = opts.toggleAnim ?? true;
-          reduceMotion.checked = opts.reduceMotion ?? false;
-          showFavsOnly.checked = opts.showFavsOnly ?? false;
-          accentBrightness.value = opts.accentBrightness ?? 100;
-        } else {
-          toggleDecor.checked = true;
-          toggleAnim.checked = true;
-          reduceMotion.checked = false;
-          showFavsOnly.checked = false;
-        }
-      }catch(e){}
-      applyOptions();
-    }
-    function saveOptions(){
-      const opts = {
-        toggleDecor: toggleDecor.checked,
-        toggleAnim: toggleAnim.checked,
-        reduceMotion: reduceMotion.checked,
-        showFavsOnly: showFavsOnly.checked,
-        accentBrightness: accentBrightness.value
-      };
-      localStorage.setItem('mlOptions', JSON.stringify(opts));
-    }
-
-    function applyOptions(){
-      // decorations
-      setDecorationsVisible(toggleDecor.checked);
-      // decoration animation
-      decoAnimationEnabled = toggleAnim.checked && !reduceMotion.checked;
-      // background animation toggle
-      if(toggleAnim.checked && !reduceMotion.checked){
-        document.body.style.animationPlayState = 'running';
-        document.body.style.animation = 'moveBackground 18s ease infinite';
-      } else {
-        document.body.style.animation = 'none';
-      }
-      // reduced motion: stop transforms/animations if requested
-      if(reduceMotion.checked){
-        document.body.style.animation = 'none';
-        decoAnimationEnabled = false;
-      } else {
-        if(toggleAnim.checked) decoAnimationEnabled = true;
-      }
-      // show favorites only filter
-      renderGames(currentCategory);
-    }
-
-    // wire up change handlers
-    [toggleDecor, toggleAnim, reduceMotion, showFavsOnly, accentBrightness].forEach(el=>{
-      el.addEventListener('change', ()=>{ applyOptions(); saveOptions(); });
-    });
-
-    // on startup
-    loadOptions();
-
-    // initial: if decorations are disabled, hide them
-    if(!toggleDecor.checked) setDecorationsVisible(false);
-
-    /* Search to show favorites only checkbox effect */
-    showFavsOnly.addEventListener('change', ()=> renderGames(currentCategory));
-
-    /* persist and apply accent brightness value on load */
-    const accentBrightnessVal = parseInt(localStorage.getItem('mlAccentBrightness') || '100', 10);
-    if(!isNaN(accentBrightnessVal)) accentBrightness.value = accentBrightnessVal;
-    accentBrightness.addEventListener('change', ()=>{
-      localStorage.setItem('mlAccentBrightness', accentBrightness.value);
-    });
-
-    /* save options when window unloads */
-    window.addEventListener('beforeunload', ()=>{ saveOptions(); savePalette(); localStorage.setItem('mlAccentBrightness', accentBrightness.value); });
-
-    /* Accessibility: handle reduced motion preference from OS */
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    function handleReducedMotionChange(e){
-      if(e.matches){
-        reduceMotion.checked = true;
-        applyOptions();
-      }
-    }
-    if(mediaQuery.addEventListener) mediaQuery.addEventListener('change', handleReducedMotionChange);
-    else if(mediaQuery.addListener) mediaQuery.addListener(handleReducedMotionChange);
-    if(mediaQuery.matches){ reduceMotion.checked = true; applyOptions(); }
-
-    /* make sure decoration animation respects reduce-motion too */
-    (function decorationAutoPause(){
-      if(reduceMotion.checked) decoAnimationEnabled = false;
-      else decoAnimationEnabled = toggleAnim.checked;
-      requestAnimationFrame(decorationAutoPause);
-    })();
-
-    /* Ensure category buttons reflect current selection on initial load */
-    setActiveCategoryButton("All");
-  </script>
-</body>
-</html>
+      requestCard.className
