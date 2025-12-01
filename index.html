@@ -226,12 +226,16 @@
       /* small responsive fallback for card-size only for narrow screens */
       :root{ --card-size:140px; }
     }
-  </style>
-</head>
-<body>
-
-  <header><h1>Math Line</h1></header>
-
+ <script>
+    document.documentElement.style.setProperty('--bg1', '#0b1a0b');
+    document.documentElement.style.setProperty('--bg2', '#144d14');
+    document.documentElement.style.setProperty('--bg3', '#b30000');
+    document.documentElement.style.setProperty('--bg4', '#fffafa');
+    document.documentElement.style.setProperty('--accent', '#ffcc00');
+    document.documentElement.style.setProperty('--text-color', '#ffffff');
+  </script>
+</body>
+</html>
   <div class="top-controls">
     <div id="search-container">
       <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
