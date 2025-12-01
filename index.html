@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Math Line</title>
+<title>Math Line - Christmas</title>
 <style>
 :root {
   --bg1: #0b1a0b;
@@ -16,173 +16,253 @@
   --card-radius: 12px;
 }
 
+/* Body & animated background */
 html, body {
-  margin: 0; padding: 0; font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
   color: var(--text-color);
   background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
   background-size: 400% 400%;
   animation: moveBackground 18s ease infinite;
   overflow-x: hidden;
+  position: relative;
 }
-
 @keyframes moveBackground {
   0% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
   100% { background-position: 0% 50%; }
 }
 
-/* Decorations */
-.decoration {
-  position: fixed;
-  pointer-events: none;
-  z-index: 1;
-  user-select: none;
-}
-
 /* Header */
-header { padding: 20px; text-align: center; position: relative; z-index: 6; }
-header h1 { margin: 0; font-size: 2.6rem; color: var(--bg4); text-shadow: 0 2px 8px rgba(0,0,0,0.45); }
+header {
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  z-index: 5;
+}
+header h1 {
+  margin: 0;
+  font-size: 2.6rem;
+  color: var(--bg4);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+}
 
-/* String Lights */
-#string-lights {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 40px;
-  pointer-events: none;
+/* Top search & categories */
+.top-controls {
   display: flex;
-  justify-content: space-around;
-  z-index: 2;
+  justify-content: center;
+  padding: 0 12px;
+  z-index: 5;
 }
-.light {
-  width: 12px; height: 12px; border-radius: 50%;
-  background-color: red;
-  box-shadow: 0 0 6px rgba(255,255,0,0.8);
-  animation: glow 1.2s infinite alternate;
-}
-.light:nth-child(2n) { background-color: green; }
-.light:nth-child(3n) { background-color: yellow; }
-@keyframes glow { 0% { opacity: 0.4; } 100% { opacity: 1; } }
-
-/* Top controls */
-.top-controls { display: flex; justify-content: center; margin-bottom: 8px; position: relative; z-index: 6; }
 #search-input {
   background: rgba(20,77,20,0.6);
   color: var(--text-color);
-  width: 100%; max-width: 520px;
+  width: 100%;
+  max-width: 520px;
   padding: 8px 12px;
   font-size: 15px;
   border-radius: 8px;
   border: 2px solid rgba(255,255,255,0.06);
   outline: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
 }
+.category-bar {
+  text-align: center;
+  margin: 6px 0 12px;
+  z-index: 5;
+}
+.category-bar button {
+  margin: 4px 6px;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  transition: transform .12s, filter .12s;
+}
+.category-bar button:hover { filter: brightness(1.05); transform: translateY(-2px); }
+.category-bar button.active { outline: 3px solid rgba(255,255,255,0.06); }
 
-/* Game Grid */
+/* Game grid */
 #game-list {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 15px; padding: 18px; position: relative; z-index: 6;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  padding: 18px;
+  position: relative;
+  z-index: 5;
 }
 .game-card {
-  position: relative; width: var(--card-size); height: var(--card-size);
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(10,8,6,0.45); border: 2px solid rgba(0,0,0,0.25);
-  border-radius: var(--card-radius); cursor: pointer; color: var(--bg4);
-  font-weight: 800; text-align: center; padding: 8px;
+  position: relative;
+  width: var(--card-size);
+  height: var(--card-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10,8,6,0.45);
+  border: 2px solid rgba(0,0,0,0.25);
+  border-radius: var(--card-radius);
+  cursor: pointer;
+  color: var(--bg4);
+  font-weight: 800;
+  text-align: center;
+  padding: 8px;
   box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  user-select: none;
   transition: transform .14s ease, box-shadow .14s ease;
 }
 .game-card:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(0,0,0,0.55); }
+.star {
+  position: absolute;
+  top: 8px; right: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 8;
+  color: var(--accent);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+.star.favorited { color: #ffd36b; text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
 
-/* iframe */
+/* Iframe */
 #game-frame {
-  display: none; width: 95%; max-width: 1200px; height: 680px;
-  margin: 12px auto; border: none; border-radius: 12px; background: #000;
-  position: relative; z-index: 6; box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+  display: none;
+  width: 95%;
+  max-width: 1200px;
+  height: 680px;
+  margin: 12px auto;
+  border: none;
+  border-radius: 12px;
+  background: #000;
+  position: relative;
+  z-index: 6;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 }
 
 /* Floating buttons */
 .floating-btn {
-  position: fixed; padding: 8px 12px; border-radius: 8px; border: none; cursor: pointer;
-  z-index: 12; font-weight: 700; box-shadow: 0 6px 16px rgba(0,0,0,0.4); color: #fff;
+  position: fixed;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  z-index: 12;
+  font-weight: 700;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 }
-#fullscreen-btn { top: 18px; right: 18px; background: var(--accent); display: none; }
-#back-btn { top: 18px; left: 18px; background: rgba(0,0,0,0.55); display: none; }
+#fullscreen-btn { right: 18px; top: 18px; background: var(--accent); color: #fff; display: none; }
+#back-btn { left: 18px; top: 18px; background: rgba(0,0,0,0.55); color: #fff; display: none; }
+
+/* Decorations (falling emojis) */
+.decoration {
+  position: fixed;
+  pointer-events: none;
+  z-index: 3;
+  user-select: none;
+}
+
+/* String lights */
+#lights-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  pointer-events: none;
+  z-index: 4;
+}
+.light {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  box-shadow: 0 0 8px rgba(255,255,255,0.8);
+  animation: glow 1.5s infinite alternate;
+}
+@keyframes glow {
+  0% { opacity: 0.4; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
+  100% { opacity: 0.4; transform: scale(0.8); }
+}
+
+/* Responsive */
+@media (max-width:720px){
+  :root { --card-size: 140px; }
+  #game-frame { height: 480px; }
+}
 </style>
 </head>
 <body>
-<header>
-  <h1>Math Line</h1>
-  <div id="string-lights"></div>
-</header>
+<header><h1>Math Line 🎄</h1></header>
 
 <div class="top-controls">
   <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
 </div>
+<div class="category-bar" id="category-filter"></div>
+<div id="game-list" aria-live="polite"></div>
 
-<div id="game-list"></div>
+<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-<iframe id="game-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
+<button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
 
-<button id="fullscreen-btn" class="floating-btn">Fullscreen</button>
-<button id="back-btn" class="floating-btn">← Back</button>
+<!-- Decorations -->
+<div id="lights-container"></div>
 
 <script>
-// ================= Decorations =================
-const DECO_EMOJIS = ["❄️","🎄","🎅","⛄","🦌","🌟"];
-let decorations = [];
-const DECO_COUNT = 25;
-
-function createDecorations() {
-  document.querySelectorAll('.decoration').forEach(n => n.remove());
-  decorations = [];
-  for (let i = 0; i < DECO_COUNT; i++) {
-    const d = document.createElement('div');
-    d.className = 'decoration';
-    d.textContent = DECO_EMOJIS[Math.floor(Math.random() * DECO_EMOJIS.length)];
-    d.style.left = (Math.random() * 110 - 5) + 'vw';
-    d.style.top = (Math.random() * 110 - 5) + 'vh';
-    d.style.fontSize = (16 + Math.random()*36) + 'px';
-    d.style.opacity = (0.4 + Math.random()*0.6);
-    d.dataset.vy = (0.02 + Math.random()*0.12);
-    d.dataset.vx = ((Math.random()-0.5)*0.04);
-    decorations.push(d);
-    document.body.appendChild(d);
-  }
+// ===================== Decorations =====================
+const DECO_EMOJIS = ["🎄","❄️","🎁","⛄","🌟","🍬"];
+const DECO_COUNT = 32;
+let decorations=[];
+for(let i=0;i<DECO_COUNT;i++){
+  const d=document.createElement('div');
+  d.className='decoration';
+  d.textContent=DECO_EMOJIS[Math.floor(Math.random()*DECO_EMOJIS.length)];
+  d.style.left=(Math.random()*110-5)+'vw';
+  d.style.top=(Math.random()*110-5)+'vh';
+  d.style.fontSize=(16+Math.random()*36)+'px';
+  d.style.opacity=(0.45+Math.random()*0.55).toString();
+  d.dataset.vy=(0.02+Math.random()*0.12).toString();
+  d.dataset.vx=((Math.random()-0.5)*0.04).toString();
+  decorations.push(d);
+  document.body.appendChild(d);
 }
-createDecorations();
-
-function animateDecorations() {
-  decorations.forEach(d => {
-    let top = parseFloat(d.style.top), left = parseFloat(d.style.left);
-    top += parseFloat(d.dataset.vy); left += parseFloat(d.dataset.vx);
-    if(top>105) top=-5; if(top<-10) top=100;
-    if(left>105) left=-5; if(left<-10) left=100;
-    d.style.top=top+'vh'; d.style.left=left+'vw';
-    d.style.transform = `rotate(${Math.sin((top+left)*0.1)*10}deg)`;
+function animateDecorations(){
+  decorations.forEach(d=>{
+    let top=parseFloat(d.style.top||'0')+parseFloat(d.dataset.vy)*1.1;
+    let left=parseFloat(d.style.left||'0')+parseFloat(d.dataset.vx)*1.1;
+    if(top>105) top=-5;
+    if(top<-10) top=100;
+    if(left>105) left=-5;
+    if(left<-10) left=100;
+    d.style.top=top+'vh';
+    d.style.left=left+'vw';
+    d.style.transform=`rotate(${Math.sin((top+left)*0.1)*10}deg)`;
   });
   requestAnimationFrame(animateDecorations);
 }
 requestAnimationFrame(animateDecorations);
 
-// ================= String Lights =================
-const stringLightsEl = document.getElementById('string-lights');
-const LIGHT_COUNT = 30;
+// ===================== String lights =====================
+const COLORS=["#ff0000","#00ff00","#ffff00","#00ffff","#ff00ff","#ffa500"];
+const LIGHT_COUNT=40;
+const lightsContainer=document.getElementById('lights-container');
 for(let i=0;i<LIGHT_COUNT;i++){
-  const light = document.createElement('div');
-  light.className='light';
-  stringLightsEl.appendChild(light);
+  const bulb=document.createElement('div');
+  bulb.className='light';
+  const t=i/(LIGHT_COUNT-1)*Math.PI;
+  bulb.style.left=(5+90*(i/(LIGHT_COUNT-1)))+'%';
+  bulb.style.top=(10+10*Math.sin(t))+'%';
+  bulb.style.backgroundColor=COLORS[i%COLORS.length];
+  bulb.style.animationDelay=(Math.random()*2)+'s';
+  lightsContainer.appendChild(bulb);
 }
 
-let lastScroll = 0;
-window.addEventListener('scroll', ()=>{
-  const current = window.scrollY;
-  if(current>lastScroll) stringLightsEl.style.display='none';
-  else stringLightsEl.style.display='flex';
-  lastScroll=current;
-});
-
-// ================= Games =================
+// ===================== Games =====================
 const games=[
   {name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
       {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
@@ -269,50 +349,41 @@ const games=[
       {name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
       {name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
   {name: "Request a Game", url: "#", category: "Request", request: true}
-  {name:"Request a Game", url:"#", category:"Request", request:true}
 ];
 
-const gameListEl = document.getElementById('game-list');
-const gameFrame = document.getElementById('game-frame');
-const fullscreenBtn = document.getElementById('fullscreen-btn');
-const backBtn = document.getElementById('back-btn');
+const gameListEl=document.getElementById('game-list');
+const iframe=document.getElementById('game-frame');
+const backBtn=document.getElementById('back-btn');
+const fullscreenBtn=document.getElementById('fullscreen-btn');
 
-function renderGames(filter='') {
-  gameListEl.innerHTML='';
-  games.filter(g=>g.name.toLowerCase().includes(filter.toLowerCase())).forEach(g=>{
-    const card=document.createElement('div');
-    card.className='game-card';
-    card.textContent=g.name;
-    card.onclick=()=>{
-      if(g.request) alert('Request your game!');
-      else {
-        gameFrame.src=g.url;
-        gameFrame.style.display='block';
-        fullscreenBtn.style.display='block';
-        backBtn.style.display='block';
-        window.scrollTo({top:gameFrame.offsetTop,behavior:'smooth'});
-      }
-    };
-    gameListEl.appendChild(card);
+games.forEach(g=>{
+  const card=document.createElement('div');
+  card.className='game-card';
+  card.textContent=g.name;
+  card.addEventListener('click',()=>{
+    if(g.request) alert('Request form coming soon!');
+    else{
+      gameListEl.style.display='none';
+      iframe.style.display='block';
+      iframe.src=g.url;
+      backBtn.style.display='block';
+      fullscreenBtn.style.display='block';
+    }
   });
-}
-
-renderGames();
-document.getElementById('search-input').addEventListener('input',(e)=>{
-  renderGames(e.target.value);
+  gameListEl.appendChild(card);
 });
 
-// ================= Fullscreen & Back =================
-fullscreenBtn.addEventListener('click', ()=>{ 
-  if(gameFrame.requestFullscreen) gameFrame.requestFullscreen();
-});
-
-backBtn.addEventListener('click', ()=>{
-  gameFrame.style.display='none';
-  fullscreenBtn.style.display='none';
+// ===================== Back & Fullscreen =====================
+backBtn.addEventListener('click',()=>{
+  iframe.style.display='none';
+  iframe.src='';
+  gameListEl.style.display='flex';
   backBtn.style.display='none';
-  gameFrame.src='';
-  window.scrollTo({top:0, behavior:'smooth'});
+  fullscreenBtn.style.display='none';
+});
+fullscreenBtn.addEventListener('click',()=>{
+  if(iframe.requestFullscreen) iframe.requestFullscreen();
+  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
 });
 </script>
 </body>
