@@ -1,31 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Math Line</title>
-  <style>
-   :root {
-  /* ===== Christmas Palette ===== */
-  --bg1: #0b1a0b;      /* Dark green background */
-  --bg2: #144d14;      /* Lighter green for cards/menus */
-  --bg3: #b30000;      /* Festive red accent */
-  --bg4: #fffafa;      /* Snow white for cards/text */
-  --accent: #ffcc00;   /* Golden highlight for buttons/borders */
-  --text-color: #ffffff; /* Main text color */
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Math Line</title>
+<style>
+:root {
+  /* Christmas Palette */
+  --bg1: #0b1a0b;
+  --bg2: #144d14;
+  --bg3: #b30000;
+  --bg4: #fffafa;
+  --accent: #ffcc00;
+  --text-color: #ffffff;
 
-  /* ===== Card settings (keep original) ===== */
-  --card-size: 180px;  
+  --card-size: 180px;
   --card-radius: 12px;
-    }
+}
 
-    /* layout and optimized animated background (prevents seam when scrolling) */
-    html,body{height:100%;}
-    body{
-       margin:0;
-  padding:0;
-  font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--text-color);
+/* Layout & Background */
+html, body { height:100%; margin:0; padding:0; font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; color: var(--text-color); }
+body {
   background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
   background-size: 400% 400%;
   background-repeat: no-repeat;
@@ -33,34 +28,20 @@
   animation: moveBackground 18s ease infinite;
   overflow-x:hidden;
   position:relative;
-  will-change: background-position, transform;
-  -webkit-backface-visibility: hidden;
-  backface-visibility: hidden;
-    }
-    @keyframes moveBackground{
-      0%{background-position:0% 50%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 50%;}
-    }
+}
+@keyframes moveBackground{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
 
-    /* header & top controls */
-    header{padding:20px;text-align:center;z-index:6;position:relative;}
-    header h1{margin:0;font-size:2.6rem;color:var(--bg4);text-shadow:0 2px 8px rgba(0,0,0,0.45);}
-
-    .top-controls{
-      display:flex;
-      gap:8px;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:8px;
-      padding:0 12px;
-      position:relative;
-      z-index:6;
-    }
-
-    #search-container{flex:1;max-width:720px;text-align:center;}
-    #search-input{
-  background: rgba(20,77,20,0.6); /* matches --bg2 */
+/* Header & Controls */
+header{padding:20px;text-align:center;z-index:6;position:relative;}
+header h1{margin:0;font-size:2.6rem;color:var(--bg4);text-shadow:0 2px 8px rgba(0,0,0,0.45);}
+.top-controls{display:flex;gap:8px;align-items:center;justify-content:center;margin-bottom:8px;padding:0 12px;position:relative;z-index:6;}
+#search-container{flex:1;max-width:720px;text-align:center;}
+#search-input{
+  background: rgba(20,77,20,0.6);
   color: var(--text-color);
   width:100%;
   max-width:520px;
@@ -70,275 +51,216 @@
   border:2px solid rgba(255,255,255,0.06);
   outline:none;
   box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-    }
+}
 
-    .category-bar{ text-align:center; margin:6px 0 12px; z-index:6; position:relative; }
-    .category-bar button{
-      margin:4px 6px;
-      padding:6px 12px;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      background:var(--accent);
-      color:#fff;
-      font-weight:700;
-      transition:transform .12s, filter .12s;
-    }
-    .category-bar button:hover{ filter:brightness(1.05); transform:translateY(-2px); }
-    .category-bar button.active{ outline:3px solid rgba(255,255,255,0.06); }
+/* Category bar */
+.category-bar{ text-align:center; margin:6px 0 12px; z-index:6; position:relative; }
+.category-bar button{
+  margin:4px 6px;
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  transition:transform .12s, filter .12s;
+}
+.category-bar button:hover{ filter:brightness(1.05); transform:translateY(-2px); }
+.category-bar button.active{ outline:3px solid rgba(255,255,255,0.06); }
 
-    /* game grid */
-    #game-list{
-      display:flex;
-      flex-wrap:wrap;
-      justify-content:center;
-      gap:15px;
-      padding:18px;
-      position:relative;
-      z-index:6;
-    }
-    .game-card{
-      position:relative;
-      width:var(--card-size);
-      height:var(--card-size);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background: rgba(10,8,6,0.45);
-      border:2px solid rgba(0,0,0,0.25);
-      border-radius:var(--card-radius);
-      cursor:pointer;
-      color:var(--bg4);
-      font-weight:800;
-      text-align:center;
-      padding:8px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-      user-select:none;
-      transition: transform .14s ease, box-shadow .14s ease;
-    }
-    .game-card:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(0,0,0,0.55); }
+/* Game grid */
+#game-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:15px;
+  padding:18px;
+  position:relative;
+  z-index:6;
+}
+.game-card{
+  position:relative;
+  width:var(--card-size);
+  height:var(--card-size);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background: rgba(10,8,6,0.45);
+  border:2px solid rgba(0,0,0,0.25);
+  border-radius:var(--card-radius);
+  cursor:pointer;
+  color:var(--bg4);
+  font-weight:800;
+  text-align:center;
+  padding:8px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
+  user-select:none;
+  transition: transform .14s ease, box-shadow .14s ease;
+}
+.game-card:hover{ transform: translateY(-6px) scale(1.02); box-shadow: 0 18px 36px rgba(0,0,0,0.55); }
 
-    /* star favorite */
-    .star{
-      position:absolute; top:8px; right:8px;
-      font-size:18px; cursor:pointer; z-index:8;
-      color:var(--accent);
-      text-shadow:0 1px 6px rgba(0,0,0,0.5);
-    }
-    .star.favorited{ color: #ffd36b; text-shadow:0 1px 8px rgba(0,0,0,0.6); }
+/* Favorite star */
+.star{position:absolute;top:8px;right:8px;font-size:18px;cursor:pointer;z-index:8;color:var(--accent);text-shadow:0 1px 6px rgba(0,0,0,0.5);}
+.star.favorited{ color: #ffd36b; text-shadow:0 1px 8px rgba(0,0,0,0.6); }
 
-    /* special "request a game" card styling (glow) */
-    .request-card{
-      border-color: rgba(255,200,110,0.9);
-      background: linear-gradient(180deg, rgba(255,238,210,0.06), rgba(255,238,210,0.02));
-      color: #fff;
-      box-shadow:
-        0 0 12px rgba(179,89,0,0.12),
-        0 0 28px rgba(179,89,0,0.10),
-        inset 0 1px 0 rgba(255,255,255,0.02);
-      animation: glowPulse 2.8s ease-in-out infinite;
-      outline: 3px solid rgba(255,200,110,0.06);
-    }
-    @keyframes glowPulse{
-      0%{ box-shadow: 0 0 8px rgba(179,89,0,0.08), 0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
-      50%{ box-shadow: 0 0 18px rgba(179,89,0,0.22), 0 0 36px rgba(179,89,0,0.12); transform:translateY(-4px); }
-      100%{ box-shadow: 0 0 8px rgba(179,89,0,0.08), 0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
-    }
+/* Request card glow */
+.request-card{
+  border-color: rgba(255,200,110,0.9);
+  background: linear-gradient(180deg, rgba(255,238,210,0.06), rgba(255,238,210,0.02));
+  color: #fff;
+  box-shadow: 0 0 12px rgba(179,89,0,0.12), 0 0 28px rgba(179,89,0,0.10), inset 0 1px 0 rgba(255,255,255,0.02);
+  animation: glowPulse 2.8s ease-in-out infinite;
+  outline: 3px solid rgba(255,200,110,0.06);
+}
+@keyframes glowPulse{
+  0%{ box-shadow: 0 0 8px rgba(179,89,0,0.08),0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
+  50%{ box-shadow: 0 0 18px rgba(179,89,0,0.22),0 0 36px rgba(179,89,0,0.12); transform:translateY(-4px); }
+  100%{ box-shadow: 0 0 8px rgba(179,89,0,0.08),0 0 20px rgba(179,89,0,0.06); transform:translateY(0); }
+}
 
-    /* iframe game frame */
-    #game-frame{
-      display:none;
-      width:95%;
-      max-width:1200px;
-      height:680px;
-      margin:12px auto;
-      border:none;
-      border-radius:12px;
-      background:#000;
-      position:relative;
-      z-index:6;
-      box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-    }
+/* Iframe game frame */
+#game-frame{
+  display:none;
+  width:95%;
+  max-width:1200px;
+  height:680px;
+  margin:12px auto;
+  border:none;
+  border-radius:12px;
+  background:#000;
+  position:relative;
+  z-index:6;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
+}
 
-    /* floating buttons */
-    .floating-btn{
-      position:fixed;
-      top:18px;
-      padding:8px 12px;
-      border-radius:8px;
-      border:none;
-      cursor:pointer;
-      z-index:12;
-      font-weight:700;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-    }
-    #fullscreen-btn{ right:18px; background:var(--accent); color:#fff; display:none; }
-    /* back button moved to left side per your request */
-    #back-btn{ left:18px; background:rgba(0,0,0,0.55); color:#fff; display:none; }
-    /* settings button on right side */
-    #settings-btn{ right:72px; background:rgba(255,255,255,0.06); color:var(--accent); font-size:20px; }
+/* Floating buttons */
+.floating-btn{
+  position:fixed; top:18px; padding:8px 12px; border-radius:8px; border:none; cursor:pointer; z-index:12; font-weight:700; box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+}
+#fullscreen-btn{ right:18px; background:var(--accent); color:#fff; display:none; }
+#back-btn{ left:18px; background:rgba(0,0,0,0.55); color:#fff; display:none; }
+#settings-btn{ right:72px; background:rgba(255,255,255,0.06); color:var(--accent); font-size:20px; }
 
-    /* settings drawer (right side) */
-    #settings-menu{
-      position:fixed;
-      top:64px;
-      right:-360px;
-      width:340px;
-      height:calc(100% - 80px);
-      background: rgba(18,12,10,0.96);
-      color:#fff;
-      padding:16px;
-      box-shadow: -8px 12px 40px rgba(0,0,0,0.6);
-      transition: right .28s ease;
-      z-index:14;
-      overflow:auto;
-      border-left:4px solid rgba(255,255,255,0.03);
-    }
-    #settings-menu.open{ right:12px; }
-    #close-settings-btn{
-      position:absolute;
-      top:12px; right:12px;
-      padding:6px 10px; border-radius:6px;
-      background:var(--accent); color:#fff; border:none; cursor:pointer;
-    }
+/* Settings menu */
+#settings-menu{
+  position:fixed; top:64px; right:-360px; width:340px; height:calc(100% - 80px); background: rgba(18,12,10,0.96); color:#fff; padding:16px; box-shadow: -8px 12px 40px rgba(0,0,0,0.6); transition: right .28s ease; z-index:14; overflow:auto; border-left:4px solid rgba(255,255,255,0.03);
+}
+#settings-menu.open{ right:12px; }
+#close-settings-btn{position:absolute;top:12px;right:12px;padding:6px 10px;border-radius:6px;background:var(--accent);color:#fff;border:none;cursor:pointer;}
+.setting-row{ margin:12px 0; display:flex; gap:8px; align-items:center; justify-content:space-between; }
+.setting-row label{ flex:1; font-size:0.96rem; color:#e8dfd4; }
+.setting-row input[type="color"]{ width:44px; height:34px; border-radius:6px; border:none; padding:0; }
 
-    .setting-row{ margin:12px 0; display:flex; gap:8px; align-items:center; justify-content:space-between; }
-    .setting-row label{ flex:1; font-size:0.96rem; color:#e8dfd4; }
-    .setting-row input[type="color"]{ width:44px; height:34px; border-radius:6px; border:none; padding:0; }
+/* Decorations */
+.decoration{position:fixed; z-index:2; pointer-events:none; font-size:28px; opacity:0.95; transform-origin:center; will-change:top,left,transform,opacity;}
 
-    /* decoration style (autumn) */
-    .decoration{
-      position:fixed;
-      z-index:2; /* behind UI but above background */
-      pointer-events:none;
-      font-size:28px;
-      opacity:0.95;
-      transform-origin:center;
-      will-change:top,left,transform,opacity;
-    }
+/* Small screens */
+@media (max-width:720px){
+  header h1{font-size:1.8rem;}
+  #settings-menu{ width:92%; height:60%; right:-100%; top:auto; bottom:-100%; left:4%; border-left:0; border-radius:10px; }
+  #settings-menu.open{ right:4%; bottom:12%; top:auto; }
+  #game-frame{ height:480px; }
+  :root{ --card-size:140px; }
+}
+</style>
+</head>
+<body>
+<header><h1>Math Line</h1></header>
 
-    /* small screens */
-    @media (max-width:720px){
-      header h1{font-size:1.8rem;}
-      #settings-menu{ width:92%; height:60%; right:-100%; top:auto; bottom:-100%; left:4%; border-left:0; border-radius:10px; }
-      #settings-menu.open{ right:4%; bottom:12%; top:auto; }
-      #game-frame{ height:480px; }
-      /* small responsive fallback for card-size only for narrow screens */
-      :root{ --card-size:140px; }
+<div class="top-controls">
+  <div id="search-container">
+    <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
+  </div>
+</div>
+
+<div class="category-bar" id="category-filter" aria-label="Categories"></div>
+
+<div id="game-list" aria-live="polite">
+  <div class="game-card">Math Puzzle</div>
+  <div class="game-card">Number Line</div>
+  <div class="game-card">Sudoku</div>
+  <div class="game-card request-card" onclick="alert('Request a game!')">Request a Game 🎁</div>
+</div>
+
+<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
+
+<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
+<button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
+<button id="settings-btn" class="floating-btn" title="Settings">⚙️</button>
+
+<div id="settings-menu" aria-hidden="true">
+  <button id="close-settings-btn" aria-label="Close settings">✖ Close</button>
+  <h2 style="margin-top:8px;margin-bottom:8px;color:var(--accent)">Settings</h2>
+
+  <!-- Color pickers -->
+  <div class="setting-row"><label for="bg1-color">Background 1</label><input id="bg1-color" type="color" value="#0b1a0b"></div>
+  <div class="setting-row"><label for="bg2-color">Background 2</label><input id="bg2-color" type="color" value="#144d14"></div>
+  <div class="setting-row"><label for="bg3-color">Background 3</label><input id="bg3-color" type="color" value="#b30000"></div>
+  <div class="setting-row"><label for="bg4-color">Background 4</label><input id="bg4-color" type="color" value="#fffafa"></div>
+  <div class="setting-row"><label for="accent-color">Accent Color</label><input id="accent-color" type="color" value="#ffcc00"></div>
+
+  <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0">
+
+  <!-- Other settings -->
+  <div class="setting-row"><label for="toggle-decor">Show Decorations</label><input id="toggle-decor" type="checkbox" checked></div>
+  <div class="setting-row"><label for="toggle-anim">Animate Background</label><input id="toggle-anim" type="checkbox" checked></div>
+  <div class="setting-row"><label for="reduce-motion">Reduce Motion</label><input id="reduce-motion" type="checkbox"></div>
+  <div class="setting-row"><label for="show-favorites-only">Show Favorites Only</label><input id="show-favorites-only" type="checkbox"></div>
+  <div class="setting-row"><label for="accent-brightness">Accent Brightness</label><input id="accent-brightness" type="range" min="50" max="150" value="100"></div>
+
+  <p style="color:#dcd0c3;font-size:0.88rem;margin-top:10px">Settings do not change card size/text. Palette and preferences are saved for next visit.</p>
+</div>
+
+<script>
+  // Settings open/close
+  const settingsBtn = document.getElementById('settings-btn');
+  const closeSettingsBtn = document.getElementById('close-settings-btn');
+  const settingsMenu = document.getElementById('settings-menu');
+  settingsBtn?.addEventListener('click',()=>{settingsMenu.classList.add('open');settingsMenu.setAttribute('aria-hidden','false');});
+  closeSettingsBtn?.addEventListener('click',()=>{settingsMenu.classList.remove('open');settingsMenu.setAttribute('aria-hidden','true');});
+
+  // Color pickers
+  ['bg1','bg2','bg3','bg4','accent'].forEach(c=>{
+    const input=document.getElementById(`${c}-color`);
+    input?.addEventListener('input',e=>{
+      document.documentElement.style.setProperty(`--${c}`, e.target.value);
+    });
+  });
+
+  // Animate background toggle
+  const toggleAnim = document.getElementById('toggle-anim');
+  toggleAnim?.addEventListener('change', e => {
+    document.body.style.animation = e.target.checked ? 'moveBackground 18s ease infinite' : 'none';
+  });
+
+  // Decorations
+  const DECO_EMOJIS = ["🎄","❄️","⛄","🎁","⭐","🍪","🕯️","🧦","🍬"];
+  let decorations = [];
+  const DECO_COUNT = 30;
+  const toggleDecor = document.getElementById('toggle-decor');
+  function createDecorations() {
+    decorations.forEach(d=>d.remove());
+    decorations=[];
+    if(!toggleDecor.checked) return;
+    for(let i=0;i<DECO_COUNT;i++){
+      const deco=document.createElement('div');
+      deco.className='decoration';
+      deco.style.left=Math.random()*100+'%';
+      deco.style.top=Math.random()*100+'%';
+      deco.style.fontSize=20+Math.random()*20+'px';
+      deco.style.transform=`rotate(${Math.random()*360}deg)`;
+      deco.innerText=DECO_EMOJIS[Math.floor(Math.random()*DECO_EMOJIS.length)];
+      document.body.appendChild(deco);
+      decorations.push(deco);
     }
- <script>
-    document.documentElement.style.setProperty('--bg1', '#0b1a0b');
-    document.documentElement.style.setProperty('--bg2', '#144d14');
-    document.documentElement.style.setProperty('--bg3', '#b30000');
-    document.documentElement.style.setProperty('--bg4', '#fffafa');
-    document.documentElement.style.setProperty('--accent', '#ffcc00');
-    document.documentElement.style.setProperty('--text-color', '#ffffff');
-  </script>
+  }
+  toggleDecor?.addEventListener('change', createDecorations);
+  createDecorations();
+</script>
 </body>
 </html>
-  <div class="top-controls">
-    <div id="search-container">
-      <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
-    </div>
-  </div>
 
-  <div class="category-bar" id="category-filter" aria-label="Categories"></div>
-
-  <div id="game-list" aria-live="polite"></div>
-
-  <!-- Game iframe -->
-  <iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
-
-  <!-- Floating controls -->
-  <button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
-  <button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
-  <button id="settings-btn" class="floating-btn" title="Settings">⚙️</button>
-
-  <!-- Settings drawer -->
-  <div id="settings-menu" aria-hidden="true">
-    <button id="close-settings-btn" aria-label="Close settings">✖ Close</button>
-    <h2 style="margin-top:8px;margin-bottom:8px;color:var(--accent)">Settings</h2>
-
-    <!-- Color palette -->
-    <div class="setting-row">
-      <label for="bg1-color">Background 1</label>
-      <input id="bg1-color" type="color" value="#4b2e2a">
-    </div>
-    <div class="setting-row">
-      <label for="bg2-color">Background 2</label>
-      <input id="bg2-color" type="color" value="#7a4b2f">
-    </div>
-    <div class="setting-row">
-      <label for="bg3-color">Background 3</label>
-      <input id="bg3-color" type="color" value="#c86f2b">
-    </div>
-    <div class="setting-row">
-      <label for="bg4-color">Background 4</label>
-      <input id="bg4-color" type="color" value="#f6e9d7">
-    </div>
-    <div class="setting-row">
-      <label for="accent-color">Accent Color</label>
-      <input id="accent-color" type="color" value="#b35900">
-    </div>
-
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.06);margin:12px 0">
-
-    <!-- New non-card-size/text-changing settings -->
-    <div class="setting-row">
-      <label for="toggle-decor">Show Decorations</label>
-      <input id="toggle-decor" type="checkbox" title="Toggle background decorations">
-    </div>
-
-    <div class="setting-row">
-      <label for="toggle-anim">Animate Background</label>
-      <input id="toggle-anim" type="checkbox" title="Toggle animated gradient background" checked>
-    </div>
-
-    <div class="setting-row">
-      <label for="reduce-motion">Reduce Motion</label>
-      <input id="reduce-motion" type="checkbox" title="Reduce motion for animations">
-    </div>
-
-    <div class="setting-row">
-      <label for="show-favorites-only">Show Favorites Only</label>
-      <input id="show-favorites-only" type="checkbox" title="Filter to favorites only">
-    </div>
-
-    <div class="setting-row">
-      <label for="accent-brightness">Accent Brightness</label>
-      <input id="accent-brightness" type="range" min="50" max="150" value="100" title="Adjust accent brightness (visual only)">
-    </div>
-
-    <p style="color:#dcd0c3;font-size:0.88rem;margin-top:10px">These settings do not change the size or text of game cards. Palette and visual preferences are saved for your next visit.</p>
-  </div>
-
-  <script>
-    /* ============================
-       Decorations (Thanksgiving)
-       ============================ */
-    const DECO_EMOJIS = ["🦃","🍂","🍁","🌽","🥧","🍠","🥔","🍇","🍎","🧺"];
-    let decorations = [];
-    const DECO_COUNT = 32;
-    let decoAnimationEnabled = true;
-
-    function createDecorations() {
-      document.querySelectorAll('.decoration').forEach(n => n.remove());
-      decorations = [];
-      for (let i = 0; i < DECO_COUNT; i++) {
-        const d = document.createElement('div');
-        d.className = 'decoration';
-        d.textContent = DECO_EMOJIS[Math.floor(Math.random() * DECO_EMOJIS.length)];
-        d.style.left = (Math.random() * 110 - 5) + 'vw';
-        d.style.top = (Math.random() * 110 - 5) + 'vh';
-        d.style.fontSize = (16 + Math.random() * 36) + 'px';
-        d.style.opacity = (0.45 + Math.random() * 0.55).toString();
-        d.dataset.vy = (0.02 + Math.random() * 0.12).toString();
-        d.dataset.vx = ((Math.random() - 0.5) * 0.04).toString();
-        decorations.push(d);
-        document.body.appendChild(d);
-      }
-    }
-    createDecorations();
 
     function animateDecorations(){
       if(!decoAnimationEnabled){ requestAnimationFrame(animateDecorations); return; }
