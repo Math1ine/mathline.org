@@ -6,13 +6,13 @@
 <title>Math Line - Christmas</title>
 <style>
 :root {
---bg1: #0a0a23;
-  --bg2: #1c1c5a;
-  --bg3: #ff1744;
-  --bg4: #ffd600;
-  --accent: #f9ff00; /* neon yellow, futuristic accent */
-  --text-color: #ffffff;
-  --card-radius: 12px;
+--bg1: #3a0a1a;   /* deep rose */
+--bg2: #6a1032;   /* wine */
+--bg3: #ff4d6d;   /* hot pink */
+--bg4: #ff8fab;   /* soft pink */
+--accent: #ff2e63; /* neon pink */
+--text-color: #ffffff;
+--card-radius: 12px;
 }
 
 /* Body & animated background */
@@ -169,31 +169,6 @@ header h1 {
   user-select: none;
 }
 
-/* String lights fixed to header */
-#lights-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 80px;
-  pointer-events: none;
-  z-index: 6;
-  display: none;
-}
-.light {
-  position: absolute;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  box-shadow: 0 0 8px rgba(255,255,255,0.8);
-  animation: glow 1.5s infinite alternate;
-}
-@keyframes glow {
-  0% { opacity: 0.4; transform: scale(0.8); }
-  50% { opacity: 1; transform: scale(1.3); }
-  100% { opacity: 0.4; transform: scale(0.8); }
-}
-
 /* Responsive */
 @media (max-width:720px){
   #game-list { grid-template-columns: repeat(3, 1fr); gap: 8px; }
@@ -202,9 +177,9 @@ header h1 {
 </style>
 </head>
 <body>
-<header><h1>Math Line  🎉</h1></header>
+<header><h1>Math Line ❤️</h1></header>
 <div style="text-align:center;font-weight:800;color:#ffd700;">
-🎉 2026 🎉
+❤️Valentine's Day❤️
 </div>
   
 <div class="top-controls">
@@ -223,7 +198,7 @@ header h1 {
 
 <script>
 // ===================== Decorations =====================
-const DECO_EMOJIS = ["✨","🎉","🎁","🎆","🌟","🎇"];
+const DECO_EMOJIS = ["💖","❤️","💕","💘","💝","🌹"];
 const DECO_COUNT = 32;
 let decorations=[];
 for(let i=0;i<DECO_COUNT;i++){
