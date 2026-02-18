@@ -1,205 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Math Line - Christmas</title>
-<style>
-:root {
-  --bg1: #2b0000;   /* near black red */
-  --bg2: #660708;   /* deep crimson */
-  --bg3: #a4161a;   /* rich red */
-  --bg4: #ff8fab;   /* soft pink */
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Math Line</title>
+	<style>
+	:root {
+	
+	--bg1: #000000; /* pure black */
+	--bg2: #050505; /* near black */
+	--bg3: #0a0a0f; /* dark gray-blue */
+	--bg4: #0d001a; /* very dark purple */
+	
+	--accent: #9d4edd; /* neon purple for glow */
+	--text-color: #ffffff;
+	--card-radius: 14px;
+	
+	}
 
-  --accent: #ff4d6d; /* red-pink accent */
-  --text-color: #ffffff;
-  --card-radius: 12px;
-}
+		/* Body & animated background */
+		html,
+		body {
+			margin: 0;
+			padding: 0;
+			height: 100%;
+			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+			color: var(--text-color);
+			background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
+			background-size: 400% 400%;
+			animation: moveBackground 18s ease infinite;
+			overflow-x: hidden;
+			position: relative;
+		}
 
-/* Body & animated background */
-html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
-  color: var(--text-color);
-  background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
-  background-size: 400% 400%;
-  animation: moveBackground 18s ease infinite;
-  overflow-x: hidden;
-  position: relative;
-}
-@keyframes moveBackground {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
+		@keyframes moveBackground {
+			0% {
+				background-position: 0% 50%;
+			}
 
-/* Header */
-header {
-  padding: 20px;
-  text-align: center;
-  position: relative;
-  z-index: 5;
-}
-header h1 {
-  margin: 0;
-  font-size: 2.6rem;
-  color: var(--bg4);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
-}
+			50% {
+				background-position: 100% 50%;
+			}
 
-/* Top search & categories */
-.top-controls {
-  display: flex;
-  justify-content: center;
-  padding: 0 12px;
-  z-index: 5;
-}
-#search-input {
-  background: rgba(20,77,20,0.6);
-  color: var(--text-color);
-  width: 100%;
-  max-width: 520px;
-  padding: 8px 12px;
-  font-size: 15px;
-  border-radius: 8px;
-  border: 2px solid rgba(255,255,255,0.06);
-  outline: none;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-.category-bar {
-  text-align: center;
-  margin: 6px 0 12px;
-  z-index: 5;
-}
-.category-bar button {
-  margin: 4px 6px;
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  transition: transform .12s, filter .12s;
-}
-.category-bar button:hover { filter: brightness(1.05); transform: translateY(-2px); }
-.category-bar button.active { outline: 3px solid rgba(255,255,255,0.06); }
+			100% {
+				background-position: 0% 50%;
+			}
+		}
 
-/* Game grid: smaller cards, 6 per row */
-#game-list {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(100px, 1fr));
-  gap: 10px;
-  padding: 18px;
-  position: relative;
-  z-index: 5;
-}
-.game-card {
-  width: 100%;
-  aspect-ratio: 1/1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(10,8,6,0.45);
-  border: 2px solid rgba(0,0,0,0.25);
-  border-radius: var(--card-radius);
-  cursor: pointer;
-  color: var(--bg4);
-  font-weight: 800;
-  text-align: center;
-  padding: 6px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.45);
-  user-select: none;
-  transition: transform .14s ease, box-shadow .14s ease;
-}
-.game-card:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 24px rgba(0,0,0,0.55); }
+		/* Header */
+		header {
+			padding: 20px;
+			text-align: center;
+			position: relative;
+			z-index: 5;
+		}
 
-/* Request card steady glow */
-.game-card.request {
-  box-shadow: 0 0 20px 4px var(--accent);
-}
+		header h1 {
+			margin: 0;
+			font-size: 2.6rem;
+	color: #00f5ff;
+	text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
+		}
 
-/* Star */
-.star {
-  position: absolute;
-  top: 8px; right: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  z-index: 8;
-  color: var(--accent);
-  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
-}
-.star.favorited { color: #ffd36b; text-shadow: 0 1px 8px rgba(0,0,0,0.6); }
+		/* Top search & categories */
+		.top-controls {
+			display: flex;
+			justify-content: center;
+			padding: 0 12px;
+			z-index: 5;
+		}
 
-/* Iframe */
-#game-frame {
-  display: none;
-  width: 95%;
-  max-width: 1200px;
-  height: 680px;
-  margin: 12px auto;
-  border: none;
-  border-radius: 12px;
-  background: #000;
-  position: relative;
-  z-index: 6;
-  box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-}
+		#search-input {
+			background: rgba(20, 77, 20, 0.6);
+			color: var(--text-color);
+			width: 100%;
+			max-width: 520px;
+			padding: 8px 12px;
+			font-size: 15px;
+			border-radius: 8px;
+			border: 2px solid rgba(255, 255, 255, 0.06);
+			outline: none;
+			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		}
 
-/* Floating buttons */
-.floating-btn {
-  position: fixed;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: none;
-  cursor: pointer;
-  z-index: 12;
-  font-weight: 700;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-}
-#fullscreen-btn { right: 18px; top: 18px; background: var(--accent); color: #fff; display: none; }
-#back-btn { left: 18px; top: 18px; background: rgba(0,0,0,0.55); color: #fff; display: none; }
+		.category-bar {
+			text-align: center;
+			margin: 6px 0 12px;
+			z-index: 5;
+		}
 
-/* Decorations (falling emojis) */
-.decoration {
-  position: fixed;
-  pointer-events: none;
-  z-index: 3;
-  user-select: none;
-}
+		.category-bar button {
+			margin: 4px 6px;
+			padding: 6px 12px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			background: var(--accent);
+			color: #fff;
+			font-weight: 700;
+			transition: transform .12s, filter .12s;
+		}
 
-/* Responsive */
-@media (max-width:720px){
-  #game-list { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  #game-frame { height: 480px; }
-}
-</style>
+		.category-bar button:hover {
+			filter: brightness(1.05);
+			transform: translateY(-2px);
+		}
+
+		.category-bar button.active {
+			outline: 3px solid rgba(255, 255, 255, 0.06);
+		}
+
+		/* Game grid: smaller cards, 6 per row */
+		#game-list {
+			display: grid;
+			grid-template-columns: repeat(6, minmax(100px, 1fr));
+			gap: 10px;
+			padding: 18px;
+			position: relative;
+			z-index: 5;
+		}
+
+		.game-card {
+		width: 100%;
+		aspect-ratio: 1/1;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		
+		background: rgba(15, 0, 30, 0.85);
+		border-radius: var(--card-radius);
+		cursor: pointer;
+		
+		font-weight: 800;
+		text-align: center;
+		padding: 6px;
+		user-select: none;
+		
+		border: 2px solid #c77dff;
+		color: #c77dff;
+		
+		box-shadow:
+		0 0 10px #c77dff,
+		0 0 20px #9d4edd,
+		0 0 40px #7b2cbf;
+		
+		transition: all 0.3s ease;
+		}
+
+		.game-card:hover {
+			color: #ffffff;
+			border-color: #ff00ff;
+
+			box-shadow:
+				0 0 15px #ff00ff,
+				0 0 30px #ff00ff,
+				0 0 60px #ff00ff;
+
+			transform: scale(1.07);
+		}
+
+		.game-card:hover {
+			transform: translateY(-4px) scale(1.02);
+			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.55);
+		}
+
+		/* Request card steady glow */
+		.game-card.request {
+			box-shadow: 0 0 20px 4px var(--accent);
+		}
+
+		/* Star */
+		.star {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			font-size: 18px;
+			cursor: pointer;
+			z-index: 8;
+			color: var(--accent);
+			text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
+		}
+
+		.star.favorited {
+			color: #ffd36b;
+			text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
+		}
+
+		/* Iframe */
+		#game-frame {
+			display: none;
+			width: 95%;
+			max-width: 1200px;
+			height: 680px;
+			margin: 12px auto;
+			border: none;
+			border-radius: 12px;
+			background: #000;
+			position: relative;
+			z-index: 6;
+			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+		}
+
+		/* Floating buttons */
+		.floating-btn {
+			position: fixed;
+			padding: 8px 12px;
+			border-radius: 8px;
+			border: none;
+			cursor: pointer;
+			z-index: 12;
+			font-weight: 700;
+			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+		}
+
+		#fullscreen-btn {
+			right: 18px;
+			top: 18px;
+			background: var(--accent);
+			color: #fff;
+			display: none;
+		}
+
+		#back-btn {
+			left: 18px;
+			top: 18px;
+			background: rgba(0, 0, 0, 0.55);
+			color: #fff;
+			display: none;
+		}
+
+		/* Decorations (falling emojis) */
+		.decoration {
+			position: fixed;
+			pointer-events: none;
+			z-index: 3;
+			user-select: none;
+		}
+
+		/* Responsive */
+		@media (max-width:720px) {
+			#game-list {
+				grid-template-columns: repeat(3, 1fr);
+				gap: 8px;
+			}
+
+			#game-frame {
+				height: 480px;
+			}
+		}
+	</style>
 </head>
+
 <body>
-<header><h1>Math Line ❤️</h1></header>
-<div style="text-align:center;font-weight:800;color:#ffd700;">
-❤️Valentine's Day❤️
+	<header>
+		<h1>Math Line </h1>
+	</header>
+	<div style="text-align:center;font-weight:800;color:#ffd700;">
+		
+	</div>
+
+	<div class="top-controls">
+		<input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
 </div>
-  
-<div class="top-controls">
-  <input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
-</div>
-<div class="category-bar" id="category-filter"></div>
-<div id="game-list" aria-live="polite"></div>
+		<div class="category-bar" id="category-filter"></div>
+		<div id="game-list" aria-live="polite"></div>
 
-<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
+		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
-<button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
+		<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
+		<button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
 
-<!-- Decorations -->
-<div id="lights-container"></div>
+		<!-- Decorations -->
+		<div id="lights-container"></div>
 
-<script>
-// ===================== Decorations =====================
-const DECO_EMOJIS = ["💖","❤️","💕","💘","💝","🌹"];
+		<script>
+			// ===================== Decorations =====================
+const DECO_EMOJIS = ["⚡","💥","✨","🌟","🔆","🔥"];
 const DECO_COUNT = 32;
 let decorations=[];
 for(let i=0;i<DECO_COUNT;i++){
@@ -400,6 +477,7 @@ fullscreenBtn.addEventListener('click',()=>{
   if(iframe.requestFullscreen) iframe.requestFullscreen();
   else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
 });
-</script>
+		</script>
 </body>
+
 </html>
