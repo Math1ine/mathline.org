@@ -6,18 +6,23 @@
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
 	<title>Math Line</title>
 	<style>
-	:root {
-	
-	--bg1: #000000; /* pure black */
-	--bg2: #050505; /* near black */
-	--bg3: #0a0a0f; /* dark gray-blue */
-	--bg4: #0d001a; /* very dark purple */
-	
-	--accent: #9d4edd; /* neon purple for glow */
-	--text-color: #ffffff;
-	--card-radius: 14px;
-	
-	}
+		:root {
+
+			--bg1: #000000;
+			/* pure black */
+			--bg2: #050505;
+			/* near black */
+			--bg3: #0a0a0f;
+			/* dark gray-blue */
+			--bg4: #0d001a;
+			/* very dark purple */
+
+			--accent: #9d4edd;
+			/* neon purple for glow */
+			--text-color: #ffffff;
+			--card-radius: 14px;
+
+		}
 
 		/* Body & animated background */
 		html,
@@ -59,8 +64,8 @@
 		header h1 {
 			margin: 0;
 			font-size: 2.6rem;
-	color: #00f5ff;
-	text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
+			color: #00f5ff;
+			text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
 		}
 
 		/* Top search & categories */
@@ -88,6 +93,11 @@
 			text-align: center;
 			margin: 6px 0 12px;
 			z-index: 5;
+			display: flex;
+			justify-content: center;
+			flex-wrap: wrap;
+			padding: 0 12px;
+			gap: 8px;
 		}
 
 		.category-bar button {
@@ -109,6 +119,7 @@
 
 		.category-bar button.active {
 			outline: 3px solid rgba(255, 255, 255, 0.06);
+			background: #ff00ff;
 		}
 
 		/* Game grid: smaller cards, 6 per row */
@@ -122,30 +133,30 @@
 		}
 
 		.game-card {
-		width: 100%;
-		aspect-ratio: 1/1;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		
-		background: rgba(15, 0, 30, 0.85);
-		border-radius: var(--card-radius);
-		cursor: pointer;
-		
-		font-weight: 800;
-		text-align: center;
-		padding: 6px;
-		user-select: none;
-		
-		border: 2px solid #c77dff;
-		color: #c77dff;
-		
-		box-shadow:
-		0 0 10px #c77dff,
-		0 0 20px #9d4edd,
-		0 0 40px #7b2cbf;
-		
-		transition: all 0.3s ease;
+			width: 100%;
+			aspect-ratio: 1/1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			background: rgba(15, 0, 30, 0.85);
+			border-radius: var(--card-radius);
+			cursor: pointer;
+
+			font-weight: 800;
+			text-align: center;
+			padding: 6px;
+			user-select: none;
+
+			border: 2px solid #c77dff;
+			color: #c77dff;
+
+			box-shadow:
+				0 0 10px #c77dff,
+				0 0 20px #9d4edd,
+				0 0 40px #7b2cbf;
+
+			transition: all 0.3s ease;
 		}
 
 		.game-card:hover {
@@ -248,6 +259,16 @@
 			#game-frame {
 				height: 480px;
 			}
+
+			.category-bar {
+				gap: 4px;
+			}
+
+			.category-bar button {
+				margin: 2px 3px;
+				padding: 4px 8px;
+				font-size: 12px;
+			}
 		}
 	</style>
 </head>
@@ -257,12 +278,12 @@
 		<h1>Math Line </h1>
 	</header>
 	<div style="text-align:center;font-weight:800;color:#ffd700;">
-		
+
 	</div>
 
 	<div class="top-controls">
 		<input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
-</div>
+	</div>
 		<div class="category-bar" id="category-filter"></div>
 		<div id="game-list" aria-live="polite"></div>
 
@@ -326,136 +347,174 @@ for(let i=0;i<LIGHT_COUNT;i++){
 // ===================== Games =====================
 const games=[
   {name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
-      {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
-      {name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
-      {name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
-      {name:"Snow Rider",url:"Snow-Rider.html",category:"Racing"},
-      {name:"Swords And Sandals",url:"Swords-and-sandlas.html",category:"Action"},
-      {name:"Crazy Cattle",url:"Crazy-cattle.html",category:"Arcade"},
-      {name:"Gladi Hoppers",url:"Gladi-hoppers.html",category:"Action"},
-      {name:"Bit Planes",url:"Bit-planes.html",category:"Arcade"},
-      {name:"Final Earth2",url:"Final-earth2.html",category:"Strategy"},
-      {name:"Cluster Rush",url:"Cluster-rush.html",category:"Arcade"},
-      {name:"Push Your Luck",url:"Push-your-luck.html",category:"Arcade"},
-      {name:"Poly Track",url:"Poly-track.html",category:"Racing"},
-      {name:"Ragdoll Soccer",url:"Ragdoll-soccer.html",category:"Sports"},
-      {name:"Jetpack Joy Ride",url:"Jetpack-joy-ride.html",category:"Action"},
-      {name:"Learn To Fly 3",url:"Learn-to-fly-3.html",category:"Racing"},
-      {name:"Malidin Stun Cars",url:"Malidin-stun-cars.html",category:"Racing"},
-      {name:"Gun Spin",url:"Gun-spin.html",category:"Action"},
-      {name:"Age Of War",url:"Age-of-war.html",category:"Strategy"},
-      {name:"Moto X3M 2",url:"Moto-x3m-2.html",category:"Racing"},
-      {name:"Moto X3M Winter",url:"Moto-x3m-winter.html",category:"Racing"},
-      {name:"Basketball Stars",url:"Basketball-stars.html",category:"Sports"},
-      {name:"Idle Breakout",url:"Idle-breakout.html",category:"Arcade"},
-      {name:"Vex 8",url:"Vex-8.html",category:"Action"},
-      {name:"Tiny Fishing",url:"Tiny-fishing.html",category:"Simulation"},
-      {name:"Drive Mad",url:"Drive-mad.html",category:"Racing"},
-      {name:"Stick Man Hook",url:"Stick-man-hook.html",category:"Action"},
-      {name:"Line Rider",url:"Line-rider.html",category:"Racing"},
-      {name:"Unicycle Hero",url:"Unicycle-hero.html",category:"Action"},
-      {name:"Basket Random",url:"Basket-random.html",category:"Sports"},
-      {name:"1v1 Lol",url:"1v1-lol.html",category:"Action"},
-      {name:"Happy Wheels",url:"Happy-wheels.html",category:"Action"},
-      {name:"Idle Miner Tycoon",url:"Idle-miner-tycoon.html",category:"Simulation"},
-      {name:"Johnny Upgrade",url:"Johnny-upgrade.html",category:"Arcade"},
-      {name:"Jack Smith",url:"Jack-smith.html",category:"Action"},
-      {name:"Tunnel Rush",url:"Tunnel-rush.html",category:"Racing"},
-      {name:"Duck Life 5",url:"Duck-life-5.html",category:"Simulation"},
-      {name:"Duck Life 4",url:"Duck-life-4.html",category:"Simulation"},
-      {name:"Mob Control",url:"Mob-control.html",category:"Action"},
-      {name:"A Small World Cup",url:"A-small-world-cup.html",category:"Sports"},
-      {name:"Escape Road",url:"Escape-road.html",category:"Racing"},
-      {name:"QWOP",url:"QWOP.html",category:"Simulation"},
-      {name:"Indian Truck Simulator",url:"Indian-truck-simulator.html",category:"Simulation"},
-      {name:"Doge Miner",url:"Doge-miner.html",category:"Simulation"},
-      {name:"Draw Climber",url:"Draw-climber.html",category:"Racing"},
-      {name:"Slope 3",url:"Slope-3.html",category:"Racing"},
-      {name:"Infinte Craft",url:"Infinte-craft.html",category:"Simulation"},
-      {name:"Block Blast",url:"Block-blast.html",category:"Arcade"},
-      {name:"Melon playground",url:"Melon-playground.html",category:"Simulation"},
-      {name:"House of hazards",url:"house-of-hazards.html",category:"Action"},
-      {name:"Binding of Issac",url:"Binding-of-issac.html",category:"Action"},
-      {name:"Troll Face Quest 10",url:"Troll-face-10.html",category:"Puzzle"},
-      {name:"Troll Face Quest 11",url:"Troll-face-11.html",category:"Puzzle"},
-      {name:"Troll Face Quest 12",url:"Troll-face-12.html",category:"Puzzle"},
-      {name:"Ultimate Car Driving Simulator 3",url:"ultimate-car-simulator.html",category:"Racing"},
-      {name:"Wordle",url:"Wordle.html",category:"Puzzle"},
-      {name:"Cappybara Clicker",url:"Cappybara-clicker.html",category:"Simulation"},
-      {name:"Bob The Robber 5",url:"bob-robber.html",category:"Action"},
-      {name:"Car Crash 3D",url:"Car-crash-3d.html",category:"Racing"},
-      {name:"Bit Life",url:"Bit-life.html",category:"Simulation"},
-      {name:"Plants vs Zombies",url:"Plants-vs-zombies.html",category:"Action"},
-      {name:"Tall Man Run",url:"tall-man-run.html",category:"Racing"},
-      {name:"Tag",url:"tag.html",category:"Racing"},
-      {name:"Subway Surfers Winter",url:"Subway-Winter.html",category:"Racing"},
-      {name:"Subway Surfers Miami",url:"Subway-miami.html",category:"Racing"},
-      {name:"Hole.io",url:"Hole-io.html",category:"Simulation"},
-      {name:"Drift Boss",url:"Drift-boss.html",category:"Racing"},
-      {name:"Subway Surfers Mexico",url:"Subway-mexico.html",category:"Racing"},
-      {name:"Subway Surfers London",url:"Subway-london.html",category:"Racing"},
-      {name:"Subway Surfers Iceland",url:"Subway-iceland.html",category:"Racing"},
-      {name:"Granny 2",url:"Granny2.html",category:"Puzzle"},
-      {name:"Granny 3",url:"Granny3.html",category:"Puzzle"},
-      {name:"Factory Balls 2",url:"Factory-balls2.html",category:"Simulation"},
-      {name:"Factory Balls 3",url:"Factory-balls3.html",category:"Simulation"},
-      {name:"Geometry Dash Lite",url:"Geometry-Dash.html",category:"Racing"},
-      {name:"Hardware Tycoon",url:"Hardware-tycoon.html",category:"Arcade"},
-      {name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Arcade"},
-      {name:"Cross Road",url:"Crossy-road.html",category:"Arcade"},
-      {name:"Burrito Bison",url:"BB.html",category:"Arcade"},
-      {name:"Burrito Bison Launch a Libre",url:"BL.html",category:"Arcade"},
-      {name:"Burrito Bison Revenge",url:"BR.html",category:"Arcade"},
-      {name:"Space Waves",url:"Space-waves.html",category:"Arcade"},
-      {name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
-      {name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
+  {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
+  {name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
+  {name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
+  {name:"Snow Rider",url:"Snow-Rider.html",category:"Racing"},
+  {name:"Swords And Sandals",url:"Swords-and-sandlas.html",category:"Action"},
+  {name:"Crazy Cattle",url:"Crazy-cattle.html",category:"Arcade"},
+  {name:"Gladi Hoppers",url:"Gladi-hoppers.html",category:"Action"},
+  {name:"Bit Planes",url:"Bit-planes.html",category:"Arcade"},
+  {name:"Final Earth2",url:"Final-earth2.html",category:"Strategy"},
+  {name:"Cluster Rush",url:"Cluster-rush.html",category:"Arcade"},
+  {name:"Push Your Luck",url:"Push-your-luck.html",category:"Arcade"},
+  {name:"Poly Track",url:"Poly-track.html",category:"Racing"},
+  {name:"Ragdoll Soccer",url:"Ragdoll-soccer.html",category:"Sports"},
+  {name:"Jetpack Joy Ride",url:"Jetpack-joy-ride.html",category:"Action"},
+  {name:"Learn To Fly 3",url:"Learn-to-fly-3.html",category:"Racing"},
+  {name:"Malidin Stun Cars",url:"Malidin-stun-cars.html",category:"Racing"},
+  {name:"Gun Spin",url:"Gun-spin.html",category:"Action"},
+  {name:"Age Of War",url:"Age-of-war.html",category:"Strategy"},
+  {name:"Moto X3M 2",url:"Moto-x3m-2.html",category:"Racing"},
+  {name:"Moto X3M Winter",url:"Moto-x3m-winter.html",category:"Racing"},
+  {name:"Basketball Stars",url:"Basketball-stars.html",category:"Sports"},
+  {name:"Idle Breakout",url:"Idle-breakout.html",category:"Arcade"},
+  {name:"Vex 8",url:"Vex-8.html",category:"Action"},
+  {name:"Tiny Fishing",url:"Tiny-fishing.html",category:"Simulation"},
+  {name:"Drive Mad",url:"Drive-mad.html",category:"Racing"},
+  {name:"Stick Man Hook",url:"Stick-man-hook.html",category:"Action"},
+  {name:"Line Rider",url:"Line-rider.html",category:"Racing"},
+  {name:"Unicycle Hero",url:"Unicycle-hero.html",category:"Action"},
+  {name:"Basket Random",url:"Basket-random.html",category:"Sports"},
+  {name:"1v1 Lol",url:"1v1-lol.html",category:"Action"},
+  {name:"Happy Wheels",url:"Happy-wheels.html",category:"Action"},
+  {name:"Idle Miner Tycoon",url:"Idle-miner-tycoon.html",category:"Simulation"},
+  {name:"Johnny Upgrade",url:"Johnny-upgrade.html",category:"Arcade"},
+  {name:"Jack Smith",url:"Jack-smith.html",category:"Action"},
+  {name:"Tunnel Rush",url:"Tunnel-rush.html",category:"Racing"},
+  {name:"Duck Life 5",url:"Duck-life-5.html",category:"Simulation"},
+  {name:"Duck Life 4",url:"Duck-life-4.html",category:"Simulation"},
+  {name:"Mob Control",url:"Mob-control.html",category:"Action"},
+  {name:"A Small World Cup",url:"A-small-world-cup.html",category:"Sports"},
+  {name:"Escape Road",url:"Escape-road.html",category:"Racing"},
+  {name:"QWOP",url:"QWOP.html",category:"Simulation"},
+  {name:"Indian Truck Simulator",url:"Indian-truck-simulator.html",category:"Simulation"},
+  {name:"Doge Miner",url:"Doge-miner.html",category:"Simulation"},
+  {name:"Draw Climber",url:"Draw-climber.html",category:"Racing"},
+  {name:"Slope 3",url:"Slope-3.html",category:"Racing"},
+  {name:"Infinte Craft",url:"Infinte-craft.html",category:"Simulation"},
+  {name:"Block Blast",url:"Block-blast.html",category:"Arcade"},
+  {name:"Melon playground",url:"Melon-playground.html",category:"Simulation"},
+  {name:"House of hazards",url:"house-of-hazards.html",category:"Action"},
+  {name:"Binding of Issac",url:"Binding-of-issac.html",category:"Action"},
+  {name:"Troll Face Quest 10",url:"Troll-face-10.html",category:"Puzzle"},
+  {name:"Troll Face Quest 11",url:"Troll-face-11.html",category:"Puzzle"},
+  {name:"Troll Face Quest 12",url:"Troll-face-12.html",category:"Puzzle"},
+  {name:"Ultimate Car Driving Simulator 3",url:"ultimate-car-simulator.html",category:"Racing"},
+  {name:"Wordle",url:"Wordle.html",category:"Puzzle"},
+  {name:"Cappybara Clicker",url:"Cappybara-clicker.html",category:"Simulation"},
+  {name:"Bob The Robber 5",url:"bob-robber.html",category:"Action"},
+  {name:"Car Crash 3D",url:"Car-crash-3d.html",category:"Racing"},
+  {name:"Bit Life",url:"Bit-life.html",category:"Simulation"},
+  {name:"Plants vs Zombies",url:"Plants-vs-zombies.html",category:"Action"},
+  {name:"Tall Man Run",url:"tall-man-run.html",category:"Racing"},
+  {name:"Tag",url:"tag.html",category:"Racing"},
+  {name:"Subway Surfers Winter",url:"Subway-Winter.html",category:"Racing"},
+  {name:"Subway Surfers Miami",url:"Subway-miami.html",category:"Racing"},
+  {name:"Hole.io",url:"Hole-io.html",category:"Simulation"},
+  {name:"Drift Boss",url:"Drift-boss.html",category:"Racing"},
+  {name:"Subway Surfers Mexico",url:"Subway-mexico.html",category:"Racing"},
+  {name:"Subway Surfers London",url:"Subway-london.html",category:"Racing"},
+  {name:"Subway Surfers Iceland",url:"Subway-iceland.html",category:"Racing"},
+  {name:"Granny 2",url:"Granny2.html",category:"Puzzle"},
+  {name:"Granny 3",url:"Granny3.html",category:"Puzzle"},
+  {name:"Factory Balls 2",url:"Factory-balls2.html",category:"Simulation"},
+  {name:"Factory Balls 3",url:"Factory-balls3.html",category:"Simulation"},
+  {name:"Geometry Dash Lite",url:"Geometry-Dash.html",category:"Racing"},
+  {name:"Hardware Tycoon",url:"Hardware-tycoon.html",category:"Arcade"},
+  {name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Simulation"},
+  {name:"Cross Road",url:"Crossy-road.html",category:"Arcade"},
+  {name:"Burrito Bison",url:"BB.html",category:"Arcade"},
+  {name:"Burrito Bison Launch a Libre",url:"BL.html",category:"Arcade"},
+  {name:"Burrito Bison Revenge",url:"BR.html",category:"Arcade"},
+  {name:"Space Waves",url:"Space-waves.html",category:"Arcade"},
+  {name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
+  {name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
+  {name:"Roof Top Snipers",url:"RF.html",category:"Arcade"},
+  {name:"Ultimate car driving simulator",url:"Ucarsim.html",category:"Racing"},
+  {name:"Traffic Jam 3D",url:"Tj.html",category:"Arcade"},
+  {name:"Papa's freezeria",url:"Pf.html",category:"Arcade"},
+  {name:"Papa's pastaria",url:"Pp.html",category:"Arcade"},
+  {name:"Papa's sushiria",url:"Ps.html",category:"Arcade"},
+  {name:"Ballz",url:"Ballz.html",category:"Arcade"},
+  {name:"10 Minutes Till Dawn",url:"10min.html",category:"Arcade"},
+  {name:"Minecraft",url:"EaglerCraft 1.12 [wasm].html",category:"Arcade"},
   {name:"Request a Game",url:"#",category:"Request",request:true},
-    {name:"Roof Top Snipers",url:"RF.html",category:"Arcade"},
-    {name:"Ultimate car driving simulator",url:"Ucarsim.html",category:"Racing"},
-    {name:"Traffic Jam 3D",url:"Tj.html",category:"arcade"},
-    {name:"Papa’s freezeria ",url:"Pf.html",category:"arcade"},
-    {name:"Papa’s pastaria",url:"Pp.html",category:"arcade"},
-    {name:"Papa’s sushiria",url:"Ps.html",category:"arcade"},
-    {name:"Ballz",url:"Ballz.html",category:"arcade"},
-    {name:"10 Minutes Till Dawn",url:"10min.html",category:"arcade"},
-    {name:"Minecraft",url:"EaglerCraft 1.12 [wasm].html",category:"arcade"},
-
 ];
 
 // Sort A-Z but keep request card separate
 const normalGames = games.filter(g => !g.request).sort((a,b)=>a.name.localeCompare(b.name));
 const requestCard = games.find(g => g.request);
 
-// ===================== Render =====================
-const gameListEl=document.getElementById('game-list');
-const iframe=document.getElementById('game-frame');
-const backBtn=document.getElementById('back-btn');
-const fullscreenBtn=document.getElementById('fullscreen-btn');
+// ===================== DOM Elements =====================
+const gameListEl = document.getElementById('game-list');
+const iframe = document.getElementById('game-frame');
+const backBtn = document.getElementById('back-btn');
+const fullscreenBtn = document.getElementById('fullscreen-btn');
+const categoryEl = document.getElementById('category-filter');
+const searchInput = document.getElementById('search-input');
 
-function renderGames(filter=""){
-  gameListEl.innerHTML="";
-  // Render filtered normal games
-  normalGames.forEach(g=>{
-    if(g.name.toLowerCase().includes(filter.toLowerCase())){
-      const card=document.createElement('div');
-      card.className='game-card';
-      card.textContent=g.name;
-      card.addEventListener('click',()=>{
-        gameListEl.style.display='none';
-        iframe.style.display='block';
-        iframe.src=g.url;
-        backBtn.style.display='block';
-        fullscreenBtn.style.display='block';
-      });
-      gameListEl.appendChild(card);
-    }
+// ===================== Setup Categories =====================
+const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
+  if(a === "All") return -1;
+  if(b === "All") return 1;
+  return a.localeCompare(b);
+});
+
+let activeCategory = "All";
+let activeSearch = "";
+
+categories.forEach(cat => {
+  const btn = document.createElement('button');
+  btn.textContent = cat;
+  if(cat === "All") btn.classList.add('active');
+  btn.addEventListener('click', () => {
+    // Remove active class from all buttons
+    document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
+    // Add active class to clicked button
+    btn.classList.add('active');
+    activeCategory = cat;
+    renderGames();
   });
+  categoryEl.appendChild(btn);
+});
+
+// ===================== Render =====================
+function renderGames(){
+  gameListEl.innerHTML="";
+  
+  // Filter games based on category and search
+  let filtered = normalGames;
+  
+  if(activeCategory !== "All"){
+    filtered = filtered.filter(g => g.category === activeCategory);
+  }
+  
+  if(activeSearch){
+    filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+  }
+  
+  // Render filtered games
+  filtered.forEach(g => {
+    const card = document.createElement('div');
+    card.className = 'game-card';
+    card.textContent = g.name;
+    card.addEventListener('click', () => {
+      gameListEl.style.display = 'none';
+      iframe.style.display = 'block';
+      iframe.src = g.url;
+      backBtn.style.display = 'block';
+      fullscreenBtn.style.display = 'block';
+    });
+    gameListEl.appendChild(card);
+  });
+  
   // Always append request card at the bottom
-  const reqCard=document.createElement('div');
-  reqCard.className='game-card request';
-  reqCard.textContent=requestCard.name;
-  reqCard.addEventListener('click',()=>{
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
+  const reqCard = document.createElement('div');
+  reqCard.className = 'game-card request';
+  reqCard.textContent = requestCard.name;
+  reqCard.addEventListener('click', () => {
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
   });
   gameListEl.appendChild(reqCard);
 }
@@ -463,20 +522,21 @@ function renderGames(filter=""){
 renderGames();
 
 // ===================== Search =====================
-const searchInput=document.getElementById('search-input');
-searchInput.addEventListener('input',(e)=>{
-  renderGames(e.target.value);
+searchInput.addEventListener('input', (e) => {
+  activeSearch = e.target.value;
+  renderGames();
 });
 
 // ===================== Back & Fullscreen =====================
-backBtn.addEventListener('click',()=>{
-  iframe.style.display='none';
-  iframe.src='';
-  gameListEl.style.display='grid';
-  backBtn.style.display='none';
-  fullscreenBtn.style.display='none';
+backBtn.addEventListener('click', () => {
+  iframe.style.display = 'none';
+  iframe.src = '';
+  gameListEl.style.display = 'grid';
+  backBtn.style.display = 'none';
+  fullscreenBtn.style.display = 'none';
 });
-fullscreenBtn.addEventListener('click',()=>{
+
+fullscreenBtn.addEventListener('click', () => {
   if(iframe.requestFullscreen) iframe.requestFullscreen();
   else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
 });
