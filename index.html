@@ -475,7 +475,7 @@
 		<!-- Decorations -->
 		<div id="lights-container"></div>
 
-		<script>
+	<script>	
 			// ===================== Local Storage Manager =====================
 const StorageManager = {
 	getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'),
@@ -483,9 +483,10 @@ const StorageManager = {
 		const stats = StorageManager.getGameStats(name);
 		stats.played = (stats.played || 0) + 1;
 		stats.lastPlayed = new Date().toLocaleDateString();
-		stats.playTime = (stats.playTime || 0) + 1;
+		stats.playTime = (stats.playTime || 0) + 0.01;
 		localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
-	},
+	 let playTimer = null;
+  },
 	getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
 	setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
 	getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
@@ -700,9 +701,11 @@ const ModalManager = {
 		
 		const stats = StorageManager.getGameStats(gameName);
 		const lastPlayed = stats.lastPlayed || "Never";
-		const playTimeStr = stats.playTime > 60 
-			? `${Math.floor(stats.playTime / 60)}h ${stats.playTime % 60}m`
-			: `${stats.playTime}m`;
+		const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
+		
+		const playTimeStr = roundedTime > 60
+		? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m`
+		: `${roundedTime}m`;
 		
 		document.getElementById('modal-game-name').textContent = gameName;
 		document.getElementById('modal-category').textContent = game.category;
@@ -722,7 +725,11 @@ const ModalManager = {
 		
 		StorageManager.updateGameStats(gameName);
 		
-		gameListEl.style.display = 'none';
+ playTimer = setInterval(() => {
+	StorageManager.updateGameStats(gameName);
+	}, 1000);
+		
+    gameListEl.style.display = 'none';
 		gameLoading.style.display = 'block';
 		iframe.style.display = 'none';
 		backBtn.style.display = 'block';
@@ -845,7 +852,11 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ===================== Back & Fullscreen =====================
-backBtn.addEventListener('click', () => {
+  backBtn.addEventListener('click', () => {
+if (playTimer) {
+clearInterval(playTimer);
+playTimer = null;
+}
   iframe.style.display = 'none';
   gameLoading.style.display = 'none';
   iframe.src = '';
