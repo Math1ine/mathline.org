@@ -74,6 +74,8 @@
 			justify-content: center;
 			padding: 0 12px;
 			z-index: 5;
+			flex-wrap: wrap;
+			gap: 10px;
 		}
 
 		#search-input {
@@ -87,6 +89,14 @@
 			border: 2px solid rgba(255, 255, 255, 0.06);
 			outline: none;
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+		}
+
+		.category-dropdown {
+			display: none;
+		}
+
+		.category-dropdown.mobile-active {
+			display: block;
 		}
 
 		.category-bar {
@@ -122,6 +132,28 @@
 			background: #ff00ff;
 		}
 
+		.game-counter {
+			text-align: center;
+			color: var(--accent);
+			margin: 8px 0;
+			font-size: 14px;
+			font-weight: 700;
+		}
+
+		.empty-state {
+			text-align: center;
+			padding: 40px 20px;
+			color: var(--accent);
+			font-size: 18px;
+			font-weight: 700;
+			grid-column: 1/-1;
+			display: none;
+		}
+
+		.empty-state.show {
+			display: block;
+		}
+
 		/* Game grid: smaller cards, 6 per row */
 		#game-list {
 			display: grid;
@@ -138,6 +170,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			flex-direction: column;
 
 			background: rgba(15, 0, 30, 0.85);
 			border-radius: var(--card-radius);
@@ -157,6 +190,7 @@
 				0 0 40px #7b2cbf;
 
 			transition: all 0.3s ease;
+			position: relative;
 		}
 
 		.game-card:hover {
@@ -181,23 +215,6 @@
 			box-shadow: 0 0 20px 4px var(--accent);
 		}
 
-		/* Star */
-		.star {
-			position: absolute;
-			top: 8px;
-			right: 8px;
-			font-size: 18px;
-			cursor: pointer;
-			z-index: 8;
-			color: var(--accent);
-			text-shadow: 0 1px 6px rgba(0, 0, 0, 0.5);
-		}
-
-		.star.favorited {
-			color: #ffd36b;
-			text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
-		}
-
 		/* Iframe */
 		#game-frame {
 			display: none;
@@ -211,6 +228,35 @@
 			position: relative;
 			z-index: 6;
 			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+		}
+
+		#game-loading {
+			display: none;
+			text-align: center;
+			padding: 20px;
+			color: var(--accent);
+			z-index: 6;
+			position: relative;
+		}
+
+		.spinner {
+			border: 4px solid rgba(157, 78, 221, 0.3);
+			border-top: 4px solid #9d4edd;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			animation: spin 1s linear infinite;
+			margin: 0 auto 10px;
+		}
+
+		@keyframes spin {
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
 		}
 
 		/* Floating buttons */
@@ -241,6 +287,91 @@
 			display: none;
 		}
 
+		/* Game Details Modal */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 15;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.8);
+			backdrop-filter: blur(4px);
+		}
+
+		.modal.active {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.modal-content {
+			background: rgba(15, 0, 30, 0.95);
+			padding: 30px;
+			border-radius: 12px;
+			border: 2px solid #c77dff;
+			max-width: 500px;
+			width: 90%;
+			color: var(--text-color);
+			box-shadow: 0 0 30px #9d4edd;
+		}
+
+		.modal-content h2 {
+			margin-top: 0;
+			color: #00f5ff;
+		}
+
+		.game-stat {
+			display: flex;
+			justify-content: space-between;
+			padding: 8px 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.game-stat label {
+			color: var(--accent);
+			font-weight: 700;
+		}
+
+		.game-stat value {
+			color: var(--text-color);
+		}
+
+		.modal-buttons {
+			display: flex;
+			gap: 10px;
+			margin-top: 20px;
+			justify-content: center;
+		}
+
+		.modal-buttons button {
+			padding: 8px 16px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.2s;
+		}
+
+		.play-btn {
+			background: var(--accent);
+			color: #fff;
+		}
+
+		.play-btn:hover {
+			filter: brightness(1.1);
+		}
+
+		.close-modal {
+			background: rgba(255, 255, 255, 0.1);
+			color: var(--text-color);
+		}
+
+		.close-modal:hover {
+			background: rgba(255, 255, 255, 0.2);
+		}
+
 		/* Decorations (falling emojis) */
 		.decoration {
 			position: fixed;
@@ -251,6 +382,10 @@
 
 		/* Responsive */
 		@media (max-width:720px) {
+			header h1 {
+				font-size: 2rem;
+			}
+
 			#game-list {
 				grid-template-columns: repeat(3, 1fr);
 				gap: 8px;
@@ -262,6 +397,11 @@
 
 			.category-bar {
 				gap: 4px;
+				display: none;
+			}
+
+			.category-bar.mobile-visible {
+				display: flex;
 			}
 
 			.category-bar button {
@@ -269,34 +409,90 @@
 				padding: 4px 8px;
 				font-size: 12px;
 			}
+
+			.modal-content {
+				max-width: 90%;
+			}
 		}
 	</style>
 </head>
 
 <body>
 	<header>
-		<h1>Math Line </h1>
+		<h1>Math Line</h1>
 	</header>
 	<div style="text-align:center;font-weight:800;color:#ffd700;">
 
 	</div>
 
 	<div class="top-controls">
-		<input id="search-input" type="search" placeholder="Search games..." aria-label="Search games">
+		<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 	</div>
 		<div class="category-bar" id="category-filter"></div>
-		<div id="game-list" aria-live="polite"></div>
+		<button id="category-toggle-mobile" style="display:none; background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin: 0 12px;">📂 Categories</button>
+		<div class="game-counter" id="game-counter"></div>
+		<div id="game-list" aria-live="polite">
+			<div class="empty-state" id="empty-state"></div>
+		</div>
+
+		<div id="game-loading">
+			<div class="spinner"></div>
+			<p>Loading game...</p>
+		</div>
 
 		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-		<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen">Fullscreen</button>
-		<button id="back-btn" class="floating-btn" title="Back to games">← Back</button>
+		<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen (F)">Fullscreen</button>
+		<button id="back-btn" class="floating-btn" title="Back to games (Esc)">← Back</button>
+
+		<!-- Game Details Modal -->
+		<div id="game-modal" class="modal">
+			<div class="modal-content">
+				<h2 id="modal-game-name"></h2>
+				<div class="game-stat">
+					<label>Category:</label>
+					<span id="modal-category"></span>
+				</div>
+				<div class="game-stat">
+					<label>Times Played:</label>
+					<span id="modal-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Last Played:</label>
+					<span id="modal-last-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Total Play Time:</label>
+					<span id="modal-playtime"></span>
+				</div>
+				<div class="modal-buttons">
+					<button class="play-btn" id="modal-play-btn">▶️ Play</button>
+					<button class="close-modal" id="modal-close-btn">Close</button>
+				</div>
+			</div>
+		</div>
 
 		<!-- Decorations -->
 		<div id="lights-container"></div>
 
 		<script>
-			// ===================== Decorations =====================
+			// ===================== Local Storage Manager =====================
+const StorageManager = {
+	getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'),
+	updateGameStats: (name) => {
+		const stats = StorageManager.getGameStats(name);
+		stats.played = (stats.played || 0) + 1;
+		stats.lastPlayed = new Date().toLocaleDateString();
+		stats.playTime = (stats.playTime || 0) + 1;
+		localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
+	},
+	getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
+	setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
+	getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
+	setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
+};
+
+		// ===================== Decorations =====================
 const DECO_EMOJIS = ["⚡","💥","✨","🌟","🔆","🔥"];
 const DECO_COUNT = 32;
 let decorations=[];
@@ -422,7 +618,7 @@ const games=[
   {name:"Factory Balls 3",url:"Factory-balls3.html",category:"Simulation"},
   {name:"Geometry Dash Lite",url:"Geometry-Dash.html",category:"Racing"},
   {name:"Hardware Tycoon",url:"Hardware-tycoon.html",category:"Arcade"},
-  {name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Simulation"},
+  {name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Arcade"},
   {name:"Cross Road",url:"Crossy-road.html",category:"Arcade"},
   {name:"Burrito Bison",url:"BB.html",category:"Arcade"},
   {name:"Burrito Bison Launch a Libre",url:"BL.html",category:"Arcade"},
@@ -442,17 +638,29 @@ const games=[
   {name:"Request a Game",url:"#",category:"Request",request:true},
 ];
 
-// Sort A-Z but keep request card separate
-const normalGames = games.filter(g => !g.request).sort((a,b)=>a.name.localeCompare(b.name));
+// Separate games by letter type and sort
+const normalGames = games.filter(g => !g.request).sort((a, b) => {
+  const aStartsWithNum = /^\d/.test(a.name);
+  const bStartsWithNum = /^\d/.test(b.name);
+  
+  if(aStartsWithNum && !bStartsWithNum) return 1;
+  if(!aStartsWithNum && bStartsWithNum) return -1;
+  return a.name.localeCompare(b.name);
+});
 const requestCard = games.find(g => g.request);
 
 // ===================== DOM Elements =====================
 const gameListEl = document.getElementById('game-list');
+const emptyStateEl = document.getElementById('empty-state');
 const iframe = document.getElementById('game-frame');
 const backBtn = document.getElementById('back-btn');
 const fullscreenBtn = document.getElementById('fullscreen-btn');
 const categoryEl = document.getElementById('category-filter');
 const searchInput = document.getElementById('search-input');
+const gameModal = document.getElementById('game-modal');
+const gameCounter = document.getElementById('game-counter');
+const gameLoading = document.getElementById('game-loading');
+const categoryToggleMobile = document.getElementById('category-toggle-mobile');
 
 // ===================== Setup Categories =====================
 const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
@@ -461,84 +669,211 @@ const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a
   return a.localeCompare(b);
 });
 
-let activeCategory = "All";
-let activeSearch = "";
+let activeCategory = StorageManager.getLastCategory();
+let activeSearch = '';
 
 categories.forEach(cat => {
   const btn = document.createElement('button');
   btn.textContent = cat;
-  if(cat === "All") btn.classList.add('active');
+  if(cat === activeCategory) btn.classList.add('active');
   btn.addEventListener('click', () => {
-    // Remove active class from all buttons
     document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
-    // Add active class to clicked button
     btn.classList.add('active');
     activeCategory = cat;
+    StorageManager.setLastCategory(cat);
     renderGames();
+    window.scrollTo(0, 0);
   });
   categoryEl.appendChild(btn);
 });
 
+// Mobile category toggle
+categoryToggleMobile.addEventListener('click', () => {
+	categoryEl.classList.toggle('mobile-visible');
+});
+
+// ===================== Modal Manager =====================
+const ModalManager = {
+	open: (gameName) => {
+		const game = normalGames.find(g => g.name === gameName);
+		if(!game) return;
+		
+		const stats = StorageManager.getGameStats(gameName);
+		const lastPlayed = stats.lastPlayed || "Never";
+		const playTimeStr = stats.playTime > 60 
+			? `${Math.floor(stats.playTime / 60)}h ${stats.playTime % 60}m`
+			: `${stats.playTime}m`;
+		
+		document.getElementById('modal-game-name').textContent = gameName;
+		document.getElementById('modal-category').textContent = game.category;
+		document.getElementById('modal-played').textContent = stats.played || '0';
+		document.getElementById('modal-last-played').textContent = lastPlayed;
+		document.getElementById('modal-playtime').textContent = playTimeStr;
+		
+		document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
+		gameModal.classList.add('active');
+	},
+	close: () => {
+		gameModal.classList.remove('active');
+	},
+	play: (gameName) => {
+		const game = normalGames.find(g => g.name === gameName);
+		if(!game) return;
+		
+		StorageManager.updateGameStats(gameName);
+		
+		gameListEl.style.display = 'none';
+		gameLoading.style.display = 'block';
+		iframe.style.display = 'none';
+		backBtn.style.display = 'block';
+		fullscreenBtn.style.display = 'block';
+		gameModal.classList.remove('active');
+		
+		// Simulate loading delay
+		setTimeout(() => {
+			iframe.src = game.url;
+			iframe.style.display = 'block';
+			gameLoading.style.display = 'none';
+		}, 500);
+	}
+};
+
+document.getElementById('modal-close-btn').addEventListener('click', ModalManager.close);
+gameModal.addEventListener('click', (e) => {
+	if(e.target === gameModal) ModalManager.close();
+});
+
 // ===================== Render =====================
 function renderGames(){
-  gameListEl.innerHTML="";
-  
-  // Filter games based on category and search
-  let filtered = normalGames;
-  
-  if(activeCategory !== "All"){
-    filtered = filtered.filter(g => g.category === activeCategory);
-  }
-  
-  if(activeSearch){
-    filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
-  }
-  
-  // Render filtered games
-  filtered.forEach(g => {
-    const card = document.createElement('div');
-    card.className = 'game-card';
-    card.textContent = g.name;
-    card.addEventListener('click', () => {
-      gameListEl.style.display = 'none';
-      iframe.style.display = 'block';
-      iframe.src = g.url;
-      backBtn.style.display = 'block';
-      fullscreenBtn.style.display = 'block';
-    });
-    gameListEl.appendChild(card);
-  });
-  
-  // Always append request card at the bottom
-  const reqCard = document.createElement('div');
-  reqCard.className = 'game-card request';
-  reqCard.textContent = requestCard.name;
-  reqCard.addEventListener('click', () => {
-    window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
-  });
-  gameListEl.appendChild(reqCard);
+gameListEl.innerHTML="";
+
+// Filter games
+let filtered = normalGames;
+
+if(activeCategory !== "All"){
+filtered = filtered.filter(g => g.category === activeCategory);
 }
 
-renderGames();
+if(activeSearch){
+filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+}
+
+// Render all filtered games
+filtered.forEach(g => {
+const card = createGameCard(g);
+gameListEl.appendChild(card);
+});
+
+// Always append request card at the bottom (ALWAYS appears)
+const reqCard = document.createElement('div');
+reqCard.className = 'game-card request';
+reqCard.innerHTML = '<span>Request a Game</span>';
+reqCard.addEventListener('click', () => {
+window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog',
+'_blank');
+});
+gameListEl.appendChild(reqCard);
+
+// Update counter (keep it visible always)
+const totalGames = filtered.length;
+gameCounter.textContent = `Showing ${totalGames} game${totalGames !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `•
+${activeCategory}` : ''}${activeSearch ? ` • Searched for "${activeSearch}"` : ''}`;
+
+// Show/hide category toggle on mobile
+if(window.innerWidth <= 720) { categoryToggleMobile.style.display=filtered.length===0 && !activeSearch ? 'none'
+	: 'block' ; } } function createGameCard(game) { const card=document.createElement('div'); card.className='game-card'
+	; card.innerHTML=`<span>${game.name}</span>`;
+
+card.addEventListener('click', () => {
+ModalManager.open(game.name);
+});
+
+return card;
+}
+function createGameCard(game) {
+const card = document.createElement('div');
+card.className = 'game-card';
+card.innerHTML = `<span>${game.name}</span>`;
+
+card.addEventListener('click', () => {
+ModalManager.open(game.name);
+});
+
+return card;
+}
+
+renderGames(); // ADD THIS LINE - renders games on page load
 
 // ===================== Search =====================
 searchInput.addEventListener('input', (e) => {
+activeSearch = e.target.value;
+StorageManager.setLastSearch(activeSearch);
+renderGames();
+});
+
+searchInput.addEventListener('input', (e) => {
   activeSearch = e.target.value;
+  StorageManager.setLastSearch(activeSearch);
   renderGames();
+});
+
+// ===================== Keyboard Shortcuts =====================
+document.addEventListener('keydown', (e) => {
+	// "/" to focus search
+	if(e.key === '/' && !searchInput.matches(':focus')) {
+		e.preventDefault();
+		searchInput.focus();
+	}
+	
+	// "Esc" to close game
+	if(e.key === 'Escape' && iframe.style.display === 'block') {
+		backBtn.click();
+	}
+	
+	// "F" for fullscreen
+	if(e.key === 'f' || e.key === 'F') {
+		if(iframe.style.display === 'block') {
+			e.preventDefault();
+			fullscreenBtn.click();
+		}
+	}
+	
+	// "C" to toggle categories on mobile
+	if((e.key === 'c' || e.key === 'C') && window.innerWidth <= 720) {
+		categoryToggleMobile.click();
+	}
 });
 
 // ===================== Back & Fullscreen =====================
 backBtn.addEventListener('click', () => {
   iframe.style.display = 'none';
+  gameLoading.style.display = 'none';
   iframe.src = '';
   gameListEl.style.display = 'grid';
   backBtn.style.display = 'none';
   fullscreenBtn.style.display = 'none';
+  window.scrollTo(0, 0);
 });
 
 fullscreenBtn.addEventListener('click', () => {
   if(iframe.requestFullscreen) iframe.requestFullscreen();
   else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+});
+
+// Handle iframe errors
+iframe.addEventListener('error', () => {
+	gameLoading.innerHTML = '<p style="color: #ff6b6b; font-size: 16px;">⚠️ Failed to load game. Try again?</p>';
+	setTimeout(() => {
+		gameLoading.style.display = 'none';
+	}, 3000);
+});
+
+// Mobile responsiveness
+window.addEventListener('resize', () => {
+	if(window.innerWidth > 720) {
+		categoryToggleMobile.style.display = 'none';
+		categoryEl.classList.remove('mobile-visible');
+	}
 });
 		</script>
 </body>
