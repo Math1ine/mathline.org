@@ -475,24 +475,28 @@
 		<!-- Decorations -->
 		<div id="lights-container"></div>
 
-	<script>	
+		<script>
 			// ===================== Local Storage Manager =====================
-const StorageManager = {
-	getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'),
-	updateGameStats: (name) => {
-		const stats = StorageManager.getGameStats(name);
-		stats.played = (stats.played || 0) + 1;
-		stats.lastPlayed = new Date().toLocaleDateString();
-		stats.playTime = (stats.playTime || 0) + 0.01;
-		localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
-	 let playTimer = null;
-  },
-	getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
-	setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
-	getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
-	setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
-};
+let playTimer = null;
 
+const StorageManager = {
+getGameStats: (name) =>
+JSON.parse(
+localStorage.getItem(`mathline_stats_${name}`) ||
+'{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'
+),
+
+updateGameStats: (name) => {
+const stats = StorageManager.getGameStats(name);
+stats.playTime = (stats.playTime || 0) + 0.01;
+localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
+},
+
+getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
+setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
+getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
+setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
+};
 		// ===================== Decorations =====================
 const DECO_EMOJIS = ["⚡","💥","✨","🌟","🔆","🔥"];
 const DECO_COUNT = 32;
@@ -719,13 +723,17 @@ const ModalManager = {
 		gameModal.classList.add('active');
 	},
 	close: () => {
-		gameModal.classList.remove('active');
-	},
-	play: (gameName) => {
+		gameModal.classList.remove('active');},
+	
+  
+  play: (gameName) => {
 		const game = normalGames.find(g => g.name === gameName);
 		if(!game) return;
 		
-		StorageManager.updateGameStats(gameName);
+	const stats = StorageManager.getGameStats(gameName);
+	stats.played = (stats.played || 0) + 1;
+	stats.lastPlayed = new Date().toLocaleDateString();
+	localStorage.setItem(`mathline_stats_${gameName}`, JSON.stringify(stats));
 		
  playTimer = setInterval(() => {
 	StorageManager.updateGameStats(gameName);
@@ -743,7 +751,7 @@ const ModalManager = {
 			iframe.src = game.url;
 			iframe.style.display = 'block';
 			gameLoading.style.display = 'none';
-		}, 500);
+		}, 1500);
 	}
 };
 
@@ -811,7 +819,7 @@ ModalManager.open(game.name);
 return card;
 }
 
-renderGames(); // ADD THIS LINE - renders games on page load
+renderGames();
 
 // ===================== Search =====================
 searchInput.addEventListener('input', (e) => {
