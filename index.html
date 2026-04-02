@@ -7,24 +7,15 @@
 	<title>Math Line</title>
 	<style>
 		:root {
-
 			--bg1: #000000;
-			/* pure black */
 			--bg2: #050505;
-			/* near black */
 			--bg3: #0a0a0f;
-			/* dark gray-blue */
 			--bg4: #0d001a;
-			/* very dark purple */
-
 			--accent: #9d4edd;
-			/* neon purple for glow */
 			--text-color: #ffffff;
 			--card-radius: 14px;
-
 		}
 
-		/* Body & animated background */
 		html,
 		body {
 			margin: 0;
@@ -32,25 +23,249 @@
 			height: 100%;
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 			color: var(--text-color);
-			background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg4));
-			background-size: 400% 400%;
-			animation: moveBackground 18s ease infinite;
+			background: #000;
 			overflow-x: hidden;
 			position: relative;
 		}
 
-		@keyframes moveBackground {
-			0% {
-				background-position: 0% 50%;
-			}
+		/* Animated Grid Background */
+		#grid-bg {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 1;
+			pointer-events: none;
+		}
 
-			50% {
-				background-position: 100% 50%;
-			}
+		/* Auth Modal */
+		#auth-modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.9);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 25;
+		}
 
-			100% {
-				background-position: 0% 50%;
-			}
+		#auth-modal.hidden {
+			display: none;
+		}
+
+		.auth-container {
+			background: rgba(15, 0, 30, 0.95);
+			padding: 40px;
+			border-radius: 12px;
+			border: 2px solid #c77dff;
+			max-width: 400px;
+			width: 90%;
+			box-shadow: 0 0 30px #9d4edd;
+		}
+
+		.auth-container h1 {
+			color: #00f5ff;
+			text-align: center;
+			margin-bottom: 30px;
+		}
+
+		.auth-input {
+			width: 100%;
+			padding: 12px;
+			margin: 12px 0;
+			background: rgba(50, 50, 70, 0.8);
+			border: 2px solid rgba(157, 78, 221, 0.3);
+			border-radius: 6px;
+			color: var(--text-color);
+			font-size: 14px;
+			box-sizing: border-box;
+			transition: all 0.3s;
+		}
+
+		.auth-input:focus {
+			outline: none;
+			border-color: #9d4edd;
+			background: rgba(50, 50, 70, 1);
+			box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+		}
+
+		.auth-button {
+			width: 100%;
+			padding: 12px;
+			margin: 12px 0;
+			background: #9d4edd;
+			border: none;
+			border-radius: 6px;
+			color: #fff;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.3s;
+		}
+
+		.auth-button:hover {
+			background: #c77dff;
+			box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+		}
+
+		.auth-toggle {
+			text-align: center;
+			margin-top: 15px;
+			color: #9d4edd;
+			cursor: pointer;
+			font-size: 12px;
+		}
+
+		.auth-error {
+			color: #ff6b6b;
+			text-align: center;
+			margin: 10px 0;
+			font-size: 12px;
+		}
+
+		.auth-success {
+			color: #51cf66;
+			text-align: center;
+			margin: 10px 0;
+			font-size: 12px;
+		}
+
+		/* User Panel */
+		#user-panel {
+			position: fixed;
+			top: 10px;
+			right: 10px;
+			background: rgba(157, 78, 221, 0.2);
+			border: 2px solid #9d4edd;
+			border-radius: 8px;
+			padding: 12px 16px;
+			z-index: 20;
+			font-size: 12px;
+		}
+
+		#user-panel button {
+			background: #9d4edd;
+			border: none;
+			color: #fff;
+			padding: 6px 12px;
+			border-radius: 4px;
+			cursor: pointer;
+			margin-left: 10px;
+			font-weight: 700;
+			transition: all 0.3s;
+		}
+
+		#user-panel button:hover {
+			background: #c77dff;
+		}
+
+		/* Leaderboard */
+		#leaderboard-modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 22;
+			backdrop-filter: blur(4px);
+		}
+
+		#leaderboard-modal.show {
+			display: flex;
+		}
+
+		.leaderboard-container {
+			background: rgba(15, 0, 30, 0.95);
+			padding: 30px;
+			border-radius: 12px;
+			border: 2px solid #c77dff;
+			max-width: 600px;
+			width: 90%;
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 0 30px #9d4edd;
+		}
+
+		.leaderboard-container h2 {
+			color: #00f5ff;
+			text-align: center;
+			margin-top: 0;
+		}
+
+		.leaderboard-row {
+			display: grid;
+			grid-template-columns: 50px 1fr 150px;
+			align-items: center;
+			padding: 12px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			gap: 15px;
+		}
+
+		.leaderboard-row.header {
+			background: rgba(157, 78, 221, 0.2);
+			font-weight: 700;
+			border-bottom: 2px solid #9d4edd;
+		}
+
+		.leaderboard-rank {
+			text-align: center;
+			color: #9d4edd;
+			font-weight: 700;
+		}
+
+		.leaderboard-rank.first {
+			color: #ffd700;
+		}
+
+		.leaderboard-rank.second {
+			color: #c0c0c0;
+		}
+
+		.leaderboard-rank.third {
+			color: #cd7f32;
+		}
+
+		.leaderboard-name {
+			color: #00f5ff;
+		}
+
+		.leaderboard-playtime {
+			text-align: right;
+			color: #c77dff;
+		}
+
+		.close-leaderboard {
+			background: rgba(255, 255, 255, 0.1) !important;
+			margin-top: 15px;
+			width: 100%;
+		}
+
+		/* Secret Box */
+		#secret-box {
+			position: fixed;
+			top: 70px;
+			right: 10px;
+			width: 80px;
+			height: 50px;
+			z-index: 20;
+			cursor: pointer;
+			background: rgba(0, 0, 0, 0.1);
+			border: 2px solid transparent;
+			border-radius: 8px;
+			transition: all 0.3s ease;
+		}
+
+		#secret-box:hover {
+			background: rgba(157, 78, 221, 0.3);
+			border-color: #9d4edd;
+			box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
 		}
 
 		/* Header */
@@ -76,6 +291,7 @@
 			z-index: 5;
 			flex-wrap: wrap;
 			gap: 10px;
+			position: relative;
 		}
 
 		#search-input {
@@ -91,14 +307,6 @@
 			box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 		}
 
-		.category-dropdown {
-			display: none;
-		}
-
-		.category-dropdown.mobile-active {
-			display: block;
-		}
-
 		.category-bar {
 			text-align: center;
 			margin: 6px 0 12px;
@@ -108,6 +316,7 @@
 			flex-wrap: wrap;
 			padding: 0 12px;
 			gap: 8px;
+			position: relative;
 		}
 
 		.category-bar button {
@@ -138,23 +347,10 @@
 			margin: 8px 0;
 			font-size: 14px;
 			font-weight: 700;
+			position: relative;
+			z-index: 5;
 		}
 
-		.empty-state {
-			text-align: center;
-			padding: 40px 20px;
-			color: var(--accent);
-			font-size: 18px;
-			font-weight: 700;
-			grid-column: 1/-1;
-			display: none;
-		}
-
-		.empty-state.show {
-			display: block;
-		}
-
-		/* Game grid: smaller cards, 6 per row */
 		#game-list {
 			display: grid;
 			grid-template-columns: repeat(6, minmax(100px, 1fr));
@@ -171,24 +367,16 @@
 			align-items: center;
 			justify-content: center;
 			flex-direction: column;
-
 			background: rgba(15, 0, 30, 0.85);
 			border-radius: var(--card-radius);
 			cursor: pointer;
-
 			font-weight: 800;
 			text-align: center;
 			padding: 6px;
 			user-select: none;
-
 			border: 2px solid #c77dff;
 			color: #c77dff;
-
-			box-shadow:
-				0 0 10px #c77dff,
-				0 0 20px #9d4edd,
-				0 0 40px #7b2cbf;
-
+			box-shadow: 0 0 10px #c77dff, 0 0 20px #9d4edd, 0 0 40px #7b2cbf;
 			transition: all 0.3s ease;
 			position: relative;
 		}
@@ -196,26 +384,14 @@
 		.game-card:hover {
 			color: #ffffff;
 			border-color: #ff00ff;
-
-			box-shadow:
-				0 0 15px #ff00ff,
-				0 0 30px #ff00ff,
-				0 0 60px #ff00ff;
-
-			transform: scale(1.07);
-		}
-
-		.game-card:hover {
+			box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 60px #ff00ff;
 			transform: translateY(-4px) scale(1.02);
-			box-shadow: 0 12px 24px rgba(0, 0, 0, 0.55);
 		}
 
-		/* Request card steady glow */
 		.game-card.request {
 			box-shadow: 0 0 20px 4px var(--accent);
 		}
 
-		/* Iframe */
 		#game-frame {
 			display: none;
 			width: 95%;
@@ -259,7 +435,6 @@
 			}
 		}
 
-		/* Floating buttons */
 		.floating-btn {
 			position: fixed;
 			padding: 8px 12px;
@@ -287,7 +462,6 @@
 			display: none;
 		}
 
-		/* Game Details Modal */
 		.modal {
 			display: none;
 			position: fixed;
@@ -334,10 +508,6 @@
 			font-weight: 700;
 		}
 
-		.game-stat value {
-			color: var(--text-color);
-		}
-
 		.modal-buttons {
 			display: flex;
 			gap: 10px;
@@ -372,15 +542,6 @@
 			background: rgba(255, 255, 255, 0.2);
 		}
 
-		/* Decorations (falling emojis) */
-		.decoration {
-			position: fixed;
-			pointer-events: none;
-			z-index: 3;
-			user-select: none;
-		}
-
-		/* Responsive */
 		@media (max-width:720px) {
 			header h1 {
 				font-size: 2rem;
@@ -413,24 +574,73 @@
 			.modal-content {
 				max-width: 90%;
 			}
+
+			#user-panel {
+				font-size: 10px;
+				padding: 8px 10px;
+			}
+
+			#user-panel button {
+				padding: 4px 8px;
+				margin-left: 5px;
+			}
 		}
 	</style>
 </head>
 
 <body>
+	<!-- Animated Grid Background Canvas -->
+	<canvas id="grid-bg"></canvas>
+
+	<!-- Auth Modal -->
+	<div id="auth-modal">
+		<div class="auth-container">
+			<h1 id="auth-title">Login</h1>
+			<div id="auth-message"></div>
+			<input type="text" id="auth-username" class="auth-input" placeholder="Username" maxlength="20">
+			<input type="password" id="auth-password" class="auth-input" placeholder="Password" maxlength="30">
+			<button class="auth-button" id="auth-submit">Login</button>
+			<div class="auth-toggle" id="auth-toggle">Don't have an account? Create one</div>
+		</div>
+	</div>
+
+	<!-- User Panel -->
+	<div id="user-panel" style="display: none;">
+		<span id="user-display"></span>
+		<button id="leaderboard-btn">🏆 Leaderboard</button>
+		<button id="logout-btn">Logout</button>
+	</div>
+
+	<!-- Secret Box -->
+	<div id="secret-box"></div>
+
+	<!-- Leaderboard Modal -->
+	<div id="leaderboard-modal">
+		<div class="leaderboard-container">
+			<h2>🏆 Leaderboard</h2>
+			<div class="leaderboard-row header">
+				<div class="leaderboard-rank">Rank</div>
+				<div class="leaderboard-name">Player</div>
+				<div class="leaderboard-playtime">Total Playtime</div>
+			</div>
+			<div id="leaderboard-list"></div>
+			<button class="auth-button close-leaderboard" id="close-leaderboard">Close</button>
+		</div>
+	</div>
+
 	<header>
 		<h1>Math Line</h1>
 	</header>
-	<div style="text-align:center;font-weight:800;color:#ffd700;">
-
-	</div>
 
 	<div class="top-controls">
 		<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 	</div>
+
 		<div class="category-bar" id="category-filter"></div>
 		<button id="category-toggle-mobile" style="display:none; background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin: 0 12px;">📂 Categories</button>
+
 		<div class="game-counter" id="game-counter"></div>
+
 		<div id="game-list" aria-live="polite">
 			<div class="empty-state" id="empty-state"></div>
 		</div>
@@ -472,431 +682,617 @@
 			</div>
 		</div>
 
-		<!-- Decorations -->
-		<div id="lights-container"></div>
-
 		<script>
-			// ===================== Local Storage Manager =====================
-let playTimer = null;
+			// ===================== Account System =====================
+		const AccountManager = {
+			getAllUsers: () => {
+				return JSON.parse(localStorage.getItem('mathline_users') || '{}');
+			},
 
-const StorageManager = {
-getGameStats: (name) =>
-JSON.parse(
-localStorage.getItem(`mathline_stats_${name}`) ||
-'{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'
-),
+			saveUsers: (users) => {
+				localStorage.setItem('mathline_users', JSON.stringify(users));
+			},
 
-updateGameStats: (name) => {
-const stats = StorageManager.getGameStats(name);
-stats.playTime = (stats.playTime || 0) + 0.01;
-localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
-},
+			getCurrentUser: () => {
+				return localStorage.getItem('mathline_current_user');
+			},
 
-getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
-setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
-getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
-setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
-};
-		// ===================== Decorations =====================
-const DECO_EMOJIS = ["⚡","💥","✨","🌟","🔆","🔥"];
-const DECO_COUNT = 32;
-let decorations=[];
-for(let i=0;i<DECO_COUNT;i++){
-  const d=document.createElement('div');
-  d.className='decoration';
-  d.textContent=DECO_EMOJIS[Math.floor(Math.random()*DECO_EMOJIS.length)];
-  d.style.left=(Math.random()*110-5)+'vw';
-  d.style.top=(Math.random()*110-5)+'vh';
-  d.style.fontSize=(16+Math.random()*36)+'px';
-  d.style.opacity=(0.45+Math.random()*0.55).toString();
-  d.dataset.vy=(0.02+Math.random()*0.12).toString();
-  d.dataset.vx=((Math.random()-0.5)*0.04).toString();
-  decorations.push(d);
-  document.body.appendChild(d);
-}
-function animateDecorations(){
-  decorations.forEach(d=>{
-    let top=parseFloat(d.style.top||'0')+parseFloat(d.dataset.vy)*1.1;
-    let left=parseFloat(d.style.left||'0')+parseFloat(d.dataset.vx)*1.1;
-    if(top>105) top=-5;
-    if(top<-10) top=100;
-    if(left>105) left=-5;
-    if(left<-10) left=100;
-    d.style.top=top+'vh';
-    d.style.left=left+'vw';
-    d.style.transform=`rotate(${Math.sin((top+left)*0.1)*10}deg)`;
-  });
-  requestAnimationFrame(animateDecorations);
-}
-requestAnimationFrame(animateDecorations);
+			setCurrentUser: (username) => {
+				localStorage.setItem('mathline_current_user', username);
+			},
 
-// ===================== String lights =====================
-const COLORS=["#ff0000","#00ff00","#ffff00","#00ffff","#ff00ff","#ffa500"];
-const LIGHT_COUNT=60;
-const lightsContainer=document.getElementById('lights-container');
-for(let i=0;i<LIGHT_COUNT;i++){
-  const bulb=document.createElement('div');
-  bulb.className='light';
-  const t=i/(LIGHT_COUNT-1)*Math.PI;
-  bulb.style.left=(5+90*(i/(LIGHT_COUNT-1)))+'%';
-  bulb.style.top=(20+10*Math.sin(t))+'%';
-  bulb.style.backgroundColor=COLORS[i%COLORS.length];
-  bulb.style.animationDelay=(Math.random()*2)+'s';
-  lightsContainer.appendChild(bulb);
-}
+			userExists: (username) => {
+				const users = AccountManager.getAllUsers();
+				return username in users;
+			},
 
-// ===================== Games =====================
-const games=[
-  {name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
-  {name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
-  {name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
-  {name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
-  {name:"Snow Rider",url:"Snow-Rider.html",category:"Racing"},
-  {name:"Swords And Sandals",url:"Swords-and-sandlas.html",category:"Action"},
-  {name:"Crazy Cattle",url:"Crazy-cattle.html",category:"Arcade"},
-  {name:"Gladi Hoppers",url:"Gladi-hoppers.html",category:"Action"},
-  {name:"Bit Planes",url:"Bit-planes.html",category:"Arcade"},
-  {name:"Final Earth2",url:"Final-earth2.html",category:"Strategy"},
-  {name:"Cluster Rush",url:"Cluster-rush.html",category:"Arcade"},
-  {name:"Push Your Luck",url:"Push-your-luck.html",category:"Arcade"},
-  {name:"Poly Track",url:"Poly-track.html",category:"Racing"},
-  {name:"Ragdoll Soccer",url:"Ragdoll-soccer.html",category:"Sports"},
-  {name:"Jetpack Joy Ride",url:"Jetpack-joy-ride.html",category:"Action"},
-  {name:"Learn To Fly 3",url:"Learn-to-fly-3.html",category:"Racing"},
-  {name:"Malidin Stun Cars",url:"Malidin-stun-cars.html",category:"Racing"},
-  {name:"Gun Spin",url:"Gun-spin.html",category:"Action"},
-  {name:"Age Of War",url:"Age-of-war.html",category:"Strategy"},
-  {name:"Moto X3M 2",url:"Moto-x3m-2.html",category:"Racing"},
-  {name:"Moto X3M Winter",url:"Moto-x3m-winter.html",category:"Racing"},
-  {name:"Basketball Stars",url:"Basketball-stars.html",category:"Sports"},
-  {name:"Idle Breakout",url:"Idle-breakout.html",category:"Arcade"},
-  {name:"Vex 8",url:"Vex-8.html",category:"Action"},
-  {name:"Tiny Fishing",url:"Tiny-fishing.html",category:"Simulation"},
-  {name:"Drive Mad",url:"Drive-mad.html",category:"Racing"},
-  {name:"Stick Man Hook",url:"Stick-man-hook.html",category:"Action"},
-  {name:"Line Rider",url:"Line-rider.html",category:"Racing"},
-  {name:"Unicycle Hero",url:"Unicycle-hero.html",category:"Action"},
-  {name:"Basket Random",url:"Basket-random.html",category:"Sports"},
-  {name:"1v1 Lol",url:"1v1-lol.html",category:"Action"},
-  {name:"Happy Wheels",url:"Happy-wheels.html",category:"Action"},
-  {name:"Idle Miner Tycoon",url:"Idle-miner-tycoon.html",category:"Simulation"},
-  {name:"Jack Smith",url:"Jack-smith.html",category:"Action"},
-  {name:"Tunnel Rush",url:"Tunnel-rush.html",category:"Racing"},
-  {name:"Duck Life 5",url:"Duck-life-5.html",category:"Simulation"},
-  {name:"Duck Life 4",url:"Duck-life-4.html",category:"Simulation"},
-  {name:"Mob Control",url:"Mob-control.html",category:"Action"},
-  {name:"A Small World Cup",url:"A-small-world-cup.html",category:"Sports"},
-  {name:"Escape Road",url:"Escape-road.html",category:"Racing"},
-  {name:"QWOP",url:"QWOP.html",category:"Simulation"},
-  {name:"Indian Truck Simulator",url:"Indian-truck-simulator.html",category:"Simulation"},
-  {name:"Doge Miner",url:"Doge-miner.html",category:"Simulation"},
-  {name:"Draw Climber",url:"Draw-climber.html",category:"Racing"},
-  {name:"Slope 3",url:"Slope-3.html",category:"Racing"},
-  {name:"Infinte Craft",url:"Infinte-craft.html",category:"Simulation"},
-  {name:"Block Blast",url:"Block-blast.html",category:"Arcade"},
-  {name:"Melon playground",url:"Melon-playground.html",category:"Simulation"},
-  {name:"House of hazards",url:"house-of-hazards.html",category:"Action"},
-  {name:"Binding of Issac",url:"Binding-of-issac.html",category:"Action"},
-  {name:"Troll Face Quest 10",url:"Troll-face-10.html",category:"Puzzle"},
-  {name:"Troll Face Quest 11",url:"Troll-face-11.html",category:"Puzzle"},
-  {name:"Troll Face Quest 12",url:"Troll-face-12.html",category:"Puzzle"},
-  {name:"Ultimate Car Driving Simulator 3",url:"ultimate-car-simulator.html",category:"Racing"},
-  {name:"Wordle",url:"Wordle.html",category:"Puzzle"},
-  {name:"Cappybara Clicker",url:"Cappybara-clicker.html",category:"Simulation"},
-  {name:"Bob The Robber 5",url:"bob-robber.html",category:"Action"},
-  {name:"Car Crash 3D",url:"Car-crash-3d.html",category:"Racing"},
-  {name:"Bit Life",url:"Bit-life.html",category:"Simulation"},
-  {name:"Plants vs Zombies",url:"Plants-vs-zombies.html",category:"Action"},
-  {name:"Tall Man Run",url:"tall-man-run.html",category:"Racing"},
-  {name:"Tag",url:"tag.html",category:"Racing"},
-  {name:"Subway Surfers Winter",url:"Subway-Winter.html",category:"Racing"},
-  {name:"Subway Surfers Miami",url:"Subway-miami.html",category:"Racing"},
-  {name:"Hole.io",url:"Hole-io.html",category:"Simulation"},
-  {name:"Drift Boss",url:"Drift-boss.html",category:"Racing"},
-  {name:"Subway Surfers Mexico",url:"Subway-mexico.html",category:"Racing"},
-  {name:"Subway Surfers London",url:"Subway-london.html",category:"Racing"},
-  {name:"Subway Surfers Iceland",url:"Subway-iceland.html",category:"Racing"},
-  {name:"Granny 2",url:"Granny2.html",category:"Puzzle"},
-  {name:"Granny 3",url:"Granny3.html",category:"Puzzle"},
-  {name:"Factory Balls 2",url:"Factory-balls2.html",category:"Simulation"},
-  {name:"Factory Balls 3",url:"Factory-balls3.html",category:"Simulation"},
-  {name:"Geometry Dash Lite",url:"Geometry-Dash.html",category:"Racing"},
-  {name:"Hardware Tycoon",url:"Hardware-tycoon.html",category:"Arcade"},
-  {name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Arcade"},
-  {name:"Cross Road",url:"Crossy-road.html",category:"Arcade"},
-  {name:"Burrito Bison",url:"BB.html",category:"Arcade"},
-  {name:"Burrito Bison Launch a Libre",url:"BL.html",category:"Arcade"},
-  {name:"Burrito Bison Revenge",url:"BR.html",category:"Arcade"},
-  {name:"Space Waves",url:"Space-waves.html",category:"Arcade"},
-  {name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
-  {name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
-  {name:"Roof Top Snipers",url:"RF.html",category:"Arcade"},
-  {name:"Ultimate car driving simulator",url:"Ucarsim.html",category:"Racing"},
-  {name:"Traffic Jam 3D",url:"Tj.html",category:"Arcade"},
-  {name:"Papa's freezeria",url:"Pf.html",category:"Arcade"},
-  {name:"Papa's pastaria",url:"Pp.html",category:"Arcade"},
-  {name:"Papa's sushiria",url:"Ps.html",category:"Arcade"},
-  {name:"Ballz",url:"Ballz.html",category:"Arcade"},
-  {name:"10 Minutes Till Dawn",url:"10min.html",category:"Arcade"},
-  {name:"Minecraft",url:"EaglerCraft 1.12 [wasm].html",category:"Arcade"},
-  {name:"Request a Game",url:"#",category:"Request",request:true},
-  {name:"Rocket League",url:"goal.html",category:"Arcade"},
-  {name:"Pixel Battleground",url:"pg.html",category:"Arcade"},
-  {name:"BTD5",url:"BTD5.html",category:"Arcade"},
+			createUser: (username, password) => {
+				if(AccountManager.userExists(username)) {
+					return { success: false, error: 'Username already exists' };
+				}
+				if(username.length < 3 || password.length < 3) {
+					return { success: false, error: 'Username and password must be 3+ characters' };
+				}
 
-];
+				const users = AccountManager.getAllUsers();
+				users[username] = {
+					password: btoa(password), // Simple encoding (not secure for production)
+					totalPlayTime: 0,
+					gamesPlayed: {},
+					createdAt: new Date().toLocaleDateString()
+				};
+				AccountManager.saveUsers(users);
+				return { success: true };
+			},
 
-// Separate games by letter type and sort
-const normalGames = games.filter(g => !g.request).sort((a, b) => {
-  const aStartsWithNum = /^\d/.test(a.name);
-  const bStartsWithNum = /^\d/.test(b.name);
-  
-  if(aStartsWithNum && !bStartsWithNum) return 1;
-  if(!aStartsWithNum && bStartsWithNum) return -1;
-  return a.name.localeCompare(b.name);
-});
-const requestCard = games.find(g => g.request);
+			login: (username, password) => {
+				const users = AccountManager.getAllUsers();
+				if(!(username in users)) {
+					return { success: false, error: 'User not found' };
+				}
+				if(users[username].password !== btoa(password)) {
+					return { success: false, error: 'Incorrect password' };
+				}
 
-// ===================== DOM Elements =====================
-const gameListEl = document.getElementById('game-list');
-const emptyStateEl = document.getElementById('empty-state');
-const iframe = document.getElementById('game-frame');
-const backBtn = document.getElementById('back-btn');
-const fullscreenBtn = document.getElementById('fullscreen-btn');
-const categoryEl = document.getElementById('category-filter');
-const searchInput = document.getElementById('search-input');
-const gameModal = document.getElementById('game-modal');
-const gameCounter = document.getElementById('game-counter');
-const gameLoading = document.getElementById('game-loading');
-const categoryToggleMobile = document.getElementById('category-toggle-mobile');
+				AccountManager.setCurrentUser(username);
+				return { success: true };
+			},
 
-// ===================== Setup Categories =====================
-const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
-  if(a === "All") return -1;
-  if(b === "All") return 1;
-  return a.localeCompare(b);
-});
+			logout: () => {
+				localStorage.removeItem('mathline_current_user');
+			},
 
-let activeCategory = StorageManager.getLastCategory();
-let activeSearch = '';
+			updatePlayTime: (username, playtime) => {
+				const users = AccountManager.getAllUsers();
+				if(username in users) {
+					users[username].totalPlayTime = (users[username].totalPlayTime || 0) + playtime;
+					AccountManager.saveUsers(users);
+				}
+			},
 
-categories.forEach(cat => {
-  const btn = document.createElement('button');
-  btn.textContent = cat;
-  if(cat === activeCategory) btn.classList.add('active');
-  btn.addEventListener('click', () => {
-    document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeCategory = cat;
-    StorageManager.setLastCategory(cat);
-    renderGames();
-    window.scrollTo(0, 0);
-  });
-  categoryEl.appendChild(btn);
-});
+			getLeaderboard: () => {
+				const users = AccountManager.getAllUsers();
+				return Object.keys(users)
+					.map(username => ({
+						username,
+						totalPlayTime: users[username].totalPlayTime || 0
+					}))
+					.sort((a, b) => b.totalPlayTime - a.totalPlayTime)
+					.slice(0, 50);
+			}
+		};
 
-// Mobile category toggle
-categoryToggleMobile.addEventListener('click', () => {
-	categoryEl.classList.toggle('mobile-visible');
-});
+		// ===================== Auth UI =====================
+		const AuthUI = {
+			isLoginMode: true,
 
-// ===================== Modal Manager =====================
-const ModalManager = {
-	open: (gameName) => {
-		const game = normalGames.find(g => g.name === gameName);
-		if(!game) return;
-		
-		const stats = StorageManager.getGameStats(gameName);
-		const lastPlayed = stats.lastPlayed || "Never";
-		const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
-		
-		const playTimeStr = roundedTime > 60
-		? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m`
-		: `${roundedTime}m`;
-		
-		document.getElementById('modal-game-name').textContent = gameName;
-		document.getElementById('modal-category').textContent = game.category;
-		document.getElementById('modal-played').textContent = stats.played || '0';
-		document.getElementById('modal-last-played').textContent = lastPlayed;
-		document.getElementById('modal-playtime').textContent = playTimeStr;
-		
-		document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
-		gameModal.classList.add('active');
-	},
-	close: () => {
-		gameModal.classList.remove('active');},
-	
-  
-  play: (gameName) => {
-		const game = normalGames.find(g => g.name === gameName);
-		if(!game) return;
-		
-	const stats = StorageManager.getGameStats(gameName);
-	stats.played = (stats.played || 0) + 1;
-	stats.lastPlayed = new Date().toLocaleDateString();
-	localStorage.setItem(`mathline_stats_${gameName}`, JSON.stringify(stats));
-		
- playTimer = setInterval(() => {
-	StorageManager.updateGameStats(gameName);
-	}, 1000);
-		
-    gameListEl.style.display = 'none';
-		gameLoading.style.display = 'block';
-		iframe.style.display = 'none';
-		backBtn.style.display = 'block';
-		fullscreenBtn.style.display = 'block';
-		gameModal.classList.remove('active');
-		
-		// Simulate loading delay
-		setTimeout(() => {
-			iframe.src = game.url;
-			iframe.style.display = 'block';
-			gameLoading.style.display = 'none';
-		}, 1500);
-	}
-};
+			init: () => {
+				const currentUser = AccountManager.getCurrentUser();
+				if(currentUser) {
+					AuthUI.showMainUI(currentUser);
+				} else {
+					AuthUI.showAuthUI();
+				}
+			},
 
-document.getElementById('modal-close-btn').addEventListener('click', ModalManager.close);
-gameModal.addEventListener('click', (e) => {
-	if(e.target === gameModal) ModalManager.close();
-});
+			showAuthUI: () => {
+				document.getElementById('auth-modal').classList.remove('hidden');
+				document.getElementById('user-panel').style.display = 'none';
+			},
 
-// ===================== Render =====================
-function renderGames(){
-gameListEl.innerHTML="";
+			showMainUI: (username) => {
+				document.getElementById('auth-modal').classList.add('hidden');
+				document.getElementById('user-panel').style.display = 'block';
+				document.getElementById('user-display').textContent = `👤 ${username}`;
+			},
 
-// Filter games
-let filtered = normalGames;
+			toggleMode: () => {
+				AuthUI.isLoginMode = !AuthUI.isLoginMode;
+				const title = document.getElementById('auth-title');
+				const button = document.getElementById('auth-submit');
+				const toggle = document.getElementById('auth-toggle');
 
-if(activeCategory !== "All"){
-filtered = filtered.filter(g => g.category === activeCategory);
-}
+				if(AuthUI.isLoginMode) {
+					title.textContent = 'Login';
+					button.textContent = 'Login';
+					toggle.textContent = "Don't have an account? Create one";
+				} else {
+					title.textContent = 'Create Account';
+					button.textContent = 'Create Account';
+					toggle.textContent = 'Already have an account? Login';
+				}
+				document.getElementById('auth-message').innerHTML = '';
+			},
 
-if(activeSearch){
-filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
-}
+			submit: () => {
+				const username = document.getElementById('auth-username').value;
+				const password = document.getElementById('auth-password').value;
+				const messageEl = document.getElementById('auth-message');
 
-// Render all filtered games
-filtered.forEach(g => {
-const card = createGameCard(g);
-gameListEl.appendChild(card);
-});
+				if(!username || !password) {
+					messageEl.innerHTML = '<div class="auth-error">Please fill in all fields</div>';
+					return;
+				}
 
-// Always append request card at the bottom (ALWAYS appears)
-const reqCard = document.createElement('div');
-reqCard.className = 'game-card request';
-reqCard.innerHTML = '<span>Request a Game</span>';
-reqCard.addEventListener('click', () => {
-window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog',
-'_blank');
-});
-gameListEl.appendChild(reqCard);
+				let result;
+				if(AuthUI.isLoginMode) {
+					result = AccountManager.login(username, password);
+				} else {
+					result = AccountManager.createUser(username, password);
+				}
 
-// Update counter (keep it visible always)
-const totalGames = filtered.length;
-gameCounter.textContent = `Showing ${totalGames} game${totalGames !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `•
-${activeCategory}` : ''}${activeSearch ? ` • Searched for "${activeSearch}"` : ''}`;
+				if(result.success) {
+					messageEl.innerHTML = '<div class="auth-success">Success!</div>';
+					setTimeout(() => {
+						document.getElementById('auth-username').value = '';
+						document.getElementById('auth-password').value = '';
+						AuthUI.showMainUI(username);
+						renderGames();
+					}, 500);
+				} else {
+					messageEl.innerHTML = `<div class="auth-error">${result.error}</div>`;
+				}
+			}
+		};
 
-// Show/hide category toggle on mobile
-if(window.innerWidth <= 720) { categoryToggleMobile.style.display=filtered.length===0 && !activeSearch ? 'none'
-	: 'block' ; } } function createGameCard(game) { const card=document.createElement('div'); card.className='game-card'
-	; card.innerHTML=`<span>${game.name}</span>`;
+		// Event listeners for auth
+		document.getElementById('auth-submit').addEventListener('click', AuthUI.submit);
+		document.getElementById('auth-toggle').addEventListener('click', AuthUI.toggleMode);
+		document.getElementById('logout-btn').addEventListener('click', () => {
+			AccountManager.logout();
+			AuthUI.showAuthUI();
+			document.getElementById('auth-username').value = '';
+			document.getElementById('auth-password').value = '';
+		});
 
-card.addEventListener('click', () => {
-ModalManager.open(game.name);
-});
+		// ===================== Leaderboard =====================
+		document.getElementById('leaderboard-btn').addEventListener('click', () => {
+			const leaderboard = AccountManager.getLeaderboard();
+			const listEl = document.getElementById('leaderboard-list');
+			listEl.innerHTML = '';
 
-return card;
-}
-function createGameCard(game) {
-const card = document.createElement('div');
-card.className = 'game-card';
-card.innerHTML = `<span>${game.name}</span>`;
+			leaderboard.forEach((entry, index) => {
+				const hours = Math.floor(entry.totalPlayTime / 60);
+				const mins = Math.floor(entry.totalPlayTime % 60);
+				const timeStr = `${hours}h ${mins}m`;
 
-card.addEventListener('click', () => {
-ModalManager.open(game.name);
-});
+				const row = document.createElement('div');
+				row.className = 'leaderboard-row';
+				if(index === 0) row.querySelector = 'first';
+				if(index === 1) row.querySelector = 'second';
+				if(index === 2) row.querySelector = 'third';
 
-return card;
-}
+				row.innerHTML = `
+					<div class="leaderboard-rank ${index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : ''}">
+						${index + 1}${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
+					</div>
+					<div class="leaderboard-name">${entry.username}</div>
+					<div class="leaderboard-playtime">${timeStr}</div>
+				`;
+				listEl.appendChild(row);
+			});
 
-renderGames();
+			document.getElementById('leaderboard-modal').classList.add('show');
+		});
 
-// ===================== Search =====================
-searchInput.addEventListener('input', (e) => {
-activeSearch = e.target.value;
-StorageManager.setLastSearch(activeSearch);
-renderGames();
-});
+		document.getElementById('close-leaderboard').addEventListener('click', () => {
+			document.getElementById('leaderboard-modal').classList.remove('show');
+		});
 
-searchInput.addEventListener('input', (e) => {
-  activeSearch = e.target.value;
-  StorageManager.setLastSearch(activeSearch);
-  renderGames();
-});
+		// ===================== Animated Grid Background =====================
+		const canvas = document.getElementById('grid-bg');
+		const ctx = canvas.getContext('2d');
 
-// ===================== Keyboard Shortcuts =====================
-document.addEventListener('keydown', (e) => {
-	// "/" to focus search
-	if(e.key === '/' && !searchInput.matches(':focus')) {
-		e.preventDefault();
-		searchInput.focus();
-	}
-	
-	// "Esc" to close game
-	if(e.key === 'Escape' && iframe.style.display === 'block') {
-		backBtn.click();
-	}
-	
-	// "F" for fullscreen
-	if(e.key === 'f' || e.key === 'F') {
-		if(iframe.style.display === 'block') {
-			e.preventDefault();
-			fullscreenBtn.click();
+		function resizeCanvas() {
+			canvas.width = window.innerWidth;
+			canvas.height = window.innerHeight;
 		}
-	}
-	
-	// "C" to toggle categories on mobile
-	if((e.key === 'c' || e.key === 'C') && window.innerWidth <= 720) {
-		categoryToggleMobile.click();
-	}
-});
+		resizeCanvas();
+		window.addEventListener('resize', resizeCanvas);
 
-// ===================== Back & Fullscreen =====================
-  backBtn.addEventListener('click', () => {
-if (playTimer) {
-clearInterval(playTimer);
-playTimer = null;
-}
-  iframe.style.display = 'none';
-  gameLoading.style.display = 'none';
-  iframe.src = '';
-  gameListEl.style.display = 'grid';
-  backBtn.style.display = 'none';
-  fullscreenBtn.style.display = 'none';
-  window.scrollTo(0, 0);
-});
+		let time = 0;
+		const gridSpacing = 40;
 
-fullscreenBtn.addEventListener('click', () => {
-  if(iframe.requestFullscreen) iframe.requestFullscreen();
-  else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
-});
+		function animateGrid() {
+			time += 0.8;
+			
+			ctx.fillStyle = '#000';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-// Handle iframe errors
-iframe.addEventListener('error', () => {
-	gameLoading.innerHTML = '<p style="color: #ff6b6b; font-size: 16px;">⚠️ Failed to load game. Try again?</p>';
-	setTimeout(() => {
-		gameLoading.style.display = 'none';
-	}, 3000);
-});
+			const colorCycle = (time / 200) % 3;
+			let color;
+			if(colorCycle < 1) {
+				color = `rgba(200, 100, 255, ${0.5 + colorCycle * 0.3})`;
+			} else if(colorCycle < 2) {
+				color = `rgba(0, 255, 255, ${0.8 - (colorCycle - 1) * 0.3})`;
+			} else {
+				color = `rgba(255, 50, 200, ${0.5 + (colorCycle - 2) * 0.3})`;
+			}
 
-// Mobile responsiveness
-window.addEventListener('resize', () => {
-	if(window.innerWidth > 720) {
-		categoryToggleMobile.style.display = 'none';
-		categoryEl.classList.remove('mobile-visible');
-	}
-});
+			ctx.strokeStyle = color;
+			ctx.lineWidth = 2.5;
+			ctx.shadowColor = color;
+			ctx.shadowBlur = 15;
+
+			for (let x = 0; x < canvas.width + gridSpacing; x += gridSpacing) {
+				const offset = (time * 2) % gridSpacing;
+				ctx.beginPath();
+				ctx.moveTo(x - offset, 0);
+				ctx.lineTo(x - offset + canvas.height * 0.4, canvas.height);
+				ctx.stroke();
+			}
+
+			for (let y = 0; y < canvas.height + gridSpacing; y += gridSpacing) {
+				const offset = (time * 2) % gridSpacing;
+				ctx.beginPath();
+				ctx.moveTo(0, y - offset);
+				ctx.lineTo(canvas.width, y - offset + canvas.width * 0.2);
+				ctx.stroke();
+			}
+
+			ctx.shadowBlur = 0;
+
+			requestAnimationFrame(animateGrid);
+		}
+
+		animateGrid();
+
+		// ===================== Secret Box =====================
+		document.getElementById('secret-box').addEventListener('click', () => {
+			window.open('secret.html', '_blank');
+		});
+
+		// ===================== Local Storage Manager =====================
+		let playTimer = null;
+
+		const StorageManager = {
+			getGameStats: (name) =>
+				JSON.parse(
+					localStorage.getItem(`mathline_stats_${name}`) ||
+					'{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'
+				),
+
+			updateGameStats: (name) => {
+				const stats = StorageManager.getGameStats(name);
+				stats.playTime = (stats.playTime || 0) + 0.01;
+				localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
+			},
+
+			getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
+			setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
+			getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
+			setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
+		};
+
+		// ===================== Games =====================
+		const games = [
+			{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
+			{name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
+			{name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
+			{name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
+			{name:"Snow Rider",url:"Snow-Rider.html",category:"Racing"},
+			{name:"Swords And Sandals",url:"Swords-and-sandlas.html",category:"Action"},
+			{name:"Crazy Cattle",url:"Crazy-cattle.html",category:"Arcade"},
+			{name:"Gladi Hoppers",url:"Gladi-hoppers.html",category:"Action"},
+			{name:"Bit Planes",url:"Bit-planes.html",category:"Arcade"},
+			{name:"Final Earth2",url:"Final-earth2.html",category:"Strategy"},
+			{name:"Cluster Rush",url:"Cluster-rush.html",category:"Arcade"},
+			{name:"Push Your Luck",url:"Push-your-luck.html",category:"Arcade"},
+			{name:"Poly Track",url:"Poly-track.html",category:"Racing"},
+			{name:"Ragdoll Soccer",url:"Ragdoll-soccer.html",category:"Sports"},
+			{name:"Jetpack Joy Ride",url:"Jetpack-joy-ride.html",category:"Action"},
+			{name:"Learn To Fly 3",url:"Learn-to-fly-3.html",category:"Racing"},
+			{name:"Malidin Stun Cars",url:"Malidin-stun-cars.html",category:"Racing"},
+			{name:"Gun Spin",url:"Gun-spin.html",category:"Action"},
+			{name:"Age Of War",url:"Age-of-war.html",category:"Strategy"},
+			{name:"Moto X3M 2",url:"Moto-x3m-2.html",category:"Racing"},
+			{name:"Moto X3M Winter",url:"Moto-x3m-winter.html",category:"Racing"},
+			{name:"Basketball Stars",url:"Basketball-stars.html",category:"Sports"},
+			{name:"Idle Breakout",url:"Idle-breakout.html",category:"Arcade"},
+			{name:"Vex 8",url:"Vex-8.html",category:"Action"},
+			{name:"Tiny Fishing",url:"Tiny-fishing.html",category:"Simulation"},
+			{name:"Drive Mad",url:"Drive-mad.html",category:"Racing"},
+			{name:"Stick Man Hook",url:"Stick-man-hook.html",category:"Action"},
+			{name:"Line Rider",url:"Line-rider.html",category:"Racing"},
+			{name:"Unicycle Hero",url:"Unicycle-hero.html",category:"Action"},
+			{name:"Basket Random",url:"Basket-random.html",category:"Sports"},
+			{name:"1v1 Lol",url:"1v1-lol.html",category:"Action"},
+			{name:"Happy Wheels",url:"Happy-wheels.html",category:"Action"},
+			{name:"Idle Miner Tycoon",url:"Idle-miner-tycoon.html",category:"Simulation"},
+			{name:"Jack Smith",url:"Jack-smith.html",category:"Action"},
+			{name:"Tunnel Rush",url:"Tunnel-rush.html",category:"Racing"},
+			{name:"Duck Life 5",url:"Duck-life-5.html",category:"Simulation"},
+			{name:"Duck Life 4",url:"Duck-life-4.html",category:"Simulation"},
+			{name:"Mob Control",url:"Mob-control.html",category:"Action"},
+			{name:"A Small World Cup",url:"A-small-world-cup.html",category:"Sports"},
+			{name:"Escape Road",url:"Escape-road.html",category:"Racing"},
+			{name:"QWOP",url:"QWOP.html",category:"Simulation"},
+			{name:"Indian Truck Simulator",url:"Indian-truck-simulator.html",category:"Simulation"},
+			{name:"Doge Miner",url:"Doge-miner.html",category:"Simulation"},
+			{name:"Draw Climber",url:"Draw-climber.html",category:"Racing"},
+			{name:"Slope 3",url:"Slope-3.html",category:"Racing"},
+			{name:"Infinte Craft",url:"Infinte-craft.html",category:"Simulation"},
+			{name:"Block Blast",url:"Block-blast.html",category:"Arcade"},
+			{name:"Melon playground",url:"Melon-playground.html",category:"Simulation"},
+			{name:"House of hazards",url:"house-of-hazards.html",category:"Action"},
+			{name:"Binding of Issac",url:"Binding-of-issac.html",category:"Action"},
+			{name:"Troll Face Quest 10",url:"Troll-face-10.html",category:"Puzzle"},
+			{name:"Troll Face Quest 11",url:"Troll-face-11.html",category:"Puzzle"},
+			{name:"Troll Face Quest 12",url:"Troll-face-12.html",category:"Puzzle"},
+			{name:"Ultimate Car Driving Simulator 3",url:"ultimate-car-simulator.html",category:"Racing"},
+			{name:"Wordle",url:"Wordle.html",category:"Puzzle"},
+			{name:"Cappybara Clicker",url:"Cappybara-clicker.html",category:"Simulation"},
+			{name:"Bob The Robber 5",url:"bob-robber.html",category:"Action"},
+			{name:"Car Crash 3D",url:"Car-crash-3d.html",category:"Racing"},
+			{name:"Bit Life",url:"Bit-life.html",category:"Simulation"},
+			{name:"Plants vs Zombies",url:"Plants-vs-zombies.html",category:"Action"},
+			{name:"Tall Man Run",url:"tall-man-run.html",category:"Racing"},
+			{name:"Tag",url:"tag.html",category:"Racing"},
+			{name:"Subway Surfers Winter",url:"Subway-Winter.html",category:"Racing"},
+			{name:"Subway Surfers Miami",url:"Subway-miami.html",category:"Racing"},
+			{name:"Hole.io",url:"Hole-io.html",category:"Simulation"},
+			{name:"Drift Boss",url:"Drift-boss.html",category:"Racing"},
+			{name:"Subway Surfers Mexico",url:"Subway-mexico.html",category:"Racing"},
+			{name:"Subway Surfers London",url:"Subway-london.html",category:"Racing"},
+			{name:"Subway Surfers Iceland",url:"Subway-iceland.html",category:"Racing"},
+			{name:"Granny 2",url:"Granny2.html",category:"Puzzle"},
+			{name:"Granny 3",url:"Granny3.html",category:"Puzzle"},
+			{name:"Factory Balls 2",url:"Factory-balls2.html",category:"Simulation"},
+			{name:"Factory Balls 3",url:"Factory-balls3.html",category:"Simulation"},
+			{name:"Geometry Dash Lite",url:"Geometry-Dash.html",category:"Racing"},
+			{name:"Hardware Tycoon",url:"Hardware-tycoon.html",category:"Arcade"},
+			{name:"CSGO Cliker",url:"CsGo-clicker.html",category:"Arcade"},
+			{name:"Cross Road",url:"Crossy-road.html",category:"Arcade"},
+			{name:"Burrito Bison",url:"BB.html",category:"Arcade"},
+			{name:"Burrito Bison Launch a Libre",url:"BL.html",category:"Arcade"},
+			{name:"Burrito Bison Revenge",url:"BR.html",category:"Arcade"},
+			{name:"Space Waves",url:"Space-waves.html",category:"Arcade"},
+			{name:"The legend of Zelda Ocarina",url:"Zelda0.html",category:"Arcade"},
+			{name:"Pokemon emerald randomized",url:"PER.html",category:"Arcade"},
+			{name:"Roof Top Snipers",url:"RF.html",category:"Arcade"},
+			{name:"Ultimate car driving simulator",url:"Ucarsim.html",category:"Racing"},
+			{name:"Traffic Jam 3D",url:"Tj.html",category:"Arcade"},
+			{name:"Papa's freezeria",url:"Pf.html",category:"Arcade"},
+			{name:"Papa's pastaria",url:"Pp.html",category:"Arcade"},
+			{name:"Papa's sushiria",url:"Ps.html",category:"Arcade"},
+			{name:"Ballz",url:"Ballz.html",category:"Arcade"},
+			{name:"10 Minutes Till Dawn",url:"10min.html",category:"Arcade"},
+			{name:"Minecraft",url:"EaglerCraft 1.12 [wasm].html",category:"Arcade"},
+			{name:"Request a Game",url:"#",category:"Request",request:true},
+			{name:"Rocket League",url:"goal.html",category:"Arcade"},
+			{name:"Pixel Battleground",url:"pg.html",category:"Arcade"},
+			{name:"BTD5",url:"BTD5.html",category:"Arcade"},
+		];
+
+		const normalGames = games.filter(g => !g.request).sort((a, b) => {
+			const aStartsWithNum = /^\d/.test(a.name);
+			const bStartsWithNum = /^\d/.test(b.name);
+			if(aStartsWithNum && !bStartsWithNum) return 1;
+			if(!aStartsWithNum && bStartsWithNum) return -1;
+			return a.name.localeCompare(b.name);
+		});
+
+		// ===================== DOM Elements =====================
+		const gameListEl = document.getElementById('game-list');
+		const iframe = document.getElementById('game-frame');
+		const backBtn = document.getElementById('back-btn');
+		const fullscreenBtn = document.getElementById('fullscreen-btn');
+		const categoryEl = document.getElementById('category-filter');
+		const searchInput = document.getElementById('search-input');
+		const gameModal = document.getElementById('game-modal');
+		const gameCounter = document.getElementById('game-counter');
+		const gameLoading = document.getElementById('game-loading');
+		const categoryToggleMobile = document.getElementById('category-toggle-mobile');
+
+		// ===================== Setup Categories =====================
+		const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
+			if(a === "All") return -1;
+			if(b === "All") return 1;
+			return a.localeCompare(b);
+		});
+
+		let activeCategory = StorageManager.getLastCategory();
+		let activeSearch = '';
+
+		categories.forEach(cat => {
+			const btn = document.createElement('button');
+			btn.textContent = cat;
+			if(cat === activeCategory) btn.classList.add('active');
+			btn.addEventListener('click', () => {
+				document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
+				btn.classList.add('active');
+				activeCategory = cat;
+				StorageManager.setLastCategory(cat);
+				renderGames();
+				window.scrollTo(0, 0);
+			});
+			categoryEl.appendChild(btn);
+		});
+
+		categoryToggleMobile.addEventListener('click', () => {
+			categoryEl.classList.toggle('mobile-visible');
+		});
+
+		// ===================== Modal Manager =====================
+		const ModalManager = {
+			open: (gameName) => {
+				const game = normalGames.find(g => g.name === gameName);
+				if(!game) return;
+
+				const stats = StorageManager.getGameStats(gameName);
+				const lastPlayed = stats.lastPlayed || "Never";
+				const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
+
+				const playTimeStr = roundedTime > 60
+					? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m`
+					: `${roundedTime}m`;
+
+				document.getElementById('modal-game-name').textContent = gameName;
+				document.getElementById('modal-category').textContent = game.category;
+				document.getElementById('modal-played').textContent = stats.played || '0';
+				document.getElementById('modal-last-played').textContent = lastPlayed;
+				document.getElementById('modal-playtime').textContent = playTimeStr;
+
+				document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
+				gameModal.classList.add('active');
+			},
+			close: () => {
+				gameModal.classList.remove('active');
+			},
+			play: (gameName) => {
+				const game = normalGames.find(g => g.name === gameName);
+				if(!game) return;
+
+				const stats = StorageManager.getGameStats(gameName);
+				stats.played = (stats.played || 0) + 1;
+				stats.lastPlayed = new Date().toLocaleDateString();
+				localStorage.setItem(`mathline_stats_${gameName}`, JSON.stringify(stats));
+
+				playTimer = setInterval(() => {
+					StorageManager.updateGameStats(gameName);
+				}, 1000);
+
+				gameListEl.style.display = 'none';
+				gameLoading.style.display = 'block';
+				iframe.style.display = 'none';
+				backBtn.style.display = 'block';
+				fullscreenBtn.style.display = 'block';
+				gameModal.classList.remove('active');
+
+				setTimeout(() => {
+					iframe.src = game.url;
+					iframe.style.display = 'block';
+					gameLoading.style.display = 'none';
+				}, 1500);
+			}
+		};
+
+		document.getElementById('modal-close-btn').addEventListener('click', ModalManager.close);
+		gameModal.addEventListener('click', (e) => {
+			if(e.target === gameModal) ModalManager.close();
+		});
+
+		// ===================== Render =====================
+		function renderGames(){
+			gameListEl.innerHTML="";
+
+			let filtered = normalGames;
+
+			if(activeCategory !== "All"){
+				filtered = filtered.filter(g => g.category === activeCategory);
+			}
+
+			if(activeSearch){
+				filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+			}
+
+			filtered.forEach(g => {
+				const card = createGameCard(g);
+				gameListEl.appendChild(card);
+			});
+
+			const reqCard = document.createElement('div');
+			reqCard.className = 'game-card request';
+			reqCard.innerHTML = '<span>Request a Game</span>';
+			reqCard.addEventListener('click', () => {
+				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
+			});
+			gameListEl.appendChild(reqCard);
+
+			const totalGames = filtered.length;
+			gameCounter.textContent = `Showing ${totalGames} game${totalGames !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `• ${activeCategory}` : ''}${activeSearch ? ` • Searched for "${activeSearch}"` : ''}`;
+
+			if(window.innerWidth <= 720) {
+				categoryToggleMobile.style.display = filtered.length === 0 && !activeSearch ? 'none' : 'block';
+			}
+		}
+
+		function createGameCard(game) {
+			const card = document.createElement('div');
+			card.className = 'game-card';
+			card.innerHTML = `<span>${game.name}</span>`;
+
+			card.addEventListener('click', () => {
+				ModalManager.open(game.name);
+			});
+
+			return card;
+		}
+
+		// ===================== Search =====================
+		searchInput.addEventListener('input', (e) => {
+			activeSearch = e.target.value;
+			StorageManager.setLastSearch(activeSearch);
+			renderGames();
+		});
+
+		// ===================== Keyboard Shortcuts =====================
+		document.addEventListener('keydown', (e) => {
+			if(e.key === '/' && !searchInput.matches(':focus')) {
+				e.preventDefault();
+				searchInput.focus();
+			}
+
+			if(e.key === 'Escape' && iframe.style.display === 'block') {
+				backBtn.click();
+			}
+
+			if(e.key === 'f' || e.key === 'F') {
+				if(iframe.style.display === 'block') {
+					e.preventDefault();
+					fullscreenBtn.click();
+				}
+			}
+
+			if((e.key === 'c' || e.key === 'C') && window.innerWidth <= 720) {
+				categoryToggleMobile.click();
+			}
+		});
+
+		// ===================== Back & Fullscreen =====================
+		backBtn.addEventListener('click', () => {
+			if (playTimer) {
+				clearInterval(playTimer);
+				playTimer = null;
+
+				// Update account's total playtime
+				const currentUser = AccountManager.getCurrentUser();
+				if(currentUser) {
+					const users = AccountManager.getAllUsers();
+					const timeSpent = 1.5; // 1.5 minutes per game session
+					AccountManager.updatePlayTime(currentUser, timeSpent);
+				}
+			}
+			iframe.style.display = 'none';
+			gameLoading.style.display = 'none';
+			iframe.src = '';
+			gameListEl.style.display = 'grid';
+			backBtn.style.display = 'none';
+			fullscreenBtn.style.display = 'none';
+			window.scrollTo(0, 0);
+		});
+
+		fullscreenBtn.addEventListener('click', () => {
+			if(iframe.requestFullscreen) iframe.requestFullscreen();
+			else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+		});
+
+		iframe.addEventListener('error', () => {
+			gameLoading.innerHTML = '<p style="color: #ff6b6b; font-size: 16px;">⚠️ Failed to load game. Try again?</p>';
+			setTimeout(() => {
+				gameLoading.style.display = 'none';
+			}, 3000);
+		});
+
+		window.addEventListener('resize', () => {
+			if(window.innerWidth > 720) {
+				categoryToggleMobile.style.display = 'none';
+				categoryEl.classList.remove('mobile-visible');
+			}
+		});
+
+		// ===================== Initialize =====================
+		AuthUI.init();
 		</script>
 </body>
 
