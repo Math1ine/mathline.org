@@ -16,8 +16,7 @@
 			--card-radius: 14px;
 		}
 
-		html,
-		body {
+		html, body {
 			margin: 0;
 			padding: 0;
 			height: 100%;
@@ -426,13 +425,8 @@
 		}
 
 		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-
-			100% {
-				transform: rotate(360deg);
-			}
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
 		}
 
 		.floating-btn {
@@ -636,54 +630,54 @@
 		<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 	</div>
 
-		<div class="category-bar" id="category-filter"></div>
-		<button id="category-toggle-mobile" style="display:none; background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin: 0 12px;">📂 Categories</button>
+	<div class="category-bar" id="category-filter"></div>
+	<button id="category-toggle-mobile" style="display:none; background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin: 0 12px;">📂 Categories</button>
 
-		<div class="game-counter" id="game-counter"></div>
+	<div class="game-counter" id="game-counter"></div>
 
-		<div id="game-list" aria-live="polite">
-			<div class="empty-state" id="empty-state"></div>
-		</div>
+	<div id="game-list" aria-live="polite">
+		<div class="empty-state" id="empty-state"></div>
+	</div>
 
-		<div id="game-loading">
-			<div class="spinner"></div>
-			<p>Loading game...</p>
-		</div>
+	<div id="game-loading">
+		<div class="spinner"></div>
+		<p>Loading game...</p>
+	</div>
 
-		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
+	<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-		<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen (F)">Fullscreen</button>
-		<button id="back-btn" class="floating-btn" title="Back to games (Esc)">← Back</button>
+	<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen (F)">Fullscreen</button>
+	<button id="back-btn" class="floating-btn" title="Back to games (Esc)">← Back</button>
 
-		<!-- Game Details Modal -->
-		<div id="game-modal" class="modal">
-			<div class="modal-content">
-				<h2 id="modal-game-name"></h2>
-				<div class="game-stat">
-					<label>Category:</label>
-					<span id="modal-category"></span>
-				</div>
-				<div class="game-stat">
-					<label>Times Played:</label>
-					<span id="modal-played"></span>
-				</div>
-				<div class="game-stat">
-					<label>Last Played:</label>
-					<span id="modal-last-played"></span>
-				</div>
-				<div class="game-stat">
-					<label>Total Play Time:</label>
-					<span id="modal-playtime"></span>
-				</div>
-				<div class="modal-buttons">
-					<button class="play-btn" id="modal-play-btn">▶️ Play</button>
-					<button class="close-modal" id="modal-close-btn">Close</button>
-				</div>
+	<!-- Game Details Modal -->
+	<div id="game-modal" class="modal">
+		<div class="modal-content">
+			<h2 id="modal-game-name"></h2>
+			<div class="game-stat">
+				<label>Category:</label>
+				<span id="modal-category"></span>
+			</div>
+			<div class="game-stat">
+				<label>Times Played:</label>
+				<span id="modal-played"></span>
+			</div>
+			<div class="game-stat">
+				<label>Last Played:</label>
+				<span id="modal-last-played"></span>
+			</div>
+			<div class="game-stat">
+				<label>Total Play Time:</label>
+				<span id="modal-playtime"></span>
+			</div>
+			<div class="modal-buttons">
+				<button class="play-btn" id="modal-play-btn">▶️ Play</button>
+				<button class="close-modal" id="modal-close-btn">Close</button>
 			</div>
 		</div>
+	</div>
 
-		<script>
-			// ===================== Account System =====================
+	<script>
+		// ===================== Account System =====================
 		const AccountManager = {
 			getAllUsers: () => {
 				return JSON.parse(localStorage.getItem('mathline_users') || '{}');
@@ -1293,7 +1287,7 @@
 
 		// ===================== Initialize =====================
 		AuthUI.init();
-		</script>
+	</script>
 </body>
 
 </html>
