@@ -16,7 +16,8 @@
 			--card-radius: 14px;
 		}
 
-		html, body {
+		html,
+		body {
 			margin: 0;
 			padding: 0;
 			height: 100%;
@@ -27,7 +28,6 @@
 			position: relative;
 		}
 
-		/* Animated Grid Background */
 		#grid-bg {
 			position: fixed;
 			top: 0;
@@ -38,7 +38,60 @@
 			pointer-events: none;
 		}
 
-		/* Auth Modal */
+		header {
+			padding: 20px;
+			text-align: center;
+			position: relative;
+			z-index: 5;
+		}
+
+		header h1 {
+			margin: 0;
+			font-size: 2.6rem;
+			color: #00f5ff;
+			text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
+		}
+
+		#user-panel {
+			position: fixed;
+			top: 10px;
+			right: 10px;
+			background: rgba(157, 78, 221, 0.2);
+			border: 2px solid #9d4edd;
+			border-radius: 8px;
+			padding: 12px 16px;
+			z-index: 100;
+			font-size: 12px;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		#user-display {
+			font-weight: 700;
+		}
+
+		#user-display.admin {
+			color: #ffd700;
+			text-shadow: 0 0 10px #ffd700;
+		}
+
+		#user-panel button {
+			background: #9d4edd;
+			border: none;
+			color: #fff;
+			padding: 6px 12px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.3s;
+			white-space: nowrap;
+		}
+
+		#user-panel button:hover {
+			background: #c77dff;
+		}
+
 		#auth-modal {
 			position: fixed;
 			top: 0;
@@ -132,36 +185,198 @@
 			font-size: 12px;
 		}
 
-		/* User Panel */
-		#user-panel {
+		#settings-modal {
 			position: fixed;
-			top: 10px;
-			right: 10px;
-			background: rgba(157, 78, 221, 0.2);
-			border: 2px solid #9d4edd;
-			border-radius: 8px;
-			padding: 12px 16px;
-			z-index: 20;
-			font-size: 12px;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 24;
+			backdrop-filter: blur(4px);
 		}
 
-		#user-panel button {
-			background: #9d4edd;
-			border: none;
-			color: #fff;
-			padding: 6px 12px;
-			border-radius: 4px;
-			cursor: pointer;
-			margin-left: 10px;
+		#settings-modal.show {
+			display: flex;
+		}
+
+		.settings-container {
+			background: rgba(15, 0, 30, 0.95);
+			padding: 30px;
+			border-radius: 12px;
+			border: 2px solid #c77dff;
+			max-width: 500px;
+			width: 90%;
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 0 30px #9d4edd;
+		}
+
+		.settings-container h2 {
+			color: #00f5ff;
+			text-align: center;
+			margin-top: 0;
+		}
+
+		.settings-item {
+			margin: 20px 0;
+			padding: 15px;
+			background: rgba(157, 78, 221, 0.1);
+			border-radius: 8px;
+			border: 1px solid rgba(157, 78, 221, 0.3);
+		}
+
+		.settings-item label {
+			display: block;
+			color: var(--accent);
 			font-weight: 700;
+			margin-bottom: 8px;
+		}
+
+		.color-picker {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+
+		.color-option {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			cursor: pointer;
+			border: 3px solid transparent;
 			transition: all 0.3s;
 		}
 
-		#user-panel button:hover {
-			background: #c77dff;
+		.color-option.selected {
+			border-color: #fff;
+			box-shadow: 0 0 10px currentColor;
 		}
 
-		/* Leaderboard */
+		#admin-modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.8);
+			display: none;
+			align-items: center;
+			justify-content: center;
+			z-index: 23;
+			backdrop-filter: blur(4px);
+		}
+
+		#admin-modal.show {
+			display: flex;
+		}
+
+		.admin-container {
+			background: rgba(15, 0, 30, 0.95);
+			padding: 30px;
+			border-radius: 12px;
+			border: 2px solid #ff6b6b;
+			max-width: 600px;
+			width: 90%;
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 0 30px #ff6b6b;
+		}
+
+		.admin-container h2 {
+			color: #ff6b6b;
+			text-align: center;
+			margin-top: 0;
+		}
+
+		.admin-player {
+			display: grid;
+			grid-template-columns: 1fr auto;
+			align-items: center;
+			padding: 12px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			gap: 15px;
+		}
+
+		.admin-player.banned {
+			background: rgba(255, 107, 107, 0.1);
+			opacity: 0.6;
+		}
+
+		.admin-player-name {
+			color: #00f5ff;
+			font-weight: 700;
+		}
+
+		.admin-player.banned .admin-player-name {
+			text-decoration: line-through;
+			color: #ff6b6b;
+		}
+
+		.admin-actions {
+			display: flex;
+			gap: 5px;
+		}
+
+		.admin-actions button {
+			background: #ff6b6b;
+			border: none;
+			color: #fff;
+			padding: 6px 10px;
+			border-radius: 4px;
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.3s;
+			font-size: 11px;
+		}
+
+		.admin-actions button:hover {
+			background: #ff8787;
+		}
+
+		.admin-actions button.unban {
+			background: #51cf66;
+		}
+
+		.admin-actions button.unban:hover {
+			background: #69db7c;
+		}
+
+		.popular-game {
+			display: flex;
+			align-items: center;
+			gap: 15px;
+			padding: 12px;
+			background: rgba(157, 78, 221, 0.1);
+			border-radius: 8px;
+			margin-bottom: 10px;
+			border-left: 4px solid #ffd700;
+		}
+
+		.popular-game-rank {
+			font-size: 24px;
+			font-weight: 700;
+			color: #ffd700;
+			min-width: 40px;
+		}
+
+		.popular-game-info {
+			flex: 1;
+		}
+
+		.popular-game-name {
+			color: #00f5ff;
+			font-weight: 700;
+		}
+
+		.popular-game-plays {
+			color: #9d4edd;
+			font-size: 12px;
+		}
+
 		#leaderboard-modal {
 			position: fixed;
 			top: 0;
@@ -233,6 +448,7 @@
 
 		.leaderboard-name {
 			color: #00f5ff;
+			font-weight: 700;
 		}
 
 		.leaderboard-playtime {
@@ -246,43 +462,6 @@
 			width: 100%;
 		}
 
-		/* Secret Box */
-		#secret-box {
-			position: fixed;
-			top: 70px;
-			right: 10px;
-			width: 80px;
-			height: 50px;
-			z-index: 20;
-			cursor: pointer;
-			background: rgba(0, 0, 0, 0.1);
-			border: 2px solid transparent;
-			border-radius: 8px;
-			transition: all 0.3s ease;
-		}
-
-		#secret-box:hover {
-			background: rgba(157, 78, 221, 0.3);
-			border-color: #9d4edd;
-			box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
-		}
-
-		/* Header */
-		header {
-			padding: 20px;
-			text-align: center;
-			position: relative;
-			z-index: 5;
-		}
-
-		header h1 {
-			margin: 0;
-			font-size: 2.6rem;
-			color: #00f5ff;
-			text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
-		}
-
-		/* Top search & categories */
 		.top-controls {
 			display: flex;
 			justify-content: center;
@@ -350,51 +529,53 @@
 			z-index: 5;
 		}
 
-		#game-list {
-			display: grid;
-			grid-template-columns: repeat(6, minmax(100px, 1fr));
-			gap: 10px;
-			padding: 18px;
-			position: relative;
-			z-index: 5;
-		}
+#game-list {
+display: grid;
+grid-template-columns: repeat(5, minmax(120px, 1fr));
+gap: 30px;
+padding: 18px;
+position: relative;
+z-index: 5;
+row-gap: 60px;
+}
 
-		.game-card {
-			width: 100%;
-			aspect-ratio: 1/1;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			background: rgba(15, 0, 30, 0.85);
-			border-radius: var(--card-radius);
-			cursor: pointer;
-			font-weight: 800;
-			text-align: center;
-			padding: 6px;
-			user-select: none;
-			border: 2px solid #c77dff;
-			color: #c77dff;
-			box-shadow: 0 0 10px #c77dff, 0 0 20px #9d4edd, 0 0 40px #7b2cbf;
-			transition: all 0.3s ease;
-			position: relative;
-		}
+.game-card {
+width: 80%;
+aspect-ratio: 1/1;
+display: flex;
+align-items: center;
+justify-content: center;
+flex-direction: column;
+background: rgba(15, 0, 30, 0.85);
+border-radius: var(--card-radius);
+cursor: pointer;
+font-weight: 700;
+text-align: center;
+padding: 5px;
+user-select: none;
+border: 2px solid #c77dff;
+color: #c77dff;
+box-shadow: 0 0 10px #c77dff, 0 0 20px #9d4edd, 0 0 40px #7b2cbf;
+transition: all 0.3s ease;
+position: relative;
+font-size: 15px;
+}
 
-		.game-card:hover {
-			color: #ffffff;
-			border-color: #ff00ff;
-			box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 60px #ff00ff;
-			transform: translateY(-4px) scale(1.02);
-		}
+.game-card:hover {
+color: #ffffff;
+border-color: #ff00ff;
+box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 60px #ff00ff;
+transform: translateY(-4px) scale(1.02);
+}
 
-		.game-card.request {
-			box-shadow: 0 0 20px 4px var(--accent);
-		}
+.game-card.request {
+box-shadow: 0 0 20px 4px var(--accent);
+}
 
 		#game-frame {
 			display: none;
 			width: 95%;
-			max-width: 1200px;
+			max-width: 1100px;
 			height: 680px;
 			margin: 12px auto;
 			border: none;
@@ -425,8 +606,13 @@
 		}
 
 		@keyframes spin {
-			0% { transform: rotate(0deg); }
-			100% { transform: rotate(360deg); }
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
 		}
 
 		.floating-btn {
@@ -536,57 +722,43 @@
 			background: rgba(255, 255, 255, 0.2);
 		}
 
-		@media (max-width:720px) {
+		@media (max-width:520px) {
 			header h1 {
 				font-size: 2rem;
 			}
 
+			#user-panel {
+				position: relative;
+				right: auto;
+				top: auto;
+				width: auto;
+				margin-top: 10px;
+			}
+
 			#game-list {
 				grid-template-columns: repeat(3, 1fr);
-				gap: 8px;
+				gap: 50px;
 			}
 
 			#game-frame {
-				height: 480px;
+				height: 10px;
 			}
 
 			.category-bar {
-				gap: 4px;
+				gap: 1px;
 				display: none;
 			}
 
 			.category-bar.mobile-visible {
 				display: flex;
 			}
-
-			.category-bar button {
-				margin: 2px 3px;
-				padding: 4px 8px;
-				font-size: 12px;
-			}
-
-			.modal-content {
-				max-width: 90%;
-			}
-
-			#user-panel {
-				font-size: 10px;
-				padding: 8px 10px;
-			}
-
-			#user-panel button {
-				padding: 4px 8px;
-				margin-left: 5px;
-			}
 		}
 	</style>
 </head>
 
 <body>
-	<!-- Animated Grid Background Canvas -->
 	<canvas id="grid-bg"></canvas>
 
-	<!-- Auth Modal -->
 	<div id="auth-modal">
 		<div class="auth-container">
 			<h1 id="auth-title">Login</h1>
@@ -598,17 +770,42 @@
 		</div>
 	</div>
 
-	<!-- User Panel -->
-	<div id="user-panel" style="display: none;">
-		<span id="user-display"></span>
-		<button id="leaderboard-btn">🏆 Leaderboard</button>
-		<button id="logout-btn">Logout</button>
+	<div id="settings-modal">
+		<div class="settings-container">
+			<h2>⚙️ Profile Settings</h2>
+			<div class="settings-item">
+				<label>Your Name Color</label>
+				<div class="color-picker" id="color-picker">
+					<div class="color-option" style="background-color: #00f5ff;" data-color="#00f5ff" title="Cyan">
+					</div>
+					<div class="color-option" style="background-color: #ffd700;" data-color="#ffd700" title="Golden">
+					</div>
+					<div class="color-option" style="background-color: #ff00ff;" data-color="#ff00ff" title="Magenta">
+					</div>
+					<div class="color-option" style="background-color: #51cf66;" data-color="#51cf66" title="Green">
+					</div>
+					<div class="color-option" style="background-color: #ff6b6b;" data-color="#ff6b6b" title="Red"></div>
+					<div class="color-option" style="background-color: #ffa500;" data-color="#ffa500" title="Orange">
+					</div>
+					<div class="color-option" style="background-color: #c77dff;" data-color="#c77dff" title="Purple">
+					</div>
+					<div class="color-option" style="background-color: #ffffff;" data-color="#ffffff" title="White">
+					</div>
+				</div>
+			</div>
+			<button class="auth-button" id="save-settings">Save Settings</button>
+			<button class="close-modal" id="close-settings" style="width: 100%; margin-top: 10px;">Close</button>
+		</div>
 	</div>
 
-	<!-- Secret Box -->
-	<div id="secret-box"></div>
+	<div id="admin-modal">
+		<div class="admin-container">
+			<h2>👑 Admin Panel</h2>
+			<div id="admin-players-list"></div>
+			<button class="close-modal" id="close-admin" style="width: 100%; margin-top: 15px;">Close</button>
+		</div>
+	</div>
 
-	<!-- Leaderboard Modal -->
 	<div id="leaderboard-modal">
 		<div class="leaderboard-container">
 			<h2>🏆 Leaderboard</h2>
@@ -622,6 +819,14 @@
 		</div>
 	</div>
 
+	<div id="user-panel" style="display: none;">
+		<span id="user-display"></span>
+		<button id="leaderboard-btn">🏆</button>
+		<button id="settings-btn">⚙️</button>
+		<button id="admin-btn" style="display: none;">👑</button>
+		<button id="logout-btn">🚪</button>
+	</div>
+
 	<header>
 		<h1>Math Line</h1>
 	</header>
@@ -630,111 +835,110 @@
 		<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 	</div>
 
-	<div class="category-bar" id="category-filter"></div>
-	<button id="category-toggle-mobile" style="display:none; background: var(--accent); color: #fff; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: 700; margin: 0 12px;">📂 Categories</button>
+		<div class="category-bar" id="category-filter"></div>
+		<div class="game-counter" id="game-counter"></div>
+		<div id="game-list" aria-live="polite"></div>
 
-	<div class="game-counter" id="game-counter"></div>
+		<div id="game-loading">
+			<div class="spinner"></div>
+			<p>Loading game...</p>
+		</div>
 
-	<div id="game-list" aria-live="polite">
-		<div class="empty-state" id="empty-state"></div>
-	</div>
+		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
 
-	<div id="game-loading">
-		<div class="spinner"></div>
-		<p>Loading game...</p>
-	</div>
+		<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
+		<button id="back-btn" class="floating-btn" title="Back to games (Esc)">← Back</button>
 
-	<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
-
-	<button id="fullscreen-btn" class="floating-btn" title="Enter fullscreen (F)">Fullscreen</button>
-	<button id="back-btn" class="floating-btn" title="Back to games (Esc)">← Back</button>
-
-	<!-- Game Details Modal -->
-	<div id="game-modal" class="modal">
-		<div class="modal-content">
-			<h2 id="modal-game-name"></h2>
-			<div class="game-stat">
-				<label>Category:</label>
-				<span id="modal-category"></span>
-			</div>
-			<div class="game-stat">
-				<label>Times Played:</label>
-				<span id="modal-played"></span>
-			</div>
-			<div class="game-stat">
-				<label>Last Played:</label>
-				<span id="modal-last-played"></span>
-			</div>
-			<div class="game-stat">
-				<label>Total Play Time:</label>
-				<span id="modal-playtime"></span>
-			</div>
-			<div class="modal-buttons">
-				<button class="play-btn" id="modal-play-btn">▶️ Play</button>
-				<button class="close-modal" id="modal-close-btn">Close</button>
+		<div id="game-modal" class="modal">
+			<div class="modal-content">
+				<h2 id="modal-game-name"></h2>
+				<div class="game-stat">
+					<label>Category:</label>
+					<span id="modal-category"></span>
+				</div>
+				<div class="game-stat">
+					<label>Times Played:</label>
+					<span id="modal-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Last Played:</label>
+					<span id="modal-last-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Total Play Time:</label>
+					<span id="modal-playtime"></span>
+				</div>
+				<div class="modal-buttons">
+					<button class="play-btn" id="modal-play-btn">▶️ Play</button>
+					<button class="close-modal" id="modal-close-btn">Close</button>
+				</div>
 			</div>
 		</div>
-	</div>
 
-	<script>
-		// ===================== Account System =====================
+		<script>
+			const BANNED_WORDS = ['shit', 'damn', 'ass', 'hell', 'crap', 'piss', 'dick', 'cock', 'pussy', 'bitch', 'bastard', 'fart', 'turd', 'arsehole', 'bollocks', 'bugger', 'cunt', 'fuck', 'motherfucker', 'twat', 'wanker', 'tosser', 'git', 'knob', 'bellend', 'numpty', 'plonker', 'pillock', 'prat', 'n-word', 'n word', 'n1', 'nigga', 'nigger', 'f4g', 'fag', 'faggot', 'tranny', 'chink', 'gook', 'spic', 'wetback', 'k!ke', 'kike', 'beaner', 'dumbass', 'badass', 'smartass', 'jackass', 'retard'];
+
+		function isNameClean(username) {
+			const lowerName = username.toLowerCase();
+			for(let word of BANNED_WORDS) {
+				if(lowerName.includes(word)) return false;
+			}
+			return true;
+		}
+
+		const ADMIN_USERS = ['admin'];
+
+		const BanManager = {
+			getBannedUsers: () => JSON.parse(localStorage.getItem('mathline_banned_users') || '[]'),
+			saveBannedUsers: (banned) => localStorage.setItem('mathline_banned_users', JSON.stringify(banned)),
+			isBanned: (username) => BanManager.getBannedUsers().includes(username),
+			banUser: (username) => {
+				const banned = BanManager.getBannedUsers();
+				if(!banned.includes(username)) {
+					banned.push(username);
+					BanManager.saveBannedUsers(banned);
+				}
+			},
+			unbanUser: (username) => {
+				const banned = BanManager.getBannedUsers();
+				BanManager.saveBannedUsers(banned.filter(u => u !== username));
+			}
+		};
+
 		const AccountManager = {
-			getAllUsers: () => {
-				return JSON.parse(localStorage.getItem('mathline_users') || '{}');
-			},
-
-			saveUsers: (users) => {
-				localStorage.setItem('mathline_users', JSON.stringify(users));
-			},
-
-			getCurrentUser: () => {
-				return localStorage.getItem('mathline_current_user');
-			},
-
-			setCurrentUser: (username) => {
-				localStorage.setItem('mathline_current_user', username);
-			},
-
-			userExists: (username) => {
-				const users = AccountManager.getAllUsers();
-				return username in users;
-			},
+			getCurrentUser: () => localStorage.getItem('mathline_current_user'),
+			setCurrentUser: (username) => localStorage.setItem('mathline_current_user', username),
+			isAdmin: (username) => ADMIN_USERS.includes(username),
+			getUserData: (username) => JSON.parse(localStorage.getItem(`mathline_user_${username}`) || '{"nameColor":"#00f5ff"}'),
+			setUserData: (username, data) => localStorage.setItem(`mathline_user_${username}`, JSON.stringify(data)),
+			getAllUsers: () => JSON.parse(localStorage.getItem('mathline_all_users') || '{}'),
+			saveUsers: (users) => localStorage.setItem('mathline_all_users', JSON.stringify(users)),
 
 			createUser: (username, password) => {
-				if(AccountManager.userExists(username)) {
-					return { success: false, error: 'Username already exists' };
-				}
-				if(username.length < 3 || password.length < 3) {
-					return { success: false, error: 'Username and password must be 3+ characters' };
-				}
+				if(!isNameClean(username)) return { success: false, error: 'Username contains inappropriate language' };
+				if(username.length < 3 || password.length < 3) return { success: false, error: 'Username and password must be 3+ characters' };
+				if(!/^[a-zA-Z0-9_]+$/.test(username)) return { success: false, error: 'Username can only contain letters, numbers, and underscores' };
 
 				const users = AccountManager.getAllUsers();
-				users[username] = {
-					password: btoa(password), // Simple encoding (not secure for production)
-					totalPlayTime: 0,
-					gamesPlayed: {},
-					createdAt: new Date().toLocaleDateString()
-				};
+				if(username in users) return { success: false, error: 'Username already exists' };
+
+				users[username] = { password: btoa(password), totalPlayTime: 0, createdAt: new Date().toLocaleDateString() };
 				AccountManager.saveUsers(users);
+				AccountManager.setCurrentUser(username);
+				AccountManager.setUserData(username, { nameColor: '#00f5ff' });
 				return { success: true };
 			},
 
 			login: (username, password) => {
+				if(BanManager.isBanned(username)) return { success: false, error: 'This account has been banned' };
 				const users = AccountManager.getAllUsers();
-				if(!(username in users)) {
-					return { success: false, error: 'User not found' };
-				}
-				if(users[username].password !== btoa(password)) {
-					return { success: false, error: 'Incorrect password' };
-				}
-
+				if(!(username in users)) return { success: false, error: 'User not found' };
+				if(users[username].password !== btoa(password)) return { success: false, error: 'Incorrect password' };
 				AccountManager.setCurrentUser(username);
 				return { success: true };
 			},
 
-			logout: () => {
-				localStorage.removeItem('mathline_current_user');
-			},
+			logout: () => { localStorage.removeItem('mathline_current_user'); },
 
 			updatePlayTime: (username, playtime) => {
 				const users = AccountManager.getAllUsers();
@@ -747,16 +951,18 @@
 			getLeaderboard: () => {
 				const users = AccountManager.getAllUsers();
 				return Object.keys(users)
-					.map(username => ({
-						username,
-						totalPlayTime: users[username].totalPlayTime || 0
-					}))
+					.map(username => ({ username, totalPlayTime: users[username].totalPlayTime || 0 }))
 					.sort((a, b) => b.totalPlayTime - a.totalPlayTime)
 					.slice(0, 50);
 			}
 		};
 
-		// ===================== Auth UI =====================
+		function closeAllModals() {
+			document.getElementById('settings-modal').classList.remove('show');
+			document.getElementById('admin-modal').classList.remove('show');
+			document.getElementById('leaderboard-modal').classList.remove('show');
+		}
+
 		const AuthUI = {
 			isLoginMode: true,
 
@@ -764,6 +970,7 @@
 				const currentUser = AccountManager.getCurrentUser();
 				if(currentUser) {
 					AuthUI.showMainUI(currentUser);
+					renderGames();
 				} else {
 					AuthUI.showAuthUI();
 				}
@@ -776,25 +983,26 @@
 
 			showMainUI: (username) => {
 				document.getElementById('auth-modal').classList.add('hidden');
-				document.getElementById('user-panel').style.display = 'block';
-				document.getElementById('user-display').textContent = `👤 ${username}`;
+				document.getElementById('user-panel').style.display = 'flex';
+				const isAdmin = AccountManager.isAdmin(username);
+				const userData = AccountManager.getUserData(username);
+				const userDisplay = document.getElementById('user-display');
+				userDisplay.innerHTML = `👤 ${username}`;
+				if(isAdmin) {
+					userDisplay.classList.add('admin');
+					document.getElementById('admin-btn').style.display = 'block';
+				} else {
+					userDisplay.classList.remove('admin');
+					userDisplay.style.color = userData.nameColor;
+					document.getElementById('admin-btn').style.display = 'none';
+				}
 			},
 
 			toggleMode: () => {
 				AuthUI.isLoginMode = !AuthUI.isLoginMode;
-				const title = document.getElementById('auth-title');
-				const button = document.getElementById('auth-submit');
-				const toggle = document.getElementById('auth-toggle');
-
-				if(AuthUI.isLoginMode) {
-					title.textContent = 'Login';
-					button.textContent = 'Login';
-					toggle.textContent = "Don't have an account? Create one";
-				} else {
-					title.textContent = 'Create Account';
-					button.textContent = 'Create Account';
-					toggle.textContent = 'Already have an account? Login';
-				}
+				document.getElementById('auth-title').textContent = AuthUI.isLoginMode ? 'Login' : 'Create Account';
+				document.getElementById('auth-submit').textContent = AuthUI.isLoginMode ? 'Login' : 'Create Account';
+				document.getElementById('auth-toggle').textContent = AuthUI.isLoginMode ? "Don't have an account? Create one" : 'Already have an account? Login';
 				document.getElementById('auth-message').innerHTML = '';
 			},
 
@@ -808,12 +1016,7 @@
 					return;
 				}
 
-				let result;
-				if(AuthUI.isLoginMode) {
-					result = AccountManager.login(username, password);
-				} else {
-					result = AccountManager.createUser(username, password);
-				}
+				let result = AuthUI.isLoginMode ? AccountManager.login(username, password) : AccountManager.createUser(username, password);
 
 				if(result.success) {
 					messageEl.innerHTML = '<div class="auth-success">Success!</div>';
@@ -829,43 +1032,124 @@
 			}
 		};
 
-		// Event listeners for auth
 		document.getElementById('auth-submit').addEventListener('click', AuthUI.submit);
 		document.getElementById('auth-toggle').addEventListener('click', AuthUI.toggleMode);
+		document.getElementById('auth-password').addEventListener('keypress', (e) => {
+			if(e.key === 'Enter') AuthUI.submit();
+		});
+
+		document.getElementById('settings-btn').addEventListener('click', () => {
+			closeAllModals();
+			const currentUser = AccountManager.getCurrentUser();
+			const userData = AccountManager.getUserData(currentUser);
+			document.querySelectorAll('.color-option').forEach(el => {
+				el.classList.remove('selected');
+				if(el.getAttribute('data-color') === userData.nameColor) el.classList.add('selected');
+			});
+			document.getElementById('settings-modal').classList.add('show');
+		});
+
+		document.querySelectorAll('.color-option').forEach(el => {
+			el.addEventListener('click', () => {
+				document.querySelectorAll('.color-option').forEach(e => e.classList.remove('selected'));
+				el.classList.add('selected');
+			});
+		});
+
+		document.getElementById('save-settings').addEventListener('click', () => {
+			const currentUser = AccountManager.getCurrentUser();
+			const selectedColor = document.querySelector('.color-option.selected').getAttribute('data-color');
+			AccountManager.setUserData(currentUser, { nameColor: selectedColor });
+			const userDisplay = document.getElementById('user-display');
+			if(!AccountManager.isAdmin(currentUser)) userDisplay.style.color = selectedColor;
+			document.getElementById('settings-modal').classList.remove('show');
+			alert('Settings saved!');
+		});
+
+		document.getElementById('close-settings').addEventListener('click', () => {
+			document.getElementById('settings-modal').classList.remove('show');
+		});
+
+		document.getElementById('admin-btn').addEventListener('click', () => {
+			closeAllModals();
+			const listEl = document.getElementById('admin-players-list');
+			listEl.innerHTML = '';
+			const users = AccountManager.getAllUsers();
+			Object.keys(users).sort().forEach((username) => {
+				const isBanned = BanManager.isBanned(username);
+				const row = document.createElement('div');
+				row.className = 'admin-player' + (isBanned ? ' banned' : '');
+				row.innerHTML = `
+					<div class="admin-player-name">${username}</div>
+					<div class="admin-actions">
+						<button onclick="adminKickPlayer('${username}')">Kick</button>
+						${isBanned ? `<button class="unban" onclick="adminUnbanPlayer('${username}')">Unban</button>` : `<button onclick="adminBanPlayer('${username}')">Ban</button>`}
+					</div>
+				`;
+				listEl.appendChild(row);
+			});
+			document.getElementById('admin-modal').classList.add('show');
+		});
+
+		function adminKickPlayer(username) {
+			alert(`✅ ${username} has been KICKED!`);
+		}
+
+		function adminBanPlayer(username) {
+			BanManager.banUser(username);
+			alert(`✅ ${username} has been BANNED!`);
+			document.getElementById('admin-btn').click();
+		}
+
+		function adminUnbanPlayer(username) {
+			BanManager.unbanUser(username);
+			alert(`✅ ${username} has been UNBANNED!`);
+			document.getElementById('admin-btn').click();
+		}
+
+		document.getElementById('close-admin').addEventListener('click', () => {
+			document.getElementById('admin-modal').classList.remove('show');
+		});
+
 		document.getElementById('logout-btn').addEventListener('click', () => {
 			AccountManager.logout();
 			AuthUI.showAuthUI();
 			document.getElementById('auth-username').value = '';
 			document.getElementById('auth-password').value = '';
+			document.getElementById('game-list').innerHTML = '';
 		});
 
-		// ===================== Leaderboard =====================
 		document.getElementById('leaderboard-btn').addEventListener('click', () => {
-			const leaderboard = AccountManager.getLeaderboard();
+			closeAllModals();
 			const listEl = document.getElementById('leaderboard-list');
+			const leaderboard = AccountManager.getLeaderboard();
 			listEl.innerHTML = '';
-
+			if(leaderboard.length === 0) {
+				listEl.innerHTML = '<div style="padding: 20px; text-align: center; color: #9d4edd;">No players yet</div>';
+				document.getElementById('leaderboard-modal').classList.add('show');
+				return;
+			}
 			leaderboard.forEach((entry, index) => {
 				const hours = Math.floor(entry.totalPlayTime / 60);
 				const mins = Math.floor(entry.totalPlayTime % 60);
 				const timeStr = `${hours}h ${mins}m`;
-
+				const isAdmin = AccountManager.isAdmin(entry.username);
+				const userData = AccountManager.getUserData(entry.username);
+				let displayColor = userData.nameColor;
+				if(isAdmin) displayColor = '#ffd700';
 				const row = document.createElement('div');
 				row.className = 'leaderboard-row';
-				if(index === 0) row.querySelector = 'first';
-				if(index === 1) row.querySelector = 'second';
-				if(index === 2) row.querySelector = 'third';
-
 				row.innerHTML = `
 					<div class="leaderboard-rank ${index === 0 ? 'first' : index === 1 ? 'second' : index === 2 ? 'third' : ''}">
 						${index + 1}${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : ''}
 					</div>
-					<div class="leaderboard-name">${entry.username}</div>
+					<div class="leaderboard-name" style="color: ${displayColor};">
+						${isAdmin ? '👑 ' : ''}${entry.username}
+					</div>
 					<div class="leaderboard-playtime">${timeStr}</div>
 				`;
 				listEl.appendChild(row);
 			});
-
 			document.getElementById('leaderboard-modal').classList.add('show');
 		});
 
@@ -873,92 +1157,69 @@
 			document.getElementById('leaderboard-modal').classList.remove('show');
 		});
 
-		// ===================== Animated Grid Background =====================
 		const canvas = document.getElementById('grid-bg');
-		const ctx = canvas.getContext('2d');
-
-		function resizeCanvas() {
+		const ctx = canvas.getContext('2d', { alpha: false });
+		canvas.width = window.innerWidth;
+		canvas.height = window.innerHeight;
+		window.addEventListener('resize', () => {
 			canvas.width = window.innerWidth;
 			canvas.height = window.innerHeight;
-		}
-		resizeCanvas();
-		window.addEventListener('resize', resizeCanvas);
-
-		let time = 0;
-		const gridSpacing = 40;
-
-		function animateGrid() {
-			time += 0.8;
-			
-			ctx.fillStyle = '#000';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-			const colorCycle = (time / 200) % 3;
-			let color;
-			if(colorCycle < 1) {
-				color = `rgba(200, 100, 255, ${0.5 + colorCycle * 0.3})`;
-			} else if(colorCycle < 2) {
-				color = `rgba(0, 255, 255, ${0.8 - (colorCycle - 1) * 0.3})`;
-			} else {
-				color = `rgba(255, 50, 200, ${0.5 + (colorCycle - 2) * 0.3})`;
-			}
-
-			ctx.strokeStyle = color;
-			ctx.lineWidth = 2.5;
-			ctx.shadowColor = color;
-			ctx.shadowBlur = 15;
-
-			for (let x = 0; x < canvas.width + gridSpacing; x += gridSpacing) {
-				const offset = (time * 2) % gridSpacing;
-				ctx.beginPath();
-				ctx.moveTo(x - offset, 0);
-				ctx.lineTo(x - offset + canvas.height * 0.4, canvas.height);
-				ctx.stroke();
-			}
-
-			for (let y = 0; y < canvas.height + gridSpacing; y += gridSpacing) {
-				const offset = (time * 2) % gridSpacing;
-				ctx.beginPath();
-				ctx.moveTo(0, y - offset);
-				ctx.lineTo(canvas.width, y - offset + canvas.width * 0.2);
-				ctx.stroke();
-			}
-
-			ctx.shadowBlur = 0;
-
-			requestAnimationFrame(animateGrid);
-		}
-
-		animateGrid();
-
-		// ===================== Secret Box =====================
-		document.getElementById('secret-box').addEventListener('click', () => {
-			window.open('secret.html', '_blank');
 		});
 
-		// ===================== Local Storage Manager =====================
+		let time = 0;
+		const gridSpacing = 60;
+		let frameCount = 0;
+
+		function animateGrid() {
+			requestAnimationFrame(animateGrid);
+			frameCount++;
+			if(frameCount % 3 !== 0) return;
+			time += 0.5;
+			ctx.fillStyle = '#000';
+			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			const colorCycle = (time / 150) % 3;
+			let color;
+			if(colorCycle < 1) {
+				color = `rgba(200, 100, 255, ${0.2 + colorCycle * 0.15})`;
+			} else if(colorCycle < 2) {
+				color = `rgba(0, 255, 255, ${0.35 - (colorCycle - 1) * 0.15})`;
+			} else {
+				color = `rgba(255, 50, 200, ${0.2 + (colorCycle - 2) * 0.15})`;
+			}
+			ctx.strokeStyle = color;
+			ctx.lineWidth = 1.2;
+			ctx.shadowColor = color;
+			ctx.shadowBlur = 4;
+			const offset = (time * 1.5) % gridSpacing;
+			for (let x = -offset; x < canvas.width + gridSpacing; x += gridSpacing) {
+				ctx.beginPath();
+				ctx.moveTo(x, 0);
+				ctx.lineTo(x + canvas.height * 0.15, canvas.height);
+				ctx.stroke();
+			}
+			for (let y = -offset; y < canvas.height + gridSpacing; y += gridSpacing) {
+				ctx.beginPath();
+				ctx.moveTo(0, y);
+				ctx.lineTo(canvas.width, y + canvas.width * 0.08);
+				ctx.stroke();
+			}
+			ctx.shadowBlur = 0;
+		}
+		animateGrid();
+
 		let playTimer = null;
 
 		const StorageManager = {
-			getGameStats: (name) =>
-				JSON.parse(
-					localStorage.getItem(`mathline_stats_${name}`) ||
-					'{"played":0,"lastPlayed":"Never","playTime":0,"rating":0}'
-				),
-
+			getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0}'),
 			updateGameStats: (name) => {
 				const stats = StorageManager.getGameStats(name);
 				stats.playTime = (stats.playTime || 0) + 0.01;
 				localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
 			},
-
 			getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
 			setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
-			getLastSearch: () => localStorage.getItem('mathline_lastSearch') || '',
-			setLastSearch: (search) => localStorage.setItem('mathline_lastSearch', search),
 		};
 
-		// ===================== Games =====================
 		const games = [
 			{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
 			{name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
@@ -1052,21 +1313,19 @@
 			{name:"Ballz",url:"Ballz.html",category:"Arcade"},
 			{name:"10 Minutes Till Dawn",url:"10min.html",category:"Arcade"},
 			{name:"Minecraft",url:"EaglerCraft 1.12 [wasm].html",category:"Arcade"},
-			{name:"Request a Game",url:"#",category:"Request",request:true},
 			{name:"Rocket League",url:"goal.html",category:"Arcade"},
 			{name:"Pixel Battleground",url:"pg.html",category:"Arcade"},
 			{name:"BTD5",url:"BTD5.html",category:"Arcade"},
 		];
 
-		const normalGames = games.filter(g => !g.request).sort((a, b) => {
-			const aStartsWithNum = /^\d/.test(a.name);
-			const bStartsWithNum = /^\d/.test(b.name);
-			if(aStartsWithNum && !bStartsWithNum) return 1;
-			if(!aStartsWithNum && bStartsWithNum) return -1;
+		const normalGames = games.sort((a, b) => {
+			const aNum = /^\d/.test(a.name);
+			const bNum = /^\d/.test(b.name);
+			if(aNum && !bNum) return 1;
+			if(!aNum && bNum) return -1;
 			return a.name.localeCompare(b.name);
 		});
 
-		// ===================== DOM Elements =====================
 		const gameListEl = document.getElementById('game-list');
 		const iframe = document.getElementById('game-frame');
 		const backBtn = document.getElementById('back-btn');
@@ -1076,14 +1335,8 @@
 		const gameModal = document.getElementById('game-modal');
 		const gameCounter = document.getElementById('game-counter');
 		const gameLoading = document.getElementById('game-loading');
-		const categoryToggleMobile = document.getElementById('category-toggle-mobile');
 
-		// ===================== Setup Categories =====================
-		const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
-			if(a === "All") return -1;
-			if(b === "All") return 1;
-			return a.localeCompare(b);
-		});
+		const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort();
 
 		let activeCategory = StorageManager.getLastCategory();
 		let activeSearch = '';
@@ -1098,61 +1351,38 @@
 				activeCategory = cat;
 				StorageManager.setLastCategory(cat);
 				renderGames();
-				window.scrollTo(0, 0);
 			});
 			categoryEl.appendChild(btn);
 		});
 
-		categoryToggleMobile.addEventListener('click', () => {
-			categoryEl.classList.toggle('mobile-visible');
-		});
-
-		// ===================== Modal Manager =====================
 		const ModalManager = {
 			open: (gameName) => {
 				const game = normalGames.find(g => g.name === gameName);
 				if(!game) return;
-
 				const stats = StorageManager.getGameStats(gameName);
-				const lastPlayed = stats.lastPlayed || "Never";
 				const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
-
-				const playTimeStr = roundedTime > 60
-					? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m`
-					: `${roundedTime}m`;
-
+				const playTimeStr = roundedTime > 60 ? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m` : `${roundedTime}m`;
 				document.getElementById('modal-game-name').textContent = gameName;
 				document.getElementById('modal-category').textContent = game.category;
 				document.getElementById('modal-played').textContent = stats.played || '0';
-				document.getElementById('modal-last-played').textContent = lastPlayed;
+				document.getElementById('modal-last-played').textContent = stats.lastPlayed || 'Never';
 				document.getElementById('modal-playtime').textContent = playTimeStr;
-
 				document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
 				gameModal.classList.add('active');
 			},
-			close: () => {
-				gameModal.classList.remove('active');
-			},
+			close: () => gameModal.classList.remove('active'),
 			play: (gameName) => {
 				const game = normalGames.find(g => g.name === gameName);
-				if(!game) return;
-
 				const stats = StorageManager.getGameStats(gameName);
 				stats.played = (stats.played || 0) + 1;
 				stats.lastPlayed = new Date().toLocaleDateString();
 				localStorage.setItem(`mathline_stats_${gameName}`, JSON.stringify(stats));
-
-				playTimer = setInterval(() => {
-					StorageManager.updateGameStats(gameName);
-				}, 1000);
-
+				playTimer = setInterval(() => StorageManager.updateGameStats(gameName), 1000);
 				gameListEl.style.display = 'none';
 				gameLoading.style.display = 'block';
-				iframe.style.display = 'none';
 				backBtn.style.display = 'block';
 				fullscreenBtn.style.display = 'block';
 				gameModal.classList.remove('active');
-
 				setTimeout(() => {
 					iframe.src = game.url;
 					iframe.style.display = 'block';
@@ -1166,128 +1396,58 @@
 			if(e.target === gameModal) ModalManager.close();
 		});
 
-		// ===================== Render =====================
 		function renderGames(){
-			gameListEl.innerHTML="";
-
+			gameListEl.innerHTML = "";
 			let filtered = normalGames;
-
-			if(activeCategory !== "All"){
-				filtered = filtered.filter(g => g.category === activeCategory);
-			}
-
-			if(activeSearch){
-				filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
-			}
-
+			if(activeCategory !== "All") filtered = filtered.filter(g => g.category === activeCategory);
+			if(activeSearch) filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
 			filtered.forEach(g => {
-				const card = createGameCard(g);
+				const card = document.createElement('div');
+				card.className = 'game-card';
+				card.innerHTML = `<span>${g.name}</span>`;
+				card.addEventListener('click', () => ModalManager.open(g.name));
 				gameListEl.appendChild(card);
 			});
-
 			const reqCard = document.createElement('div');
 			reqCard.className = 'game-card request';
-			reqCard.innerHTML = '<span>Request a Game</span>';
-			reqCard.addEventListener('click', () => {
-				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
-			});
+			reqCard.innerHTML = '<span>Request a Game</s#game-list pan>';
+			reqCard.addEventListener('click', () => window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank'));
 			gameListEl.appendChild(reqCard);
-
-			const totalGames = filtered.length;
-			gameCounter.textContent = `Showing ${totalGames} game${totalGames !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `• ${activeCategory}` : ''}${activeSearch ? ` • Searched for "${activeSearch}"` : ''}`;
-
-			if(window.innerWidth <= 720) {
-				categoryToggleMobile.style.display = filtered.length === 0 && !activeSearch ? 'none' : 'block';
-			}
+			gameCounter.textContent = `Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `• ${activeCategory}` : ''}`;
 		}
 
-		function createGameCard(game) {
-			const card = document.createElement('div');
-			card.className = 'game-card';
-			card.innerHTML = `<span>${game.name}</span>`;
-
-			card.addEventListener('click', () => {
-				ModalManager.open(game.name);
-			});
-
-			return card;
-		}
-
-		// ===================== Search =====================
 		searchInput.addEventListener('input', (e) => {
 			activeSearch = e.target.value;
-			StorageManager.setLastSearch(activeSearch);
 			renderGames();
 		});
 
-		// ===================== Keyboard Shortcuts =====================
 		document.addEventListener('keydown', (e) => {
-			if(e.key === '/' && !searchInput.matches(':focus')) {
+			if(e.key === 'Escape' && iframe.style.display === 'block') backBtn.click();
+			if((e.key === 'f' || e.key === 'F') && iframe.style.display === 'block') {
 				e.preventDefault();
-				searchInput.focus();
-			}
-
-			if(e.key === 'Escape' && iframe.style.display === 'block') {
-				backBtn.click();
-			}
-
-			if(e.key === 'f' || e.key === 'F') {
-				if(iframe.style.display === 'block') {
-					e.preventDefault();
-					fullscreenBtn.click();
-				}
-			}
-
-			if((e.key === 'c' || e.key === 'C') && window.innerWidth <= 720) {
-				categoryToggleMobile.click();
+				fullscreenBtn.click();
 			}
 		});
 
-		// ===================== Back & Fullscreen =====================
 		backBtn.addEventListener('click', () => {
-			if (playTimer) {
+			if(playTimer) {
 				clearInterval(playTimer);
-				playTimer = null;
-
-				// Update account's total playtime
 				const currentUser = AccountManager.getCurrentUser();
-				if(currentUser) {
-					const users = AccountManager.getAllUsers();
-					const timeSpent = 1.5; // 1.5 minutes per game session
-					AccountManager.updatePlayTime(currentUser, timeSpent);
-				}
+				if(currentUser) AccountManager.updatePlayTime(currentUser, 1.5);
 			}
 			iframe.style.display = 'none';
-			gameLoading.style.display = 'none';
 			iframe.src = '';
 			gameListEl.style.display = 'grid';
 			backBtn.style.display = 'none';
 			fullscreenBtn.style.display = 'none';
-			window.scrollTo(0, 0);
 		});
 
 		fullscreenBtn.addEventListener('click', () => {
 			if(iframe.requestFullscreen) iframe.requestFullscreen();
-			else if(iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
 		});
 
-		iframe.addEventListener('error', () => {
-			gameLoading.innerHTML = '<p style="color: #ff6b6b; font-size: 16px;">⚠️ Failed to load game. Try again?</p>';
-			setTimeout(() => {
-				gameLoading.style.display = 'none';
-			}, 3000);
-		});
-
-		window.addEventListener('resize', () => {
-			if(window.innerWidth > 720) {
-				categoryToggleMobile.style.display = 'none';
-				categoryEl.classList.remove('mobile-visible');
-			}
-		});
-
-		// ===================== Initialize =====================
 		AuthUI.init();
-	</script>
+		</script>
 </body>
 
 </html>
