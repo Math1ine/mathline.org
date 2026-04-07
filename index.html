@@ -23,7 +23,7 @@
 			height: 100%;
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 			color: var(--text-color);
-			background: #000;
+background: linear-gradient(180deg, #0b2a38, #123f52);
 			overflow-x: hidden;
 			position: relative;
 		}
@@ -109,6 +109,15 @@
 			background: #ff00ff;
 		}
 
+		.category-bar button.new-btn {
+			background: #ffa500;
+		}
+
+		.category-bar button.new-btn.active {
+			background: #ff8c00;
+			outline: 3px solid rgba(255, 255, 255, 0.06);
+		}
+
 		.game-counter {
 			text-align: center;
 			color: var(--accent);
@@ -130,7 +139,7 @@
 		}
 
 		.game-card {
-			width: 100%;
+			width: 80%;
 			aspect-ratio: 1/1;
 			display: flex;
 			align-items: center;
@@ -402,12 +411,12 @@
 				stats.playTime = (stats.playTime || 0) + 0.01;
 				localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
 			},
-			getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'All',
+			getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'New',
 			setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
 		};
 
 		const games = [
-			{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
+		{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
 			{name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
 			{name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
 			{name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
@@ -504,13 +513,9 @@
 			{name:"BTD5",url:"BTD5.html",category:"Arcade"},
 		];
 
-		const normalGames = games.sort((a, b) => {
-			const aNum = /^\d/.test(a.name);
-			const bNum = /^\d/.test(b.name);
-			if(aNum && !bNum) return 1;
-			if(!aNum && bNum) return -1;
-			return a.name.localeCompare(b.name);
-		});
+const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
+    const NEW_COUNT = 12;
+    const newestGames = games.slice(-NEW_COUNT).map(g => g.name);
 
 		const gameListEl = document.getElementById('game-list');
 		const iframe = document.getElementById('game-frame');
@@ -522,7 +527,13 @@
 		const gameCounter = document.getElementById('game-counter');
 		const gameLoading = document.getElementById('game-loading');
 
-		const categories = ["All", ...new Set(normalGames.map(g => g.category))].sort();
+		const categories = ["All", "New", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
+			if(a === "All") return -1;
+			if(b === "New") return 1;
+			if(a === "All") return -1;
+			if(b === "All") return 1;
+			return a.localeCompare(b);
+		});
 
 		let activeCategory = StorageManager.getLastCategory();
 		let activeSearch = '';
@@ -530,6 +541,7 @@
 		categories.forEach(cat => {
 			const btn = document.createElement('button');
 			btn.textContent = cat;
+			if(cat === "New") btn.classList.add('new-btn');
 			if(cat === activeCategory) btn.classList.add('active');
 			btn.addEventListener('click', () => {
 				document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
@@ -580,21 +592,34 @@
 		gameModal.addEventListener('click', (e) => {
 			if(e.target === gameModal) ModalManager.close();
 		});
+function renderGames(){
+gameListEl.innerHTML = "";
+let filtered = normalGames;
 
-		function renderGames(){
-			gameListEl.innerHTML = "";
-			let filtered = normalGames;
-			if(activeCategory !== "All") filtered = filtered.filter(g => g.category === activeCategory);
-			if(activeSearch) filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
-			filtered.forEach(g => {
-				const card = document.createElement('div');
-				card.className = 'game-card';
-				card.innerHTML = `<span>${g.name}</span>`;
-				card.addEventListener('click', () => ModalManager.open(g.name));
-				gameListEl.appendChild(card);
-			});
-			gameCounter.textContent = `Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''} ${activeCategory !== 'All' ? `• ${activeCategory}` : ''}`;
-		}
+// Category filtering
+if(activeCategory === "New") {
+filtered = filtered.filter(g => newestGames.includes(g.name));
+} else if(activeCategory !== "All") {
+filtered = filtered.filter(g => g.category === activeCategory);
+}
+
+// Search filtering
+if(activeSearch) {
+filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+}
+
+filtered.forEach(g => {
+const card = document.createElement('div');
+card.className = 'game-card';
+card.innerHTML = `<span>${g.name}</span>`;
+card.addEventListener('click', () => ModalManager.open(g.name));
+gameListEl.appendChild(card);
+});
+
+gameCounter.textContent =
+`Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''}` +
+(activeCategory !== 'All' ? ` • ${activeCategory}` : '');
+}
 
 		searchInput.addEventListener('input', (e) => {
 			activeSearch = e.target.value;
