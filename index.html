@@ -23,7 +23,7 @@
 			height: 100%;
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 			color: var(--text-color);
-background: linear-gradient(180deg, #0b2a38, #123f52);
+			background: linear-gradient(180deg, #0b2a38, #123f52);
 			overflow-x: hidden;
 			position: relative;
 		}
@@ -152,9 +152,9 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 			text-align: center;
 			padding: 5px;
 			user-select: none;
-			border: 2px solid #c77dff;
-			color: #c77dff;
-			box-shadow: 0 0 10px #c77dff, 0 0 20px #9d4edd, 0 0 40px #7b2cbf;
+			border: 2px solid var(--card-border-color, #c77dff);
+			color: var(--card-text-color, #c77dff);
+			box-shadow: 0 0 10px var(--card-shadow-1, #c77dff), 0 0 20px var(--card-shadow-2, #9d4edd), 0 0 40px var(--card-shadow-3, #7b2cbf);
 			transition: all 0.3s ease;
 			position: relative;
 			font-size: 15px;
@@ -162,13 +162,214 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 
 		.game-card:hover {
 			color: #ffffff;
-			border-color: #ff00ff;
-			box-shadow: 0 0 15px #ff00ff, 0 0 30px #ff00ff, 0 0 60px #ff00ff;
+			border-color: var(--card-hover-border, #ff00ff);
+			box-shadow: 0 0 15px var(--card-hover-border, #ff00ff), 0 0 30px var(--card-hover-border, #ff00ff), 0 0 60px var(--card-hover-border, #ff00ff);
 			transform: translateY(-4px) scale(1.02);
 		}
 
 		.game-card.request {
-			box-shadow: 0 0 20px 4px var(--accent);
+			border-color: var(--card-request-border, #ff9500);
+			box-shadow: 0 0 10px var(--card-request-border, #ff9500), 0 0 20px var(--card-request-color, #ffa500), 0 0 40px var(--card-request-dark, #ff8c00);
+			color: var(--card-request-color, #ffa500);
+		}
+
+		.game-card.request:hover {
+			border-color: var(--card-request-dark, #ff8c00);
+			box-shadow: 0 0 15px var(--card-request-dark, #ff8c00), 0 0 30px var(--card-request-color, #ffa500), 0 0 60px var(--card-request-border, #ff9500);
+			color: #ffb347;
+		}
+
+		/* Settings Button - Top Right */
+		.settings-btn-top {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			width: 50px;
+			height: 50px;
+			border-radius: 50%;
+			border: none;
+			cursor: pointer;
+			font-size: 24px;
+			font-weight: 700;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 20;
+			background: var(--accent);
+			color: #fff;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+		}
+
+		.settings-btn-top:hover {
+			transform: scale(1.1);
+			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+		}
+
+		.settings-btn-top:active {
+			transform: scale(0.95);
+		}
+
+		.settings-btn-top.hidden {
+			display: none;
+		}
+
+		/* Sidebar Menu */
+		.settings-sidebar {
+			position: fixed;
+			right: -350px;
+			top: 0;
+			width: 350px;
+			height: 100%;
+			background: rgba(15, 0, 30, 0.98);
+			border-left: 3px solid var(--accent);
+			z-index: 19;
+			transition: right 0.35s ease;
+			overflow-y: auto;
+			box-shadow: -5px 0 20px rgba(0, 0, 0, 0.6);
+		}
+
+		.settings-sidebar.active {
+			right: 0;
+		}
+
+		.sidebar-header {
+			padding: 20px;
+			border-bottom: 2px solid var(--accent);
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+		}
+
+		.sidebar-header h2 {
+			margin: 0;
+			color: #00f5ff;
+			font-size: 1.5rem;
+		}
+
+		.sidebar-menu {
+			display: flex;
+			flex-direction: column;
+			gap: 0;
+		}
+
+		.sidebar-item {
+			padding: 15px 20px;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			cursor: pointer;
+			transition: all 0.2s;
+			color: var(--text-color);
+			font-weight: 600;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			font-size: 16px;
+		}
+
+		.sidebar-item:hover {
+			background: rgba(157, 78, 221, 0.2);
+			padding-left: 25px;
+		}
+
+		.sidebar-item.active {
+			background: var(--accent);
+			color: #fff;
+		}
+
+		/* Tab Content */
+		.sidebar-content {
+			display: none;
+			padding: 20px;
+		}
+
+		.sidebar-content.active {
+			display: block;
+		}
+
+		.setting-group {
+			margin: 20px 0;
+		}
+
+		.setting-group label {
+			display: block;
+			color: var(--accent);
+			font-weight: 700;
+			margin-bottom: 10px;
+		}
+
+		.color-options {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 10px;
+		}
+
+		.color-option {
+			padding: 12px;
+			border: 2px solid rgba(255, 255, 255, 0.2);
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.2s;
+			text-align: center;
+		}
+
+		.color-option:hover {
+			border-color: var(--accent);
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.color-option.active {
+			border-color: var(--accent);
+			background: var(--accent);
+			color: #fff;
+		}
+
+		.card-color-option {
+			padding: 12px;
+			border: 2px solid rgba(255, 255, 255, 0.2);
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.2s;
+			text-align: center;
+		}
+
+		.card-color-option:hover {
+			border-color: var(--accent);
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.card-color-option.active {
+			border-color: var(--accent);
+			background: var(--accent);
+			color: #fff;
+		}
+
+		.grid-color-option {
+			padding: 12px;
+			border: 2px solid rgba(255, 255, 255, 0.2);
+			border-radius: 8px;
+			background: rgba(255, 255, 255, 0.05);
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 700;
+			transition: all 0.2s;
+			text-align: center;
+		}
+
+		.grid-color-option:hover {
+			border-color: var(--accent);
+			background: rgba(255, 255, 255, 0.1);
+		}
+
+		.grid-color-option.active {
+			border-color: var(--accent);
+			background: var(--accent);
+			color: #fff;
 		}
 
 		#game-frame {
@@ -273,6 +474,8 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 			width: 90%;
 			color: var(--text-color);
 			box-shadow: 0 0 30px #9d4edd;
+			max-height: 70vh;
+			overflow-y: auto;
 		}
 
 		.modal-content h2 {
@@ -285,6 +488,15 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 			justify-content: space-between;
 			padding: 8px 0;
 			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+		}
+
+		.game-description {
+			padding: 10px 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			margin-bottom: 10px;
+			color: rgba(255, 255, 255, 0.8);
+			font-size: 14px;
+			line-height: 1.4;
 		}
 
 		.game-stat label {
@@ -348,6 +560,11 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 			.category-bar.mobile-visible {
 				display: flex;
 			}
+
+			.settings-sidebar {
+				width: 100%;
+				right: -100%;
+			}
 		}
 	</style>
 </head>
@@ -377,9 +594,79 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 		<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
 		<button id="back-btn" title="Back to games (Esc)">← Back</button>
 
+		<!-- Settings Button Top Right -->
+		<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
+
+		<!-- Settings Sidebar -->
+		<div class="settings-sidebar" id="settings-sidebar">
+			<div class="sidebar-header">
+				<h2>Settings</h2>
+			</div>
+
+			<div class="sidebar-menu">
+				<div class="sidebar-item active" data-tab="themes">🎨 Themes</div>
+				<div class="sidebar-item" data-tab="cards">🎮 Game Cards</div>
+				<div class="sidebar-item" data-tab="background">🌅 Background</div>
+				<div class="sidebar-item" data-tab="about">ℹ️ About</div>
+			</div>
+
+			<!-- Themes Tab -->
+			<div class="sidebar-content active" id="tab-themes">
+				<div class="setting-group">
+					<label>Accent Color:</label>
+					<div class="color-options">
+						<div class="color-option active" data-theme="purple">Purple</div>
+						<div class="color-option" data-theme="cyan">Cyan</div>
+						<div class="color-option" data-theme="green">Green</div>
+						<div class="color-option" data-theme="orange">Orange</div>
+						<div class="color-option" data-theme="red">Red</div>
+						<div class="color-option" data-theme="pink">Pink</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Game Cards Tab -->
+			<div class="sidebar-content" id="tab-cards">
+				<div class="setting-group">
+					<label>Card Color Theme:</label>
+					<div class="color-options">
+						<div class="card-color-option active" data-card="purple">Purple</div>
+						<div class="card-color-option" data-card="cyan">Cyan</div>
+						<div class="card-color-option" data-card="green">Green</div>
+						<div class="card-color-option" data-card="red">Red</div>
+						<div class="card-color-option" data-card="pink">Pink</div>
+						<div class="card-color-option" data-card="gold">Gold</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Background Tab (Grid Lines) -->
+			<div class="sidebar-content" id="tab-background">
+				<div class="setting-group">
+					<label>Background Color:</label>
+					<div class="color-options">
+						<div class="grid-color-option active" data-grid="purple">Purple</div>
+						<div class="grid-color-option" data-grid="cyan">Cyan</div>
+						<div class="grid-color-option" data-grid="green">Green</div>
+						<div class="grid-color-option" data-grid="red">Red</div>
+						<div class="grid-color-option" data-grid="pink">Pink</div>
+						<div class="grid-color-option" data-grid="orange">Orange</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- About Tab -->
+			<div class="sidebar-content" id="tab-about">
+				<h3 style="color: #00f5ff; margin-top: 0;" id="about-title">About Math Line</h3>
+				<div id="about-content" style="line-height: 1.6; color: rgba(255, 255, 255, 0.8);"></div>
+			</div>
+		</div>
+
+		<!-- Game Modal -->
 		<div id="game-modal" class="modal">
 			<div class="modal-content">
 				<h2 id="modal-game-name"></h2>
+				<div class="game-description" id="modal-description"></div>
 				<div class="game-stat">
 					<label>Category:</label>
 					<span id="modal-category"></span>
@@ -404,19 +691,283 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 		</div>
 
 		<script>
-			const StorageManager = {
-			getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0}'),
-			updateGameStats: (name) => {
+			// ===== EASY TO EDIT: About Page Content =====
+		const ABOUT_CONTENT = {
+			title: "DISCLAIMER",
+			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br>
+				<strong>Version:</strong> 1.1<br>
+		
+				<strong>Last Updated:</strong> April 8th`
+		};
+
+		const StorageManager = {
+			getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0,"startTime":null}'),
+			updateGameStats: (name, seconds) => {
 				const stats = StorageManager.getGameStats(name);
-				stats.playTime = (stats.playTime || 0) + 0.01;
+				stats.playTime = (stats.playTime || 0) + (seconds / 60);
 				localStorage.setItem(`mathline_stats_${name}`, JSON.stringify(stats));
 			},
 			getLastCategory: () => localStorage.getItem('mathline_lastCategory') || 'New',
 			setLastCategory: (cat) => localStorage.setItem('mathline_lastCategory', cat),
+			getTheme: () => localStorage.getItem('mathline_theme') || 'purple',
+			setTheme: (theme) => localStorage.setItem('mathline_theme', theme),
+			getCardTheme: () => localStorage.getItem('mathline_card_theme') || 'purple',
+			setCardTheme: (theme) => localStorage.setItem('mathline_card_theme', theme),
+			getGridTheme: () => localStorage.getItem('mathline_grid_theme') || 'purple',
+			setGridTheme: (theme) => localStorage.setItem('mathline_grid_theme', theme),
 		};
 
+		// EASY TO EDIT: Add game descriptions here
+		const gameDescriptions = {
+			"Ragdoll Archers": "A fun physics-based archery game where ragdoll characters battle it out with bows and arrows.",
+			"Ragdoll Hit": "Smash ragdoll characters with various weapons and objects in this hilarious physics game.",
+			"Time Shooter": "A tactical shooter where time itself is a weapon. Master time manipulation to defeat enemies.",
+			"Retro Bowl": "Classic American football gameplay with a retro aesthetic. Build your team and dominate the field.",
+			"Snow Rider": "Race across snowy mountains on your sled. Fast-paced winter racing action.",
+			"Swords And Sandals": "Gladiator combat at its finest. Fight epic battles in the arena with swords and strategy.",
+			"Crazy Cattle": "Herd wild cattle across the range in this addictive arcade game.",
+			"Gladi Hoppers": "Gladiators hopping through dangerous obstacles and combat zones.",
+			"Bit Planes": "Pixel-art flying game with arcade challenges and power-ups.",
+			"Final Earth2": "Build and manage your planet through different eras. Strategy city-building game.",
+			"Cluster Rush": "Fast-paced platformer with cluster-based obstacles and challenging levels.",
+			"Push Your Luck": "Risk it all in this arcade game of chance and strategy.",
+			"Poly Track": "Polygon-based racing game with smooth physics and vibrant graphics.",
+			"Ragdoll Soccer": "Soccer with hilarious ragdoll physics. Hilarity and chaos guaranteed.",
+			"Jetpack Joy Ride": "Fly through the sky with a jetpack, dodging obstacles and collecting coins.",
+			"Learn To Fly 3": "Launch yourself from a cliff and learn to fly. Upgrade and progress through challenges.",
+			"Malidin Stun Cars": "Drive cars and stun opponents in this action-packed racing game.",
+			"Gun Spin": "Spin guns and master the art of shooting in multiple directions.",
+			"Age Of War": "Epic strategy tower defense game spanning multiple ages and civilizations.",
+			"Moto X3M 2": "Intense motorcycle racing with stunts and challenging tracks.",
+			"Moto X3M Winter": "Motorcycle racing on snowy winter tracks. Icy, slippery, and challenging.",
+			"Basketball Stars": "Arcade basketball action with quick reflexes and shooting skills.",
+			"Idle Breakout": "Addictive idle/clicker game where you break bricks to progress.",
+			"Vex 8": "Parkour platformer with challenging obstacles and fast-paced action.",
+			"Tiny Fishing": "Relaxing fishing game with cute graphics and progression system.",
+			"Drive Mad": "Crazy driving challenges with physics-based vehicles and obstacles.",
+			"Stick Man Hook": "Swing on hooks with a stick figure character in this physics-based platformer.",
+			"Line Rider": "Draw lines to create paths for a sledding character. Creative and fun.",
+			"Unicycle Hero": "Balance and ride a unicycle through challenging obstacle courses.",
+			"Basket Random": "Basketball with random twists. Every game is different and unpredictable.",
+			"1v1 Lol": "Fast-paced 1v1 multiplayer shooter with building mechanics.",
+			"Happy Wheels": "Ragdoll physics game with creative levels and dark humor.",
+			"Idle Miner Tycoon": "Build a mining empire and watch your wealth grow passively.",
+			"Jack Smith": "Craft and blacksmith your way to creating legendary weapons.",
+			"Tunnel Rush": "High-speed tunnel runner avoiding obstacles at breakneck speeds.",
+			"Duck Life 5": "Raise and train ducks to compete in various sports competitions.",
+			"Duck Life 4": "Continue the duck training saga with new challenges and competitions.",
+			"Mob Control": "Control a mob of characters to overcome obstacles and enemies.",
+			"A Small World Cup": "Minimalist football tournament game with cute aesthetics.",
+			"Escape Road": "Navigate escape routes while avoiding obstacles and enemies.",
+			"QWOP": "Use individual keys to control body parts of a runner. Surprisingly challenging.",
+			"Indian Truck Simulator": "Simulate driving an Indian truck with realistic physics.",
+			"Doge Miner": "Mine with the famous Doge and become fabulously wealthy.",
+			"Draw Climber": "Draw paths for your character to climb. Creative platforming game.",
+			"Slope 3": "Roll a ball down an infinite slope, avoiding obstacles and barriers.",
+			"Infinte Craft": "Create infinite objects by combining items. Relaxing crafting game.",
+			"Block Blast": "Match and clear blocks in this addictive puzzle game.",
+			"Melon playground": "Physics sandbox where you launch melons at various objects.",
+			"House of hazards": "Navigate a house full of hazards and traps. Co-op party game.",
+			"Binding of Issac": "Top-down roguelike dungeon crawler with challenging bosses.",
+			"Troll Face Quest 10": "Solve puzzles with a troll theme. Mind-bending brain teasers.",
+			"Troll Face Quest 11": "More troll face puzzles with weird and funny solutions.",
+			"Troll Face Quest 12": "Continue the tradition of absurd and hilarious puzzle solving.",
+			"Ultimate Car Driving Simulator 3": "Realistic car driving simulation with various vehicles.",
+			"Wordle": "Guess the word in six attempts. Daily puzzle challenge.",
+			"Cappybara Clicker": "Click on cute capybaras to earn currency and upgrades.",
+			"Bob The Robber 5": "Steal treasures and complete heists as the legendary thief Bob.",
+			"Car Crash 3D": "Cause massive car crashes and destruction in this physics sandbox.",
+			"Bit Life": "Live a digital life making choices that shape your destiny.",
+			"Plants vs Zombies": "Tower defense classic. Grow plants to defend against zombies.",
+			"Tall Man Run": "Run as a tall man, growing taller as you collect power-ups.",
+			"Tag": "High-speed parkour chasing game. Run, jump, and evade opponents.",
+			"Subway Surfers Winter": "Endless runner through snowy subway tunnels.",
+			"Subway Surfers Miami": "Endless runner through Miami with tropical vibes.",
+			"Hole.io": "Grow your hole to consume the entire map and crush opponents.",
+			"Drift Boss": "Master drifting mechanics in this racing game.",
+			"Subway Surfers Mexico": "Endless runner through Mexican subway environments.",
+			"Subway Surfers London": "Endless runner through London's underground.",
+			"Subway Surfers Iceland": "Endless runner through icy Icelandic terrain.",
+			"Granny 2": "Survive and escape from a creepy granny in this horror-puzzle game.",
+			"Granny 3": "The granny nightmare continues with new terrors and challenges.",
+			"Factory Balls 2": "Paint and create balls to match specific patterns and requirements.",
+			"Factory Balls 3": "More factory ball creation with advanced painting techniques.",
+			"Geometry Dash Lite": "Rhythm platformer with geometric obstacles and electronic music.",
+			"Hardware Tycoon": "Build and manage a computer hardware company.",
+			"CSGO Cliker": "Clicker game themed around the popular Counter-Strike game.",
+			"Cross Road": "Cross roads safely while avoiding traffic and hazards.",
+			"Burrito Bison": "Launch a burritos through dinosaur hordes and obstacles.",
+			"Burrito Bison Launch a Libre": "Burrito Bison returns with more launching chaos.",
+			"Burrito Bison Revenge": "Get revenge with an even more powerful burrito launcher.",
+			"Space Waves": "Navigate through waves of space obstacles and enemies.",
+			"The legend of Zelda Ocarina": "Classic Zelda adventure in a browser-playable format.",
+			"Pokemon emerald randomized": "Randomized Pokemon Emerald adventure with surprises.",
+			"Roof Top Snipers": "Sniper duels on rooftops with physics-based shooting.",
+			"Ultimate car driving simulator": "Comprehensive car driving simulation experience.",
+			"Traffic Jam 3D": "Solve traffic jams by strategically moving vehicles.",
+			"Papa's freezeria": "Serve frozen treats to customers in this time-management game.",
+			"Papa's pastaria": "Prepare pasta dishes quickly to satisfy hungry customers.",
+			"Papa's sushiria": "Make sushi rolls to order in this fast-paced cooking game.",
+			"Ballz": "Break blocks by bouncing balls strategically.",
+			"10 Minutes Till Dawn": "Survive 10 minutes of monster waves in this roguelike shooter.",
+			"Minecraft": "The ultimate building and exploration sandbox game.",
+			"Rocket League": "Soccer with rockets and fast cars. High-octane sports action.",
+			"Pixel Battleground": "Pixel-art battle royale with strategic combat.",
+			"BTD5": "Bloons Tower Defense 5. Pop balloons with towers and upgrades.",
+			"Brotato": "Roguelike survival with potato characters and unique weapons.",
+			"dungeons and degenerate gamblers": "Roguelike dungeon crawler with gambling mechanics.",
+			"Eggy Car": "Drive a fragile car carrying an egg. Don't crash and break it.",
+			"Mr mine": "Idle mining game where you dig for treasure and resources.",
+			"Jet Rush": "Jet-powered racing game with fast-paced action.",
+		};
+
+		// Color Themes
+		const colorThemes = {
+			purple: {
+				accent: "#9d4edd",
+				glow1: "#c77dff",
+				glow2: "#7b2cbf",
+			},
+			cyan: {
+				accent: "#00d9ff",
+				glow1: "#00f5ff",
+				glow2: "#0099cc",
+			},
+			green: {
+				accent: "#00ff88",
+				glow1: "#00ff99",
+				glow2: "#00aa44",
+			},
+			orange: {
+				accent: "#ff9500",
+				glow1: "#ffa500",
+				glow2: "#cc6600",
+			},
+			red: {
+				accent: "#ff3366",
+				glow1: "#ff5577",
+				glow2: "#cc0033",
+			},
+			pink: {
+				accent: "#ff00ff",
+				glow1: "#ff33ff",
+				glow2: "#cc00cc",
+			},
+		};
+
+		// Card Color Themes
+		const cardColorThemes = {
+			purple: {
+				border: "#c77dff",
+				text: "#c77dff",
+				shadow1: "#c77dff",
+				shadow2: "#9d4edd",
+				shadow3: "#7b2cbf",
+				hover: "#ff00ff",
+				requestBorder: "#ff9500",
+				requestColor: "#ffa500",
+				requestDark: "#ff8c00",
+			},
+			cyan: {
+				border: "#00f5ff",
+				text: "#00f5ff",
+				shadow1: "#00f5ff",
+				shadow2: "#00d9ff",
+				shadow3: "#0099cc",
+				hover: "#00ffff",
+				requestBorder: "#00ccff",
+				requestColor: "#00ffff",
+				requestDark: "#0099ff",
+			},
+			green: {
+				border: "#00ff99",
+				text: "#00ff99",
+				shadow1: "#00ff99",
+				shadow2: "#00ff88",
+				shadow3: "#00aa44",
+				hover: "#00ffaa",
+				requestBorder: "#00ff66",
+				requestColor: "#00ff88",
+				requestDark: "#00cc66",
+			},
+			red: {
+				border: "#ff5577",
+				text: "#ff5577",
+				shadow1: "#ff5577",
+				shadow2: "#ff3366",
+				shadow3: "#cc0033",
+				hover: "#ff3355",
+				requestBorder: "#ff6666",
+				requestColor: "#ff7777",
+				requestDark: "#ff4444",
+			},
+			pink: {
+				border: "#ff33ff",
+				text: "#ff33ff",
+				shadow1: "#ff33ff",
+				shadow2: "#ff00ff",
+				shadow3: "#cc00cc",
+				hover: "#ff00ff",
+				requestBorder: "#ff66ff",
+				requestColor: "#ff44ff",
+				requestDark: "#ff00ff",
+			},
+			gold: {
+				border: "#ffd700",
+				text: "#ffd700",
+				shadow1: "#ffd700",
+				shadow2: "#ffcc00",
+				shadow3: "#cc9900",
+				hover: "#ffed4e",
+				requestBorder: "#ffb347",
+				requestColor: "#ffc757",
+				requestDark: "#ff9500",
+			},
+		};
+
+		// Grid Line Colors
+		const gridColorThemes = {
+			purple: { c1: "#c87fff", c2: "#00ffff", c3: "#ff32ff" },
+			cyan: { c1: "#00ffff", c2: "#00ff88", c3: "#00ccff" },
+			green: { c1: "#00ff88", c2: "#ff1493", c3: "#00ffcc" },
+			red: { c1: "#ff6666", c2: "#ffff00", c3: "#ff0099" },
+			pink: { c1: "#ff00ff", c2: "#ffff00", c3: "#00ffff" },
+			orange: { c1: "#ff9500", c2: "#00ffff", c3: "#ff6600" },
+		};
+
+		let currentGridTheme = StorageManager.getGridTheme();
+
+		function applyTheme(themeName) {
+			const theme = colorThemes[themeName];
+			if (!theme) return;
+
+			document.querySelector(':root').style.setProperty('--accent', theme.accent);
+			StorageManager.setTheme(themeName);
+		}
+
+		function applyCardTheme(cardTheme) {
+			const colors = cardColorThemes[cardTheme];
+			if (!colors) return;
+
+			document.querySelector(':root').style.setProperty('--card-border-color', colors.border);
+			document.querySelector(':root').style.setProperty('--card-text-color', colors.text);
+			document.querySelector(':root').style.setProperty('--card-shadow-1', colors.shadow1);
+			document.querySelector(':root').style.setProperty('--card-shadow-2', colors.shadow2);
+			document.querySelector(':root').style.setProperty('--card-shadow-3', colors.shadow3);
+			document.querySelector(':root').style.setProperty('--card-hover-border', colors.hover);
+			document.querySelector(':root').style.setProperty('--card-request-border', colors.requestBorder);
+			document.querySelector(':root').style.setProperty('--card-request-color', colors.requestColor);
+			document.querySelector(':root').style.setProperty('--card-request-dark', colors.requestDark);
+			StorageManager.setCardTheme(cardTheme);
+		}
+
+		function applyGridTheme(gridTheme) {
+			currentGridTheme = gridTheme;
+			StorageManager.setGridTheme(gridTheme);
+		}
+
 		const games = [
-		{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
+			{name:"Ragdoll Archers",url:"Ragdoll-Archers.html",category:"Action"},
 			{name:"Ragdoll Hit",url:"Ragdoll-hit.html",category:"Action"},
 			{name:"Time Shooter",url:"Time-shooter.html",category:"Action"},
 			{name:"Retro Bowl",url:"Retro-bowl.html",category:"Sports"},
@@ -516,12 +1067,11 @@ background: linear-gradient(180deg, #0b2a38, #123f52);
 			{name:"Eggy Car",url:"eggy.html",category:"Puzzle"},
 			{name:"Mr mine",url:"miner.html",category:"Arcade"},
 			{name:"Jet Rush",url:"jet.html",category:"Racing"},
-
 		];
 
-const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
-    const NEW_COUNT = 6;
-    const newestGames = games.slice(-NEW_COUNT).map(g => g.name);
+		const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
+		const NEW_COUNT = 6;
+		const newestGames = games.slice(-NEW_COUNT).map(g => g.name);
 
 		const gameListEl = document.getElementById('game-list');
 		const iframe = document.getElementById('game-frame');
@@ -532,6 +1082,8 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 		const gameModal = document.getElementById('game-modal');
 		const gameCounter = document.getElementById('game-counter');
 		const gameLoading = document.getElementById('game-loading');
+		const settingsBtnTop = document.getElementById('settings-btn-top');
+		const settingsSidebar = document.getElementById('settings-sidebar');
 
 		const categories = ["All", "New", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
 			if(a === "All") return -1;
@@ -543,6 +1095,7 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 
 		let activeCategory = StorageManager.getLastCategory();
 		let activeSearch = '';
+		let gameStartTime = null;
 
 		categories.forEach(cat => {
 			const btn = document.createElement('button');
@@ -559,6 +1112,67 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 			categoryEl.appendChild(btn);
 		});
 
+		// Settings Button Toggle
+		settingsBtnTop.addEventListener('click', () => {
+			settingsSidebar.classList.toggle('active');
+		});
+
+		// Click outside sidebar to close
+		document.addEventListener('click', (e) => {
+			if(!e.target.closest('.settings-sidebar') && !e.target.closest('.settings-btn-top')) {
+				settingsSidebar.classList.remove('active');
+			}
+		});
+
+		// Sidebar Tab Switching
+		document.querySelectorAll('.sidebar-item').forEach(item => {
+			item.addEventListener('click', () => {
+				const tabName = item.getAttribute('data-tab');
+				
+				document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+				item.classList.add('active');
+				
+				document.querySelectorAll('.sidebar-content').forEach(c => c.classList.remove('active'));
+				document.getElementById(`tab-${tabName}`).classList.add('active');
+			});
+		});
+
+		// Populate about page
+		function populateAbout() {
+			document.getElementById('about-title').textContent = ABOUT_CONTENT.title;
+			document.getElementById('about-content').innerHTML = ABOUT_CONTENT.content;
+		}
+
+		// Color theme options
+		document.querySelectorAll('.color-option').forEach(option => {
+			option.addEventListener('click', (e) => {
+				document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+				e.target.classList.add('active');
+				const theme = e.target.getAttribute('data-theme');
+				applyTheme(theme);
+			});
+		});
+
+		// Card color options
+		document.querySelectorAll('.card-color-option').forEach(option => {
+			option.addEventListener('click', (e) => {
+				document.querySelectorAll('.card-color-option').forEach(o => o.classList.remove('active'));
+				e.target.classList.add('active');
+				const cardTheme = e.target.getAttribute('data-card');
+				applyCardTheme(cardTheme);
+			});
+		});
+
+		// Grid color options
+		document.querySelectorAll('.grid-color-option').forEach(option => {
+			option.addEventListener('click', (e) => {
+				document.querySelectorAll('.grid-color-option').forEach(o => o.classList.remove('active'));
+				e.target.classList.add('active');
+				const gridTheme = e.target.getAttribute('data-grid');
+				applyGridTheme(gridTheme);
+			});
+		});
+
 		const ModalManager = {
 			open: (gameName) => {
 				const game = normalGames.find(g => g.name === gameName);
@@ -567,14 +1181,22 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 				const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
 				const playTimeStr = roundedTime > 60 ? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m` : `${roundedTime}m`;
 				document.getElementById('modal-game-name').textContent = gameName;
+				document.getElementById('modal-description').textContent = gameDescriptions[gameName] || "No description available.";
 				document.getElementById('modal-category').textContent = game.category;
 				document.getElementById('modal-played').textContent = stats.played || '0';
 				document.getElementById('modal-last-played').textContent = stats.lastPlayed || 'Never';
 				document.getElementById('modal-playtime').textContent = playTimeStr;
 				document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
+				
+				settingsSidebar.classList.remove('active');
+				settingsBtnTop.classList.add('hidden');
+				
 				gameModal.classList.add('active');
 			},
-			close: () => gameModal.classList.remove('active'),
+			close: () => {
+				gameModal.classList.remove('active');
+				settingsBtnTop.classList.remove('hidden');
+			},
 			play: (gameName) => {
 				const game = normalGames.find(g => g.name === gameName);
 				const stats = StorageManager.getGameStats(gameName);
@@ -586,6 +1208,13 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 				backBtn.style.display = 'block';
 				fullscreenBtn.style.display = 'block';
 				gameModal.classList.remove('active');
+				
+				settingsSidebar.classList.remove('active');
+				settingsBtnTop.classList.add('hidden');
+				
+				// Start timer
+				gameStartTime = Date.now();
+				
 				setTimeout(() => {
 					iframe.src = game.url;
 					iframe.style.display = 'block';
@@ -594,38 +1223,53 @@ const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
 			}
 		};
 
-		document.getElementById('modal-close-btn').addEventListener('click', ModalManager.close);
-		gameModal.addEventListener('click', (e) => {
-			if(e.target === gameModal) ModalManager.close();
+		document.getElementById('modal-close-btn').addEventListener('click', () => {
+			ModalManager.close();
+			settingsBtnTop.classList.remove('hidden');
 		});
-function renderGames(){
-gameListEl.innerHTML = "";
-let filtered = normalGames;
+		
+		gameModal.addEventListener('click', (e) => {
+			if(e.target === gameModal) {
+				ModalManager.close();
+				settingsBtnTop.classList.remove('hidden');
+			}
+		});
 
-// Category filtering
-if(activeCategory === "New") {
-filtered = filtered.filter(g => newestGames.includes(g.name));
-} else if(activeCategory !== "All") {
-filtered = filtered.filter(g => g.category === activeCategory);
-}
+		function renderGames(){
+			gameListEl.innerHTML = "";
+			let filtered = normalGames;
 
-// Search filtering
-if(activeSearch) {
-filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
-}
+			if(activeCategory === "New") {
+				filtered = filtered.filter(g => newestGames.includes(g.name));
+			} else if(activeCategory !== "All") {
+				filtered = filtered.filter(g => g.category === activeCategory);
+			}
 
-filtered.forEach(g => {
-const card = document.createElement('div');
-card.className = 'game-card';
-card.innerHTML = `<span>${g.name}</span>`;
-card.addEventListener('click', () => ModalManager.open(g.name));
-gameListEl.appendChild(card);
-});
+			if(activeSearch) {
+				filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+			}
 
-gameCounter.textContent =
-`Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''}` +
-(activeCategory !== 'All' ? ` • ${activeCategory}` : '');
-}
+			filtered.forEach(g => {
+				const card = document.createElement('div');
+				card.className = 'game-card';
+				card.innerHTML = `<span>${g.name}</span>`;
+				card.addEventListener('click', () => ModalManager.open(g.name));
+				gameListEl.appendChild(card);
+			});
+
+			// Add request game card - always visible
+			const requestCard = document.createElement('div');
+			requestCard.className = 'game-card request';
+			requestCard.innerHTML = `<span> Request A Game</span>`;
+			requestCard.addEventListener('click', () => {
+				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
+			});
+			gameListEl.appendChild(requestCard);
+
+			gameCounter.textContent =
+				`Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''}` +
+				(activeCategory !== 'All' ? ` • ${activeCategory}` : '');
+		}
 
 		searchInput.addEventListener('input', (e) => {
 			activeSearch = e.target.value;
@@ -633,7 +1277,15 @@ gameCounter.textContent =
 		});
 
 		document.addEventListener('keydown', (e) => {
-			if(e.key === 'Escape' && iframe.style.display === 'block') backBtn.click();
+			if(e.key === 'Escape') {
+				if(iframe.style.display === 'block') {
+					backBtn.click();
+				} else if(settingsSidebar.classList.contains('active')) {
+					settingsSidebar.classList.remove('active');
+				} else {
+					gameModal.classList.remove('active');
+				}
+			}
 			if((e.key === 'f' || e.key === 'F') && iframe.style.display === 'block') {
 				e.preventDefault();
 				fullscreenBtn.click();
@@ -641,11 +1293,23 @@ gameCounter.textContent =
 		});
 
 		backBtn.addEventListener('click', () => {
+			// Calculate playtime
+			if(gameStartTime) {
+				const currentGame = iframe.src.split('/').pop();
+				const gameName = normalGames.find(g => g.url === currentGame)?.name;
+				if(gameName) {
+					const secondsElapsed = Math.floor((Date.now() - gameStartTime) / 1000);
+					StorageManager.updateGameStats(gameName, secondsElapsed);
+				}
+				gameStartTime = null;
+			}
+			
 			iframe.style.display = 'none';
 			iframe.src = '';
 			gameListEl.style.display = 'grid';
 			backBtn.style.display = 'none';
 			fullscreenBtn.style.display = 'none';
+			settingsBtnTop.classList.remove('hidden');
 		});
 
 		fullscreenBtn.addEventListener('click', () => {
@@ -672,15 +1336,18 @@ gameCounter.textContent =
 			time += 0.5;
 			ctx.fillStyle = '#000';
 			ctx.fillRect(0, 0, canvas.width, canvas.height);
+			
+			const gridTheme = gridColorThemes[currentGridTheme];
 			const colorCycle = (time / 150) % 3;
 			let color;
 			if(colorCycle < 1) {
-				color = `rgba(200, 100, 255, ${0.2 + colorCycle * 0.15})`;
+				color = gridTheme.c1;
 			} else if(colorCycle < 2) {
-				color = `rgba(0, 255, 255, ${0.35 - (colorCycle - 1) * 0.15})`;
+				color = gridTheme.c2;
 			} else {
-				color = `rgba(255, 50, 200, ${0.2 + (colorCycle - 2) * 0.15})`;
+				color = gridTheme.c3;
 			}
+			
 			ctx.strokeStyle = color;
 			ctx.lineWidth = 1.2;
 			ctx.shadowColor = color;
@@ -702,6 +1369,20 @@ gameCounter.textContent =
 		}
 		animateGrid();
 
+		// Apply saved settings on load
+		const savedTheme = StorageManager.getTheme();
+		const savedCardTheme = StorageManager.getCardTheme();
+		const savedGridTheme = StorageManager.getGridTheme();
+		
+		applyTheme(savedTheme);
+		applyCardTheme(savedCardTheme);
+		applyGridTheme(savedGridTheme);
+		
+		document.querySelector(`[data-theme="${savedTheme}"]`).classList.add('active');
+		document.querySelector(`[data-card="${savedCardTheme}"]`).classList.add('active');
+		document.querySelector(`[data-grid="${savedGridTheme}"]`).classList.add('active');
+
+		populateAbout();
 		renderGames();
 		</script>
 </body>
