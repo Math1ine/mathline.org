@@ -179,6 +179,192 @@
 			color: #ffb347;
 		}
 
+		/* Browser Screen */
+		#browser-screen {
+			display: none;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: linear-gradient(180deg, #0b2a38, #123f52);
+			z-index: 10;
+			flex-direction: column;
+		}
+
+		#browser-screen.active {
+			display: flex;
+		}
+
+		.browser-header {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			padding: 12px;
+			background: rgba(15, 0, 30, 0.95);
+			border-bottom: 2px solid var(--accent);
+			z-index: 11;
+		}
+
+		.browser-controls {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.browser-btn {
+			padding: 6px 12px;
+			background: var(--accent);
+			border: none;
+			border-radius: 6px;
+			color: #fff;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.2s;
+			font-size: 14px;
+		}
+
+		.browser-btn:hover {
+			filter: brightness(1.1);
+		}
+
+		.browser-btn:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+
+		.browser-url-bar {
+			display: flex;
+			gap: 8px;
+			align-items: center;
+		}
+
+		.browser-url-input {
+			flex: 1;
+			padding: 8px 12px;
+			background: rgba(255, 255, 255, 0.1);
+			border: 2px solid var(--accent);
+			border-radius: 6px;
+			color: var(--text-color);
+			font-size: 14px;
+		}
+
+		.browser-url-input:focus {
+			outline: none;
+			box-shadow: 0 0 10px var(--accent);
+		}
+
+		.browser-go-btn {
+			padding: 8px 16px;
+			background: var(--accent);
+			border: none;
+			border-radius: 6px;
+			color: #fff;
+			font-weight: 700;
+			cursor: pointer;
+			transition: all 0.2s;
+		}
+
+		.browser-go-btn:hover {
+			filter: brightness(1.1);
+		}
+
+		.browser-tabs {
+			display: flex;
+			gap: 8px;
+			padding: 8px 12px;
+			background: rgba(0, 0, 0, 0.3);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+			overflow-x: auto;
+		}
+
+		.browser-tab {
+			padding: 6px 12px;
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 6px;
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 600;
+			font-size: 12px;
+			transition: all 0.2s;
+			max-width: 150px;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+
+		.browser-tab:hover {
+			background: rgba(255, 255, 255, 0.15);
+		}
+
+		.browser-tab.active {
+			background: var(--accent);
+			border-color: var(--accent);
+		}
+
+		.browser-tab-close {
+			background: none;
+			border: none;
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 700;
+			padding: 0;
+			margin-left: 4px;
+		}
+
+		.browser-tab-close:hover {
+			color: #ff6666;
+		}
+
+		.new-tab-btn {
+			padding: 6px 12px;
+			background: rgba(255, 255, 255, 0.1);
+			border: 1px solid rgba(255, 255, 255, 0.2);
+			border-radius: 6px;
+			color: var(--text-color);
+			cursor: pointer;
+			font-weight: 700;
+			font-size: 16px;
+			transition: all 0.2s;
+		}
+
+		.new-tab-btn:hover {
+			background: rgba(255, 255, 255, 0.15);
+		}
+
+		.browser-content {
+			flex: 1;
+			overflow: hidden;
+			background: #000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.browser-loading {
+			color: var(--accent);
+			font-size: 18px;
+			text-align: center;
+		}
+
+		.browser-error {
+			color: #ff6666;
+			padding: 40px;
+			text-align: center;
+			line-height: 1.6;
+		}
+
+		.browser-html-content {
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background: #fff;
+		}
+
 		/* Settings Button - Top Right */
 		.settings-btn-top {
 			position: fixed;
@@ -594,6 +780,28 @@
 		<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
 		<button id="back-btn" title="Back to games (Esc)">← Back</button>
 
+		<!-- Browser Screen -->
+		<div id="browser-screen">
+			<div class="browser-header">
+				<div class="browser-controls">
+					<button class="browser-btn" id="browser-back" title="Back">← Back</button>
+					<button class="browser-btn" id="browser-forward" title="Forward">Forward →</button>
+					<button class="browser-btn" id="browser-reload" title="Reload">⟳ Reload</button>
+				</div>
+				<div class="browser-url-bar">
+					<input type="text" class="browser-url-input" id="browser-url-input" placeholder="Enter URL (e.g., google.com)">
+					<button class="browser-go-btn" id="browser-go">GO</button>
+				</div>
+				<div class="browser-tabs">
+					<div id="browser-tabs-container"></div>
+					<button class="new-tab-btn" id="new-tab-btn">+</button>
+				</div>
+			</div>
+			<div class="browser-content" id="browser-content"></div>
+		</div>
+
+		<button class="browser-back-btn" id="browser-back-main">← Back</button>
+
 		<!-- Settings Button Top Right -->
 		<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
 
@@ -607,6 +815,7 @@
 				<div class="sidebar-item active" data-tab="themes">🎨 Themes</div>
 				<div class="sidebar-item" data-tab="cards">🎮 Game Cards</div>
 				<div class="sidebar-item" data-tab="background">🌅 Background</div>
+				<div class="sidebar-item" data-tab="search">🔍 Search</div>
 				<div class="sidebar-item" data-tab="about">ℹ️ About</div>
 			</div>
 
@@ -640,7 +849,7 @@
 				</div>
 			</div>
 
-			<!-- Background Tab (Grid Lines) -->
+			<!-- Background Tab -->
 			<div class="sidebar-content" id="tab-background">
 				<div class="setting-group">
 					<label>Background Color:</label>
@@ -653,6 +862,11 @@
 						<div class="grid-color-option" data-grid="orange">Orange</div>
 					</div>
 				</div>
+			</div>
+
+			<!-- Search Tab -->
+			<div class="sidebar-content" id="tab-search">
+				<button class="browser-btn" id="open-browser-btn" style="width: 100%; padding: 12px;">Open Web Browser</button>
 			</div>
 
 			<!-- About Tab -->
@@ -693,12 +907,16 @@
 		<script>
 			// ===== EASY TO EDIT: About Page Content =====
 		const ABOUT_CONTENT = {
-			title: "DISCLAIMER",
-			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br>
-				<strong>Version:</strong> 1.1<br>
-		
-				<strong>Last Updated:</strong> April 8th`
+			title: "About Math Line",
+			content: `Math Line is a collection of fun and addictive games to keep you entertained. 
+				Browse through different categories, search for your favorite games, and track your play time and statistics.<br><br>
+				<strong>Version:</strong> 1.0<br>
+				<strong>Developer:</strong> Game Portal Team<br>
+				<strong>Last Updated:</strong> 2026`
 		};
+
+		// PROXY SERVER URL - CHANGE THIS TO YOUR REPLIT URL
+		const PROXY_URL = 'https://always-online--teddyplaczek880.replit.app/api/proxy';
 
 		const StorageManager = {
 			getGameStats: (name) => JSON.parse(localStorage.getItem(`mathline_stats_${name}`) || '{"played":0,"lastPlayed":"Never","playTime":0,"startTime":null}'),
@@ -937,6 +1155,11 @@
 
 		let currentGridTheme = StorageManager.getGridTheme();
 
+		// Browser State
+		let browserTabs = [{ id: 1, url: '', title: 'New Tab', history: [], historyIndex: -1 }];
+		let activeTabId = 1;
+		let tabIdCounter = 2;
+
 		function applyTheme(themeName) {
 			const theme = colorThemes[themeName];
 			if (!theme) return;
@@ -1085,6 +1308,19 @@
 		const settingsBtnTop = document.getElementById('settings-btn-top');
 		const settingsSidebar = document.getElementById('settings-sidebar');
 
+		// Browser elements
+		const browserScreen = document.getElementById('browser-screen');
+		const browserContent = document.getElementById('browser-content');
+		const browserURLInput = document.getElementById('browser-url-input');
+		const browserGoBtn = document.getElementById('browser-go');
+		const browserBackBtn = document.getElementById('browser-back');
+		const browserForwardBtn = document.getElementById('browser-forward');
+		const browserReloadBtn = document.getElementById('browser-reload');
+		const browserTabsContainer = document.getElementById('browser-tabs-container');
+		const newTabBtn = document.getElementById('new-tab-btn');
+		const openBrowserBtn = document.getElementById('open-browser-btn');
+		const browserBackMainBtn = document.getElementById('browser-back-main');
+
 		const categories = ["All", "New", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
 			if(a === "All") return -1;
 			if(b === "New") return 1;
@@ -1171,6 +1407,111 @@
 				const gridTheme = e.target.getAttribute('data-grid');
 				applyGridTheme(gridTheme);
 			});
+		});
+
+		// Browser Functions
+		function updateTabs() {
+			browserTabsContainer.innerHTML = '';
+			browserTabs.forEach(tab => {
+				const tabEl = document.createElement('div');
+				tabEl.className = `browser-tab ${tab.id === activeTabId ? 'active' : ''}`;
+				tabEl.innerHTML = `
+					<span>${tab.title}</span>
+					<button class="browser-tab-close" data-tab-id="${tab.id}">×</button>
+				`;
+				tabEl.addEventListener('click', (e) => {
+					if (!e.target.classList.contains('browser-tab-close')) {
+						activeTabId = tab.id;
+						updateTabs();
+						loadTab();
+					}
+				});
+				tabEl.querySelector('.browser-tab-close').addEventListener('click', (e) => {
+					e.stopPropagation();
+					browserTabs = browserTabs.filter(t => t.id !== tab.id);
+					if (activeTabId === tab.id && browserTabs.length > 0) {
+						activeTabId = browserTabs[0].id;
+					}
+					updateTabs();
+					loadTab();
+				});
+				browserTabsContainer.appendChild(tabEl);
+			});
+		}
+
+		function getActiveTab() {
+			return browserTabs.find(t => t.id === activeTabId);
+		}
+
+		function loadTab() {
+			const tab = getActiveTab();
+			if (!tab) return;
+			
+			browserURLInput.value = tab.url;
+			browserContent.innerHTML = '';
+			
+			if (tab.url) {
+				browserContent.innerHTML = '<div class="browser-loading">Loading...</div>';
+				
+				const fullUrl = tab.url.startsWith('http') ? tab.url : 'https://' + tab.url;
+				fetch(`${PROXY_URL}?url=${encodeURIComponent(fullUrl)}`)
+					.then(res => res.text())
+					.then(html => {
+						const div = document.createElement('div');
+						div.className = 'browser-html-content';
+						div.innerHTML = html;
+						
+						// Make all links open in new tabs
+						div.querySelectorAll('a').forEach(link => {
+							link.setAttribute('target', '_blank');
+						});
+						
+						browserContent.innerHTML = '';
+						browserContent.appendChild(div);
+					})
+					.catch(error => {
+						browserContent.innerHTML = `<div class="browser-error"><p>❌ Unable to load this website</p><p>${error.message}</p><p>It may be blocked by your network or doesn't support being displayed this way.</p></div>`;
+					});
+			} else {
+				browserContent.innerHTML = '<div style="padding: 40px; color: rgba(255,255,255,0.6); text-align: center;"><p>Enter a URL to get started</p></div>';
+			}
+		}
+
+		openBrowserBtn.addEventListener('click', () => {
+			settingsSidebar.classList.remove('active');
+			browserScreen.classList.add('active');
+			settingsBtnTop.classList.add('hidden');
+			updateTabs();
+			loadTab();
+		});
+
+		browserBackMainBtn.addEventListener('click', () => {
+			browserScreen.classList.remove('active');
+			settingsBtnTop.classList.remove('hidden');
+		});
+
+		browserGoBtn.addEventListener('click', () => {
+			const url = browserURLInput.value.trim();
+			if (url) {
+				const tab = getActiveTab();
+				tab.url = url;
+				tab.title = url.length > 20 ? url.substring(0, 20) + '...' : url;
+				updateTabs();
+				loadTab();
+			}
+		});
+
+		browserURLInput.addEventListener('keypress', (e) => {
+			if (e.key === 'Enter') browserGoBtn.click();
+		});
+
+		newTabBtn.addEventListener('click', () => {
+			const newTab = { id: tabIdCounter++, url: '', title: 'New Tab', history: [], historyIndex: -1 };
+			browserTabs.push(newTab);
+			activeTabId = newTab.id;
+			updateTabs();
+			loadTab();
+			browserURLInput.focus();
 		});
 
 		const ModalManager = {
@@ -1260,7 +1601,7 @@
 			// Add request game card - always visible
 			const requestCard = document.createElement('div');
 			requestCard.className = 'game-card request';
-			requestCard.innerHTML = `<span> Request A Game</span>`;
+			requestCard.innerHTML = `<span>📝 Request A Game</span>`;
 			requestCard.addEventListener('click', () => {
 				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
 			});
@@ -1278,7 +1619,9 @@
 
 		document.addEventListener('keydown', (e) => {
 			if(e.key === 'Escape') {
-				if(iframe.style.display === 'block') {
+				if(browserScreen.classList.contains('active')) {
+					browserBackMainBtn.click();
+				} else if(iframe.style.display === 'block') {
 					backBtn.click();
 				} else if(settingsSidebar.classList.contains('active')) {
 					settingsSidebar.classList.remove('active');
