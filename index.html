@@ -929,9 +929,12 @@
 		};
 
 		// ===== EASY TO EDIT: Browser Popup Content =====
+		// Change any of these to customize what the popup says
 		const BROWSER_POPUP_CONTENT = {
-			title: "🌐 Mini Browser",
-			text: "Welcome to the Mini Browser! Browse the web directly from Math Line."
+			title: "🌐 Mini Browser",           // Popup heading
+			text: "Welcome to the Mini Browser! Browse the web directly from Math Line.", // Main message
+			checkboxLabel: "Don't show this again",  // Checkbox text
+			okButtonText: "OK",                 // Button text
 		};
 
 		// Safe storage - falls back to memory if localStorage is blocked
@@ -1190,15 +1193,15 @@
 
 		screenTabBtns.forEach(btn => {
 			btn.addEventListener('click', () => {
-				screenTabBtns.forEach(b => b.classList.remove('active'));
-				btn.classList.add('active');
 				const screen = btn.getAttribute('data-screen');
-				if(screen === 'games') {
+				if(screen === 'browser') {
+					// Always show popup — checkbox inside controls whether to skip next time
+					browserPopup.classList.add('active');
+				} else {
+					screenTabBtns.forEach(b => b.classList.remove('active'));
+					btn.classList.add('active');
 					gamesPage.classList.add('active');
 					drfrostPage.classList.remove('active');
-				} else if(screen === 'browser') {
-					drfrostPage.classList.add('active');
-					gamesPage.classList.remove('active');
 				}
 			});
 		});
@@ -1210,6 +1213,7 @@
 				goToBrowser();
 			}
 		});
+
 
 		function goToBrowser() {
 			drfrostPage.classList.add('active');
@@ -1224,6 +1228,8 @@
 				StorageManager.setBrowserPopupShown();
 			}
 			browserPopup.classList.remove('active');
+			screenTabBtns.forEach(b => b.classList.remove('active'));
+			document.getElementById('browser-screen-btn').classList.add('active');
 			goToBrowser();
 		});
 
@@ -1252,6 +1258,8 @@
 		function populateBrowserPopup() {
 			document.getElementById('popup-title').textContent = BROWSER_POPUP_CONTENT.title;
 			document.getElementById('popup-text').textContent = BROWSER_POPUP_CONTENT.text;
+			document.querySelector('label[for="dont-show-again"]').textContent = BROWSER_POPUP_CONTENT.checkboxLabel || "Don't show this again";
+			document.getElementById('popup-ok-btn').textContent = BROWSER_POPUP_CONTENT.okButtonText || "OK";
 		}
 
 		document.querySelectorAll('.color-option').forEach(option => {
