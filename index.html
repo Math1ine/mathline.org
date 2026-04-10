@@ -508,8 +508,13 @@
 		}
 
 		@keyframes spin {
-			0% { transform: rotate(0deg); }
-			100% { transform: rotate(360deg); }
+			0% {
+				transform: rotate(0deg);
+			}
+
+			100% {
+				transform: rotate(360deg);
+			}
 		}
 
 		#fullscreen-btn {
@@ -761,168 +766,168 @@
 			<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 		</div>
 
-		<div class="category-bar" id="category-filter"></div>
-		<div class="game-counter" id="game-counter"></div>
-		<div id="game-list" aria-live="polite"></div>
+			<div class="category-bar" id="category-filter"></div>
+			<div class="game-counter" id="game-counter"></div>
+			<div id="game-list" aria-live="polite"></div>
 
-		<div id="game-loading">
-			<div class="spinner"></div>
-			<p>Loading game...</p>
+			<div id="game-loading">
+				<div class="spinner"></div>
+				<p>Loading game...</p>
+			</div>
+
+			<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
+
+			<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
+			<button id="back-btn" title="Back to games (Esc)">← Back</button>
 		</div>
 
-		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
-
-		<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
-		<button id="back-btn" title="Back to games (Esc)">← Back</button>
-	</div>
-
-	<!-- Dr Frost Page -->
-	<div id="drfrost-page" class="page-screen">
-		<iframe class="drfrost-iframe" src="https://www.drfrost.site/" title="Dr Frost Maths"></iframe>
-	</div>
-
-	<!-- Settings Button Top Right -->
-	<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
-
-	<!-- Settings Sidebar -->
-	<div class="settings-sidebar" id="settings-sidebar">
-		<div class="sidebar-header">
-			<h2>Settings</h2>
+		<!-- Dr Frost Page -->
+		<div id="drfrost-page" class="page-screen">
+			<iframe class="drfrost-iframe" src="https://www.drfrost.site/" title="Dr Frost Maths"></iframe>
 		</div>
 
-		<div class="sidebar-menu">
-			<!-- Screen Tabs -->
-			<div class="setting-group" style="margin-bottom: 0; padding: 10px 20px;">
-				<div class="screen-tabs">
-					<button class="screen-tab-btn active" id="games-screen-btn" data-screen="games">🏠 Home</button>
-					<button class="screen-tab-btn" id="browser-screen-btn" data-screen="browser">🌐 Browser</button>
+		<!-- Settings Button Top Right -->
+		<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
+
+		<!-- Settings Sidebar -->
+		<div class="settings-sidebar" id="settings-sidebar">
+			<div class="sidebar-header">
+				<h2>Settings</h2>
+			</div>
+
+			<div class="sidebar-menu">
+				<!-- Screen Tabs -->
+				<div class="setting-group" style="margin-bottom: 0; padding: 10px 20px;">
+					<div class="screen-tabs">
+						<button class="screen-tab-btn active" id="games-screen-btn" data-screen="games">🏠 Home</button>
+						<button class="screen-tab-btn" id="browser-screen-btn" data-screen="browser">🌐 Browser</button>
+					</div>
+				</div>
+
+				<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
+				<div class="sidebar-item" data-tab="cards">🎮 Game Bar</div>
+				<div class="sidebar-item" data-tab="background">🌅 Background</div>
+				<div class="sidebar-item" data-tab="disclaimer">📋 Disclaimer</div>
+			</div>
+
+			<!-- Themes Tab -->
+			<div class="sidebar-content active" id="tab-themes">
+				<div class="setting-group">
+					<label>Accent Color:</label>
+					<div class="color-options">
+						<div class="color-option active" data-theme="purple">Purple</div>
+						<div class="color-option" data-theme="cyan">Cyan</div>
+						<div class="color-option" data-theme="green">Green</div>
+						<div class="color-option" data-theme="orange">Orange</div>
+						<div class="color-option" data-theme="red">Red</div>
+						<div class="color-option" data-theme="pink">Pink</div>
+					</div>
 				</div>
 			</div>
 
-			<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
-			<div class="sidebar-item" data-tab="cards">🎮 Game Bar</div>
-			<div class="sidebar-item" data-tab="background">🌅 Background</div>
-			<div class="sidebar-item" data-tab="disclaimer">📋 Disclaimer</div>
+			<!-- Game Bar Tab -->
+			<div class="sidebar-content" id="tab-cards">
+				<div class="setting-group">
+					<label>Card Color Theme:</label>
+					<div class="color-options">
+						<div class="card-color-option active" data-card="purple">Purple</div>
+						<div class="card-color-option" data-card="cyan">Cyan</div>
+						<div class="card-color-option" data-card="green">Green</div>
+						<div class="card-color-option" data-card="red">Red</div>
+						<div class="card-color-option" data-card="pink">Pink</div>
+						<div class="card-color-option" data-card="gold">Gold</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Background Tab (Grid Lines) -->
+			<div class="sidebar-content" id="tab-background">
+				<div class="setting-group">
+					<label>Background Color:</label>
+					<div class="color-options">
+						<div class="grid-color-option active" data-grid="purple">Purple</div>
+						<div class="grid-color-option" data-grid="cyan">Cyan</div>
+						<div class="grid-color-option" data-grid="green">Green</div>
+						<div class="grid-color-option" data-grid="red">Red</div>
+						<div class="grid-color-option" data-grid="pink">Pink</div>
+						<div class="grid-color-option" data-grid="orange">Orange</div>
+					</div>
+				</div>
+
+				<div class="setting-group">
+					<label>Grid Line Brightness:</label>
+					<div class="brightness-slider-container">
+						<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
+						<div class="brightness-value"><span id="brightness-value">100</span>%</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Browser Tab -->
+			<div class="sidebar-content" id="tab-browser-tab">
+				<div class="setting-group">
+					<label>🌐 Mini Browser</label>
+					<p style="color: rgba(255,255,255,0.6); font-size: 12px;">Click below to access the web browser</p>
+					<button class="popup-ok-btn" id="open-browser-btn" style="width: 100%; margin-top: 10px;">Open Browser</button>
+				</div>
+			</div>
+
+			<!-- Disclaimer Tab -->
+			<div class="sidebar-content" id="tab-disclaimer">
+				<h3 style="color: #00f5ff; margin-top: 0;" id="disclaimer-title">Disclaimer</h3>
+				<div id="disclaimer-content" style="line-height: 1.6; color: rgba(255, 255, 255, 0.8);"></div>
+			</div>
 		</div>
 
-		<!-- Themes Tab -->
-		<div class="sidebar-content active" id="tab-themes">
-			<div class="setting-group">
-				<label>Accent Color:</label>
-				<div class="color-options">
-					<div class="color-option active" data-theme="purple">Purple</div>
-					<div class="color-option" data-theme="cyan">Cyan</div>
-					<div class="color-option" data-theme="green">Green</div>
-					<div class="color-option" data-theme="orange">Orange</div>
-					<div class="color-option" data-theme="red">Red</div>
-					<div class="color-option" data-theme="pink">Pink</div>
+		<!-- Browser Info Popup -->
+		<div class="browser-popup" id="browser-popup">
+			<div class="browser-popup-content">
+				<h2 id="popup-title">🌐 Mini Browser</h2>
+				<div class="browser-popup-text" id="popup-text">
+					Welcome to the Mini Browser! Browse the web directly from Math Line.
+				</div>
+				<div class="popup-checkbox">
+					<input type="checkbox" id="dont-show-again" />
+					<label for="dont-show-again">Don't show this again</label>
+				</div>
+				<div class="popup-buttons">
+					<button class="popup-ok-btn" id="popup-ok-btn">OK</button>
 				</div>
 			</div>
 		</div>
 
-		<!-- Game Bar Tab -->
-		<div class="sidebar-content" id="tab-cards">
-			<div class="setting-group">
-				<label>Card Color Theme:</label>
-				<div class="color-options">
-					<div class="card-color-option active" data-card="purple">Purple</div>
-					<div class="card-color-option" data-card="cyan">Cyan</div>
-					<div class="card-color-option" data-card="green">Green</div>
-					<div class="card-color-option" data-card="red">Red</div>
-					<div class="card-color-option" data-card="pink">Pink</div>
-					<div class="card-color-option" data-card="gold">Gold</div>
+		<!-- Game Modal -->
+		<div id="game-modal" class="modal">
+			<div class="modal-content">
+				<h2 id="modal-game-name"></h2>
+				<div class="game-stat">
+					<label>Category:</label>
+					<span id="modal-category"></span>
+				</div>
+				<div class="game-stat">
+					<label>Times Played:</label>
+					<span id="modal-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Last Played:</label>
+					<span id="modal-last-played"></span>
+				</div>
+				<div class="game-stat">
+					<label>Total Play Time:</label>
+					<span id="modal-playtime"></span>
+				</div>
+				<div class="modal-buttons">
+					<button class="play-btn" id="modal-play-btn">▶️ Play</button>
+					<button class="close-modal" id="modal-close-btn">Close</button>
 				</div>
 			</div>
 		</div>
 
-		<!-- Background Tab (Grid Lines) -->
-		<div class="sidebar-content" id="tab-background">
-			<div class="setting-group">
-				<label>Background Color:</label>
-				<div class="color-options">
-					<div class="grid-color-option active" data-grid="purple">Purple</div>
-					<div class="grid-color-option" data-grid="cyan">Cyan</div>
-					<div class="grid-color-option" data-grid="green">Green</div>
-					<div class="grid-color-option" data-grid="red">Red</div>
-					<div class="grid-color-option" data-grid="pink">Pink</div>
-					<div class="grid-color-option" data-grid="orange">Orange</div>
-				</div>
-			</div>
-
-			<div class="setting-group">
-				<label>Grid Line Brightness:</label>
-				<div class="brightness-slider-container">
-					<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
-					<div class="brightness-value"><span id="brightness-value">100</span>%</div>
-				</div>
-			</div>
-		</div>
-
-		<!-- Browser Tab -->
-		<div class="sidebar-content" id="tab-browser-tab">
-			<div class="setting-group">
-				<label>🌐 Mini Browser</label>
-				<p style="color: rgba(255,255,255,0.6); font-size: 12px;">Click below to access the web browser</p>
-				<button class="popup-ok-btn" id="open-browser-btn" style="width: 100%; margin-top: 10px;">Open Browser</button>
-			</div>
-		</div>
-
-		<!-- Disclaimer Tab -->
-		<div class="sidebar-content" id="tab-disclaimer">
-			<h3 style="color: #00f5ff; margin-top: 0;" id="disclaimer-title">Disclaimer</h3>
-			<div id="disclaimer-content" style="line-height: 1.6; color: rgba(255, 255, 255, 0.8);"></div>
-		</div>
-	</div>
-
-	<!-- Browser Info Popup -->
-	<div class="browser-popup" id="browser-popup">
-		<div class="browser-popup-content">
-			<h2 id="popup-title">🌐 Mini Browser</h2>
-			<div class="browser-popup-text" id="popup-text">
-				Welcome to the Mini Browser! Browse the web directly from Math Line.
-			</div>
-			<div class="popup-checkbox">
-				<input type="checkbox" id="dont-show-again" />
-				<label for="dont-show-again">Don't show this again</label>
-			</div>
-			<div class="popup-buttons">
-				<button class="popup-ok-btn" id="popup-ok-btn">OK</button>
-			</div>
-		</div>
-	</div>
-
-	<!-- Game Modal -->
-	<div id="game-modal" class="modal">
-		<div class="modal-content">
-			<h2 id="modal-game-name"></h2>
-			<div class="game-stat">
-				<label>Category:</label>
-				<span id="modal-category"></span>
-			</div>
-			<div class="game-stat">
-				<label>Times Played:</label>
-				<span id="modal-played"></span>
-			</div>
-			<div class="game-stat">
-				<label>Last Played:</label>
-				<span id="modal-last-played"></span>
-			</div>
-			<div class="game-stat">
-				<label>Total Play Time:</label>
-				<span id="modal-playtime"></span>
-			</div>
-			<div class="modal-buttons">
-				<button class="play-btn" id="modal-play-btn">▶️ Play</button>
-				<button class="close-modal" id="modal-close-btn">Close</button>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
 		// ===== EASY TO EDIT: Disclaimer Content =====
 		const DISCLAIMER_CONTENT = {
-			title: "DISCLAIMER",
+			title: "Disclaimer",
 			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br>
 				<strong>Version:</strong> 1.1<br>
 				<strong>Last Updated:</strong> April 8th`
@@ -931,8 +936,8 @@
 		// ===== EASY TO EDIT: Browser Popup Content =====
 		// Change any of these to customize what the popup says
 		const BROWSER_POPUP_CONTENT = {
-			title: "🌐 Mini Browser",           // Popup heading
-			text: "Welcome to the Mini Browser! Browse the web directly from Math Line.", // Main message
+			title: "Disclaimer",           // Popup heading
+			text: "I Do Not Claim This Is Mine this broswer belongs to its owner the credit goes to its respictive owner use at you", // Main message
 			checkboxLabel: "Don't show this again",  // Checkbox text
 			okButtonText: "OK",                 // Button text
 		};
@@ -1506,7 +1511,7 @@
 		populateBrowserPopup();
 		renderGames();
 		}); // end DOMContentLoaded
-	</script>
+		</script>
 </body>
 
 </html>
