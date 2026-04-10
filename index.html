@@ -631,6 +631,76 @@
 			background: rgba(255, 255, 255, 0.2);
 		}
 
+		/* Update Popup */
+		.update-popup {
+			display: none;
+			position: fixed;
+			z-index: 30;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.85);
+			backdrop-filter: blur(5px);
+			align-items: center;
+			justify-content: center;
+		}
+
+		.update-popup.active {
+			display: flex;
+		}
+
+		.update-popup-content {
+			background: rgba(0, 8, 25, 0.98);
+			padding: 40px;
+			border-radius: 12px;
+			border: none;
+			max-width: 550px;
+			width: 90%;
+			color: var(--text-color);
+			box-shadow: 0 0 50px var(--accent);
+			max-height: 80vh;
+			overflow-y: auto;
+		}
+
+		.update-popup-content h2 {
+			margin-top: 0;
+			color: #00f5ff;
+			font-size: 1.8rem;
+			text-shadow: 0 0 10px #00f5ff;
+		}
+
+		.update-popup-text {
+			line-height: 1.8;
+			color: rgba(255, 255, 255, 0.9);
+			margin: 20px 0;
+			font-size: 15px;
+		}
+
+		.update-popup-close {
+			display: flex;
+			justify-content: center;
+			margin-top: 25px;
+		}
+
+		.update-popup-close button {
+			padding: 12px 40px;
+			border: none;
+			border-radius: 8px;
+			background: var(--accent);
+			color: #fff;
+			font-weight: 700;
+			font-size: 16px;
+			cursor: pointer;
+			transition: all 0.3s;
+			box-shadow: 0 0 15px var(--accent);
+		}
+
+		.update-popup-close button:hover {
+			filter: brightness(1.1);
+			box-shadow: 0 0 25px var(--accent);
+		}
+
 		/* Browser Info Popup */
 		.browser-popup {
 			display: none;
@@ -879,6 +949,17 @@
 			</div>
 		</div>
 
+		<!-- Update Popup -->
+		<div class="update-popup" id="update-popup">
+			<div class="update-popup-content">
+				<h2 id="update-popup-title">🎉 Update!</h2>
+				<div class="update-popup-text" id="update-popup-text"></div>
+				<div class="update-popup-close">
+					<button id="update-popup-ok">Got it!</button>
+				</div>
+			</div>
+		</div>
+
 		<!-- Browser Info Popup -->
 		<div class="browser-popup" id="browser-popup">
 			<div class="browser-popup-content">
@@ -925,10 +1006,25 @@
 
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
+		// ===== EASY TO EDIT: Update Popup =====
+		// Change UPDATE_VERSION every time you push an update — the popup will show again for all visitors
+		const UPDATE_POPUP = {
+			version: "1.1",                        // Change this each update to trigger the popup again
+			title: "🎉 What's New in v1.1",        // Popup heading
+			text: `
+				<strong>Features:</strong><br>
+					• New Broswer 
+		      • New motoX3M Games
+        <strong>Improvements:</strong><br>
+				• Settings menu cleanup<br>
+			`,                                     // Supports HTML — use <br> for line breaks, <strong> for bold
+			okButtonText: "Got it!",               // Button text
+		};
+
 		// ===== EASY TO EDIT: Disclaimer Content =====
 		const DISCLAIMER_CONTENT = {
 			title: "Disclaimer",
-			content: `All these games' rights go to their respective owners. I do not claim to own any of these games<br><br>
+			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br>
 				<strong>Version:</strong> 1.1<br>
 				<strong>Last Updated:</strong> April 8th`
 		};
@@ -1510,6 +1606,23 @@
 		populateDisclaimer();
 		populateBrowserPopup();
 		renderGames();
+
+		// Show update popup once per version
+		function showUpdatePopupIfNeeded() {
+			const seen = _ls.getItem('mathline_update_seen_v' + UPDATE_POPUP.version);
+			if(seen === 'true') return;
+			document.getElementById('update-popup-title').textContent = UPDATE_POPUP.title;
+			document.getElementById('update-popup-text').innerHTML = UPDATE_POPUP.text;
+			document.getElementById('update-popup-ok').textContent = UPDATE_POPUP.okButtonText || 'Got it!';
+			document.getElementById('update-popup').classList.add('active');
+		}
+
+		document.getElementById('update-popup-ok').addEventListener('click', () => {
+			_ls.setItem('mathline_update_seen_v' + UPDATE_POPUP.version, 'true');
+			document.getElementById('update-popup').classList.remove('active');
+		});
+
+		showUpdatePopupIfNeeded();
 		}); // end DOMContentLoaded
 		</script>
 </body>
