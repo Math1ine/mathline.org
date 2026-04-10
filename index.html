@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -16,1120 +15,517 @@
 			--card-radius: 14px;
 			--grid-brightness: 1;
 		}
-
-		html,
-		body {
-			margin: 0;
-			padding: 0;
-			height: 100%;
+		html, body {
+			margin: 0; padding: 0; height: 100%;
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 			color: var(--text-color);
 			background: #00050f;
 			overflow-x: hidden;
 			position: relative;
 		}
-
 		#grid-bg {
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			z-index: 1;
-			pointer-events: none;
+			position: fixed; top: 0; left: 0;
+			width: 100%; height: 100%;
+			z-index: 1; pointer-events: none;
 		}
-
 		header {
-			padding: 20px;
-			text-align: center;
-			position: relative;
-			z-index: 5;
+			padding: 20px; text-align: center;
+			position: relative; z-index: 5;
 		}
-
 		header h1 {
-			margin: 0;
-			font-size: 2.6rem;
+			margin: 0; font-size: 2.6rem;
 			color: #00f5ff;
 			text-shadow: 0 0 10px #00f5ff, 0 0 25px #00f5ff;
 		}
-
 		#search-input {
-			background: rgba(0, 30, 60, 0.7);
+			background: rgba(0,30,60,0.7);
 			color: var(--text-color);
-			width: 100%;
-			max-width: 520px;
-			padding: 8px 12px;
-			font-size: 15px;
-			border-radius: 8px;
-			border: none;
-			outline: none;
-			box-shadow: none;
+			width: 100%; max-width: 520px;
+			padding: 8px 12px; font-size: 15px;
+			border-radius: 8px; border: none; outline: none; box-shadow: none;
 		}
-
 		.top-controls {
-			display: flex;
-			justify-content: center;
-			padding: 0 12px;
-			z-index: 5;
-			flex-wrap: wrap;
-			gap: 10px;
-			position: relative;
+			display: flex; justify-content: center;
+			padding: 0 12px; z-index: 5;
+			flex-wrap: wrap; gap: 10px; position: relative;
 		}
-
 		.category-bar {
-			text-align: center;
-			margin: 6px 0 12px;
-			z-index: 5;
-			display: flex;
-			justify-content: center;
-			flex-wrap: wrap;
-			padding: 0 12px;
-			gap: 8px;
-			position: relative;
+			text-align: center; margin: 6px 0 12px;
+			z-index: 5; display: flex; justify-content: center;
+			flex-wrap: wrap; padding: 0 12px; gap: 8px; position: relative;
 		}
-
 		.category-bar button {
-			margin: 4px 6px;
-			padding: 6px 12px;
-			border: none;
-			border-radius: 6px;
-			cursor: pointer;
-			background: var(--accent);
-			color: #fff;
-			font-weight: 700;
+			margin: 4px 6px; padding: 6px 12px;
+			border: none; border-radius: 6px; cursor: pointer;
+			background: var(--accent); color: #fff; font-weight: 700;
 			transition: transform .12s, filter .12s;
 		}
-
-		.category-bar button:hover {
-			filter: brightness(1.05);
-			transform: translateY(-2px);
-		}
-
-		.category-bar button.active {
-			outline: none;
-			background: #ff00ff;
-		}
-
-		.category-bar button.new-btn {
-			background: #ffa500;
-		}
-
-		.category-bar button.new-btn.active {
-			background: #ff8c00;
-			outline: none;
-		}
-
+		.category-bar button:hover { filter: brightness(1.05); transform: translateY(-2px); }
+		.category-bar button.active { outline: none; background: #ff00ff; }
+		.category-bar button.new-btn { background: #ffa500; }
+		.category-bar button.new-btn.active { background: #ff8c00; outline: none; }
 		.game-counter {
-			text-align: center;
-			color: var(--accent);
-			margin: 8px 0;
-			font-size: 14px;
-			font-weight: 700;
-			position: relative;
-			z-index: 5;
+			text-align: center; color: var(--accent);
+			margin: 8px 0; font-size: 14px; font-weight: 700;
+			position: relative; z-index: 5;
 		}
-
 		#game-list {
 			display: grid;
 			grid-template-columns: repeat(5, minmax(120px, 1fr));
-			gap: 30px;
-			padding: 18px;
-			position: relative;
-			z-index: 5;
+			gap: 30px; padding: 18px;
+			position: relative; z-index: 5;
 			row-gap: 60px;
+			contain: layout style;
 		}
-
 		.game-card {
-			width: 80%;
-			aspect-ratio: 1/1;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			flex-direction: column;
-			background: rgba(0, 10, 30, 0.85);
+			width: 80%; aspect-ratio: 1/1;
+			display: flex; align-items: center;
+			justify-content: center; flex-direction: column;
+			background: rgba(0,10,30,0.85);
 			border-radius: var(--card-radius);
-			cursor: pointer;
-			font-weight: 700;
-			text-align: center;
-			padding: 5px;
-			user-select: none;
-			border: none;
+			cursor: pointer; font-weight: 700;
+			text-align: center; padding: 5px;
+			user-select: none; border: none;
 			color: var(--card-text-color, #c77dff);
 			box-shadow: 0 0 10px var(--card-shadow-1, #c77dff), 0 0 20px var(--card-shadow-2, #9d4edd), 0 0 40px var(--card-shadow-3, #7b2cbf);
-			transition: all 0.3s ease;
-			position: relative;
-			font-size: 15px;
+			transition: box-shadow 0.3s ease, transform 0.3s ease, color 0.3s ease;
+			position: relative; font-size: 15px;
+			will-change: transform;
 		}
-
 		.game-card:hover {
 			color: #ffffff;
 			box-shadow: 0 0 15px var(--card-hover-border, #ff00ff), 0 0 30px var(--card-hover-border, #ff00ff), 0 0 60px var(--card-hover-border, #ff00ff);
 			transform: translateY(-4px) scale(1.02);
 		}
-
 		.game-card.request {
 			box-shadow: 0 0 10px var(--card-request-border, #ff9500), 0 0 20px var(--card-request-color, #ffa500), 0 0 40px var(--card-request-dark, #ff8c00);
 			color: var(--card-request-color, #ffa500);
 		}
-
 		.game-card.request:hover {
 			box-shadow: 0 0 15px var(--card-request-dark, #ff8c00), 0 0 30px var(--card-request-color, #ffa500), 0 0 60px var(--card-request-border, #ff9500);
 			color: #ffb347;
 		}
-
-		/* Page Screens */
 		.page-screen {
-			display: none;
-			position: fixed;
-			top: 0;
-			left: 0;
-			width: 100%;
-			height: 100%;
-			background: transparent;
-			z-index: 10;
-			overflow-y: auto;
+			display: none; position: fixed; top: 0; left: 0;
+			width: 100%; height: 100%;
+			background: transparent; z-index: 10; overflow-y: auto;
 		}
-
-		.page-screen.active {
-			display: flex;
-			flex-direction: column;
-		}
-
-		.drfrost-iframe {
-			width: 100%;
-			height: 100%;
-			border: none;
-		}
-
-		/* Settings Button - Top Right */
+		.page-screen.active { display: flex; flex-direction: column; }
+		.drfrost-iframe { width: 100%; height: 100%; border: none; }
 		.settings-btn-top {
-			position: fixed;
-			top: 20px;
-			right: 20px;
-			width: 50px;
-			height: 50px;
-			border-radius: 50%;
-			border: none;
-			cursor: pointer;
-			font-size: 24px;
-			font-weight: 700;
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			z-index: 20;
-			background: var(--accent);
-			color: #fff;
-			transition: all 0.3s ease;
-			box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+			position: fixed; top: 20px; right: 20px;
+			width: 50px; height: 50px; border-radius: 50%;
+			border: none; cursor: pointer; font-size: 24px;
+			font-weight: 700; display: flex; align-items: center;
+			justify-content: center; z-index: 20;
+			background: var(--accent); color: #fff;
+			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 		}
-
-		.settings-btn-top:hover {
-			transform: scale(1.1);
-			box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
-		}
-
-		.settings-btn-top:active {
-			transform: scale(0.95);
-		}
-
-		.settings-btn-top.hidden {
-			display: none;
-		}
-
-		/* Sidebar Menu */
+		.settings-btn-top:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
+		.settings-btn-top:active { transform: scale(0.95); }
+		.settings-btn-top.hidden { display: none; }
 		.settings-sidebar {
-			position: fixed;
-			right: -350px;
-			top: 0;
-			width: 350px;
-			height: 100%;
-			background: rgba(0, 8, 20, 0.98);
-			border-left: none;
-			z-index: 19;
+			position: fixed; right: -350px; top: 0;
+			width: 350px; height: 100%;
+			background: rgba(0,8,20,0.98);
+			border-left: none; z-index: 19;
 			transition: right 0.35s ease;
 			overflow-y: auto;
-			box-shadow: -5px 0 20px rgba(0, 0, 0, 0.6);
+			box-shadow: -5px 0 20px rgba(0,0,0,0.6);
 		}
-
-		.settings-sidebar.active {
-			right: 0;
-		}
-
+		.settings-sidebar.active { right: 0; }
 		.sidebar-header {
-			padding: 20px;
-			border-bottom: none;
-			display: flex;
-			justify-content: flex-start;
-			align-items: center;
+			padding: 20px; border-bottom: none;
+			display: flex; justify-content: flex-start; align-items: center;
 		}
-
-		.sidebar-header h2 {
-			margin: 0;
-			color: #00f5ff;
-			font-size: 1.5rem;
-		}
-
-		.sidebar-menu {
-			display: flex;
-			flex-direction: column;
-			gap: 0;
-		}
-
+		.sidebar-header h2 { margin: 0; color: #00f5ff; font-size: 1.5rem; }
+		.sidebar-menu { display: flex; flex-direction: column; gap: 0; }
 		.sidebar-item {
-			padding: 15px 20px;
-			border-bottom: none;
-			cursor: pointer;
-			transition: all 0.2s;
-			color: var(--text-color);
-			font-weight: 600;
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			font-size: 16px;
+			padding: 15px 20px; border-bottom: none; cursor: pointer;
+			transition: background 0.2s, padding-left 0.2s;
+			color: var(--text-color); font-weight: 600;
+			display: flex; align-items: center; gap: 10px; font-size: 16px;
 		}
-
-		.sidebar-item:hover {
-			background: rgba(157, 78, 221, 0.2);
-			padding-left: 25px;
-		}
-
-		.sidebar-item.active {
-			background: var(--accent);
-			color: #fff;
-		}
-
+		.sidebar-item:hover { background: rgba(157,78,221,0.2); padding-left: 25px; }
+		.sidebar-item.active { background: var(--accent); color: #fff; }
 		.sidebar-item.home-btn {
-			background: rgba(0, 255, 136, 0.3);
-			border-top: none;
-			color: #00ff88;
-			font-weight: 700;
+			background: rgba(0,255,136,0.3); border-top: none;
+			color: #00ff88; font-weight: 700;
 		}
-
-		.sidebar-item.home-btn.active {
-			background: #00ff88;
-			color: #000;
-		}
-
-		.sidebar-item.home-btn:hover {
-			background: rgba(0, 255, 136, 0.5);
-		}
-
-		.screen-tabs {
-			display: flex;
-			gap: 5px;
-			margin-bottom: 10px;
-			flex-wrap: wrap;
-		}
-
+		.sidebar-item.home-btn.active { background: #00ff88; color: #000; }
+		.sidebar-item.home-btn:hover { background: rgba(0,255,136,0.5); }
+		.screen-tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
 		.screen-tab-btn {
-			padding: 8px 12px;
-			border: none;
-			border-radius: 6px;
-			background: rgba(255, 255, 255, 0.05);
-			color: var(--text-color);
-			cursor: pointer;
-			font-weight: 600;
-			transition: all 0.2s;
-			font-size: 13px;
+			padding: 8px 12px; border: none; border-radius: 6px;
+			background: rgba(255,255,255,0.05); color: var(--text-color);
+			cursor: pointer; font-weight: 600;
+			transition: background 0.2s; font-size: 13px;
 		}
-
-		.screen-tab-btn:hover {
-			background: rgba(157, 78, 221, 0.1);
+		.screen-tab-btn:hover { background: rgba(157,78,221,0.1); }
+		.screen-tab-btn.active { background: var(--accent); color: #fff; }
+		.sidebar-content { display: none; padding: 20px; }
+		.sidebar-content.active { display: block; }
+		.setting-group { margin: 20px 0; }
+		.setting-group label { display: block; color: var(--accent); font-weight: 700; margin-bottom: 10px; }
+		.color-options { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+		.color-option, .card-color-option, .grid-color-option {
+			padding: 12px; border: none; border-radius: 8px;
+			background: rgba(255,255,255,0.05); color: var(--text-color);
+			cursor: pointer; font-weight: 700; transition: background 0.2s; text-align: center;
 		}
-
-		.screen-tab-btn.active {
-			background: var(--accent);
-			color: #fff;
-		}
-
-		/* Tab Content */
-		.sidebar-content {
-			display: none;
-			padding: 20px;
-		}
-
-		.sidebar-content.active {
-			display: block;
-		}
-
-		.setting-group {
-			margin: 20px 0;
-		}
-
-		.setting-group label {
-			display: block;
-			color: var(--accent);
-			font-weight: 700;
-			margin-bottom: 10px;
-		}
-
-		.color-options {
-			display: grid;
-			grid-template-columns: repeat(2, 1fr);
-			gap: 10px;
-		}
-
-		.color-option {
-			padding: 12px;
-			border: none;
-			border-radius: 8px;
-			background: rgba(255, 255, 255, 0.05);
-			color: var(--text-color);
-			cursor: pointer;
-			font-weight: 700;
-			transition: all 0.2s;
-			text-align: center;
-		}
-
-		.color-option:hover {
-			background: rgba(255, 255, 255, 0.1);
-		}
-
-		.color-option.active {
-			background: var(--accent);
-			color: #fff;
-		}
-
-		.card-color-option {
-			padding: 12px;
-			border: none;
-			border-radius: 8px;
-			background: rgba(255, 255, 255, 0.05);
-			color: var(--text-color);
-			cursor: pointer;
-			font-weight: 700;
-			transition: all 0.2s;
-			text-align: center;
-		}
-
-		.card-color-option:hover {
-			background: rgba(255, 255, 255, 0.1);
-		}
-
-		.card-color-option.active {
-			background: var(--accent);
-			color: #fff;
-		}
-
-		.grid-color-option {
-			padding: 12px;
-			border: none;
-			border-radius: 8px;
-			background: rgba(255, 255, 255, 0.05);
-			color: var(--text-color);
-			cursor: pointer;
-			font-weight: 700;
-			transition: all 0.2s;
-			text-align: center;
-		}
-
-		.grid-color-option:hover {
-			background: rgba(255, 255, 255, 0.1);
-		}
-
-		.grid-color-option.active {
-			background: var(--accent);
-			color: #fff;
-		}
-
-		/* Brightness Slider */
-		.brightness-slider-container {
-			margin: 15px 0;
-		}
-
+		.color-option:hover, .card-color-option:hover, .grid-color-option:hover { background: rgba(255,255,255,0.1); }
+		.color-option.active, .card-color-option.active, .grid-color-option.active { background: var(--accent); color: #fff; }
+		.brightness-slider-container { margin: 15px 0; }
 		.brightness-slider {
-			width: 100%;
-			height: 6px;
-			border-radius: 3px;
-			background: rgba(255, 255, 255, 0.2);
-			outline: none;
-			-webkit-appearance: none;
-			appearance: none;
+			width: 100%; height: 6px; border-radius: 3px;
+			background: rgba(255,255,255,0.2); outline: none;
+			-webkit-appearance: none; appearance: none;
 		}
-
 		.brightness-slider::-webkit-slider-thumb {
-			-webkit-appearance: none;
-			appearance: none;
-			width: 18px;
-			height: 18px;
-			border-radius: 50%;
-			background: var(--accent);
-			cursor: pointer;
+			-webkit-appearance: none; appearance: none;
+			width: 18px; height: 18px; border-radius: 50%;
+			background: var(--accent); cursor: pointer;
 			box-shadow: 0 0 10px var(--accent);
 		}
-
 		.brightness-slider::-moz-range-thumb {
-			width: 18px;
-			height: 18px;
-			border-radius: 50%;
-			background: var(--accent);
-			cursor: pointer;
-			box-shadow: 0 0 10px var(--accent);
-			border: none;
+			width: 18px; height: 18px; border-radius: 50%;
+			background: var(--accent); cursor: pointer;
+			box-shadow: 0 0 10px var(--accent); border: none;
 		}
-
-		.brightness-value {
-			color: var(--accent);
-			font-weight: 700;
-			margin-top: 8px;
-			text-align: center;
-		}
-
+		.brightness-value { color: var(--accent); font-weight: 700; margin-top: 8px; text-align: center; }
 		#game-frame {
-			display: none;
-			width: 95%;
-			max-width: 1200px;
-			height: 680px;
-			margin: 12px auto;
-			border: none;
-			border-radius: 12px;
-			background: #000;
-			position: relative;
-			z-index: 6;
-			box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+			display: none; width: 95%; max-width: 1200px; height: 680px;
+			margin: 12px auto; border: none; border-radius: 12px;
+			background: #000; position: relative; z-index: 6;
+			box-shadow: 0 16px 40px rgba(0,0,0,0.6);
 		}
-
 		#game-loading {
-			display: none;
-			text-align: center;
-			padding: 20px;
-			color: var(--accent);
-			z-index: 6;
-			position: relative;
+			display: none; text-align: center; padding: 20px;
+			color: var(--accent); z-index: 6; position: relative;
 		}
-
 		.spinner {
-			border: 4px solid rgba(157, 78, 221, 0.3);
+			border: 4px solid rgba(157,78,221,0.3);
 			border-top: 4px solid #9d4edd;
-			border-radius: 50%;
-			width: 40px;
-			height: 40px;
-			animation: spin 1s linear infinite;
-			margin: 0 auto 10px;
+			border-radius: 50%; width: 40px; height: 40px;
+			animation: spin 1s linear infinite; margin: 0 auto 10px;
 		}
-
-		@keyframes spin {
-			0% {
-				transform: rotate(0deg);
-			}
-
-			100% {
-				transform: rotate(360deg);
-			}
-		}
-
+		@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 		#fullscreen-btn {
-			position: fixed;
-			right: 18px;
-			top: 18px;
-			padding: 8px 12px;
-			border-radius: 8px;
-			border: none;
-			cursor: pointer;
-			z-index: 12;
-			font-weight: 700;
-			background: var(--accent);
-			color: #fff;
-			display: none;
-			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+			position: fixed; right: 18px; top: 18px;
+			padding: 8px 12px; border-radius: 8px; border: none;
+			cursor: pointer; z-index: 12; font-weight: 700;
+			background: var(--accent); color: #fff; display: none;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 		}
-
 		#back-btn {
-			position: fixed;
-			left: 18px;
-			top: 18px;
-			padding: 8px 12px;
-			border-radius: 8px;
-			border: none;
-			cursor: pointer;
-			z-index: 12;
-			font-weight: 700;
-			background: rgba(0, 0, 0, 0.55);
-			color: #fff;
-			display: none;
-			box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+			position: fixed; left: 18px; top: 18px;
+			padding: 8px 12px; border-radius: 8px; border: none;
+			cursor: pointer; z-index: 12; font-weight: 700;
+			background: rgba(0,0,0,0.55); color: #fff; display: none;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
 		}
-
 		.modal {
-			display: none;
-			position: fixed;
-			z-index: 15;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.8);
-			backdrop-filter: blur(4px);
+			display: none; position: fixed; z-index: 15;
+			left: 0; top: 0; width: 100%; height: 100%;
+			background-color: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
 		}
-
-		.modal.active {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-		}
-
+		.modal.active { display: flex; align-items: center; justify-content: center; }
 		.modal-content {
-			background: rgba(0, 8, 25, 0.95);
-			padding: 30px;
-			border-radius: 12px;
-			border: none;
-			max-width: 500px;
-			width: 90%;
-			color: var(--text-color);
-			box-shadow: 0 0 30px #9d4edd;
-			max-height: 70vh;
-			overflow-y: auto;
+			background: rgba(0,8,25,0.95); padding: 30px;
+			border-radius: 12px; border: none; max-width: 500px;
+			width: 90%; color: var(--text-color);
+			box-shadow: 0 0 30px #9d4edd; max-height: 70vh; overflow-y: auto;
 		}
-
-		.modal-content h2 {
-			margin-top: 0;
-			color: #00f5ff;
-		}
-
-		.game-stat {
-			display: flex;
-			justify-content: space-between;
-			padding: 8px 0;
-			border-bottom: none;
-		}
-
-		.game-stat label {
-			color: var(--accent);
-			font-weight: 700;
-		}
-
-		.modal-buttons {
-			display: flex;
-			gap: 10px;
-			margin-top: 20px;
-			justify-content: center;
-		}
-
-		.modal-buttons button {
-			padding: 8px 16px;
-			border: none;
-			border-radius: 6px;
-			cursor: pointer;
-			font-weight: 700;
-			transition: all 0.2s;
-		}
-
-		.play-btn {
-			background: var(--accent);
-			color: #fff;
-		}
-
-		.play-btn:hover {
-			filter: brightness(1.1);
-		}
-
-		.close-modal {
-			background: rgba(255, 255, 255, 0.1);
-			color: var(--text-color);
-		}
-
-		.close-modal:hover {
-			background: rgba(255, 255, 255, 0.2);
-		}
-
-		/* Update Popup */
+		.modal-content h2 { margin-top: 0; color: #00f5ff; }
+		.game-stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: none; }
+		.game-stat label { color: var(--accent); font-weight: 700; }
+		.modal-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
+		.modal-buttons button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; transition: filter 0.2s, background 0.2s; }
+		.play-btn { background: var(--accent); color: #fff; }
+		.play-btn:hover { filter: brightness(1.1); }
+		.close-modal { background: rgba(255,255,255,0.1); color: var(--text-color); }
+		.close-modal:hover { background: rgba(255,255,255,0.2); }
 		.update-popup {
-			display: none;
-			position: fixed;
-			z-index: 30;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.85);
-			backdrop-filter: blur(5px);
-			align-items: center;
-			justify-content: center;
+			display: none; position: fixed; z-index: 30;
+			left: 0; top: 0; width: 100%; height: 100%;
+			background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+			align-items: center; justify-content: center;
 		}
-
-		.update-popup.active {
-			display: flex;
-		}
-
+		.update-popup.active { display: flex; }
 		.update-popup-content {
-			background: rgba(0, 8, 25, 0.98);
-			padding: 40px;
-			border-radius: 12px;
-			border: none;
-			max-width: 550px;
-			width: 90%;
-			color: var(--text-color);
-			box-shadow: 0 0 50px var(--accent);
-			max-height: 80vh;
-			overflow-y: auto;
+			background: rgba(0,8,25,0.98); padding: 40px;
+			border-radius: 12px; border: none; max-width: 550px;
+			width: 90%; color: var(--text-color);
+			box-shadow: 0 0 50px var(--accent); max-height: 80vh; overflow-y: auto;
 		}
-
-		.update-popup-content h2 {
-			margin-top: 0;
-			color: #00f5ff;
-			font-size: 1.8rem;
-			text-shadow: 0 0 10px #00f5ff;
-		}
-
-		.update-popup-text {
-			line-height: 1.8;
-			color: rgba(255, 255, 255, 0.9);
-			margin: 20px 0;
-			font-size: 15px;
-		}
-
-		.update-popup-close {
-			display: flex;
-			justify-content: center;
-			margin-top: 25px;
-		}
-
+		.update-popup-content h2 { margin-top: 0; color: #00f5ff; font-size: 1.8rem; text-shadow: 0 0 10px #00f5ff; }
+		.update-popup-text { line-height: 1.8; color: rgba(255,255,255,0.9); margin: 20px 0; font-size: 15px; }
+		.update-popup-close { display: flex; justify-content: center; margin-top: 25px; }
 		.update-popup-close button {
-			padding: 12px 40px;
-			border: none;
-			border-radius: 8px;
-			background: var(--accent);
-			color: #fff;
-			font-weight: 700;
-			font-size: 16px;
-			cursor: pointer;
-			transition: all 0.3s;
+			padding: 12px 40px; border: none; border-radius: 8px;
+			background: var(--accent); color: #fff; font-weight: 700;
+			font-size: 16px; cursor: pointer; transition: filter 0.3s, box-shadow 0.3s;
 			box-shadow: 0 0 15px var(--accent);
 		}
-
-		.update-popup-close button:hover {
-			filter: brightness(1.1);
-			box-shadow: 0 0 25px var(--accent);
-		}
-
-		/* Browser Info Popup */
+		.update-popup-close button:hover { filter: brightness(1.1); box-shadow: 0 0 25px var(--accent); }
 		.browser-popup {
-			display: none;
-			position: fixed;
-			z-index: 25;
-			left: 0;
-			top: 0;
-			width: 100%;
-			height: 100%;
-			background-color: rgba(0, 0, 0, 0.85);
-			backdrop-filter: blur(5px);
-			align-items: center;
-			justify-content: center;
+			display: none; position: fixed; z-index: 25;
+			left: 0; top: 0; width: 100%; height: 100%;
+			background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+			align-items: center; justify-content: center;
 		}
-
-		.browser-popup.active {
-			display: flex;
-		}
-
+		.browser-popup.active { display: flex; }
 		.browser-popup-content {
-			background: rgba(0, 8, 25, 0.98);
-			padding: 40px;
-			border-radius: 12px;
-			border: none;
-			max-width: 600px;
-			width: 90%;
-			color: var(--text-color);
-			box-shadow: 0 0 50px var(--accent);
-			max-height: 80vh;
-			overflow-y: auto;
+			background: rgba(0,8,25,0.98); padding: 40px;
+			border-radius: 12px; border: none; max-width: 600px;
+			width: 90%; color: var(--text-color);
+			box-shadow: 0 0 50px var(--accent); max-height: 80vh; overflow-y: auto;
 		}
-
-		.browser-popup-content h2 {
-			margin-top: 0;
-			color: #00f5ff;
-			font-size: 1.8rem;
-			text-shadow: 0 0 10px #00f5ff;
-		}
-
-		.browser-popup-text {
-			line-height: 1.8;
-			color: rgba(255, 255, 255, 0.9);
-			margin: 20px 0;
-			font-size: 15px;
-		}
-
-		.popup-checkbox {
-			display: flex;
-			align-items: center;
-			gap: 10px;
-			margin: 20px 0;
-			color: rgba(255, 255, 255, 0.8);
-		}
-
-		.popup-checkbox input {
-			width: 18px;
-			height: 18px;
-			cursor: pointer;
-			accent-color: var(--accent);
-		}
-
-		.popup-checkbox label {
-			cursor: pointer;
-			font-weight: 600;
-		}
-
-		.popup-buttons {
-			display: flex;
-			gap: 10px;
-			margin-top: 30px;
-			justify-content: center;
-		}
-
+		.browser-popup-content h2 { margin-top: 0; color: #00f5ff; font-size: 1.8rem; text-shadow: 0 0 10px #00f5ff; }
+		.browser-popup-text { line-height: 1.8; color: rgba(255,255,255,0.9); margin: 20px 0; font-size: 15px; }
+		.popup-checkbox { display: flex; align-items: center; gap: 10px; margin: 20px 0; color: rgba(255,255,255,0.8); }
+		.popup-checkbox input { width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent); }
+		.popup-checkbox label { cursor: pointer; font-weight: 600; }
+		.popup-buttons { display: flex; gap: 10px; margin-top: 30px; justify-content: center; }
 		.popup-ok-btn {
-			padding: 12px 30px;
-			border: none;
-			border-radius: 8px;
-			background: var(--accent);
-			color: #fff;
-			font-weight: 700;
-			font-size: 16px;
-			cursor: pointer;
-			transition: all 0.3s;
+			padding: 12px 30px; border: none; border-radius: 8px;
+			background: var(--accent); color: #fff; font-weight: 700;
+			font-size: 16px; cursor: pointer; transition: filter 0.3s, box-shadow 0.3s;
 			box-shadow: 0 0 15px var(--accent);
 		}
-
-		.popup-ok-btn:hover {
-			filter: brightness(1.1);
-			box-shadow: 0 0 25px var(--accent);
-		}
-
+		.popup-ok-btn:hover { filter: brightness(1.1); box-shadow: 0 0 25px var(--accent); }
 		@media (max-width:720px) {
-			header h1 {
-				font-size: 2rem;
-			}
-
-			#game-list {
-				grid-template-columns: repeat(3, 1fr);
-				gap: 8px;
-			}
-
-			#game-frame {
-				height: 480px;
-			}
-
-			.category-bar {
-				gap: 4px;
-				display: none;
-			}
-
-			.category-bar.mobile-visible {
-				display: flex;
-			}
-
-			.settings-sidebar {
-				width: 100%;
-				right: -100%;
-			}
+			header h1 { font-size: 2rem; }
+			#game-list { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+			#game-frame { height: 480px; }
+			.category-bar { gap: 4px; display: none; }
+			.category-bar.mobile-visible { display: flex; }
+			.settings-sidebar { width: 100%; right: -100%; }
 		}
 	</style>
 </head>
-
 <body>
 	<canvas id="grid-bg"></canvas>
 
-	<!-- Games Page -->
 	<div id="games-page" class="page-screen active">
-		<header>
-			<h1>Math Line</h1>
-		</header>
-
+		<header><h1>Math Line</h1></header>
 		<div class="top-controls">
 			<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
 		</div>
+		<div class="category-bar" id="category-filter"></div>
+		<div class="game-counter" id="game-counter"></div>
+		<div id="game-list" aria-live="polite"></div>
+		<div id="game-loading"><div class="spinner"></div><p>Loading game...</p></div>
+		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe>
+		<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
+		<button id="back-btn" title="Back to games (Esc)">← Back</button>
+	</div>
 
-			<div class="category-bar" id="category-filter"></div>
-			<div class="game-counter" id="game-counter"></div>
-			<div id="game-list" aria-live="polite"></div>
+	<div id="drfrost-page" class="page-screen">
+		<iframe class="drfrost-iframe" src="https://www.drfrost.site/" title="Dr Frost Maths"></iframe>
+	</div>
 
-			<div id="game-loading">
-				<div class="spinner"></div>
-				<p>Loading game...</p>
+	<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
+
+	<div class="settings-sidebar" id="settings-sidebar">
+		<div class="sidebar-header"><h2>Settings</h2></div>
+		<div class="sidebar-menu">
+			<div class="setting-group" style="margin-bottom:0;padding:10px 20px;">
+				<div class="screen-tabs">
+					<button class="screen-tab-btn active" id="games-screen-btn" data-screen="games">🏠 Home</button>
+					<button class="screen-tab-btn" id="browser-screen-btn" data-screen="browser">🌐 Browser</button>
+				</div>
 			</div>
-
-			<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin"></iframe>
-
-			<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
-			<button id="back-btn" title="Back to games (Esc)">← Back</button>
+			<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
+			<div class="sidebar-item" data-tab="cards">🎮 Game Bar</div>
+			<div class="sidebar-item" data-tab="background">🌅 Background</div>
+			<div class="sidebar-item" data-tab="disclaimer">📋 Disclaimer</div>
 		</div>
-
-		<!-- Dr Frost Page -->
-		<div id="drfrost-page" class="page-screen">
-			<iframe class="drfrost-iframe" src="https://www.drfrost.site/" title="Dr Frost Maths"></iframe>
-		</div>
-
-		<!-- Settings Button Top Right -->
-		<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
-
-		<!-- Settings Sidebar -->
-		<div class="settings-sidebar" id="settings-sidebar">
-			<div class="sidebar-header">
-				<h2>Settings</h2>
-			</div>
-
-			<div class="sidebar-menu">
-				<!-- Screen Tabs -->
-				<div class="setting-group" style="margin-bottom: 0; padding: 10px 20px;">
-					<div class="screen-tabs">
-						<button class="screen-tab-btn active" id="games-screen-btn" data-screen="games">🏠 Home</button>
-						<button class="screen-tab-btn" id="browser-screen-btn" data-screen="browser">🌐 Browser</button>
-					</div>
-				</div>
-
-				<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
-				<div class="sidebar-item" data-tab="cards">🎮 Game Bar</div>
-				<div class="sidebar-item" data-tab="background">🌅 Background</div>
-				<div class="sidebar-item" data-tab="disclaimer">📋 Disclaimer</div>
-			</div>
-
-			<!-- Themes Tab -->
-			<div class="sidebar-content active" id="tab-themes">
-				<div class="setting-group">
-					<label>Accent Color:</label>
-					<div class="color-options">
-						<div class="color-option active" data-theme="purple">Purple</div>
-						<div class="color-option" data-theme="cyan">Cyan</div>
-						<div class="color-option" data-theme="green">Green</div>
-						<div class="color-option" data-theme="orange">Orange</div>
-						<div class="color-option" data-theme="red">Red</div>
-						<div class="color-option" data-theme="pink">Pink</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Game Bar Tab -->
-			<div class="sidebar-content" id="tab-cards">
-				<div class="setting-group">
-					<label>Card Color Theme:</label>
-					<div class="color-options">
-						<div class="card-color-option active" data-card="purple">Purple</div>
-						<div class="card-color-option" data-card="cyan">Cyan</div>
-						<div class="card-color-option" data-card="green">Green</div>
-						<div class="card-color-option" data-card="red">Red</div>
-						<div class="card-color-option" data-card="pink">Pink</div>
-						<div class="card-color-option" data-card="gold">Gold</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Background Tab (Grid Lines) -->
-			<div class="sidebar-content" id="tab-background">
-				<div class="setting-group">
-					<label>Background Color:</label>
-					<div class="color-options">
-						<div class="grid-color-option active" data-grid="purple">Purple</div>
-						<div class="grid-color-option" data-grid="cyan">Cyan</div>
-						<div class="grid-color-option" data-grid="green">Green</div>
-						<div class="grid-color-option" data-grid="red">Red</div>
-						<div class="grid-color-option" data-grid="pink">Pink</div>
-						<div class="grid-color-option" data-grid="orange">Orange</div>
-					</div>
-				</div>
-
-				<div class="setting-group">
-					<label>Grid Line Brightness:</label>
-					<div class="brightness-slider-container">
-						<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
-						<div class="brightness-value"><span id="brightness-value">100</span>%</div>
-					</div>
-				</div>
-			</div>
-
-			<!-- Browser Tab -->
-			<div class="sidebar-content" id="tab-browser-tab">
-				<div class="setting-group">
-					<label>🌐 Mini Browser</label>
-					<p style="color: rgba(255,255,255,0.6); font-size: 12px;">Click below to access the web browser</p>
-					<button class="popup-ok-btn" id="open-browser-btn" style="width: 100%; margin-top: 10px;">Open Browser</button>
-				</div>
-			</div>
-
-			<!-- Disclaimer Tab -->
-			<div class="sidebar-content" id="tab-disclaimer">
-				<h3 style="color: #00f5ff; margin-top: 0;" id="disclaimer-title">Disclaimer</h3>
-				<div id="disclaimer-content" style="line-height: 1.6; color: rgba(255, 255, 255, 0.8);"></div>
-			</div>
-		</div>
-
-		<!-- Update Popup -->
-		<div class="update-popup" id="update-popup">
-			<div class="update-popup-content">
-				<h2 id="update-popup-title">🎉 Update!</h2>
-				<div class="update-popup-text" id="update-popup-text"></div>
-				<div class="update-popup-close">
-					<button id="update-popup-ok">Got it!</button>
+		<div class="sidebar-content active" id="tab-themes">
+			<div class="setting-group">
+				<label>Accent Color:</label>
+				<div class="color-options">
+					<div class="color-option active" data-theme="purple">Purple</div>
+					<div class="color-option" data-theme="cyan">Cyan</div>
+					<div class="color-option" data-theme="green">Green</div>
+					<div class="color-option" data-theme="orange">Orange</div>
+					<div class="color-option" data-theme="red">Red</div>
+					<div class="color-option" data-theme="pink">Pink</div>
 				</div>
 			</div>
 		</div>
-
-		<!-- Browser Info Popup -->
-		<div class="browser-popup" id="browser-popup">
-			<div class="browser-popup-content">
-				<h2 id="popup-title">🌐 Mini Browser</h2>
-				<div class="browser-popup-text" id="popup-text">
-					Welcome to the Mini Browser! Browse the web directly from Math Line.
-				</div>
-				<div class="popup-checkbox">
-					<input type="checkbox" id="dont-show-again" />
-					<label for="dont-show-again">Don't show this again</label>
-				</div>
-				<div class="popup-buttons">
-					<button class="popup-ok-btn" id="popup-ok-btn">OK</button>
+		<div class="sidebar-content" id="tab-cards">
+			<div class="setting-group">
+				<label>Card Color Theme:</label>
+				<div class="color-options">
+					<div class="card-color-option active" data-card="purple">Purple</div>
+					<div class="card-color-option" data-card="cyan">Cyan</div>
+					<div class="card-color-option" data-card="green">Green</div>
+					<div class="card-color-option" data-card="red">Red</div>
+					<div class="card-color-option" data-card="pink">Pink</div>
+					<div class="card-color-option" data-card="gold">Gold</div>
 				</div>
 			</div>
 		</div>
-
-		<!-- Game Modal -->
-		<div id="game-modal" class="modal">
-			<div class="modal-content">
-				<h2 id="modal-game-name"></h2>
-				<div class="game-stat">
-					<label>Category:</label>
-					<span id="modal-category"></span>
+		<div class="sidebar-content" id="tab-background">
+			<div class="setting-group">
+				<label>Background Color:</label>
+				<div class="color-options">
+					<div class="grid-color-option active" data-grid="purple">Purple</div>
+					<div class="grid-color-option" data-grid="cyan">Cyan</div>
+					<div class="grid-color-option" data-grid="green">Green</div>
+					<div class="grid-color-option" data-grid="red">Red</div>
+					<div class="grid-color-option" data-grid="pink">Pink</div>
+					<div class="grid-color-option" data-grid="orange">Orange</div>
 				</div>
-				<div class="game-stat">
-					<label>Times Played:</label>
-					<span id="modal-played"></span>
-				</div>
-				<div class="game-stat">
-					<label>Last Played:</label>
-					<span id="modal-last-played"></span>
-				</div>
-				<div class="game-stat">
-					<label>Total Play Time:</label>
-					<span id="modal-playtime"></span>
-				</div>
-				<div class="modal-buttons">
-					<button class="play-btn" id="modal-play-btn">▶️ Play</button>
-					<button class="close-modal" id="modal-close-btn">Close</button>
+			</div>
+			<div class="setting-group">
+				<label>Grid Line Brightness:</label>
+				<div class="brightness-slider-container">
+					<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
+					<div class="brightness-value"><span id="brightness-value">100</span>%</div>
 				</div>
 			</div>
 		</div>
+		<div class="sidebar-content" id="tab-browser-tab">
+			<div class="setting-group">
+				<label>🌐 Mini Browser</label>
+				<p style="color:rgba(255,255,255,0.6);font-size:12px;">Click below to access the web browser</p>
+				<button class="popup-ok-btn" id="open-browser-btn" style="width:100%;margin-top:10px;">Open Browser</button>
+			</div>
+		</div>
+		<div class="sidebar-content" id="tab-disclaimer">
+			<h3 style="color:#00f5ff;margin-top:0;" id="disclaimer-title">Disclaimer</h3>
+			<div id="disclaimer-content" style="line-height:1.6;color:rgba(255,255,255,0.8);"></div>
+		</div>
+	</div>
 
-		<script>
-			document.addEventListener('DOMContentLoaded', function() {
-		// ===== EASY TO EDIT: Update Popup =====
-		// Change UPDATE_VERSION every time you push an update — the popup will show again for all visitors
+	<div class="update-popup" id="update-popup">
+		<div class="update-popup-content">
+			<h2 id="update-popup-title">🎉 Update!</h2>
+			<div class="update-popup-text" id="update-popup-text"></div>
+			<div class="update-popup-close"><button id="update-popup-ok">Got it!</button></div>
+		</div>
+	</div>
+
+	<div class="browser-popup" id="browser-popup">
+		<div class="browser-popup-content">
+			<h2 id="popup-title">🌐 Mini Browser</h2>
+			<div class="browser-popup-text" id="popup-text">Welcome to the Mini Browser! Browse the web directly from Math Line.</div>
+			<div class="popup-checkbox">
+				<input type="checkbox" id="dont-show-again" />
+				<label for="dont-show-again">Don't show this again</label>
+			</div>
+			<div class="popup-buttons"><button class="popup-ok-btn" id="popup-ok-btn">OK</button></div>
+		</div>
+	</div>
+
+	<div id="game-modal" class="modal">
+		<div class="modal-content">
+			<h2 id="modal-game-name"></h2>
+			<div class="game-stat"><label>Category:</label><span id="modal-category"></span></div>
+			<div class="game-stat"><label>Times Played:</label><span id="modal-played"></span></div>
+			<div class="game-stat"><label>Last Played:</label><span id="modal-last-played"></span></div>
+			<div class="game-stat"><label>Total Play Time:</label><span id="modal-playtime"></span></div>
+			<div class="modal-buttons">
+				<button class="play-btn" id="modal-play-btn">▶️ Play</button>
+				<button class="close-modal" id="modal-close-btn">Close</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
+	document.addEventListener('DOMContentLoaded', function() {
+
 		const UPDATE_POPUP = {
-			version: "1.1",                        // Change this each update to trigger the popup again
-			title: "🎉 What's New in v1.1",        // Popup heading
-			text: `
-				<strong>Features:</strong><br>
-					• New Browser
-					• New motoX3M Games
-					• Settings menu update<br>
-			`,                                     // Supports HTML — use <br> for line breaks, <strong> for bold
-			okButtonText: "Got it!",               // Button text
+			version: "1.1",
+			title: "🎉 What's New in v1.1",
+			text: `<strong>Features:</strong><br>• New Browser<br>• New motoX3M Games<br>• Settings menu update<br>`,
+			okButtonText: "Got it!",
 		};
 
-		// ===== EASY TO EDIT: Disclaimer Content =====
 		const DISCLAIMER_CONTENT = {
 			title: "DISCLAIMER",
-			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br>
-				<strong>Version:</strong> 1.1<br>
-				<strong>Last Updated:</strong> April 8th`
+			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br><strong>Version:</strong> 1.1<br><strong>Last Updated:</strong> April 8th`
 		};
 
-		// ===== EASY TO EDIT: Browser Popup Content =====
-		// Change any of these to customize what the popup says
 		const BROWSER_POPUP_CONTENT = {
-			title: "Disclaimer",           // Popup heading
-			text: "IMPORTANT This is still in beta some site might not load, I Do Not Claim This Is Mine, this browser belongs to its owner, the credit goes to its respective owner,", // Main message
-			checkboxLabel: "Don't show this again",  // Checkbox text
-			okButtonText: "OK",                 // Button text
+			title: "Disclaimer",
+			text: "IMPORTANT This is still in beta some site might not load, I Do Not Claim This Is Mine, this browser belongs to its owner, the credit goes to its respective owner,",
+			checkboxLabel: "Don't show this again",
+			okButtonText: "OK",
 		};
 
-		// Safe storage - falls back to memory if localStorage is blocked
+		// Safe storage fallback
 		const _mem = {};
 		const _ls = (() => {
 			try { localStorage.setItem('_t','1'); localStorage.removeItem('_t'); return localStorage; }
-			catch(e) { return { getItem: k => _mem[k]||null, setItem: (k,v) => { _mem[k]=String(v); }, removeItem: k => { delete _mem[k]; } }; }
+			catch(e) { return { getItem: k=>_mem[k]||null, setItem:(k,v)=>{_mem[k]=String(v);}, removeItem:k=>{delete _mem[k];} }; }
 		})();
 
 		const StorageManager = {
-			getGameStats: (name) => { try { return JSON.parse(_ls.getItem('mathline_stats_'+name) || '{"played":0,"lastPlayed":"Never","playTime":0,"startTime":null}'); } catch(e) { return {played:0,lastPlayed:'Never',playTime:0,startTime:null}; } },
-			updateGameStats: (name, seconds) => {
-				const stats = StorageManager.getGameStats(name);
-				stats.playTime = (stats.playTime || 0) + (seconds / 60);
-				_ls.setItem('mathline_stats_'+name, JSON.stringify(stats));
-			},
-			getLastCategory: () => _ls.getItem('mathline_lastCategory') || 'New',
-			setLastCategory: (cat) => _ls.setItem('mathline_lastCategory', cat),
-			getTheme: () => _ls.getItem('mathline_theme') || 'purple',
-			setTheme: (theme) => _ls.setItem('mathline_theme', theme),
-			getCardTheme: () => _ls.getItem('mathline_card_theme') || 'purple',
-			setCardTheme: (theme) => _ls.setItem('mathline_card_theme', theme),
-			getGridTheme: () => _ls.getItem('mathline_grid_theme') || 'purple',
-			setGridTheme: (theme) => _ls.setItem('mathline_grid_theme', theme),
-			getGridBrightness: () => parseFloat(_ls.getItem('mathline_grid_brightness') || '100'),
-			setGridBrightness: (brightness) => _ls.setItem('mathline_grid_brightness', String(brightness)),
-			getBrowserPopupShown: () => _ls.getItem('mathline_browser_popup_shown') === 'true',
-			setBrowserPopupShown: () => _ls.setItem('mathline_browser_popup_shown', 'true'),
+			getGameStats: n => { try { return JSON.parse(_ls.getItem('mathline_stats_'+n)||'{"played":0,"lastPlayed":"Never","playTime":0}'); } catch(e) { return {played:0,lastPlayed:'Never',playTime:0}; } },
+			saveGameStats: (n, stats) => _ls.setItem('mathline_stats_'+n, JSON.stringify(stats)),
+			updateGameStats: (n, sec) => { const s=StorageManager.getGameStats(n); s.playTime=(s.playTime||0)+(sec/60); StorageManager.saveGameStats(n,s); },
+			getLastCategory: ()=>_ls.getItem('mathline_lastCategory')||'New',
+			setLastCategory: cat=>_ls.setItem('mathline_lastCategory',cat),
+			getTheme: ()=>_ls.getItem('mathline_theme')||'purple',
+			setTheme: t=>_ls.setItem('mathline_theme',t),
+			getCardTheme: ()=>_ls.getItem('mathline_card_theme')||'purple',
+			setCardTheme: t=>_ls.setItem('mathline_card_theme',t),
+			getGridTheme: ()=>_ls.getItem('mathline_grid_theme')||'purple',
+			setGridTheme: t=>_ls.setItem('mathline_grid_theme',t),
+			getGridBrightness: ()=>parseFloat(_ls.getItem('mathline_grid_brightness')||'100'),
+			setGridBrightness: b=>_ls.setItem('mathline_grid_brightness',String(b)),
+			getBrowserPopupShown: ()=>_ls.getItem('mathline_browser_popup_shown')==='true',
+			setBrowserPopupShown: ()=>_ls.setItem('mathline_browser_popup_shown','true'),
 		};
-
-		const gameDescriptions = {};
 
 		const colorThemes = {
-			purple: { accent: "#9d4edd", glow1: "#c77dff", glow2: "#7b2cbf" },
-			cyan:   { accent: "#00d9ff", glow1: "#00f5ff", glow2: "#0099cc" },
-			green:  { accent: "#00ff88", glow1: "#00ff99", glow2: "#00aa44" },
-			orange: { accent: "#ff9500", glow1: "#ffa500", glow2: "#cc6600" },
-			red:    { accent: "#ff3366", glow1: "#ff5577", glow2: "#cc0033" },
-			pink:   { accent: "#ff00ff", glow1: "#ff33ff", glow2: "#cc00cc" },
+			purple:{accent:"#9d4edd"},cyan:{accent:"#00d9ff"},green:{accent:"#00ff88"},
+			orange:{accent:"#ff9500"},red:{accent:"#ff3366"},pink:{accent:"#ff00ff"},
 		};
-
 		const cardColorThemes = {
-			purple: { border:"#c77dff", text:"#c77dff", shadow1:"#c77dff", shadow2:"#9d4edd", shadow3:"#7b2cbf", hover:"#ff00ff", requestBorder:"#ff9500", requestColor:"#ffa500", requestDark:"#ff8c00" },
-			cyan:   { border:"#00f5ff", text:"#00f5ff", shadow1:"#00f5ff", shadow2:"#00d9ff", shadow3:"#0099cc", hover:"#00ffff", requestBorder:"#00ccff", requestColor:"#00ffff", requestDark:"#0099ff" },
-			green:  { border:"#00ff99", text:"#00ff99", shadow1:"#00ff99", shadow2:"#00ff88", shadow3:"#00aa44", hover:"#00ffaa", requestBorder:"#00ff66", requestColor:"#00ff88", requestDark:"#00cc66" },
-			red:    { border:"#ff5577", text:"#ff5577", shadow1:"#ff5577", shadow2:"#ff3366", shadow3:"#cc0033", hover:"#ff3355", requestBorder:"#ff6666", requestColor:"#ff7777", requestDark:"#ff4444" },
-			pink:   { border:"#ff33ff", text:"#ff33ff", shadow1:"#ff33ff", shadow2:"#ff00ff", shadow3:"#cc00cc", hover:"#ff00ff", requestBorder:"#ff66ff", requestColor:"#ff44ff", requestDark:"#ff00ff" },
-			gold:   { border:"#ffd700", text:"#ffd700", shadow1:"#ffd700", shadow2:"#ffcc00", shadow3:"#cc9900", hover:"#ffed4e", requestBorder:"#ffb347", requestColor:"#ffc757", requestDark:"#ff9500" },
+			purple:{border:"#c77dff",text:"#c77dff",shadow1:"#c77dff",shadow2:"#9d4edd",shadow3:"#7b2cbf",hover:"#ff00ff",requestBorder:"#ff9500",requestColor:"#ffa500",requestDark:"#ff8c00"},
+			cyan:{border:"#00f5ff",text:"#00f5ff",shadow1:"#00f5ff",shadow2:"#00d9ff",shadow3:"#0099cc",hover:"#00ffff",requestBorder:"#00ccff",requestColor:"#00ffff",requestDark:"#0099ff"},
+			green:{border:"#00ff99",text:"#00ff99",shadow1:"#00ff99",shadow2:"#00ff88",shadow3:"#00aa44",hover:"#00ffaa",requestBorder:"#00ff66",requestColor:"#00ff88",requestDark:"#00cc66"},
+			red:{border:"#ff5577",text:"#ff5577",shadow1:"#ff5577",shadow2:"#ff3366",shadow3:"#cc0033",hover:"#ff3355",requestBorder:"#ff6666",requestColor:"#ff7777",requestDark:"#ff4444"},
+			pink:{border:"#ff33ff",text:"#ff33ff",shadow1:"#ff33ff",shadow2:"#ff00ff",shadow3:"#cc00cc",hover:"#ff00ff",requestBorder:"#ff66ff",requestColor:"#ff44ff",requestDark:"#ff00ff"},
+			gold:{border:"#ffd700",text:"#ffd700",shadow1:"#ffd700",shadow2:"#ffcc00",shadow3:"#cc9900",hover:"#ffed4e",requestBorder:"#ffb347",requestColor:"#ffc757",requestDark:"#ff9500"},
 		};
-
 		const gridColorThemes = {
-			purple: { c1:"#c87fff", c2:"#00ffff", c3:"#ff32ff" },
-			cyan:   { c1:"#00ffff", c2:"#00ff88", c3:"#00ccff" },
-			green:  { c1:"#00ff88", c2:"#ff1493", c3:"#00ffcc" },
-			red:    { c1:"#ff6666", c2:"#ffff00", c3:"#ff0099" },
-			pink:   { c1:"#ff00ff", c2:"#ffff00", c3:"#00ffff" },
-			orange: { c1:"#ff9500", c2:"#00ffff", c3:"#ff6600" },
+			purple:{c1:"#c87fff",c2:"#00ffff",c3:"#ff32ff"},
+			cyan:{c1:"#00ffff",c2:"#00ff88",c3:"#00ccff"},
+			green:{c1:"#00ff88",c2:"#ff1493",c3:"#00ffcc"},
+			red:{c1:"#ff6666",c2:"#ffff00",c3:"#ff0099"},
+			pink:{c1:"#ff00ff",c2:"#ffff00",c3:"#00ffff"},
+			orange:{c1:"#ff9500",c2:"#00ffff",c3:"#ff6600"},
 		};
 
 		let currentGridTheme = StorageManager.getGridTheme();
 		let gridBrightness = StorageManager.getGridBrightness();
 
-		function applyTheme(themeName) {
-			const theme = colorThemes[themeName];
-			if (!theme) return;
-			document.querySelector(':root').style.setProperty('--accent', theme.accent);
-			StorageManager.setTheme(themeName);
+		const root = document.documentElement;
+		function applyTheme(t) { const th=colorThemes[t]; if(!th) return; root.style.setProperty('--accent',th.accent); StorageManager.setTheme(t); }
+		function applyCardTheme(t) {
+			const c=cardColorThemes[t]; if(!c) return;
+			root.style.setProperty('--card-border-color',c.border);
+			root.style.setProperty('--card-text-color',c.text);
+			root.style.setProperty('--card-shadow-1',c.shadow1);
+			root.style.setProperty('--card-shadow-2',c.shadow2);
+			root.style.setProperty('--card-shadow-3',c.shadow3);
+			root.style.setProperty('--card-hover-border',c.hover);
+			root.style.setProperty('--card-request-border',c.requestBorder);
+			root.style.setProperty('--card-request-color',c.requestColor);
+			root.style.setProperty('--card-request-dark',c.requestDark);
+			StorageManager.setCardTheme(t);
 		}
-
-		function applyCardTheme(cardTheme) {
-			const colors = cardColorThemes[cardTheme];
-			if (!colors) return;
-			const r = document.querySelector(':root');
-			r.style.setProperty('--card-border-color', colors.border);
-			r.style.setProperty('--card-text-color', colors.text);
-			r.style.setProperty('--card-shadow-1', colors.shadow1);
-			r.style.setProperty('--card-shadow-2', colors.shadow2);
-			r.style.setProperty('--card-shadow-3', colors.shadow3);
-			r.style.setProperty('--card-hover-border', colors.hover);
-			r.style.setProperty('--card-request-border', colors.requestBorder);
-			r.style.setProperty('--card-request-color', colors.requestColor);
-			r.style.setProperty('--card-request-dark', colors.requestDark);
-			StorageManager.setCardTheme(cardTheme);
-		}
-
-		function applyGridTheme(gridTheme) {
-			currentGridTheme = gridTheme;
-			StorageManager.setGridTheme(gridTheme);
-		}
-
-		function applyGridBrightness(brightness) {
-			gridBrightness = brightness / 100;
-			document.querySelector(':root').style.setProperty('--grid-brightness', gridBrightness);
-			StorageManager.setGridBrightness(brightness);
+		function applyGridTheme(t) { currentGridTheme=t; StorageManager.setGridTheme(t); }
+		function applyGridBrightness(b) {
+			gridBrightness=b/100;
+			root.style.setProperty('--grid-brightness',gridBrightness);
+			StorageManager.setGridBrightness(b);
 		}
 
 		const games = [
@@ -1237,9 +633,12 @@
 			{name:"Motox3m Pool Party",url:"motobp.html",category:"Racing"},
 		];
 
-		const normalGames = [...games].sort((a, b) => a.name.localeCompare(b.name));
+		const normalGames = [...games].sort((a,b)=>a.name.localeCompare(b.name));
 		const NEW_COUNT = 6;
-		const newestGames = games.slice(-NEW_COUNT).map(g => g.name);
+		const newestGames = new Set(games.slice(-NEW_COUNT).map(g=>g.name));
+
+		// Build URL→name lookup for back button
+		const urlToName = new Map(normalGames.map(g=>[g.url, g.name]));
 
 		const gameListEl = document.getElementById('game-list');
 		const iframe = document.getElementById('game-frame');
@@ -1253,7 +652,7 @@
 		const settingsBtnTop = document.getElementById('settings-btn-top');
 		const settingsSidebar = document.getElementById('settings-sidebar');
 		const brightnessSlider = document.getElementById('brightness-slider');
-		const brightnessValue = document.getElementById('brightness-value');
+		const brightnessValueEl = document.getElementById('brightness-value');
 		const gamesPage = document.getElementById('games-page');
 		const drfrostPage = document.getElementById('drfrost-page');
 		const browserPopup = document.getElementById('browser-popup');
@@ -1262,10 +661,8 @@
 		const openBrowserBtn = document.getElementById('open-browser-btn');
 		const screenTabBtns = document.querySelectorAll('.screen-tab-btn');
 
-		const categories = ["All", "New", ...new Set(normalGames.map(g => g.category))].sort((a, b) => {
-			if(a === "All") return -1;
-			if(b === "New") return 1;
-			if(b === "All") return 1;
+		const categories = ["All","New",...new Set(normalGames.map(g=>g.category))].sort((a,b)=>{
+			if(a==="All") return -1; if(b==="New") return 1; if(b==="All") return 1;
 			return a.localeCompare(b);
 		});
 
@@ -1273,33 +670,32 @@
 		let activeSearch = '';
 		let gameStartTime = null;
 
+		// Build category bar
+		const catFrag = document.createDocumentFragment();
 		categories.forEach(cat => {
 			const btn = document.createElement('button');
 			btn.textContent = cat;
-			if(cat === "New") btn.classList.add('new-btn');
-			if(cat === activeCategory) btn.classList.add('active');
+			if(cat==="New") btn.classList.add('new-btn');
+			if(cat===activeCategory) btn.classList.add('active');
 			btn.addEventListener('click', () => {
-				document.querySelectorAll('.category-bar button').forEach(b => b.classList.remove('active'));
+				categoryEl.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
 				btn.classList.add('active');
 				activeCategory = cat;
 				StorageManager.setLastCategory(cat);
 				renderGames();
 			});
-			categoryEl.appendChild(btn);
+			catFrag.appendChild(btn);
 		});
+		categoryEl.appendChild(catFrag);
 
-		settingsBtnTop.addEventListener('click', () => {
-			settingsSidebar.classList.toggle('active');
-		});
+		settingsBtnTop.addEventListener('click', () => settingsSidebar.classList.toggle('active'));
 
 		screenTabBtns.forEach(btn => {
 			btn.addEventListener('click', () => {
-				const screen = btn.getAttribute('data-screen');
-				if(screen === 'browser') {
-					// Always show popup — checkbox inside controls whether to skip next time
+				if(btn.getAttribute('data-screen')==='browser') {
 					browserPopup.classList.add('active');
 				} else {
-					screenTabBtns.forEach(b => b.classList.remove('active'));
+					screenTabBtns.forEach(b=>b.classList.remove('active'));
 					btn.classList.add('active');
 					gamesPage.classList.add('active');
 					drfrostPage.classList.remove('active');
@@ -1308,117 +704,103 @@
 		});
 
 		openBrowserBtn.addEventListener('click', () => {
-			if(!StorageManager.getBrowserPopupShown()) {
-				browserPopup.classList.add('active');
-			} else {
-				goToBrowser();
-			}
+			if(!StorageManager.getBrowserPopupShown()) browserPopup.classList.add('active');
+			else goToBrowser();
 		});
-
 
 		function goToBrowser() {
 			drfrostPage.classList.add('active');
 			gamesPage.classList.remove('active');
 			settingsSidebar.classList.remove('active');
-			screenTabBtns.forEach(b => b.classList.remove('active'));
+			screenTabBtns.forEach(b=>b.classList.remove('active'));
 			document.getElementById('browser-screen-btn').classList.add('active');
 		}
 
 		popupOkBtn.addEventListener('click', () => {
-			if(dontShowAgain.checked) {
-				StorageManager.setBrowserPopupShown();
-			}
+			if(dontShowAgain.checked) StorageManager.setBrowserPopupShown();
 			browserPopup.classList.remove('active');
-			screenTabBtns.forEach(b => b.classList.remove('active'));
+			screenTabBtns.forEach(b=>b.classList.remove('active'));
 			document.getElementById('browser-screen-btn').classList.add('active');
 			goToBrowser();
 		});
 
-		document.addEventListener('click', (e) => {
-			if(!e.target.closest('.settings-sidebar') && !e.target.closest('.settings-btn-top')) {
+		document.addEventListener('click', e => {
+			if(!e.target.closest('.settings-sidebar') && !e.target.closest('.settings-btn-top'))
 				settingsSidebar.classList.remove('active');
-			}
 		});
 
 		document.querySelectorAll('.sidebar-item').forEach(item => {
 			item.addEventListener('click', () => {
 				const tabName = item.getAttribute('data-tab');
 				if(!tabName) return;
-				document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+				document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
 				item.classList.add('active');
-				document.querySelectorAll('.sidebar-content').forEach(c => c.classList.remove('active'));
+				document.querySelectorAll('.sidebar-content').forEach(c=>c.classList.remove('active'));
 				document.getElementById(`tab-${tabName}`).classList.add('active');
 			});
 		});
 
-		function populateDisclaimer() {
-			document.getElementById('disclaimer-title').textContent = DISCLAIMER_CONTENT.title;
-			document.getElementById('disclaimer-content').innerHTML = DISCLAIMER_CONTENT.content;
-		}
+		document.getElementById('disclaimer-title').textContent = DISCLAIMER_CONTENT.title;
+		document.getElementById('disclaimer-content').innerHTML = DISCLAIMER_CONTENT.content;
+		document.getElementById('popup-title').textContent = BROWSER_POPUP_CONTENT.title;
+		document.getElementById('popup-text').textContent = BROWSER_POPUP_CONTENT.text;
+		document.querySelector('label[for="dont-show-again"]').textContent = BROWSER_POPUP_CONTENT.checkboxLabel;
+		document.getElementById('popup-ok-btn').textContent = BROWSER_POPUP_CONTENT.okButtonText;
 
-		function populateBrowserPopup() {
-			document.getElementById('popup-title').textContent = BROWSER_POPUP_CONTENT.title;
-			document.getElementById('popup-text').textContent = BROWSER_POPUP_CONTENT.text;
-			document.querySelector('label[for="dont-show-again"]').textContent = BROWSER_POPUP_CONTENT.checkboxLabel || "Don't show this again";
-			document.getElementById('popup-ok-btn').textContent = BROWSER_POPUP_CONTENT.okButtonText || "OK";
-		}
-
-		document.querySelectorAll('.color-option').forEach(option => {
-			option.addEventListener('click', (e) => {
-				document.querySelectorAll('.color-option').forEach(o => o.classList.remove('active'));
+		document.querySelectorAll('.color-option').forEach(opt => {
+			opt.addEventListener('click', e => {
+				document.querySelectorAll('.color-option').forEach(o=>o.classList.remove('active'));
 				e.target.classList.add('active');
 				applyTheme(e.target.getAttribute('data-theme'));
 			});
 		});
-
-		document.querySelectorAll('.card-color-option').forEach(option => {
-			option.addEventListener('click', (e) => {
-				document.querySelectorAll('.card-color-option').forEach(o => o.classList.remove('active'));
+		document.querySelectorAll('.card-color-option').forEach(opt => {
+			opt.addEventListener('click', e => {
+				document.querySelectorAll('.card-color-option').forEach(o=>o.classList.remove('active'));
 				e.target.classList.add('active');
 				applyCardTheme(e.target.getAttribute('data-card'));
 			});
 		});
-
-		document.querySelectorAll('.grid-color-option').forEach(option => {
-			option.addEventListener('click', (e) => {
-				document.querySelectorAll('.grid-color-option').forEach(o => o.classList.remove('active'));
+		document.querySelectorAll('.grid-color-option').forEach(opt => {
+			opt.addEventListener('click', e => {
+				document.querySelectorAll('.grid-color-option').forEach(o=>o.classList.remove('active'));
 				e.target.classList.add('active');
 				applyGridTheme(e.target.getAttribute('data-grid'));
 			});
 		});
 
-		brightnessSlider.addEventListener('input', (e) => {
-			brightnessValue.textContent = e.target.value;
+		brightnessSlider.addEventListener('input', e => {
+			brightnessValueEl.textContent = e.target.value;
 			applyGridBrightness(e.target.value);
 		});
 
 		const ModalManager = {
-			open: (gameName) => {
-				const game = normalGames.find(g => g.name === gameName);
+			open(gameName) {
+				const game = normalGames.find(g=>g.name===gameName);
 				if(!game) return;
 				const stats = StorageManager.getGameStats(gameName);
-				const roundedTime = parseFloat((stats.playTime || 0).toFixed(2));
-				const playTimeStr = roundedTime > 60 ? `${Math.floor(roundedTime / 60)}h ${(roundedTime % 60).toFixed(2)}m` : `${roundedTime}m`;
+				const t = parseFloat((stats.playTime||0).toFixed(2));
+				const timeStr = t>60 ? `${Math.floor(t/60)}h ${(t%60).toFixed(2)}m` : `${t}m`;
 				document.getElementById('modal-game-name').textContent = gameName;
 				document.getElementById('modal-category').textContent = game.category;
-				document.getElementById('modal-played').textContent = stats.played || '0';
-				document.getElementById('modal-last-played').textContent = stats.lastPlayed || 'Never';
-				document.getElementById('modal-playtime').textContent = playTimeStr;
-				document.getElementById('modal-play-btn').onclick = () => ModalManager.play(gameName);
+				document.getElementById('modal-played').textContent = stats.played||'0';
+				document.getElementById('modal-last-played').textContent = stats.lastPlayed||'Never';
+				document.getElementById('modal-playtime').textContent = timeStr;
+				document.getElementById('modal-play-btn').onclick = ()=>this.play(gameName);
 				settingsSidebar.classList.remove('active');
 				settingsBtnTop.classList.add('hidden');
 				gameModal.classList.add('active');
 			},
-			close: () => {
+			close() {
 				gameModal.classList.remove('active');
 				settingsBtnTop.classList.remove('hidden');
 			},
-			play: (gameName) => {
-				const game = normalGames.find(g => g.name === gameName);
+			play(gameName) {
+				const game = normalGames.find(g=>g.name===gameName);
 				const stats = StorageManager.getGameStats(gameName);
-				stats.played = (stats.played || 0) + 1;
+				stats.played = (stats.played||0)+1;
 				stats.lastPlayed = new Date().toLocaleDateString();
-				localStorage.setItem(`mathline_stats_${gameName}`, JSON.stringify(stats));
+				StorageManager.saveGameStats(gameName, stats); // fixed: use StorageManager not raw localStorage
 				gameListEl.style.display = 'none';
 				gameLoading.style.display = 'block';
 				backBtn.style.display = 'block';
@@ -1427,90 +809,74 @@
 				settingsSidebar.classList.remove('active');
 				settingsBtnTop.classList.add('hidden');
 				gameStartTime = Date.now();
-				setTimeout(() => {
-					iframe.src = game.url;
-					iframe.style.display = 'block';
-					gameLoading.style.display = 'none';
-				}, 1500);
+				// Removed artificial 1500ms delay — load immediately
+				iframe.src = game.url;
+				iframe.style.display = 'block';
+				gameLoading.style.display = 'none';
 			}
 		};
 
-		document.getElementById('modal-close-btn').addEventListener('click', () => {
-			ModalManager.close();
-			settingsBtnTop.classList.remove('hidden');
-		});
+		document.getElementById('modal-close-btn').addEventListener('click', ()=>{ ModalManager.close(); settingsBtnTop.classList.remove('hidden'); });
+		gameModal.addEventListener('click', e=>{ if(e.target===gameModal){ ModalManager.close(); settingsBtnTop.classList.remove('hidden'); } });
 
-		gameModal.addEventListener('click', (e) => {
-			if(e.target === gameModal) {
-				ModalManager.close();
-				settingsBtnTop.classList.remove('hidden');
-			}
-		});
-
-		function renderGames(){
-			gameListEl.innerHTML = "";
+		function renderGames() {
 			let filtered = normalGames;
-
-			if(activeCategory === "New") {
-				filtered = filtered.filter(g => newestGames.includes(g.name));
-			} else if(activeCategory !== "All") {
-				filtered = filtered.filter(g => g.category === activeCategory);
-			}
-
+			if(activeCategory==="New") filtered = filtered.filter(g=>newestGames.has(g.name));
+			else if(activeCategory!=="All") filtered = filtered.filter(g=>g.category===activeCategory);
 			if(activeSearch) {
-				filtered = filtered.filter(g => g.name.toLowerCase().includes(activeSearch.toLowerCase()));
+				const q = activeSearch.toLowerCase();
+				filtered = filtered.filter(g=>g.name.toLowerCase().includes(q));
 			}
 
+			// Use DocumentFragment for batch DOM insertion (much faster with 100+ cards)
+			const frag = document.createDocumentFragment();
 			filtered.forEach(g => {
 				const card = document.createElement('div');
 				card.className = 'game-card';
-				card.innerHTML = `<span>${g.name}</span>`;
-				card.addEventListener('click', () => ModalManager.open(g.name));
-				gameListEl.appendChild(card);
+				const span = document.createElement('span');
+				span.textContent = g.name;
+				card.appendChild(span);
+				card.addEventListener('click', ()=>ModalManager.open(g.name));
+				frag.appendChild(card);
 			});
 
-			const requestCard = document.createElement('div');
-			requestCard.className = 'game-card request';
-			requestCard.innerHTML = `<span>Request A Game</span>`;
-			requestCard.addEventListener('click', () => {
-				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog', '_blank');
+			const reqCard = document.createElement('div');
+			reqCard.className = 'game-card request';
+			const reqSpan = document.createElement('span');
+			reqSpan.textContent = 'Request A Game';
+			reqCard.appendChild(reqSpan);
+			reqCard.addEventListener('click', ()=>{
+				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
 			});
-			gameListEl.appendChild(requestCard);
+			frag.appendChild(reqCard);
 
+			gameListEl.replaceChildren(frag); // replaceChildren is faster than innerHTML=""
 			gameCounter.textContent =
-				`Showing ${filtered.length} game${filtered.length !== 1 ? 's' : ''}` +
-				(activeCategory !== 'All' ? ` • ${activeCategory}` : '');
+				`Showing ${filtered.length} game${filtered.length!==1?'s':''}` +
+				(activeCategory!=='All'?` • ${activeCategory}`:'');
 		}
 
-		searchInput.addEventListener('input', (e) => {
-			activeSearch = e.target.value;
-			renderGames();
+		// Debounced search — don't re-render on every keystroke
+		let searchTimer;
+		searchInput.addEventListener('input', e => {
+			clearTimeout(searchTimer);
+			searchTimer = setTimeout(()=>{ activeSearch=e.target.value; renderGames(); }, 150);
 		});
 
-		document.addEventListener('keydown', (e) => {
-			if(e.key === 'Escape') {
-				if(iframe.style.display === 'block') {
-					backBtn.click();
-				} else if(settingsSidebar.classList.contains('active')) {
-					settingsSidebar.classList.remove('active');
-				} else {
-					gameModal.classList.remove('active');
-				}
+		document.addEventListener('keydown', e => {
+			if(e.key==='Escape') {
+				if(iframe.style.display==='block') backBtn.click();
+				else if(settingsSidebar.classList.contains('active')) settingsSidebar.classList.remove('active');
+				else gameModal.classList.remove('active');
 			}
-			if((e.key === 'f' || e.key === 'F') && iframe.style.display === 'block') {
-				e.preventDefault();
-				fullscreenBtn.click();
-			}
+			if((e.key==='f'||e.key==='F') && iframe.style.display==='block') { e.preventDefault(); fullscreenBtn.click(); }
 		});
 
-		backBtn.addEventListener('click', () => {
+		backBtn.addEventListener('click', ()=>{
 			if(gameStartTime) {
-				const currentGame = iframe.src.split('/').pop();
-				const gameName = normalGames.find(g => g.url === currentGame)?.name;
-				if(gameName) {
-					const secondsElapsed = Math.floor((Date.now() - gameStartTime) / 1000);
-					StorageManager.updateGameStats(gameName, secondsElapsed);
-				}
+				const currentUrl = iframe.src.split('/').pop();
+				const gameName = urlToName.get(decodeURIComponent(currentUrl));
+				if(gameName) StorageManager.updateGameStats(gameName, Math.floor((Date.now()-gameStartTime)/1000));
 				gameStartTime = null;
 			}
 			iframe.style.display = 'none';
@@ -1521,110 +887,100 @@
 			settingsBtnTop.classList.remove('hidden');
 		});
 
-		fullscreenBtn.addEventListener('click', () => {
-			if(iframe.requestFullscreen) iframe.requestFullscreen();
-		});
+		fullscreenBtn.addEventListener('click', ()=>{ if(iframe.requestFullscreen) iframe.requestFullscreen(); });
 
+		// ===== Canvas Grid (optimized) =====
 		const canvas = document.getElementById('grid-bg');
-		const ctx = canvas.getContext('2d');
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-		window.addEventListener('resize', () => {
-			canvas.width = window.innerWidth;
-			canvas.height = window.innerHeight;
-		});
+		const ctx = canvas.getContext('2d', { alpha: false }); // alpha:false = faster compositing
+
+		function resizeCanvas() { canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+		resizeCanvas();
+
+		// Throttled resize — don't thrash canvas on every pixel
+		let resizeTimer;
+		window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer=setTimeout(resizeCanvas, 150); });
 
 		let time = 0;
-		const gridSpacing = 60;
 		let frameCount = 0;
+		const gridSpacing = 60;
 
 		function animateGrid() {
 			requestAnimationFrame(animateGrid);
 			frameCount++;
-			if(frameCount % 2 !== 0) return;
+			if(frameCount%2!==0) return; // skip every other frame (~30fps for bg)
 			time += 0.5;
 
-			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			const w = canvas.width, h = canvas.height;
 
-			// Deep blue background fill
-			ctx.globalAlpha = 1;
+			// Background fill (no globalAlpha needed — alpha:false context)
 			ctx.fillStyle = '#00050f';
-			ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-			const gridTheme = gridColorThemes[currentGridTheme];
-			const colorCycle = (time / 150) % 3;
-			let color;
-			if(colorCycle < 1) color = gridTheme.c1;
-			else if(colorCycle < 2) color = gridTheme.c2;
-			else color = gridTheme.c3;
+			ctx.fillRect(0, 0, w, h);
 
 			const brightness = gridBrightness;
+			if(brightness === 0) return; // skip drawing lines if invisible
+
+			const gt = gridColorThemes[currentGridTheme];
+			const colorCycle = (time/150)%3;
+			const color = colorCycle<1 ? gt.c1 : colorCycle<2 ? gt.c2 : gt.c3;
+
+			ctx.globalAlpha = brightness;
 			ctx.strokeStyle = color;
 			ctx.lineWidth = 2.5;
-			ctx.globalAlpha = brightness;
 			ctx.shadowColor = color;
-			ctx.shadowBlur = 10;
+			ctx.shadowBlur = 8;
 
-			const offset = (time * 1.5) % gridSpacing;
+			const offset = (time*1.5)%gridSpacing;
 
-			for (let x = -offset - canvas.height; x < canvas.width + gridSpacing; x += gridSpacing) {
-				ctx.beginPath();
+			ctx.beginPath();
+			for(let x=-offset-h; x<w+gridSpacing; x+=gridSpacing) {
 				ctx.moveTo(x, 0);
-				ctx.lineTo(x + canvas.height * 0.15, canvas.height);
-				ctx.stroke();
+				ctx.lineTo(x+h*0.15, h);
 			}
+			ctx.stroke();
 
-			for (let y = -offset - canvas.width; y < canvas.height + gridSpacing; y += gridSpacing) {
-				ctx.beginPath();
+			ctx.beginPath();
+			for(let y=-offset-w; y<h+gridSpacing; y+=gridSpacing) {
 				ctx.moveTo(0, y);
-				ctx.lineTo(canvas.width, y + canvas.width * 0.08);
-				ctx.stroke();
+				ctx.lineTo(w, y+w*0.08);
 			}
+			ctx.stroke();
 
 			ctx.shadowBlur = 0;
 			ctx.globalAlpha = 1;
 		}
 		animateGrid();
 
-		// Apply saved settings on load
+		// Apply saved settings
 		const savedTheme = StorageManager.getTheme();
 		const savedCardTheme = StorageManager.getCardTheme();
 		const savedGridTheme = StorageManager.getGridTheme();
 		const savedBrightness = StorageManager.getGridBrightness();
-
 		applyTheme(savedTheme);
 		applyCardTheme(savedCardTheme);
 		applyGridTheme(savedGridTheme);
 		applyGridBrightness(savedBrightness);
-
 		document.querySelector(`[data-theme="${savedTheme}"]`).classList.add('active');
 		document.querySelector(`[data-card="${savedCardTheme}"]`).classList.add('active');
 		document.querySelector(`[data-grid="${savedGridTheme}"]`).classList.add('active');
 		brightnessSlider.value = savedBrightness;
-		brightnessValue.textContent = savedBrightness;
+		brightnessValueEl.textContent = savedBrightness;
 
-		populateDisclaimer();
-		populateBrowserPopup();
 		renderGames();
 
-		// Show update popup once per version
-		function showUpdatePopupIfNeeded() {
-			const seen = _ls.getItem('mathline_update_seen_v' + UPDATE_POPUP.version);
-			if(seen === 'true') return;
+		// Update popup
+		const seenKey = 'mathline_update_seen_v'+UPDATE_POPUP.version;
+		if(_ls.getItem(seenKey)!=='true') {
 			document.getElementById('update-popup-title').textContent = UPDATE_POPUP.title;
 			document.getElementById('update-popup-text').innerHTML = UPDATE_POPUP.text;
-			document.getElementById('update-popup-ok').textContent = UPDATE_POPUP.okButtonText || 'Got it!';
+			document.getElementById('update-popup-ok').textContent = UPDATE_POPUP.okButtonText||'Got it!';
 			document.getElementById('update-popup').classList.add('active');
 		}
-
-		document.getElementById('update-popup-ok').addEventListener('click', () => {
-			_ls.setItem('mathline_update_seen_v' + UPDATE_POPUP.version, 'true');
+		document.getElementById('update-popup-ok').addEventListener('click', ()=>{
+			_ls.setItem(seenKey,'true');
 			document.getElementById('update-popup').classList.remove('active');
 		});
 
-		showUpdatePopupIfNeeded();
-		}); // end DOMContentLoaded
-		</script>
+	}); // end DOMContentLoaded
+	</script>
 </body>
-
 </html>
