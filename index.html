@@ -32,8 +32,7 @@
 		.category-bar button.active { background: #ff00ff; }
 		.category-bar button.new-btn { background: #ffa500; }
 		.category-bar button.new-btn.active { background: #ff8c00; }
-		.category-bar button.fav-btn { background: #c8a000; }
-		.category-bar button.fav-btn.active { background: #a07800; }
+
 		.game-counter { text-align: center; color: var(--accent); margin: 8px 0; font-size: 14px; font-weight: 700; position: relative; z-index: 5; }
 		#game-list { display: grid; grid-template-columns: repeat(5, minmax(120px, 1fr)); gap: 30px; padding: 18px; position: relative; z-index: 5; row-gap: 60px; }
 		.game-card { width: 80%; aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center; flex-direction: column; background: rgba(0,10,30,0.85); border-radius: var(--card-radius); cursor: pointer; font-weight: 700; text-align: center; padding: 5px; user-select: none; border: none; color: var(--card-text-color, #c77dff); box-shadow: 0 0 10px var(--card-shadow-1, #c77dff), 0 0 20px var(--card-shadow-2, #9d4edd), 0 0 40px var(--card-shadow-3, #7b2cbf); transition: box-shadow 0.3s ease, transform 0.3s ease, color 0.3s ease; position: relative; font-size: 15px; contain: layout style paint; }
@@ -84,25 +83,6 @@
 		.brightness-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; }
 		.brightness-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: none; }
 		.brightness-value { color: var(--accent); font-weight: 700; margin-top: 8px; text-align: center; }
-		/* Stats */
-		.stats-section-title { color: #00f5ff; font-size: 1rem; font-weight: 700; margin: 0 0 10px; padding-bottom: 8px; border-bottom: 1px solid rgba(0,245,255,0.2); }
-		.stats-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px; }
-		.stats-box { background: rgba(0,20,50,0.7); border-radius: 10px; padding: 12px; text-align: center; border: 1px solid rgba(157,78,221,0.3); }
-		.stats-box .sb-val { font-size: 1.3rem; font-weight: 700; color: #00f5ff; }
-		.stats-box .sb-lbl { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
-		.stats-list { display: flex; flex-direction: column; gap: 5px; }
-		.stats-row { display: flex; align-items: center; background: rgba(0,15,40,0.6); border-radius: 8px; padding: 9px 12px; gap: 8px; position: relative; overflow: hidden; }
-		.sr-bar { position: absolute; left: 0; top: 0; height: 100%; background: rgba(157,78,221,0.13); z-index: 0; }
-		.sr-rank { font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.35); min-width: 24px; text-align: center; position: relative; z-index: 1; }
-		.stats-row.top1 .sr-rank { font-size: 16px; }
-		.stats-row.top2 .sr-rank { font-size: 15px; }
-		.stats-row.top3 .sr-rank { font-size: 14px; }
-		.sr-name { flex: 1; font-size: 13px; font-weight: 600; color: var(--text-color); position: relative; z-index: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-		.sr-plays { font-size: 11px; color: rgba(255,255,255,0.38); position: relative; z-index: 1; white-space: nowrap; }
-		.sr-time { font-size: 12px; color: var(--accent); font-weight: 700; position: relative; z-index: 1; white-space: nowrap; }
-		.stats-empty { text-align: center; color: rgba(255,255,255,0.3); font-size: 13px; padding: 30px 0; line-height: 1.8; }
-		.stats-clear-btn { margin-top: 14px; width: 100%; padding: 10px; border: none; border-radius: 8px; cursor: pointer; background: rgba(255,50,50,0.12); color: #ff6666; font-weight: 700; font-size: 13px; transition: background 0.2s; }
-		.stats-clear-btn:hover { background: rgba(255,50,50,0.28); }
 		/* Modal */
 		.modal { display: none; position: fixed; z-index: 15; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px); }
 		.modal.active { display: flex; align-items: center; justify-content: center; }
@@ -172,7 +152,7 @@
 	<button id="back-btn" title="Back (Esc)" style="display:none;">← Back</button>
 
 	<div id="drfrost-page" class="page-screen">
-		<iframe class="drfrost-iframe" src="https://collegeapplications.b-cdn.net" title="College Applications"></iframe>
+		<iframe class="drfrost-iframe" src="https://science-23401.b-cdn.net/" title="Browser"></iframe>
 	</div>
 
 	<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
@@ -189,7 +169,6 @@
 			<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
 			<div class="sidebar-item" data-tab="cards">🎮 Game Bar</div>
 			<div class="sidebar-item" data-tab="background">🌅 Background</div>
-			<div class="sidebar-item" data-tab="stats">📊 My Stats</div>
 			<div class="sidebar-item" data-tab="disclaimer">📋 Disclaimer</div>
 		</div>
 		<div class="sidebar-content active" id="tab-themes">
@@ -235,18 +214,6 @@
 				<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
 				<div class="brightness-value"><span id="brightness-value">100</span>%</div>
 			</div>
-		</div>
-		<div class="sidebar-content" id="tab-stats">
-			<p class="stats-section-title">🏆 Your Game Stats</p>
-			<div class="stats-summary">
-				<div class="stats-box"><div class="sb-val" id="stat-total-plays">0</div><div class="sb-lbl">Total Plays</div></div>
-				<div class="stats-box"><div class="sb-val" id="stat-total-time">0m</div><div class="sb-lbl">Total Play Time</div></div>
-				<div class="stats-box"><div class="sb-val" id="stat-fav-count">0</div><div class="sb-lbl">Favourites</div></div>
-				<div class="stats-box"><div class="sb-val" id="stat-unique">0</div><div class="sb-lbl">Unique Games</div></div>
-			</div>
-			<p class="stats-section-title" style="margin-top:0;">Most Played — by time</p>
-			<div class="stats-list" id="stats-list"></div>
-			<button class="stats-clear-btn" id="stats-clear-btn">🗑️ Clear All Stats</button>
 		</div>
 		<div class="sidebar-content" id="tab-disclaimer">
 			<h3 style="color:#00f5ff;margin-top:0;" id="disclaimer-title">Disclaimer</h3>
@@ -490,35 +457,9 @@
 		let gameStartTime=null;
 		let curModalGame=null;
 
-		// ── STATS ──
-		function renderStats(){
-			const rows=allGames.map(g=>{const s=SM.getStats(g.name);return{name:g.name,playTime:s.playTime||0,played:s.played||0};}).filter(r=>r.played>0||r.playTime>0).sort((a,b)=>b.playTime-a.playTime);
-			const totalPlays=rows.reduce((s,r)=>s+r.played,0);
-			const totalTime=rows.reduce((s,r)=>s+r.playTime,0);
-			document.getElementById('stat-total-plays').textContent=totalPlays;
-			document.getElementById('stat-total-time').textContent=fmtTime(totalTime);
-			document.getElementById('stat-fav-count').textContent=SM.getFavs().length;
-			document.getElementById('stat-unique').textContent=rows.length;
-			const list=document.getElementById('stats-list');
-			if(!rows.length){list.innerHTML='<div class="stats-empty">No games played yet.<br>Start playing to see your stats here!</div>';return;}
-			const maxT=rows[0].playTime||1;
-			const frag=document.createDocumentFragment();
-			rows.forEach((r,i)=>{
-				const pct=Math.round((r.playTime/maxT)*100);
-				const row=document.createElement('div');
-				row.className='stats-row'+(i===0?' top1':i===1?' top2':i===2?' top3':'');
-				row.innerHTML=`<div class="sr-bar" style="width:${pct}%"></div><div class="sr-rank">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div><div class="sr-name">${r.name}</div><div class="sr-plays">${r.played}×</div><div class="sr-time">${fmtTime(r.playTime)}</div>`;
-				frag.appendChild(row);
-			});
-			list.replaceChildren(frag);
-		}
-		document.getElementById('stats-clear-btn').addEventListener('click',()=>{
-			if(confirm('Clear all your play stats? This cannot be undone.')){SM.clearStats();renderStats();}
-		});
-
 		// ── CATEGORIES ──
-		const cats=["All","New","Favorites",...new Set(allGames.map(g=>g.category))].sort((a,b)=>{
-			const order={All:0,New:1,Favorites:2};
+		const cats=["All","New",...new Set(allGames.map(g=>g.category))].sort((a,b)=>{
+			const order={All:0,New:1};
 			if(order[a]!==undefined&&order[b]!==undefined) return order[a]-order[b];
 			if(order[a]!==undefined) return -1;
 			if(order[b]!==undefined) return 1;
@@ -527,9 +468,8 @@
 		const catFrag=document.createDocumentFragment();
 		cats.forEach(cat=>{
 			const btn=document.createElement('button');
-			btn.textContent=cat==='Favorites'?'⭐ Favorites':cat;
+			btn.textContent=cat;
 			if(cat==="New") btn.classList.add('new-btn');
-			if(cat==="Favorites") btn.classList.add('fav-btn');
 			if(cat===activeCategory) btn.classList.add('active');
 			btn.addEventListener('click',()=>{
 				categoryEl.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
@@ -549,7 +489,6 @@
 				document.querySelectorAll('.sidebar-content').forEach(c=>c.classList.remove('active'));
 				const el=document.getElementById('tab-'+item.getAttribute('data-tab'));
 				if(el)el.classList.add('active');
-				if(item.getAttribute('data-tab')==='stats')renderStats();
 			});
 		});
 		document.querySelectorAll('.screen-tab-btn').forEach(btn=>{
@@ -601,10 +540,9 @@
 			if(!curModalGame)return;
 			const now=SM.toggleFav(curModalGame);
 			modalFavBtn.textContent=now?'★':'☆'; modalFavBtn.classList.toggle('active',now);
-			// Update card star if visible
 			const card=gameListEl.querySelector(`[data-name="${CSS.escape(curModalGame)}"]`);
 			if(card){const star=card.querySelector('.fav-star');if(star){star.textContent=now?'★':'☆';star.classList.toggle('active',now);}}
-			if(activeCategory==='Favorites'){closeModal();renderGames();}
+			renderGames();
 		});
 
 		document.getElementById('modal-close-btn').addEventListener('click',closeModal);
@@ -647,9 +585,13 @@
 			const favs=SM.getFavs();
 			let filtered=allGames;
 			if(activeCategory==="New") filtered=filtered.filter(g=>newestSet.has(g.name));
-			else if(activeCategory==="Favorites") filtered=filtered.filter(g=>favs.includes(g.name));
 			else if(activeCategory!=="All") filtered=filtered.filter(g=>g.category===activeCategory);
 			if(activeSearch){const q=activeSearch.toLowerCase();filtered=filtered.filter(g=>g.name.toLowerCase().includes(q));}
+			// Favorites always bubble to top
+			filtered=[...filtered].sort((a,b)=>{
+				const af=favs.includes(a.name), bf=favs.includes(b.name);
+				if(af&&!bf) return -1; if(!af&&bf) return 1; return 0;
+			});
 
 			const frag=document.createDocumentFragment();
 			filtered.forEach(g=>{
@@ -666,7 +608,8 @@
 					const now=SM.toggleFav(g.name);
 					star.textContent=now?'★':'☆'; star.classList.toggle('active',now);
 					star.title=now?'Remove from Favourites':'Add to Favourites';
-					if(activeCategory==='Favorites'){card.style.opacity='0';card.style.transform='scale(0.8)';setTimeout(()=>renderGames(),200);}
+					// Re-sort so the card moves to/from top
+					renderGames();
 				});
 
 				const span=document.createElement('span');
