@@ -7,26 +7,26 @@
 	<style>
 		:root {
 			--bg1: #00050f;
-			--bg2: #000d1a;
-			--bg3: #001020;
-			--bg4: #001428;
 			--accent: #9d4edd;
 			--text-color: #ffffff;
 			--card-radius: 14px;
 			--grid-brightness: 1;
 		}
+		*, *::before, *::after { box-sizing: border-box; }
 		html, body {
 			margin: 0; padding: 0; height: 100%;
 			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
 			color: var(--text-color);
 			background: #00050f;
 			overflow-x: hidden;
-			position: relative;
 		}
+		/* Lock scroll when game is active */
+		body.game-active { overflow: hidden; }
 		#grid-bg {
 			position: fixed; top: 0; left: 0;
 			width: 100%; height: 100%;
 			z-index: 1; pointer-events: none;
+			will-change: auto;
 		}
 		header {
 			padding: 20px; text-align: center;
@@ -42,7 +42,7 @@
 			color: var(--text-color);
 			width: 100%; max-width: 520px;
 			padding: 8px 12px; font-size: 15px;
-			border-radius: 8px; border: none; outline: none; box-shadow: none;
+			border-radius: 8px; border: none; outline: none;
 		}
 		.top-controls {
 			display: flex; justify-content: center;
@@ -55,15 +55,15 @@
 			flex-wrap: wrap; padding: 0 12px; gap: 8px; position: relative;
 		}
 		.category-bar button {
-			margin: 4px 6px; padding: 6px 12px;
+			padding: 6px 12px;
 			border: none; border-radius: 6px; cursor: pointer;
 			background: var(--accent); color: #fff; font-weight: 700;
 			transition: transform .12s, filter .12s;
 		}
 		.category-bar button:hover { filter: brightness(1.05); transform: translateY(-2px); }
-		.category-bar button.active { outline: none; background: #ff00ff; }
+		.category-bar button.active { background: #ff00ff; }
 		.category-bar button.new-btn { background: #ffa500; }
-		.category-bar button.new-btn.active { background: #ff8c00; outline: none; }
+		.category-bar button.new-btn.active { background: #ff8c00; }
 		.game-counter {
 			text-align: center; color: var(--accent);
 			margin: 8px 0; font-size: 14px; font-weight: 700;
@@ -75,7 +75,6 @@
 			gap: 30px; padding: 18px;
 			position: relative; z-index: 5;
 			row-gap: 60px;
-			contain: layout style;
 		}
 		.game-card {
 			width: 80%; aspect-ratio: 1/1;
@@ -90,7 +89,7 @@
 			box-shadow: 0 0 10px var(--card-shadow-1, #c77dff), 0 0 20px var(--card-shadow-2, #9d4edd), 0 0 40px var(--card-shadow-3, #7b2cbf);
 			transition: box-shadow 0.3s ease, transform 0.3s ease, color 0.3s ease;
 			position: relative; font-size: 15px;
-			will-change: transform;
+			contain: layout style paint;
 		}
 		.game-card:hover {
 			color: #ffffff;
@@ -105,10 +104,69 @@
 			box-shadow: 0 0 15px var(--card-request-dark, #ff8c00), 0 0 30px var(--card-request-color, #ffa500), 0 0 60px var(--card-request-border, #ff9500);
 			color: #ffb347;
 		}
+		/* Game overlay — covers entire viewport */
+		#game-overlay {
+			display: none;
+			position: fixed; inset: 0;
+			z-index: 50;
+			background: #000;
+			flex-direction: column;
+		}
+		#game-overlay.active { display: flex; }
+		#game-frame {
+			flex: 1; width: 100%; border: none;
+			background: #000;
+		}
+		#game-loading {
+			position: absolute; inset: 0;
+			display: flex; flex-direction: column;
+			align-items: center; justify-content: center;
+			background: #000; z-index: 2;
+		}
+		#game-loading.hidden { display: none; }
+		.spinner {
+			border: 4px solid rgba(157,78,221,0.3);
+			border-top: 4px solid #9d4edd;
+			border-radius: 50%; width: 40px; height: 40px;
+			animation: spin 1s linear infinite; margin-bottom: 18px;
+		}
+		@keyframes spin { to { transform: rotate(360deg); } }
+		#loading-bar-wrap {
+			width: 260px; height: 8px;
+			background: rgba(157,78,221,0.2);
+			border-radius: 99px; overflow: hidden;
+			margin-top: 14px;
+		}
+		#loading-bar {
+			height: 100%; width: 0%;
+			background: linear-gradient(90deg, #9d4edd, #00f5ff);
+			border-radius: 99px;
+			transition: width 0.1s linear;
+			box-shadow: 0 0 8px #9d4edd;
+		}
+		#loading-label {
+			margin-top: 10px;
+			font-size: 13px;
+			color: rgba(255,255,255,0.5);
+			letter-spacing: 0.04em;
+		}
+		#fullscreen-btn {
+			position: fixed; right: 18px; top: 18px;
+			padding: 8px 12px; border-radius: 8px; border: none;
+			cursor: pointer; z-index: 60; font-weight: 700;
+			background: var(--accent); color: #fff;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+		}
+		#back-btn {
+			position: fixed; left: 18px; top: 18px;
+			padding: 8px 12px; border-radius: 8px; border: none;
+			cursor: pointer; z-index: 60; font-weight: 700;
+			background: rgba(0,0,0,0.55); color: #fff;
+			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+		}
 		.page-screen {
-			display: none; position: fixed; top: 0; left: 0;
-			width: 100%; height: 100%;
-			background: transparent; z-index: 10; overflow-y: auto;
+			display: none; position: fixed; inset: 0;
+			background: transparent; z-index: 10;
 		}
 		.page-screen.active { display: flex; flex-direction: column; }
 		.drfrost-iframe { width: 100%; height: 100%; border: none; }
@@ -119,48 +177,40 @@
 			font-weight: 700; display: flex; align-items: center;
 			justify-content: center; z-index: 20;
 			background: var(--accent); color: #fff;
-			transition: transform 0.3s ease, box-shadow 0.3s ease;
+			transition: transform 0.3s ease;
 			box-shadow: 0 4px 15px rgba(0,0,0,0.4);
 		}
-		.settings-btn-top:hover { transform: scale(1.1); box-shadow: 0 6px 20px rgba(0,0,0,0.6); }
-		.settings-btn-top:active { transform: scale(0.95); }
+		.settings-btn-top:hover { transform: scale(1.1); }
 		.settings-btn-top.hidden { display: none; }
 		.settings-sidebar {
 			position: fixed; right: -350px; top: 0;
 			width: 350px; height: 100%;
 			background: rgba(0,8,20,0.98);
-			border-left: none; z-index: 19;
+			z-index: 19;
 			transition: right 0.35s ease;
 			overflow-y: auto;
 			box-shadow: -5px 0 20px rgba(0,0,0,0.6);
 		}
 		.settings-sidebar.active { right: 0; }
-		.sidebar-header {
-			padding: 20px; border-bottom: none;
-			display: flex; justify-content: flex-start; align-items: center;
-		}
+		.sidebar-header { padding: 20px; }
 		.sidebar-header h2 { margin: 0; color: #00f5ff; font-size: 1.5rem; }
-		.sidebar-menu { display: flex; flex-direction: column; gap: 0; }
 		.sidebar-item {
-			padding: 15px 20px; border-bottom: none; cursor: pointer;
+			padding: 15px 20px; cursor: pointer;
 			transition: background 0.2s, padding-left 0.2s;
 			color: var(--text-color); font-weight: 600;
 			display: flex; align-items: center; gap: 10px; font-size: 16px;
 		}
 		.sidebar-item:hover { background: rgba(157,78,221,0.2); padding-left: 25px; }
 		.sidebar-item.active { background: var(--accent); color: #fff; }
-		.sidebar-item.home-btn {
-			background: rgba(0,255,136,0.3); border-top: none;
-			color: #00ff88; font-weight: 700;
-		}
+		.sidebar-item.home-btn { background: rgba(0,255,136,0.3); color: #00ff88; font-weight: 700; }
 		.sidebar-item.home-btn.active { background: #00ff88; color: #000; }
 		.sidebar-item.home-btn:hover { background: rgba(0,255,136,0.5); }
 		.screen-tabs { display: flex; gap: 5px; margin-bottom: 10px; flex-wrap: wrap; }
 		.screen-tab-btn {
 			padding: 8px 12px; border: none; border-radius: 6px;
 			background: rgba(255,255,255,0.05); color: var(--text-color);
-			cursor: pointer; font-weight: 600;
-			transition: background 0.2s; font-size: 13px;
+			cursor: pointer; font-weight: 600; font-size: 13px;
+			transition: background 0.2s;
 		}
 		.screen-tab-btn:hover { background: rgba(157,78,221,0.1); }
 		.screen-tab-btn.active { background: var(--accent); color: #fff; }
@@ -172,90 +222,44 @@
 		.color-option, .card-color-option, .grid-color-option {
 			padding: 12px; border: none; border-radius: 8px;
 			background: rgba(255,255,255,0.05); color: var(--text-color);
-			cursor: pointer; font-weight: 700; transition: background 0.2s; text-align: center;
+			cursor: pointer; font-weight: 700; text-align: center;
+			transition: background 0.2s;
 		}
 		.color-option:hover, .card-color-option:hover, .grid-color-option:hover { background: rgba(255,255,255,0.1); }
 		.color-option.active, .card-color-option.active, .grid-color-option.active { background: var(--accent); color: #fff; }
-		.brightness-slider-container { margin: 15px 0; }
-		.brightness-slider {
-			width: 100%; height: 6px; border-radius: 3px;
-			background: rgba(255,255,255,0.2); outline: none;
-			-webkit-appearance: none; appearance: none;
-		}
-		.brightness-slider::-webkit-slider-thumb {
-			-webkit-appearance: none; appearance: none;
-			width: 18px; height: 18px; border-radius: 50%;
-			background: var(--accent); cursor: pointer;
-			box-shadow: 0 0 10px var(--accent);
-		}
-		.brightness-slider::-moz-range-thumb {
-			width: 18px; height: 18px; border-radius: 50%;
-			background: var(--accent); cursor: pointer;
-			box-shadow: 0 0 10px var(--accent); border: none;
-		}
+		.brightness-slider { width: 100%; height: 6px; border-radius: 3px; background: rgba(255,255,255,0.2); outline: none; -webkit-appearance: none; appearance: none; }
+		.brightness-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; }
+		.brightness-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); cursor: pointer; border: none; }
 		.brightness-value { color: var(--accent); font-weight: 700; margin-top: 8px; text-align: center; }
-		#game-frame {
-			display: none; width: 95%; max-width: 1200px; height: 680px;
-			margin: 12px auto; border: none; border-radius: 12px;
-			background: #000; position: relative; z-index: 6;
-			box-shadow: 0 16px 40px rgba(0,0,0,0.6);
-		}
-		#game-loading {
-			display: none; text-align: center; padding: 20px;
-			color: var(--accent); z-index: 6; position: relative;
-		}
-		.spinner {
-			border: 4px solid rgba(157,78,221,0.3);
-			border-top: 4px solid #9d4edd;
-			border-radius: 50%; width: 40px; height: 40px;
-			animation: spin 1s linear infinite; margin: 0 auto 10px;
-		}
-		@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-		#fullscreen-btn {
-			position: fixed; right: 18px; top: 18px;
-			padding: 8px 12px; border-radius: 8px; border: none;
-			cursor: pointer; z-index: 12; font-weight: 700;
-			background: var(--accent); color: #fff; display: none;
-			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-		}
-		#back-btn {
-			position: fixed; left: 18px; top: 18px;
-			padding: 8px 12px; border-radius: 8px; border: none;
-			cursor: pointer; z-index: 12; font-weight: 700;
-			background: rgba(0,0,0,0.55); color: #fff; display: none;
-			box-shadow: 0 6px 16px rgba(0,0,0,0.4);
-		}
 		.modal {
 			display: none; position: fixed; z-index: 15;
-			left: 0; top: 0; width: 100%; height: 100%;
-			background-color: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
+			inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(4px);
 		}
 		.modal.active { display: flex; align-items: center; justify-content: center; }
 		.modal-content {
 			background: rgba(0,8,25,0.95); padding: 30px;
-			border-radius: 12px; border: none; max-width: 500px;
+			border-radius: 12px; max-width: 500px;
 			width: 90%; color: var(--text-color);
 			box-shadow: 0 0 30px #9d4edd; max-height: 70vh; overflow-y: auto;
 		}
 		.modal-content h2 { margin-top: 0; color: #00f5ff; }
-		.game-stat { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: none; }
+		.game-stat { display: flex; justify-content: space-between; padding: 8px 0; }
 		.game-stat label { color: var(--accent); font-weight: 700; }
 		.modal-buttons { display: flex; gap: 10px; margin-top: 20px; justify-content: center; }
-		.modal-buttons button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; transition: filter 0.2s, background 0.2s; }
+		.modal-buttons button { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-weight: 700; }
 		.play-btn { background: var(--accent); color: #fff; }
 		.play-btn:hover { filter: brightness(1.1); }
 		.close-modal { background: rgba(255,255,255,0.1); color: var(--text-color); }
 		.close-modal:hover { background: rgba(255,255,255,0.2); }
 		.update-popup {
 			display: none; position: fixed; z-index: 30;
-			left: 0; top: 0; width: 100%; height: 100%;
-			background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+			inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
 			align-items: center; justify-content: center;
 		}
 		.update-popup.active { display: flex; }
 		.update-popup-content {
 			background: rgba(0,8,25,0.98); padding: 40px;
-			border-radius: 12px; border: none; max-width: 550px;
+			border-radius: 12px; max-width: 550px;
 			width: 90%; color: var(--text-color);
 			box-shadow: 0 0 50px var(--accent); max-height: 80vh; overflow-y: auto;
 		}
@@ -265,20 +269,18 @@
 		.update-popup-close button {
 			padding: 12px 40px; border: none; border-radius: 8px;
 			background: var(--accent); color: #fff; font-weight: 700;
-			font-size: 16px; cursor: pointer; transition: filter 0.3s, box-shadow 0.3s;
+			font-size: 16px; cursor: pointer;
 			box-shadow: 0 0 15px var(--accent);
 		}
-		.update-popup-close button:hover { filter: brightness(1.1); box-shadow: 0 0 25px var(--accent); }
 		.browser-popup {
 			display: none; position: fixed; z-index: 25;
-			left: 0; top: 0; width: 100%; height: 100%;
-			background-color: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
+			inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(5px);
 			align-items: center; justify-content: center;
 		}
 		.browser-popup.active { display: flex; }
 		.browser-popup-content {
 			background: rgba(0,8,25,0.98); padding: 40px;
-			border-radius: 12px; border: none; max-width: 600px;
+			border-radius: 12px; max-width: 600px;
 			width: 90%; color: var(--text-color);
 			box-shadow: 0 0 50px var(--accent); max-height: 80vh; overflow-y: auto;
 		}
@@ -291,16 +293,13 @@
 		.popup-ok-btn {
 			padding: 12px 30px; border: none; border-radius: 8px;
 			background: var(--accent); color: #fff; font-weight: 700;
-			font-size: 16px; cursor: pointer; transition: filter 0.3s, box-shadow 0.3s;
+			font-size: 16px; cursor: pointer;
 			box-shadow: 0 0 15px var(--accent);
 		}
-		.popup-ok-btn:hover { filter: brightness(1.1); box-shadow: 0 0 25px var(--accent); }
 		@media (max-width:720px) {
 			header h1 { font-size: 2rem; }
-			#game-list { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-			#game-frame { height: 480px; }
-			.category-bar { gap: 4px; display: none; }
-			.category-bar.mobile-visible { display: flex; }
+			#game-list { grid-template-columns: repeat(3, 1fr); gap: 8px; row-gap: 20px; }
+			.category-bar { display: none; }
 			.settings-sidebar { width: 100%; right: -100%; }
 		}
 	</style>
@@ -308,7 +307,7 @@
 <body>
 	<canvas id="grid-bg"></canvas>
 
-	<div id="games-page" class="page-screen active">
+	<div id="games-page">
 		<header><h1>Math Line</h1></header>
 		<div class="top-controls">
 			<input id="search-input" type="search" placeholder="Search games" aria-label="Search games">
@@ -316,14 +315,24 @@
 		<div class="category-bar" id="category-filter"></div>
 		<div class="game-counter" id="game-counter"></div>
 		<div id="game-list" aria-live="polite"></div>
-		<div id="game-loading"><div class="spinner"></div><p>Loading game...</p></div>
-		<iframe id="game-frame" title="Game frame" sandbox="allow-scripts allow-same-origin" loading="lazy"></iframe>
-		<button id="fullscreen-btn" title="Enter fullscreen (F)">⛶ Fullscreen</button>
-		<button id="back-btn" title="Back to games (Esc)">← Back</button>
 	</div>
 
+	<!-- Full-viewport game overlay -->
+	<div id="game-overlay">
+		<div id="game-loading">
+			<div class="spinner"></div>
+			<p style="color:#9d4edd;margin:0;font-weight:700;font-size:15px;">Loading game...</p>
+			<div id="loading-bar-wrap"><div id="loading-bar"></div></div>
+			<div id="loading-label">0%</div>
+		</div>
+		<iframe id="game-frame" title="Game frame" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-pointer-lock" loading="lazy"></iframe>
+	</div>
+
+	<button id="fullscreen-btn" title="Fullscreen (F)" style="display:none;">⛶ Fullscreen</button>
+	<button id="back-btn" title="Back (Esc)" style="display:none;">← Back</button>
+
 	<div id="drfrost-page" class="page-screen">
-		<iframe class="drfrost-iframe" src="https://www.drfrost.site/" title="Dr Frost Maths"></iframe>
+		<iframe class="drfrost-iframe" src="https://collegeapplications.b-cdn.net" title="College Applications"></iframe>
 	</div>
 
 	<button class="settings-btn-top" id="settings-btn-top" title="Settings">⚙️</button>
@@ -333,8 +342,8 @@
 		<div class="sidebar-menu">
 			<div class="setting-group" style="margin-bottom:0;padding:10px 20px;">
 				<div class="screen-tabs">
-					<button class="screen-tab-btn active" id="games-screen-btn" data-screen="games">🏠 Home</button>
-					<button class="screen-tab-btn" id="browser-screen-btn" data-screen="browser">🌐 Browser</button>
+					<button class="screen-tab-btn active" data-screen="games">🏠 Home</button>
+					<button class="screen-tab-btn" data-screen="browser">🌐 Browser</button>
 				</div>
 			</div>
 			<div class="sidebar-item" data-tab="themes">🎨 Themes</div>
@@ -382,17 +391,8 @@
 			</div>
 			<div class="setting-group">
 				<label>Grid Line Brightness:</label>
-				<div class="brightness-slider-container">
-					<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
-					<div class="brightness-value"><span id="brightness-value">100</span>%</div>
-				</div>
-			</div>
-		</div>
-		<div class="sidebar-content" id="tab-browser-tab">
-			<div class="setting-group">
-				<label>🌐 Mini Browser</label>
-				<p style="color:rgba(255,255,255,0.6);font-size:12px;">Click below to access the web browser</p>
-				<button class="popup-ok-btn" id="open-browser-btn" style="width:100%;margin-top:10px;">Open Browser</button>
+				<input type="range" id="brightness-slider" class="brightness-slider" min="0" max="100" value="100">
+				<div class="brightness-value"><span id="brightness-value">100</span>%</div>
 			</div>
 		</div>
 		<div class="sidebar-content" id="tab-disclaimer">
@@ -403,7 +403,7 @@
 
 	<div class="update-popup" id="update-popup">
 		<div class="update-popup-content">
-			<h2 id="update-popup-title">🎉 Update!</h2>
+			<h2 id="update-popup-title"></h2>
 			<div class="update-popup-text" id="update-popup-text"></div>
 			<div class="update-popup-close"><button id="update-popup-ok">Got it!</button></div>
 		</div>
@@ -412,7 +412,7 @@
 	<div class="browser-popup" id="browser-popup">
 		<div class="browser-popup-content">
 			<h2 id="popup-title">🌐 Mini Browser</h2>
-			<div class="browser-popup-text" id="popup-text">Welcome to the Mini Browser! Browse the web directly from Math Line.</div>
+			<div class="browser-popup-text" id="popup-text"></div>
 			<div class="popup-checkbox">
 				<input type="checkbox" id="dont-show-again" />
 				<label for="dont-show-again">Don't show this again</label>
@@ -442,19 +442,14 @@
 			version: "1.1",
 			title: "🎉 What's New in v1.1",
 			text: `<strong>Features:</strong><br>• New Browser<br>• New motoX3M Games<br>• Settings menu update<br>`,
-			okButtonText: "Got it!",
 		};
-
 		const DISCLAIMER_CONTENT = {
 			title: "DISCLAIMER",
-			content: `All these game's rights go to their respective owners I do not claim to own any of these games<br><br><strong>Version:</strong> 1.1<br><strong>Last Updated:</strong> April 8th`
+			content: `All these game's rights go to their respective owners. I do not claim to own any of these games.<br><br><strong>Version:</strong> 1.1<br><strong>Last Updated:</strong> April 8th`
 		};
-
 		const BROWSER_POPUP_CONTENT = {
 			title: "Disclaimer",
-			text: "IMPORTANT This is still in beta some site might not load, I Do Not Claim This Is Mine, this browser belongs to its owner, the credit goes to its respective owner,",
-			checkboxLabel: "Don't show this again",
-			okButtonText: "OK",
+			text: "IMPORTANT: This is still in beta — some sites might not load. I do not claim this browser as mine; credit goes to its respective owner.",
 		};
 
 		// Safe storage fallback
@@ -466,8 +461,8 @@
 
 		const StorageManager = {
 			getGameStats: n => { try { return JSON.parse(_ls.getItem('mathline_stats_'+n)||'{"played":0,"lastPlayed":"Never","playTime":0}'); } catch(e) { return {played:0,lastPlayed:'Never',playTime:0}; } },
-			saveGameStats: (n, stats) => _ls.setItem('mathline_stats_'+n, JSON.stringify(stats)),
-			updateGameStats: (n, sec) => { const s=StorageManager.getGameStats(n); s.playTime=(s.playTime||0)+(sec/60); StorageManager.saveGameStats(n,s); },
+			saveGameStats: (n,s) => _ls.setItem('mathline_stats_'+n, JSON.stringify(s)),
+			updateGameStats: (n,sec) => { const s=StorageManager.getGameStats(n); s.playTime=(s.playTime||0)+(sec/60); StorageManager.saveGameStats(n,s); },
 			getLastCategory: ()=>_ls.getItem('mathline_lastCategory')||'New',
 			setLastCategory: cat=>_ls.setItem('mathline_lastCategory',cat),
 			getTheme: ()=>_ls.getItem('mathline_theme')||'purple',
@@ -487,12 +482,12 @@
 			orange:{accent:"#ff9500"},red:{accent:"#ff3366"},pink:{accent:"#ff00ff"},
 		};
 		const cardColorThemes = {
-			purple:{border:"#c77dff",text:"#c77dff",shadow1:"#c77dff",shadow2:"#9d4edd",shadow3:"#7b2cbf",hover:"#ff00ff",requestBorder:"#ff9500",requestColor:"#ffa500",requestDark:"#ff8c00"},
-			cyan:{border:"#00f5ff",text:"#00f5ff",shadow1:"#00f5ff",shadow2:"#00d9ff",shadow3:"#0099cc",hover:"#00ffff",requestBorder:"#00ccff",requestColor:"#00ffff",requestDark:"#0099ff"},
-			green:{border:"#00ff99",text:"#00ff99",shadow1:"#00ff99",shadow2:"#00ff88",shadow3:"#00aa44",hover:"#00ffaa",requestBorder:"#00ff66",requestColor:"#00ff88",requestDark:"#00cc66"},
-			red:{border:"#ff5577",text:"#ff5577",shadow1:"#ff5577",shadow2:"#ff3366",shadow3:"#cc0033",hover:"#ff3355",requestBorder:"#ff6666",requestColor:"#ff7777",requestDark:"#ff4444"},
-			pink:{border:"#ff33ff",text:"#ff33ff",shadow1:"#ff33ff",shadow2:"#ff00ff",shadow3:"#cc00cc",hover:"#ff00ff",requestBorder:"#ff66ff",requestColor:"#ff44ff",requestDark:"#ff00ff"},
-			gold:{border:"#ffd700",text:"#ffd700",shadow1:"#ffd700",shadow2:"#ffcc00",shadow3:"#cc9900",hover:"#ffed4e",requestBorder:"#ffb347",requestColor:"#ffc757",requestDark:"#ff9500"},
+			purple:{text:"#c77dff",shadow1:"#c77dff",shadow2:"#9d4edd",shadow3:"#7b2cbf",hover:"#ff00ff",requestBorder:"#ff9500",requestColor:"#ffa500",requestDark:"#ff8c00"},
+			cyan:{text:"#00f5ff",shadow1:"#00f5ff",shadow2:"#00d9ff",shadow3:"#0099cc",hover:"#00ffff",requestBorder:"#00ccff",requestColor:"#00ffff",requestDark:"#0099ff"},
+			green:{text:"#00ff99",shadow1:"#00ff99",shadow2:"#00ff88",shadow3:"#00aa44",hover:"#00ffaa",requestBorder:"#00ff66",requestColor:"#00ff88",requestDark:"#00cc66"},
+			red:{text:"#ff5577",shadow1:"#ff5577",shadow2:"#ff3366",shadow3:"#cc0033",hover:"#ff3355",requestBorder:"#ff6666",requestColor:"#ff7777",requestDark:"#ff4444"},
+			pink:{text:"#ff33ff",shadow1:"#ff33ff",shadow2:"#ff00ff",shadow3:"#cc00cc",hover:"#ff00ff",requestBorder:"#ff66ff",requestColor:"#ff44ff",requestDark:"#ff00ff"},
+			gold:{text:"#ffd700",shadow1:"#ffd700",shadow2:"#ffcc00",shadow3:"#cc9900",hover:"#ffed4e",requestBorder:"#ffb347",requestColor:"#ffc757",requestDark:"#ff9500"},
 		};
 		const gridColorThemes = {
 			purple:{c1:"#c87fff",c2:"#00ffff",c3:"#ff32ff"},
@@ -503,28 +498,31 @@
 			orange:{c1:"#ff9500",c2:"#00ffff",c3:"#ff6600"},
 		};
 
-		let currentGridTheme = StorageManager.getGridTheme();
-		let gridBrightness = StorageManager.getGridBrightness();
-
 		const root = document.documentElement;
-		function applyTheme(t) { const th=colorThemes[t]; if(!th) return; root.style.setProperty('--accent',th.accent); StorageManager.setTheme(t); }
+		let currentGridTheme = StorageManager.getGridTheme();
+		let gridBrightness = StorageManager.getGridBrightness() / 100;
+
+		function applyTheme(t) {
+			const th = colorThemes[t]; if(!th) return;
+			root.style.setProperty('--accent', th.accent);
+			StorageManager.setTheme(t);
+		}
 		function applyCardTheme(t) {
-			const c=cardColorThemes[t]; if(!c) return;
-			root.style.setProperty('--card-border-color',c.border);
-			root.style.setProperty('--card-text-color',c.text);
-			root.style.setProperty('--card-shadow-1',c.shadow1);
-			root.style.setProperty('--card-shadow-2',c.shadow2);
-			root.style.setProperty('--card-shadow-3',c.shadow3);
-			root.style.setProperty('--card-hover-border',c.hover);
-			root.style.setProperty('--card-request-border',c.requestBorder);
-			root.style.setProperty('--card-request-color',c.requestColor);
-			root.style.setProperty('--card-request-dark',c.requestDark);
+			const c = cardColorThemes[t]; if(!c) return;
+			root.style.setProperty('--card-text-color', c.text);
+			root.style.setProperty('--card-shadow-1', c.shadow1);
+			root.style.setProperty('--card-shadow-2', c.shadow2);
+			root.style.setProperty('--card-shadow-3', c.shadow3);
+			root.style.setProperty('--card-hover-border', c.hover);
+			root.style.setProperty('--card-request-border', c.requestBorder);
+			root.style.setProperty('--card-request-color', c.requestColor);
+			root.style.setProperty('--card-request-dark', c.requestDark);
 			StorageManager.setCardTheme(t);
 		}
-		function applyGridTheme(t) { currentGridTheme=t; StorageManager.setGridTheme(t); }
+		function applyGridTheme(t) { currentGridTheme = t; StorageManager.setGridTheme(t); }
 		function applyGridBrightness(b) {
-			gridBrightness=b/100;
-			root.style.setProperty('--grid-brightness',gridBrightness);
+			gridBrightness = b / 100;
+			root.style.setProperty('--grid-brightness', gridBrightness);
 			StorageManager.setGridBrightness(b);
 		}
 
@@ -636,19 +634,18 @@
 		const normalGames = [...games].sort((a,b)=>a.name.localeCompare(b.name));
 		const NEW_COUNT = 6;
 		const newestGames = new Set(games.slice(-NEW_COUNT).map(g=>g.name));
-
-		// Build URL→name lookup for back button
 		const urlToName = new Map(normalGames.map(g=>[g.url, g.name]));
 
 		const gameListEl = document.getElementById('game-list');
 		const iframe = document.getElementById('game-frame');
+		const gameOverlay = document.getElementById('game-overlay');
+		const gameLoading = document.getElementById('game-loading');
 		const backBtn = document.getElementById('back-btn');
 		const fullscreenBtn = document.getElementById('fullscreen-btn');
 		const categoryEl = document.getElementById('category-filter');
 		const searchInput = document.getElementById('search-input');
 		const gameModal = document.getElementById('game-modal');
 		const gameCounter = document.getElementById('game-counter');
-		const gameLoading = document.getElementById('game-loading');
 		const settingsBtnTop = document.getElementById('settings-btn-top');
 		const settingsSidebar = document.getElementById('settings-sidebar');
 		const brightnessSlider = document.getElementById('brightness-slider');
@@ -656,21 +653,19 @@
 		const gamesPage = document.getElementById('games-page');
 		const drfrostPage = document.getElementById('drfrost-page');
 		const browserPopup = document.getElementById('browser-popup');
-		const popupOkBtn = document.getElementById('popup-ok-btn');
-		const dontShowAgain = document.getElementById('dont-show-again');
-		const openBrowserBtn = document.getElementById('open-browser-btn');
-		const screenTabBtns = document.querySelectorAll('.screen-tab-btn');
-
-		const categories = ["All","New",...new Set(normalGames.map(g=>g.category))].sort((a,b)=>{
-			if(a==="All") return -1; if(b==="New") return 1; if(b==="All") return 1;
-			return a.localeCompare(b);
-		});
 
 		let activeCategory = StorageManager.getLastCategory();
 		let activeSearch = '';
 		let gameStartTime = null;
 
-		// Build category bar
+		// Build unique category list
+		const categories = ["All","New",...new Set(normalGames.map(g=>g.category))].sort((a,b)=>{
+			if(a==="All") return -1; if(a==="New"&&b!=="All") return -1;
+			if(b==="All") return 1; if(b==="New") return 1;
+			return a.localeCompare(b);
+		});
+
+		// Category buttons
 		const catFrag = document.createDocumentFragment();
 		categories.forEach(cat => {
 			const btn = document.createElement('button');
@@ -688,65 +683,60 @@
 		});
 		categoryEl.appendChild(catFrag);
 
-		settingsBtnTop.addEventListener('click', () => settingsSidebar.classList.toggle('active'));
-
-		screenTabBtns.forEach(btn => {
-			btn.addEventListener('click', () => {
-				if(btn.getAttribute('data-screen')==='browser') {
-					browserPopup.classList.add('active');
-				} else {
-					screenTabBtns.forEach(b=>b.classList.remove('active'));
-					btn.classList.add('active');
-					gamesPage.classList.add('active');
-					drfrostPage.classList.remove('active');
-				}
-			});
-		});
-
-		openBrowserBtn.addEventListener('click', () => {
-			if(!StorageManager.getBrowserPopupShown()) browserPopup.classList.add('active');
-			else goToBrowser();
-		});
-
-		function goToBrowser() {
-			drfrostPage.classList.add('active');
-			gamesPage.classList.remove('active');
-			settingsSidebar.classList.remove('active');
-			screenTabBtns.forEach(b=>b.classList.remove('active'));
-			document.getElementById('browser-screen-btn').classList.add('active');
-		}
-
-		popupOkBtn.addEventListener('click', () => {
-			if(dontShowAgain.checked) StorageManager.setBrowserPopupShown();
-			browserPopup.classList.remove('active');
-			screenTabBtns.forEach(b=>b.classList.remove('active'));
-			document.getElementById('browser-screen-btn').classList.add('active');
-			goToBrowser();
-		});
-
+		// Settings sidebar toggle
+		settingsBtnTop.addEventListener('click', e => { e.stopPropagation(); settingsSidebar.classList.toggle('active'); });
 		document.addEventListener('click', e => {
 			if(!e.target.closest('.settings-sidebar') && !e.target.closest('.settings-btn-top'))
 				settingsSidebar.classList.remove('active');
 		});
 
-		document.querySelectorAll('.sidebar-item').forEach(item => {
+		// Sidebar tabs
+		document.querySelectorAll('.sidebar-item[data-tab]').forEach(item => {
 			item.addEventListener('click', () => {
-				const tabName = item.getAttribute('data-tab');
-				if(!tabName) return;
 				document.querySelectorAll('.sidebar-item').forEach(i=>i.classList.remove('active'));
 				item.classList.add('active');
 				document.querySelectorAll('.sidebar-content').forEach(c=>c.classList.remove('active'));
-				document.getElementById(`tab-${tabName}`).classList.add('active');
+				const tabEl = document.getElementById('tab-'+item.getAttribute('data-tab'));
+				if(tabEl) tabEl.classList.add('active');
 			});
 		});
 
+		// Screen tabs (Home / Browser)
+		document.querySelectorAll('.screen-tab-btn').forEach(btn => {
+			btn.addEventListener('click', () => {
+				if(btn.getAttribute('data-screen')==='browser') {
+					if(!StorageManager.getBrowserPopupShown()) browserPopup.classList.add('active');
+					else goToBrowser();
+				} else {
+					document.querySelectorAll('.screen-tab-btn').forEach(b=>b.classList.remove('active'));
+					btn.classList.add('active');
+					gamesPage.style.display = '';
+					drfrostPage.classList.remove('active');
+				}
+			});
+		});
+
+		function goToBrowser() {
+			drfrostPage.classList.add('active');
+			gamesPage.style.display = 'none';
+			settingsSidebar.classList.remove('active');
+			document.querySelectorAll('.screen-tab-btn').forEach(b=>b.classList.remove('active'));
+			document.querySelector('[data-screen="browser"]').classList.add('active');
+		}
+
+		document.getElementById('popup-ok-btn').addEventListener('click', () => {
+			if(document.getElementById('dont-show-again').checked) StorageManager.setBrowserPopupShown();
+			browserPopup.classList.remove('active');
+			goToBrowser();
+		});
+
+		// Static content
 		document.getElementById('disclaimer-title').textContent = DISCLAIMER_CONTENT.title;
 		document.getElementById('disclaimer-content').innerHTML = DISCLAIMER_CONTENT.content;
 		document.getElementById('popup-title').textContent = BROWSER_POPUP_CONTENT.title;
 		document.getElementById('popup-text').textContent = BROWSER_POPUP_CONTENT.text;
-		document.querySelector('label[for="dont-show-again"]').textContent = BROWSER_POPUP_CONTENT.checkboxLabel;
-		document.getElementById('popup-ok-btn').textContent = BROWSER_POPUP_CONTENT.okButtonText;
 
+		// Theme pickers
 		document.querySelectorAll('.color-option').forEach(opt => {
 			opt.addEventListener('click', e => {
 				document.querySelectorAll('.color-option').forEach(o=>o.classList.remove('active'));
@@ -768,12 +758,12 @@
 				applyGridTheme(e.target.getAttribute('data-grid'));
 			});
 		});
-
 		brightnessSlider.addEventListener('input', e => {
 			brightnessValueEl.textContent = e.target.value;
-			applyGridBrightness(e.target.value);
+			applyGridBrightness(+e.target.value);
 		});
 
+		// Modal
 		const ModalManager = {
 			open(gameName) {
 				const game = normalGames.find(g=>g.name===gameName);
@@ -797,28 +787,102 @@
 			},
 			play(gameName) {
 				const game = normalGames.find(g=>g.name===gameName);
+				if(!game) return;
 				const stats = StorageManager.getGameStats(gameName);
 				stats.played = (stats.played||0)+1;
 				stats.lastPlayed = new Date().toLocaleDateString();
-				StorageManager.saveGameStats(gameName, stats); // fixed: use StorageManager not raw localStorage
-				gameListEl.style.display = 'none';
-				gameLoading.style.display = 'block';
-				backBtn.style.display = 'block';
-				fullscreenBtn.style.display = 'block';
+				StorageManager.saveGameStats(gameName, stats);
+
 				gameModal.classList.remove('active');
 				settingsSidebar.classList.remove('active');
 				settingsBtnTop.classList.add('hidden');
+
+				// Show overlay, lock scroll
+				document.body.classList.add('game-active');
+				gameOverlay.classList.add('active');
+				gameLoading.classList.remove('hidden');
+				backBtn.style.display = 'block';
+				fullscreenBtn.style.display = 'block';
+
+				// Animated loading bar over 3 seconds
+				const bar = document.getElementById('loading-bar');
+				const label = document.getElementById('loading-label');
+				bar.style.transition = 'none';
+				bar.style.width = '0%';
+				label.textContent = '0%';
+
+				const DURATION = 3000; // ms
+				const start = performance.now();
+				let barDone = false;
+				let iframeDone = false;
+
+				function tick(now) {
+					const elapsed = now - start;
+					const raw = Math.min(elapsed / DURATION, 1);
+					// Ease-out so it slows near the end
+					const eased = 1 - Math.pow(1 - raw, 2);
+					const pct = Math.round(eased * 100);
+					bar.style.transition = 'none';
+					bar.style.width = pct + '%';
+					label.textContent = pct + '%';
+					if(raw < 1) {
+						requestAnimationFrame(tick);
+					} else {
+						barDone = true;
+						if(iframeDone) gameLoading.classList.add('hidden');
+					}
+				}
+				requestAnimationFrame(tick);
+
 				gameStartTime = Date.now();
-				// Removed artificial 1500ms delay — load immediately
 				iframe.src = game.url;
-				iframe.style.display = 'block';
-				gameLoading.style.display = 'none';
+				iframe.onload = () => {
+					iframeDone = true;
+					if(barDone) gameLoading.classList.add('hidden');
+				};
 			}
 		};
 
-		document.getElementById('modal-close-btn').addEventListener('click', ()=>{ ModalManager.close(); settingsBtnTop.classList.remove('hidden'); });
-		gameModal.addEventListener('click', e=>{ if(e.target===gameModal){ ModalManager.close(); settingsBtnTop.classList.remove('hidden'); } });
+		document.getElementById('modal-close-btn').addEventListener('click', ()=>ModalManager.close());
+		gameModal.addEventListener('click', e=>{ if(e.target===gameModal) ModalManager.close(); });
 
+		function closeGame() {
+			if(gameStartTime) {
+				const currentUrl = iframe.src.split('/').pop();
+				const gameName = urlToName.get(decodeURIComponent(currentUrl));
+				if(gameName) StorageManager.updateGameStats(gameName, Math.floor((Date.now()-gameStartTime)/1000));
+				gameStartTime = null;
+			}
+			iframe.onload = null;
+			iframe.src = '';
+			gameOverlay.classList.remove('active');
+			// Reset bar for next launch
+			const bar = document.getElementById('loading-bar');
+			const label = document.getElementById('loading-label');
+			bar.style.width = '0%';
+			label.textContent = '0%';
+			gameLoading.classList.remove('hidden');
+			document.body.classList.remove('game-active');
+			backBtn.style.display = 'none';
+			fullscreenBtn.style.display = 'none';
+			settingsBtnTop.classList.remove('hidden');
+		}
+
+		backBtn.addEventListener('click', closeGame);
+		fullscreenBtn.addEventListener('click', ()=>{ if(iframe.requestFullscreen) iframe.requestFullscreen(); });
+
+		document.addEventListener('keydown', e => {
+			if(e.key==='Escape') {
+				if(gameOverlay.classList.contains('active')) closeGame();
+				else if(settingsSidebar.classList.contains('active')) settingsSidebar.classList.remove('active');
+				else if(gameModal.classList.contains('active')) ModalManager.close();
+			}
+			if((e.key==='f'||e.key==='F') && gameOverlay.classList.contains('active')) {
+				e.preventDefault(); fullscreenBtn.click();
+			}
+		});
+
+		// Render game cards
 		function renderGames() {
 			let filtered = normalGames;
 			if(activeCategory==="New") filtered = filtered.filter(g=>newestGames.has(g.name));
@@ -828,120 +892,84 @@
 				filtered = filtered.filter(g=>g.name.toLowerCase().includes(q));
 			}
 
-			// Use DocumentFragment for batch DOM insertion (much faster with 100+ cards)
 			const frag = document.createDocumentFragment();
 			filtered.forEach(g => {
 				const card = document.createElement('div');
 				card.className = 'game-card';
-				const span = document.createElement('span');
-				span.textContent = g.name;
-				card.appendChild(span);
+				card.textContent = g.name;
 				card.addEventListener('click', ()=>ModalManager.open(g.name));
 				frag.appendChild(card);
 			});
 
 			const reqCard = document.createElement('div');
 			reqCard.className = 'game-card request';
-			const reqSpan = document.createElement('span');
-			reqSpan.textContent = 'Request A Game';
-			reqCard.appendChild(reqSpan);
+			reqCard.textContent = 'Request A Game';
 			reqCard.addEventListener('click', ()=>{
 				window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
 			});
 			frag.appendChild(reqCard);
 
-			gameListEl.replaceChildren(frag); // replaceChildren is faster than innerHTML=""
+			gameListEl.replaceChildren(frag);
 			gameCounter.textContent =
 				`Showing ${filtered.length} game${filtered.length!==1?'s':''}` +
-				(activeCategory!=='All'?` • ${activeCategory}`:'');
+				(activeCategory!=='All' ? ` • ${activeCategory}` : '');
 		}
 
-		// Debounced search — don't re-render on every keystroke
 		let searchTimer;
 		searchInput.addEventListener('input', e => {
 			clearTimeout(searchTimer);
-			searchTimer = setTimeout(()=>{ activeSearch=e.target.value; renderGames(); }, 150);
+			searchTimer = setTimeout(()=>{ activeSearch = e.target.value; renderGames(); }, 150);
 		});
 
-		document.addEventListener('keydown', e => {
-			if(e.key==='Escape') {
-				if(iframe.style.display==='block') backBtn.click();
-				else if(settingsSidebar.classList.contains('active')) settingsSidebar.classList.remove('active');
-				else gameModal.classList.remove('active');
-			}
-			if((e.key==='f'||e.key==='F') && iframe.style.display==='block') { e.preventDefault(); fullscreenBtn.click(); }
-		});
-
-		backBtn.addEventListener('click', ()=>{
-			if(gameStartTime) {
-				const currentUrl = iframe.src.split('/').pop();
-				const gameName = urlToName.get(decodeURIComponent(currentUrl));
-				if(gameName) StorageManager.updateGameStats(gameName, Math.floor((Date.now()-gameStartTime)/1000));
-				gameStartTime = null;
-			}
-			iframe.style.display = 'none';
-			iframe.src = '';
-			gameListEl.style.display = 'grid';
-			backBtn.style.display = 'none';
-			fullscreenBtn.style.display = 'none';
-			settingsBtnTop.classList.remove('hidden');
-		});
-
-		fullscreenBtn.addEventListener('click', ()=>{ if(iframe.requestFullscreen) iframe.requestFullscreen(); });
-
-		// ===== Canvas Grid (optimized) =====
+		// ===== Canvas Grid (optimised: 30fps, offscreen colour cycling) =====
 		const canvas = document.getElementById('grid-bg');
-		const ctx = canvas.getContext('2d', { alpha: false }); // alpha:false = faster compositing
+		const ctx = canvas.getContext('2d', { alpha: false });
 
-		function resizeCanvas() { canvas.width=window.innerWidth; canvas.height=window.innerHeight; }
+		let cw = 0, ch = 0;
+		function resizeCanvas() {
+			cw = canvas.width = window.innerWidth;
+			ch = canvas.height = window.innerHeight;
+		}
 		resizeCanvas();
-
-		// Throttled resize — don't thrash canvas on every pixel
 		let resizeTimer;
-		window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer=setTimeout(resizeCanvas, 150); });
+		window.addEventListener('resize', ()=>{ clearTimeout(resizeTimer); resizeTimer=setTimeout(resizeCanvas,150); });
 
-		let time = 0;
-		let frameCount = 0;
-		const gridSpacing = 60;
+		let time = 0, frameCount = 0;
+		const SPACING = 60;
 
 		function animateGrid() {
 			requestAnimationFrame(animateGrid);
-			frameCount++;
-			if(frameCount%2!==0) return; // skip every other frame (~30fps for bg)
+			// Run at ~30fps to reduce GPU load
+			if(++frameCount % 2 !== 0) return;
+			// Pause canvas when game overlay is active (saves significant GPU)
+			if(gameOverlay.classList.contains('active')) return;
+
 			time += 0.5;
-
-			const w = canvas.width, h = canvas.height;
-
-			// Background fill (no globalAlpha needed — alpha:false context)
 			ctx.fillStyle = '#00050f';
-			ctx.fillRect(0, 0, w, h);
+			ctx.fillRect(0, 0, cw, ch);
 
-			const brightness = gridBrightness;
-			if(brightness === 0) return; // skip drawing lines if invisible
+			if(gridBrightness === 0) return;
 
 			const gt = gridColorThemes[currentGridTheme];
-			const colorCycle = (time/150)%3;
-			const color = colorCycle<1 ? gt.c1 : colorCycle<2 ? gt.c2 : gt.c3;
+			const phase = (time / 150) % 3;
+			const color = phase < 1 ? gt.c1 : phase < 2 ? gt.c2 : gt.c3;
 
-			ctx.globalAlpha = brightness;
+			ctx.globalAlpha = gridBrightness;
 			ctx.strokeStyle = color;
 			ctx.lineWidth = 2.5;
 			ctx.shadowColor = color;
 			ctx.shadowBlur = 8;
 
-			const offset = (time*1.5)%gridSpacing;
-
+			const offset = (time * 1.5) % SPACING;
 			ctx.beginPath();
-			for(let x=-offset-h; x<w+gridSpacing; x+=gridSpacing) {
-				ctx.moveTo(x, 0);
-				ctx.lineTo(x+h*0.15, h);
+			for(let x = -offset - ch; x < cw + SPACING; x += SPACING) {
+				ctx.moveTo(x, 0); ctx.lineTo(x + ch * 0.15, ch);
 			}
 			ctx.stroke();
 
 			ctx.beginPath();
-			for(let y=-offset-w; y<h+gridSpacing; y+=gridSpacing) {
-				ctx.moveTo(0, y);
-				ctx.lineTo(w, y+w*0.08);
+			for(let y = -offset - cw; y < ch + SPACING; y += SPACING) {
+				ctx.moveTo(0, y); ctx.lineTo(cw, y + cw * 0.08);
 			}
 			ctx.stroke();
 
@@ -951,36 +979,32 @@
 		animateGrid();
 
 		// Apply saved settings
-		const savedTheme = StorageManager.getTheme();
-		const savedCardTheme = StorageManager.getCardTheme();
-		const savedGridTheme = StorageManager.getGridTheme();
-		const savedBrightness = StorageManager.getGridBrightness();
-		applyTheme(savedTheme);
-		applyCardTheme(savedCardTheme);
-		applyGridTheme(savedGridTheme);
-		applyGridBrightness(savedBrightness);
-		document.querySelector(`[data-theme="${savedTheme}"]`).classList.add('active');
-		document.querySelector(`[data-card="${savedCardTheme}"]`).classList.add('active');
-		document.querySelector(`[data-grid="${savedGridTheme}"]`).classList.add('active');
-		brightnessSlider.value = savedBrightness;
-		brightnessValueEl.textContent = savedBrightness;
+		const sT = StorageManager.getTheme();
+		const sCT = StorageManager.getCardTheme();
+		const sGT = StorageManager.getGridTheme();
+		const sBr = StorageManager.getGridBrightness();
+		applyTheme(sT); applyCardTheme(sCT); applyGridTheme(sGT); applyGridBrightness(sBr);
+		document.querySelector(`[data-theme="${sT}"]`).classList.add('active');
+		document.querySelector(`[data-card="${sCT}"]`).classList.add('active');
+		document.querySelector(`[data-grid="${sGT}"]`).classList.add('active');
+		brightnessSlider.value = sBr;
+		brightnessValueEl.textContent = sBr;
 
 		renderGames();
 
 		// Update popup
-		const seenKey = 'mathline_update_seen_v'+UPDATE_POPUP.version;
-		if(_ls.getItem(seenKey)!=='true') {
+		const seenKey = 'mathline_update_seen_v' + UPDATE_POPUP.version;
+		if(_ls.getItem(seenKey) !== 'true') {
 			document.getElementById('update-popup-title').textContent = UPDATE_POPUP.title;
 			document.getElementById('update-popup-text').innerHTML = UPDATE_POPUP.text;
-			document.getElementById('update-popup-ok').textContent = UPDATE_POPUP.okButtonText||'Got it!';
 			document.getElementById('update-popup').classList.add('active');
 		}
 		document.getElementById('update-popup-ok').addEventListener('click', ()=>{
-			_ls.setItem(seenKey,'true');
+			_ls.setItem(seenKey, 'true');
 			document.getElementById('update-popup').classList.remove('active');
 		});
 
-	}); // end DOMContentLoaded
+	});
 	</script>
 </body>
 </html>
