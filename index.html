@@ -197,10 +197,10 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
   <div class="sb-panel" id="panel-background">
     <div class="sg"><span>Style</span>
       <div class="opts">
-        <div class="opt on" data-bg="lines">Lines</div>
+        <div class="opt" data-bg="lines">Lines</div>
         <div class="opt" data-bg="static">Static</div>
         <div class="opt" data-bg="dots">Dots</div>
-        <div class="opt" data-bg="stars">Stars</div>
+        <div class="opt on" data-bg="stars">Stars</div>
         <div class="opt" data-bg="neonrain">Neon Rain</div>
         <div class="opt" data-bg="waves">Waves</div>
       </div>
@@ -235,7 +235,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <div class="popup" id="upd-popup">
   <div class="popup-box">
     <h2>🎉 What's New in v1.3</h2>
-    <p>• 6 background styles: Lines, Static, Dots, Stars, Neon Rain, Waves<br>• ⭐ Favourites bubble to top<br>• Full code rewrite — faster &amp; smoother</p>
+    <p>• Browser fixed<br>• New backgrounds: Stars, Dots, Neon Rain, Waves, Static</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
@@ -648,7 +648,7 @@ makePicker('[data-card]','data-card',applyCard);
 let curGC=get('gc')||'purple';
 makePicker('[data-gc]','data-gc',v=>{curGC=v;set('gc',v);});
 
-let curBg=get('bg')||'lines';
+let curBg=get('bg')||'stars';
 makePicker('[data-bg]','data-bg',v=>{curBg=v;set('bg',v);initBg();});
 
 let bright=parseFloat(get('bright')||'100')/100;
@@ -775,7 +775,7 @@ draw();
 
 // ── RESTORE SETTINGS ──────────────────────────────────────────────────────────
 const sT=get('theme')||'purple', sC=get('card')||'purple',
-      sGC=get('gc')||'purple', sBg=get('bg')||'lines',
+      sGC=get('gc')||'purple', sBg=get('bg')||'stars',
       sBr=parseFloat(get('bright')||'100');
 
 applyAccent(sT);applyCard(sC);
