@@ -235,8 +235,8 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <!-- Update popup -->
 <div class="popup" id="upd-popup">
   <div class="popup-box">
-    <h2>🎉 What's New in v1.3</h2>
-    <p>• Browser fixed<br>• Added new backgrounds</p>
+    <h2>🎉 What's New in v1.4</h2>
+    <p>•Fixed Crazy cattle<br>• Added Soccer bros</p><br>• Added Beach boxing sim</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
@@ -245,7 +245,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
-    <p>Some sites may not load. Credit goes to the respective owner.</p>
+    <p>Some sites may not load "if broswer not working restart computer." Credit goes to the respective owner.</p>
     <div class="popup-check">
       <input type="checkbox" id="brw-check">
       <label for="brw-check">Don't show this again</label>
@@ -423,7 +423,11 @@ const GAMES=[
   {n:'Jet Rush',u:'jet.html',c:'Racing'},
   {n:'Moto X3M Spooky Land',u:'motosp.html',c:'Racing'},
   {n:'Moto X3M Pool Party',u:'motobp.html',c:'Racing'},
-];
+  {n:'Soccer bros',u:'Sb.html',c:'Racing'},
+  {n:'Beach Boxing Simulator',u:'Bbs.html',c:'Racing'},
+
+
+  ];
 
 const ALL=[...GAMES].sort((a,b)=>a.n.localeCompare(b.n));
 const NEW_SET=new Set(GAMES.slice(-6).map(g=>g.n));
