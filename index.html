@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Math Line</title>
+<title>Canvas</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='%23E66000'/%3E%3Ccircle cx='50' cy='50' r='30' fill='%23E66000'/%3E%3Ccircle cx='50' cy='50' r='48' fill='none' stroke='white' stroke-width='14'/%3E%3Ccircle cx='50' cy='9' r='9' fill='white'/%3E%3Ccircle cx='50' cy='91' r='9' fill='white'/%3E%3Ccircle cx='9' cy='50' r='9' fill='white'/%3E%3Ccircle cx='91' cy='50' r='9' fill='white'/%3E%3Ccircle cx='22' cy='22' r='7' fill='white'/%3E%3Ccircle cx='78' cy='22' r='7' fill='white'/%3E%3Ccircle cx='22' cy='78' r='7' fill='white'/%3E%3Ccircle cx='78' cy='78' r='7' fill='white'/%3E%3C/svg%3E">
 <style>
 :root{--accent:#9d4edd;--text:#fff;--cr:14px;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
@@ -128,7 +129,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <canvas id="bg"></canvas>
 
 <div id="main">
-  <h1>Math Line</h1>
+  <h1>Canvas</h1>
   <div id="search-wrap"><input id="search" type="search" placeholder="Search games" aria-label="Search games"></div>
   <div id="cat-bar"></div>
   <div id="counter"></div>
@@ -235,7 +236,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <div class="popup" id="upd-popup">
   <div class="popup-box">
     <h2>🎉 What's New in v1.3</h2>
-    <p>• Browser fixed<br>• New backgrounds: Stars, Dots, Neon Rain, Waves, Static</p>
+    <p>• Browser fixed<br>• Added new backgrounds</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
@@ -244,7 +245,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
-    <p>This browser is still in beta — some sites may not load. Credit goes to the respective owner.</p>
+    <p>Some sites may not load. Credit goes to the respective owner.</p>
     <div class="popup-check">
       <input type="checkbox" id="brw-check">
       <label for="brw-check">Don't show this again</label>
@@ -791,7 +792,7 @@ brightIn.value=sBr;brightNum.textContent=sBr;
 initBg();
 
 // ── UPDATE POPUP ──────────────────────────────────────────────────────────────
-const VER='1.3';
+const VER='1.3b';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 
