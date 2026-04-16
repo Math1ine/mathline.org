@@ -11,10 +11,8 @@
 html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text);background:#00050f;overflow-x:hidden;}
 body.no-scroll{overflow:hidden;}
 
-/* Canvas */
 #bg{position:fixed;inset:0;z-index:1;pointer-events:none;}
 
-/* Main page */
 #main{position:relative;z-index:5;}
 h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0 10px #00f5ff,0 0 25px #00f5ff;}
 #search-wrap{display:flex;justify-content:center;padding:0 12px;}
@@ -28,7 +26,6 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 #counter{text-align:center;color:var(--accent);font-size:14px;font-weight:700;padding:4px 0 8px;}
 #game-list{display:grid;grid-template-columns:repeat(5,minmax(110px,1fr));gap:30px;row-gap:55px;padding:18px;}
 
-/* Cards */
 .card{width:80%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;flex-direction:column;background:rgba(0,10,30,.85);border-radius:var(--cr);cursor:pointer;font-weight:700;font-size:14px;text-align:center;padding:6px;user-select:none;border:none;color:var(--ct,#c77dff);box-shadow:0 0 10px var(--cs1,#c77dff),0 0 20px var(--cs2,#9d4edd),0 0 40px var(--cs3,#7b2cbf);transition:box-shadow .3s,transform .3s,color .3s;position:relative;contain:layout style paint;}
 .card:hover{color:#fff;box-shadow:0 0 16px var(--ch,#ff00ff),0 0 32px var(--ch,#ff00ff),0 0 64px var(--ch,#ff00ff);transform:translateY(-4px) scale(1.02);}
 .card.req{box-shadow:0 0 10px var(--rb,#ff9500),0 0 20px var(--rc,#ffa500),0 0 40px var(--rd,#ff8c00);color:var(--rc,#ffa500);}
@@ -37,7 +34,6 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 .star:hover{transform:scale(1.35);color:rgba(255,215,0,.6);}
 .star.on{color:#ffd700;}
 
-/* Game overlay */
 #overlay{display:none;position:fixed;inset:0;z-index:50;background:#000;flex-direction:column;}
 #overlay.on{display:flex;}
 #gframe{flex:1;width:100%;border:none;background:#000;}
@@ -51,17 +47,14 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 #fs-btn{position:fixed;right:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:var(--accent);color:#fff;}
 #bk-btn{position:fixed;left:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:rgba(0,0,0,.55);color:#fff;}
 
-/* Browser page */
 #browser-page{display:none;position:fixed;inset:0;z-index:10;}
 #browser-page.on{display:flex;flex-direction:column;}
 #browser-page iframe{width:100%;height:100%;border:none;}
 
-/* Settings button */
 #set-btn{position:fixed;top:20px;right:20px;width:50px;height:50px;border-radius:50%;border:none;cursor:pointer;font-size:24px;display:flex;align-items:center;justify-content:center;z-index:20;background:var(--accent);color:#fff;transition:transform .3s;box-shadow:0 4px 15px rgba(0,0,0,.4);}
 #set-btn:hover{transform:scale(1.1);}
 #set-btn.hide{display:none;}
 
-/* Sidebar */
 #sidebar{position:fixed;right:-380px;top:0;width:380px;height:100%;background:rgba(0,8,20,.98);z-index:19;transition:right .35s;overflow-y:auto;box-shadow:-5px 0 20px rgba(0,0,0,.6);}
 #sidebar.on{right:0;}
 .sb-head{padding:20px;}
@@ -86,7 +79,6 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 .bright-slider::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;}
 .bright-val{color:var(--accent);font-weight:700;margin-top:8px;text-align:center;font-size:13px;}
 
-/* Modal */
 .modal{display:none;position:fixed;z-index:15;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(4px);}
 .modal.on{display:flex;align-items:center;justify-content:center;}
 .modal-box{background:rgba(0,8,25,.95);padding:30px;border-radius:12px;max-width:500px;width:90%;color:var(--text);box-shadow:0 0 30px #9d4edd;max-height:70vh;overflow-y:auto;}
@@ -106,22 +98,69 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 .mbclose{background:rgba(255,255,255,.1);color:var(--text);}
 .mbclose:hover{background:rgba(255,255,255,.2);}
 
-/* Popups */
 .popup{display:none;position:fixed;z-index:30;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(5px);align-items:center;justify-content:center;}
 .popup.on{display:flex;}
 .popup-box{background:rgba(0,8,25,.98);padding:40px;border-radius:12px;max-width:560px;width:90%;color:var(--text);box-shadow:0 0 50px var(--accent);max-height:80vh;overflow-y:auto;}
 .popup-box h2{margin-top:0;color:#00f5ff;font-size:1.8rem;text-shadow:0 0 10px #00f5ff;}
 .popup-box p{line-height:1.8;color:rgba(255,255,255,.9);margin:18px 0;font-size:15px;}
-.popup-check{display:flex;align-items:center;gap:10px;margin:18px 0;color:rgba(255,255,255,.8);}
-.popup-check input{width:18px;height:18px;cursor:pointer;accent-color:var(--accent);}
 .popup-foot{display:flex;gap:10px;margin-top:28px;justify-content:center;}
 .pop-btn{padding:12px 36px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:15px;cursor:pointer;box-shadow:0 0 14px var(--accent);}
+
+/* ── TUTORIAL TOOLTIP (no dark overlay) ─────────────────────────────────── */
+#tut-box{
+  display:none;
+  position:fixed;
+  top:80px;
+  right:10px;
+  z-index:25;
+  background:rgba(0,8,25,.97);
+  border:1.5px solid #00f5ff;
+  border-radius:12px;
+  padding:18px 20px 14px;
+  max-width:220px;
+  box-shadow:0 0 20px rgba(0,245,255,.3);
+  color:#fff;
+  font-size:14px;
+  line-height:1.6;
+  text-align:center;
+}
+#tut-box.on{display:block;}
+/* little arrow pointing up-right toward the settings button */
+#tut-box::before{
+  content:'';
+  position:absolute;
+  top:-9px;
+  right:22px;
+  border:8px solid transparent;
+  border-bottom-color:#00f5ff;
+  border-top:none;
+}
+#tut-title{
+  color:#00f5ff;
+  font-weight:700;
+  font-size:15px;
+  margin-bottom:8px;
+}
+#tut-ok{
+  margin-top:12px;
+  padding:7px 22px;
+  border:none;
+  border-radius:6px;
+  background:var(--accent);
+  color:#fff;
+  font-weight:700;
+  font-size:13px;
+  cursor:pointer;
+  box-shadow:0 0 10px var(--accent);
+}
+#tut-ok:hover{filter:brightness(1.1);}
 
 @media(max-width:720px){
   h1{font-size:2rem;}
   #game-list{grid-template-columns:repeat(3,1fr);gap:8px;row-gap:20px;}
   #cat-bar{display:none;}
   #sidebar{width:100%;right:-100%;}
+  #tut-box{right:6px;max-width:calc(100vw - 24px);}
 }
 </style>
 </head>
@@ -136,7 +175,6 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
   <div id="game-list"></div>
 </div>
 
-<!-- Game overlay -->
 <div id="overlay">
   <div id="gload">
     <div class="spin"></div>
@@ -149,15 +187,20 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <button id="fs-btn" style="display:none">⛶ Fullscreen</button>
 <button id="bk-btn" style="display:none">← Back</button>
 
-<!-- Browser page -->
 <div id="browser-page">
   <iframe src="https://logan-taylor-70.b-cdn.net/onboarding/" title="Browser"></iframe>
 </div>
 
-<!-- Settings button -->
 <button id="set-btn" title="Settings">⚙️</button>
 
-<!-- Sidebar -->
+<!-- One-time tutorial tooltip — no dark screen, just a box -->
+<div id="tut-box">
+  <div id="tut-title">👆 Settings</div>
+  Click the ⚙️ button above to open Settings, then hit <strong>🌐 Browser</strong> to access the broswer
+  <br>
+  <button id="tut-ok">Got it!</button>
+</div>
+
 <div id="sidebar">
   <div class="sb-head"><h2>⚙️ Settings</h2></div>
   <div class="sb-tabs">
@@ -226,7 +269,7 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
     <div style="color:rgba(255,255,255,.8);line-height:1.7;font-size:14px;">
       <strong style="color:#00f5ff;">DISCLAIMER</strong><br><br>
       All games' rights belong to their respective owners. I do not claim ownership of any games.<br><br>
-      <strong>Version:</strong> 1.3<br>
+      <strong>Version:</strong> 1.4<br>
       <strong>Last Updated:</strong> April 2025
     </div>
   </div>
@@ -236,20 +279,16 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 <div class="popup" id="upd-popup">
   <div class="popup-box">
     <h2>🎉 What's New in v1.4</h2>
-    <p>• Added Bad Icream 3<br>• Added choppy Orc</p><br>• Shread Sauce</p>
+    <p>• Added Bad Icecream 3<br>• Added Choppy Orc<br>• Added Shred Sauce</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
 
-<!-- Browser popup -->
+<!-- Browser popup — always shows, no checkbox -->
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
-    <p> HOLD ALT TO SKIP START SCREEN. Ads are built in, don't worry about them. Credit goes to the respective owner.</p>
-    <div class="popup-check">
-      <input type="checkbox" id="brw-check">
-      <label for="brw-check">Don't show this again</label>
-    </div>
+    <p>HOLD ALT TO SKIP START SCREEN. Ads are built in, don't worry about them. Credit goes to the respective owner.</p>
     <div class="popup-foot"><button class="pop-btn" id="brw-ok">OK</button></div>
   </div>
 </div>
@@ -276,7 +315,6 @@ h1{padding:20px;text-align:center;font-size:2.6rem;color:#00f5ff;text-shadow:0 0
 (function(){
 'use strict';
 
-// ── STORAGE ──────────────────────────────────────────────────────────────────
 const mem={};
 const ls=(()=>{try{localStorage.setItem('_','1');localStorage.removeItem('_');return localStorage;}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];},get length(){return Object.keys(mem).length;},key:i=>Object.keys(mem)[i]};}})();
 const get=k=>ls.getItem('ml_'+k);
@@ -290,7 +328,6 @@ const toggleFav=n=>{let f=getFavs();f.includes(n)?f=f.filter(x=>x!==n):f.push(n)
 const isFav=n=>getFavs().includes(n);
 const fmtTime=m=>{const v=parseFloat((m||0).toFixed(1));return v>=60?`${Math.floor(v/60)}h ${Math.round(v%60)}m`:`${v}m`;};
 
-// ── THEMES ───────────────────────────────────────────────────────────────────
 const ACCENT={purple:'#9d4edd',cyan:'#00d9ff',green:'#00ff88',orange:'#ff9500',red:'#ff3366',pink:'#ff00ff'};
 const CARDS={
   purple:{ct:'#c77dff',cs1:'#c77dff',cs2:'#9d4edd',cs3:'#7b2cbf',ch:'#ff00ff',rb:'#ff9500',rc:'#ffa500',rd:'#ff8c00'},
@@ -319,7 +356,6 @@ const applyCard=t=>{
   set('card',t);
 };
 
-// ── GAMES DATA ────────────────────────────────────────────────────────────────
 const GAMES=[
   {n:'Ragdoll Archers',u:'Ragdoll-Archers.html',c:'Action'},
   {n:'Ragdoll Hit',u:'Ragdoll-hit.html',c:'Action'},
@@ -424,31 +460,28 @@ const GAMES=[
   {n:'Moto X3M Spooky Land',u:'motosp.html',c:'Racing'},
   {n:'Moto X3M Pool Party',u:'motobp.html',c:'Racing'},
   {n:'Shred Sauce',u:'ShredS.html',c:'Racing'},
-  {n:'Choppy Orc',u:'ChoppyO.html',c:'Racing'},
-  {n:'Bad Icecream 3',u:'BI3',c:'Arcade'},
-  
-  ];
+  {n:'Choppy Orc',u:'ChoppyO.html',c:'Action'},
+  {n:'Bad Icecream 3',u:'BI3.html',c:'Arcade'},
+];
 
 const ALL=[...GAMES].sort((a,b)=>a.n.localeCompare(b.n));
 const NEW_SET=new Set(GAMES.slice(-6).map(g=>g.n));
 const URL_MAP=new Map(ALL.map(g=>[g.u,g.n]));
 
-// ── DOM REFS ──────────────────────────────────────────────────────────────────
 const $=id=>document.getElementById(id);
-const gameList=$('game-list'), catBar=$('cat-bar'), counter=$('counter'),
-      search=$('search'), overlay=$('overlay'), gframe=$('gframe'),
-      gload=$('gload'), bar=$('bar'), barLbl=$('bar-lbl'),
-      fsBtn=$('fs-btn'), bkBtn=$('bk-btn'),
-      browserPage=$('browser-page'), setBtn=$('set-btn'),
-      sidebar=$('sidebar'), modal=$('modal'),
-      mName=$('m-name'), mCat=$('m-cat'), mPlayed=$('m-played'),
-      mLast=$('m-last'), mTime=$('m-time'), mPlay=$('m-play'),
-      mClose=$('m-close'), mFav=$('m-fav'),
-      brightIn=$('bright-in'), brightNum=$('bright-num');
+const gameList=$('game-list'),catBar=$('cat-bar'),counter=$('counter'),
+      search=$('search'),overlay=$('overlay'),gframe=$('gframe'),
+      gload=$('gload'),bar=$('bar'),barLbl=$('bar-lbl'),
+      fsBtn=$('fs-btn'),bkBtn=$('bk-btn'),
+      browserPage=$('browser-page'),setBtn=$('set-btn'),
+      sidebar=$('sidebar'),modal=$('modal'),
+      mName=$('m-name'),mCat=$('m-cat'),mPlayed=$('m-played'),
+      mLast=$('m-last'),mTime=$('m-time'),mPlay=$('m-play'),
+      mClose=$('m-close'),mFav=$('m-fav'),
+      brightIn=$('bright-in'),brightNum=$('bright-num');
 
-let activeCat=get('cat')||'New', activeSearch='', curModal=null, gameStart=null;
+let activeCat=get('cat')||'New',activeSearch='',curModal=null,gameStart=null;
 
-// ── CATEGORY BAR ──────────────────────────────────────────────────────────────
 const cats=['All','New',...new Set(ALL.map(g=>g.c))].sort((a,b)=>{
   if(a==='All')return-1;if(b==='All')return 1;
   if(a==='New')return-1;if(b==='New')return 1;
@@ -460,55 +493,36 @@ cats.forEach(c=>{
   btn.textContent=c;
   if(c==='New')btn.classList.add('new-btn');
   if(c===activeCat)btn.classList.add('on');
-  btn.onclick=()=>{
-    catBar.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');activeCat=c;set('cat',c);renderGames();
-  };
+  btn.onclick=()=>{catBar.querySelectorAll('button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');activeCat=c;set('cat',c);renderGames();};
   catFrag.appendChild(btn);
 });
 catBar.appendChild(catFrag);
 
-// ── RENDER GAMES ──────────────────────────────────────────────────────────────
 function renderGames(){
   const favs=getFavs();
   let list=ALL;
   if(activeCat==='New')list=list.filter(g=>NEW_SET.has(g.n));
   else if(activeCat!=='All')list=list.filter(g=>g.c===activeCat);
   if(activeSearch){const q=activeSearch.toLowerCase();list=list.filter(g=>g.n.toLowerCase().includes(q));}
-  // Favs to top, stable within each group
   list=[...list].sort((a,b)=>{const af=favs.includes(a.n),bf=favs.includes(b.n);return af===bf?0:af?-1:1;});
-
   const frag=document.createDocumentFragment();
   for(const g of list){
     const fav=favs.includes(g.n);
     const card=document.createElement('div');
     card.className='card';card.dataset.n=g.n;
-
     const star=document.createElement('button');
-    star.className='star'+(fav?' on':'');
-    star.textContent=fav?'★':'☆';
+    star.className='star'+(fav?' on':'');star.textContent=fav?'★':'☆';
     star.title=fav?'Remove favourite':'Add favourite';
-    star.onclick=e=>{
-      e.stopPropagation();
-      const now=toggleFav(g.n);
-      star.textContent=now?'★':'☆';
-      star.classList.toggle('on',now);
-      star.title=now?'Remove favourite':'Add favourite';
-      renderGames();
-    };
-
-    const lbl=document.createElement('span');
-    lbl.textContent=g.n;
+    star.onclick=e=>{e.stopPropagation();const now=toggleFav(g.n);star.textContent=now?'★':'☆';star.classList.toggle('on',now);star.title=now?'Remove favourite':'Add favourite';renderGames();};
+    const lbl=document.createElement('span');lbl.textContent=g.n;
     card.appendChild(star);card.appendChild(lbl);
     card.onclick=()=>openModal(g.n);
     frag.appendChild(card);
   }
-
   const req=document.createElement('div');
   req.className='card req';req.textContent='Request A Game';
   req.onclick=()=>window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
   frag.appendChild(req);
-
   gameList.replaceChildren(frag);
   counter.textContent=`Showing ${list.length} game${list.length!==1?'s':''}${activeCat!=='All'?' • '+activeCat:''}`;
 }
@@ -516,7 +530,6 @@ function renderGames(){
 let searchTimer;
 search.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{activeSearch=e.target.value;renderGames();},160);});
 
-// ── MODAL ─────────────────────────────────────────────────────────────────────
 function openModal(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   curModal=name;
@@ -542,7 +555,6 @@ mFav.onclick=()=>{
   renderGames();
 };
 
-// ── GAME LAUNCH ───────────────────────────────────────────────────────────────
 function launchGame(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   const s=getStats(name);s.p=(s.p||0)+1;s.d=new Date().toLocaleDateString();saveStats(name,s);
@@ -551,7 +563,6 @@ function launchGame(name){
   overlay.classList.add('on');gload.classList.remove('hide');
   fsBtn.style.display='block';bkBtn.style.display='block';
   bar.style.width='0';barLbl.textContent='0%';
-
   const T=3000,t0=performance.now();
   let barDone=false,ifrDone=false;
   function tick(now){
@@ -575,8 +586,7 @@ function closeGame(){
     gameStart=null;
   }
   gframe.onload=null;gframe.src='';
-  overlay.classList.remove('on');
-  gload.classList.remove('hide');
+  overlay.classList.remove('on');gload.classList.remove('hide');
   bar.style.width='0';barLbl.textContent='0%';
   document.body.classList.remove('no-scroll');
   fsBtn.style.display='none';bkBtn.style.display='none';
@@ -585,7 +595,6 @@ function closeGame(){
 bkBtn.onclick=closeGame;
 fsBtn.onclick=()=>{if(gframe.requestFullscreen)gframe.requestFullscreen();};
 
-// ── KEYBOARD ──────────────────────────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){
     if(overlay.classList.contains('on'))closeGame();
@@ -595,19 +604,16 @@ document.addEventListener('keydown',e=>{
   if((e.key==='f'||e.key==='F')&&overlay.classList.contains('on')){e.preventDefault();fsBtn.click();}
 });
 
-// ── SIDEBAR / SETTINGS ────────────────────────────────────────────────────────
 setBtn.onclick=e=>{e.stopPropagation();sidebar.classList.toggle('on');};
 document.addEventListener('click',e=>{
   if(!e.target.closest('#sidebar')&&!e.target.closest('#set-btn'))sidebar.classList.remove('on');
 });
 
-// Screen tabs
+// Browser tab — always show popup every time
 document.querySelectorAll('.sb-tab').forEach(btn=>{
   btn.onclick=()=>{
-    const scr=btn.dataset.scr;
-    if(scr==='browser'){
-      if(ls.getItem('ml_bseen')!=='1'){$('brw-popup').classList.add('on');}
-      else goToBrowser();
+    if(btn.dataset.scr==='browser'){
+      $('brw-popup').classList.add('on');
     } else {
       document.querySelectorAll('.sb-tab').forEach(b=>b.classList.remove('on'));
       btn.classList.add('on');
@@ -623,12 +629,8 @@ function goToBrowser(){
   document.querySelectorAll('.sb-tab').forEach(b=>b.classList.remove('on'));
   document.querySelector('.sb-tab[data-scr="browser"]').classList.add('on');
 }
-$('brw-ok').onclick=()=>{
-  if($('brw-check').checked)ls.setItem('ml_bseen','1');
-  $('brw-popup').classList.remove('on');goToBrowser();
-};
+$('brw-ok').onclick=()=>{$('brw-popup').classList.remove('on');goToBrowser();};
 
-// Sidebar panels
 document.querySelectorAll('.sb-item').forEach(item=>{
   item.onclick=()=>{
     document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('on'));
@@ -638,169 +640,72 @@ document.querySelectorAll('.sb-item').forEach(item=>{
   };
 });
 
-// Theme pickers — single delegated handler per group
 function makePicker(sel,attr,cb){
   document.querySelectorAll(sel).forEach(o=>{
-    o.onclick=()=>{
-      document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));
-      o.classList.add('on');cb(o.getAttribute(attr));
-    };
+    o.onclick=()=>{document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));o.classList.add('on');cb(o.getAttribute(attr));};
   });
 }
 makePicker('[data-theme]','data-theme',applyAccent);
 makePicker('[data-card]','data-card',applyCard);
-
 let curGC=get('gc')||'purple';
 makePicker('[data-gc]','data-gc',v=>{curGC=v;set('gc',v);});
-
 let curBg=get('bg')||'stars';
 makePicker('[data-bg]','data-bg',v=>{curBg=v;set('bg',v);initBg();});
-
 let bright=parseFloat(get('bright')||'100')/100;
-brightIn.addEventListener('input',()=>{
-  const v=+brightIn.value;brightNum.textContent=v;
-  bright=v/100;set('bright',v);
-});
+brightIn.addEventListener('input',()=>{const v=+brightIn.value;brightNum.textContent=v;bright=v/100;set('bright',v);});
 
-// ── CANVAS BACKGROUND ─────────────────────────────────────────────────────────
 const canvas=$('bg');
 const ctx=canvas.getContext('2d',{alpha:false});
-let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0,raf=0;
-
+let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0;
 function initBg(){
-  if(curBg==='stars'){
-    stars=[];
-    for(let i=0;i<180;i++)stars.push({x:Math.random()*cw,y:Math.random()*ch,r:Math.random()*1.8+.3,a:Math.random()*Math.PI*2,spd:Math.random()*.04+.01});
-  }
-  if(curBg==='neonrain'){
-    drops=[];
-    const cols=Math.floor(cw/18)||1;
-    for(let i=0;i<cols;i++)drops.push({x:i*18+Math.random()*10,y:Math.random()*ch,spd:Math.random()*2+1,len:Math.random()*80+30,a:Math.random()*.6+.2});
-  }
+  if(curBg==='stars'){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*cw,y:Math.random()*ch,r:Math.random()*1.8+.3,a:Math.random()*Math.PI*2,spd:Math.random()*.04+.01});}
+  if(curBg==='neonrain'){drops=[];const cols=Math.floor(cw/18)||1;for(let i=0;i<cols;i++)drops.push({x:i*18+Math.random()*10,y:Math.random()*ch,spd:Math.random()*2+1,len:Math.random()*80+30,a:Math.random()*.6+.2});}
 }
-
 function resize(){cw=canvas.width=window.innerWidth;ch=canvas.height=window.innerHeight;initBg();}
 resize();
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);});
-
-function getCol(){
-  const g=GC[curGC]||GC.purple;
-  const ph=(time/150)%3;
-  return ph<1?g.c1:ph<2?g.c2:g.c3;
-}
-
+function getCol(){const g=GC[curGC]||GC.purple;const ph=(time/150)%3;return ph<1?g.c1:ph<2?g.c2:g.c3;}
 let fc=0;
 function draw(){
-  raf=requestAnimationFrame(draw);
-  if(++fc%2!==0)return;       // ~30 fps
-  if(overlay.classList.contains('on'))return; // pause when game open
+  requestAnimationFrame(draw);
+  if(++fc%2!==0)return;
+  if(overlay.classList.contains('on'))return;
   time+=.5;
-
-  ctx.fillStyle='#00050f';
-  ctx.fillRect(0,0,cw,ch);
+  ctx.fillStyle='#00050f';ctx.fillRect(0,0,cw,ch);
   if(bright===0)return;
-
-  const col=getCol();
-  ctx.globalAlpha=bright;
-
+  const col=getCol();ctx.globalAlpha=bright;
   switch(curBg){
-    case'static':{
-      const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);
-      gr.addColorStop(0,col+'44');gr.addColorStop(1,'#00050f');
-      ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);
-      break;
-    }
-    case'lines':{
-      ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.shadowColor=col;ctx.shadowBlur=8;
-      const off=(time*1.5)%60;
-      ctx.beginPath();
-      for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}
-      ctx.stroke();
-      ctx.beginPath();
-      for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}
-      ctx.stroke();
-      ctx.shadowBlur=0;
-      break;
-    }
-    case'dots':{
-      dotPhase+=.018;
-      ctx.shadowColor=col;ctx.shadowBlur=5;ctx.fillStyle=col;
-      const sp=52;
-      for(let x=sp/2;x<cw;x+=sp){
-        for(let y=sp/2;y<ch;y+=sp){
-          const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;
-          ctx.globalAlpha=bright*(.25+p*.55);
-          ctx.beginPath();ctx.arc(x,y,1.2+p*2.5,0,6.283);ctx.fill();
-        }
-      }
-      ctx.shadowBlur=0;
-      break;
-    }
-    case'stars':{
-      ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;
-      for(const s of stars){
-        s.a+=s.spd;
-        ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.85;
-        ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();
-      }
-      ctx.shadowBlur=0;
-      break;
-    }
-    case'neonrain':{
-      ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=5;
-      for(const d of drops){
-        ctx.globalAlpha=d.a*bright;
-        ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();
-        d.y+=d.spd*2;
-        if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}
-      }
-      ctx.shadowBlur=0;
-      break;
-    }
-    case'waves':{
-      ctx.shadowColor=col;ctx.shadowBlur=8;ctx.lineWidth=2;
-      for(let w=0;w<8;w++){
-        const yb=ch*(w+1)/9,amp=18+w*4,fr=.0075-w*.0003,ph=time*.038+w*.9;
-        ctx.globalAlpha=bright*(.2+w*.055);
-        ctx.strokeStyle=col;
-        ctx.beginPath();
-        for(let x=0;x<=cw;x+=5){
-          const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.35;
-          x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
-        }
-        ctx.stroke();
-      }
-      ctx.shadowBlur=0;
-      break;
-    }
+    case'static':{const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);gr.addColorStop(0,col+'44');gr.addColorStop(1,'#00050f');ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);break;}
+    case'lines':{ctx.strokeStyle=col;ctx.lineWidth=2.5;ctx.shadowColor=col;ctx.shadowBlur=8;const off=(time*1.5)%60;ctx.beginPath();for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}ctx.stroke();ctx.beginPath();for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}ctx.stroke();ctx.shadowBlur=0;break;}
+    case'dots':{dotPhase+=.018;ctx.shadowColor=col;ctx.shadowBlur=5;ctx.fillStyle=col;const sp=52;for(let x=sp/2;x<cw;x+=sp){for(let y=sp/2;y<ch;y+=sp){const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;ctx.globalAlpha=bright*(.25+p*.55);ctx.beginPath();ctx.arc(x,y,1.2+p*2.5,0,6.283);ctx.fill();}}ctx.shadowBlur=0;break;}
+    case'stars':{ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;for(const s of stars){s.a+=s.spd;ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.85;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}ctx.shadowBlur=0;break;}
+    case'neonrain':{ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=5;for(const d of drops){ctx.globalAlpha=d.a*bright;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.spd*2;if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}}ctx.shadowBlur=0;break;}
+    case'waves':{ctx.shadowColor=col;ctx.shadowBlur=8;ctx.lineWidth=2;for(let w=0;w<8;w++){const yb=ch*(w+1)/9,amp=18+w*4,fr=.0075-w*.0003,ph=time*.038+w*.9;ctx.globalAlpha=bright*(.2+w*.055);ctx.strokeStyle=col;ctx.beginPath();for(let x=0;x<=cw;x+=5){const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.35;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}ctx.shadowBlur=0;break;}
   }
   ctx.globalAlpha=1;
 }
 draw();
 
-// ── RESTORE SETTINGS ──────────────────────────────────────────────────────────
-const sT=get('theme')||'purple', sC=get('card')||'purple',
-      sGC=get('gc')||'purple', sBg=get('bg')||'stars',
-      sBr=parseFloat(get('bright')||'100');
-
-applyAccent(sT);applyCard(sC);
-curGC=sGC;curBg=sBg;bright=sBr/100;
-
-// Mark active options
+const sT=get('theme')||'purple',sC=get('card')||'purple',sGC=get('gc')||'purple',sBg=get('bg')||'stars',sBr=parseFloat(get('bright')||'100');
+applyAccent(sT);applyCard(sC);curGC=sGC;curBg=sBg;bright=sBr/100;
 const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>{o.classList.toggle('on',o.getAttribute(attr)===val);});};
-mark('[data-theme]','data-theme',sT);
-mark('[data-card]','data-card',sC);
-mark('[data-gc]','data-gc',sGC);
-mark('[data-bg]','data-bg',sBg);
-brightIn.value=sBr;brightNum.textContent=sBr;
-initBg();
+mark('[data-theme]','data-theme',sT);mark('[data-card]','data-card',sC);mark('[data-gc]','data-gc',sGC);mark('[data-bg]','data-bg',sBg);
+brightIn.value=sBr;brightNum.textContent=sBr;initBg();
 
 // ── UPDATE POPUP ──────────────────────────────────────────────────────────────
-const VER='1.3b';
+const VER='1.4';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 
-// ── RENDER ────────────────────────────────────────────────────────────────────
+// ── ONE-TIME TUTORIAL — simple tooltip box, no dark screen ───────────────────
+if(ls.getItem('ml_tut2')!=='1'){
+  $('tut-box').classList.add('on');
+}
+$('tut-ok').onclick=()=>{
+  $('tut-box').classList.remove('on');
+  ls.setItem('ml_tut2','1');
+};
+
 renderGames();
 
 })();
