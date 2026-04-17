@@ -523,7 +523,7 @@ function renderGames(){
   }
   const req=document.createElement('div');
   req.className='card req';req.textContent='Request A Game';
-  req.onclick=()=>window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
+  req.onclick=()=>window.open('https://docs.google.com/forms/d/1_cxEKT5gAyG3af2QXa-pu8tjFsvugpBZBptb_IQMDM8/edit','_blank');
   frag.appendChild(req);
   gameList.replaceChildren(frag);
   counter.textContent=`Showing ${list.length} game${list.length!==1?'s':''}${activeCat!=='All'?' • '+activeCat:''}`;
