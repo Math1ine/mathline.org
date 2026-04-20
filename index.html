@@ -52,7 +52,7 @@ html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Aria
 .card-cat{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;}
 .card-fav{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);border:none;cursor:pointer;width:26px;height:26px;border-radius:50%;font-size:13px;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s,color .15s;z-index:2;}
 .card:hover .card-fav{opacity:1;}
-.card-fav.on{opacity:1;color:#ffd700;}
+.card-faon{opacity:1;color:#ffd700;}
 .card-fav:hover{color:#ffd700;}
 .card.req .card-name{color:#ffa500;}
 body.glow-on .card:hover{box-shadow:0 0 18px var(--accent)55,0 0 35px var(--accent)22;}
@@ -117,7 +117,7 @@ body.hover-off .card:hover{transform:none!important;}
 .mtrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .mtrow h2{flex:1;font-size:1.2rem;color:#fff;}
 .mfav{font-size:22px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.25);transition:color .2s;padding:4px;}
-.mfav:hover,.mfav.on{color:#ffd700;}
+.mfav:hover,.mfaon{color:#ffd700;}
 .mstat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px;}
 .mstat:last-of-type{border:none;}
 .mstat b{color:rgba(255,255,255,.45);font-weight:600;}
@@ -282,8 +282,8 @@ body.hover-off .card:hover{transform:none!important;}
 </div>
 <div class="popup" id="upd-popup">
   <div class="popup-box">
-    <h2>&#x1F389; Whats New in v1.4</h2>
-    <p>&#x2022; Added Bad Ice Cream 3<br>&#x2022; Added Choppy Orc<br>&#x2022; Added Shred Sauce<br>&#x2022; New dashboard layout<br>&#x2022; Recently Played and Favourites<br>&#x2022; Play stats tracker</p>
+    <h2>&#x1F389; Whats New in v1.5</h2>
+    <p>&#x2022; Changed layout<br>&#x2022; Added color for all cards<br>&#x2022; New dashboard layout<br>&#x2022; Recently Played and Favourites<br>&#x2022; Play stats tracker</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
