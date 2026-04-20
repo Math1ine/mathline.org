@@ -39,14 +39,7 @@ html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Aria
 .section-header:first-child{margin-top:0;}
 .section-title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.85);}
 .section-count{font-size:12px;color:rgba(255,255,255,.3);font-weight:400;}
-
-/* ── 6 cards per row, generous gap ── */
-#game-list,.recent-row{
-  display:grid;
-  grid-template-columns:repeat(6,1fr);
-  gap:20px;
-}
-
+#game-list,.recent-row{display:grid;grid-template-columns:repeat(6,1fr);gap:20px;}
 .card{background:var(--card-bg);border-radius:10px;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.05);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;position:relative;}
 .card:hover{transform:translateY(-3px) scale(1.02);border-color:rgba(255,255,255,.15);background:var(--card-hover);}
 .card-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;}
@@ -77,9 +70,35 @@ body.hover-off .card:hover{transform:none!important;}
 #bar-lbl{margin-top:10px;font-size:13px;color:rgba(255,255,255,.5);}
 #fs-btn{position:fixed;right:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:var(--accent);color:#fff;}
 #bk-btn{position:fixed;left:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:rgba(0,0,0,.55);color:#fff;}
-#browser-page{display:none;position:fixed;inset:0;z-index:10;top:var(--top-h);}
-#browser-page.on{display:flex;flex-direction:column;}
-#browser-page iframe{width:100%;height:100%;border:none;}
+
+/* ── BROWSER ── */
+#browser-page{
+  display:none;position:fixed;
+  /* cover entire viewport — full tab */
+  inset:0;
+  z-index:35;
+  flex-direction:column;
+  background:#000;
+}
+#browser-page.on{display:flex;}
+#browser-topbar{
+  height:44px;flex-shrink:0;
+  background:var(--top);
+  border-bottom:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;gap:10px;
+  padding:0 14px;
+}
+#browser-back-btn{
+  display:flex;align-items:center;gap:6px;
+  padding:6px 14px;border:none;border-radius:7px;
+  background:rgba(255,255,255,.08);color:var(--text);
+  font-size:13px;font-weight:700;cursor:pointer;
+  transition:background .15s;
+}
+#browser-back-btn:hover{background:rgba(255,255,255,.16);}
+#browser-title{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;}
+#browser-iframe{flex:1;width:100%;border:none;background:#fff;}
+
 #drawer{position:fixed;right:-400px;top:0;bottom:0;width:380px;background:#0d0d1a;z-index:40;transition:right .3s;overflow:hidden;border-left:1px solid rgba(255,255,255,.07);box-shadow:-8px 0 30px rgba(0,0,0,.5);display:flex;flex-direction:column;}
 #drawer.on{right:0;}
 .dr-head{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);}
@@ -148,16 +167,9 @@ body.hover-off .card:hover{transform:none!important;}
 #tut-ok{margin-top:12px;display:block;width:100%;padding:7px 0;border:none;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
 #tut-ok:hover{filter:brightness(1.1);}
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-
-/* Responsive breakpoints for 6-col grid */
 @media(max-width:1300px){#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
 @media(max-width:1050px){#game-list,.recent-row{grid-template-columns:repeat(4,1fr);}}
-@media(max-width:768px){
-  :root{--nav-w:0px;}
-  #nav{display:none;}
-  #main{left:0;}
-  #game-list,.recent-row{grid-template-columns:repeat(3,1fr);gap:12px;}
-}
+@media(max-width:768px){:root{--nav-w:0px;}#nav{display:none;}#main{left:0;}#game-list,.recent-row{grid-template-columns:repeat(3,1fr);gap:12px;}}
 @media(max-width:480px){#game-list,.recent-row{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
@@ -200,10 +212,16 @@ body.hover-off .card:hover{transform:none!important;}
 </div>
 <button id="fs-btn" style="display:none">⛶ Fullscreen</button>
 <button id="bk-btn" style="display:none">← Back</button>
+
+<!-- FULL TAB BROWSER — covers entire screen, has its own top bar with back button -->
 <div id="browser-page">
-  <!-- UPDATED browser URL -->
-  <iframe src="https://unpkg.com/bluebook-testing@3.1.3/index.html" title="Browser"></iframe>
+  <div id="browser-topbar">
+    <button id="browser-back-btn">← Back to Games</button>
+    <span id="browser-title">🌐 Browser</span>
+  </div>
+  <iframe id="browser-iframe" title="Browser"></iframe>
 </div>
+
 <div id="tut-box">
   <div id="tut-box-title">👆 Quick tip!</div>
   Click ⚙️ above to open Settings, or hit <strong>🌐 Browser</strong> in the sidebar!
@@ -298,8 +316,6 @@ body.hover-off .card:hover{transform:none!important;}
   </div>
   </div></div>
 </div>
-
-<!-- Update popup — shows whenever VER constant changes -->
 <div class="popup" id="upd-popup">
   <div class="popup-box">
     <h2>🎉 What's New in v1.5</h2>
@@ -307,8 +323,6 @@ body.hover-off .card:hover{transform:none!important;}
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
-
-<!-- Browser popup — always shows -->
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
@@ -316,7 +330,6 @@ body.hover-off .card:hover{transform:none!important;}
     <div class="popup-foot"><button class="pop-btn" id="brw-ok">OK</button></div>
   </div>
 </div>
-
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="modal-thumb"><div class="modal-thumb-grad" id="m-thumb-grad"></div><div class="modal-thumb-title" id="m-thumb-title"></div></div>
@@ -331,11 +344,9 @@ body.hover-off .card:hover{transform:none!important;}
     </div>
   </div>
 </div>
-
 <script>
 (function(){
 'use strict';
-
 const mem={};
 const ls=(()=>{try{localStorage.setItem('_','1');localStorage.removeItem('_');return localStorage;}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];},get length(){return Object.keys(mem).length;},key:i=>Object.keys(mem)[i]};}})();
 const get=k=>ls.getItem('ml_'+k);
@@ -350,220 +361,60 @@ const isFav=n=>getFavs().includes(n);
 const fmtTime=m=>{const v=parseFloat((m||0).toFixed(1));return v>=60?`${Math.floor(v/60)}h ${Math.round(v%60)}m`:`${v}m`;};
 const getRecent=()=>{try{return JSON.parse(ls.getItem('ml_recent')||'[]');}catch(e){return[];}};
 const addRecent=n=>{let r=getRecent().filter(x=>x!==n);r.unshift(n);if(r.length>12)r=r.slice(0,12);ls.setItem('ml_recent',JSON.stringify(r));};
-
-const GRAD_PAIRS=[
-  ['#1a0533','#6a1fd1'],['#001a33','#1a6dd1'],['#001a0d','#1ad16a'],
-  ['#1a0d00','#d16a1a'],['#1a001a','#d11ad1'],['#1a0000','#d11a3a'],
-  ['#0d1a00','#6ad11a'],['#00141a','#1ad1c0'],['#1a1200','#d1b81a'],
-  ['#0a001a','#9d1ad1'],['#001233','#1a55d1'],['#1a0820','#c81ad1'],
-  ['#001a14','#1ad198'],['#1a0500','#d1501a'],['#00101a','#1a90d1'],
-  ['#0f0f1a','#5050d1'],['#1a0f0f','#d15050'],['#0f1a0f','#50d150'],
-];
-function gradForName(name){
-  let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;
-  const pair=GRAD_PAIRS[h%GRAD_PAIRS.length];
-  return `linear-gradient(${(h%8)*45}deg,${pair[0]},${pair[1]})`;
-}
+const GRAD_PAIRS=[['#1a0533','#6a1fd1'],['#001a33','#1a6dd1'],['#001a0d','#1ad16a'],['#1a0d00','#d16a1a'],['#1a001a','#d11ad1'],['#1a0000','#d11a3a'],['#0d1a00','#6ad11a'],['#00141a','#1ad1c0'],['#1a1200','#d1b81a'],['#0a001a','#9d1ad1'],['#001233','#1a55d1'],['#1a0820','#c81ad1'],['#001a14','#1ad198'],['#1a0500','#d1501a'],['#00101a','#1a90d1'],['#0f0f1a','#5050d1'],['#1a0f0f','#d15050'],['#0f1a0f','#50d150']];
+function gradForName(name){let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;const pair=GRAD_PAIRS[h%GRAD_PAIRS.length];return `linear-gradient(${(h%8)*45}deg,${pair[0]},${pair[1]})`;}
 function initialsFor(name){return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
-
 const ACCENT={purple:'#9d4edd',cyan:'#00d9ff',green:'#00ff88',orange:'#ff9500',red:'#ff3366',pink:'#ff00ff'};
-const CARDS={
-  purple:{bg:'#16162a',hov:'#1e1e38'},
-  cyan:  {bg:'#0d1e2a',hov:'#132536'},
-  green: {bg:'#0d1e16',hov:'#112410'},
-  red:   {bg:'#200d14',hov:'#2e1020'},
-  pink:  {bg:'#1e0d1e',hov:'#2a1030'},
-  gold:  {bg:'#1e1a0a',hov:'#2a2210'},
-};
-const GC_PALETTES={
-  purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff',bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},
-  cyan:  {c1:'#00ffff',c2:'#00ff88',c3:'#00ccff',bg:'#060e16',nav:'#080f18',top:'#0d1520'},
-  green: {c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc',bg:'#060e09',nav:'#08110a',top:'#0d1810'},
-  red:   {c1:'#ff6666',c2:'#ffff00',c3:'#ff0099',bg:'#140608',nav:'#170809',top:'#1e0c0e'},
-  pink:  {c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff',bg:'#120612',nav:'#150815',top:'#1c0e1c'},
-  orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600',bg:'#120d04',nav:'#150f06',top:'#1e1408'},
-};
-
+const CARDS={purple:{bg:'#16162a',hov:'#1e1e38'},cyan:{bg:'#0d1e2a',hov:'#132536'},green:{bg:'#0d1e16',hov:'#112410'},red:{bg:'#200d14',hov:'#2e1020'},pink:{bg:'#1e0d1e',hov:'#2a1030'},gold:{bg:'#1e1a0a',hov:'#2a2210'}};
+const GC_PALETTES={purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff',bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},cyan:{c1:'#00ffff',c2:'#00ff88',c3:'#00ccff',bg:'#060e16',nav:'#080f18',top:'#0d1520'},green:{c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc',bg:'#060e09',nav:'#08110a',top:'#0d1810'},red:{c1:'#ff6666',c2:'#ffff00',c3:'#ff0099',bg:'#140608',nav:'#170809',top:'#1e0c0e'},pink:{c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff',bg:'#120612',nav:'#150815',top:'#1c0e1c'},orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600',bg:'#120d04',nav:'#150f06',top:'#1e1408'}};
 const R=document.documentElement;
 let curGC='purple',curBg='stars',bright=1,bgSpeedMult=1,canvasBg='#0a0a16';
-
 const applyAccent=t=>{R.style.setProperty('--accent',ACCENT[t]||ACCENT.purple);set('theme',t);};
 const applyCard=t=>{const c=CARDS[t];if(!c)return;R.style.setProperty('--card-bg',c.bg);R.style.setProperty('--card-hover',c.hov);set('card',t);};
-const applyBgCol=v=>{
-  curGC=v;const p=GC_PALETTES[v]||GC_PALETTES.purple;
-  canvasBg=p.bg;
-  R.style.setProperty('--bg',p.bg);R.style.setProperty('--nav',p.nav);R.style.setProperty('--top',p.top);
-  document.body.style.background=p.bg;set('gc',v);
-};
+const applyBgCol=v=>{curGC=v;const p=GC_PALETTES[v]||GC_PALETTES.purple;canvasBg=p.bg;R.style.setProperty('--bg',p.bg);R.style.setProperty('--nav',p.nav);R.style.setProperty('--top',p.top);document.body.style.background=p.bg;set('gc',v);};
 const applyBgStyle=v=>{curBg=v;set('bg',v);initBg();};
 const applyBrightness=v=>{bright=v/100;set('bright',v);};
-
-const GAMES=[
-  {n:'Ragdoll Archers',u:'Ragdoll-Archers.html',c:'Action'},
-  {n:'Ragdoll Hit',u:'Ragdoll-hit.html',c:'Action'},
-  {n:'Time Shooter',u:'Time-shooter.html',c:'Action'},
-  {n:'Retro Bowl',u:'Retro-bowl.html',c:'Arcade'},
-  {n:'Snow Rider',u:'Snow-Rider.html',c:'Racing'},
-  {n:'Swords And Sandals',u:'Swords-and-sandlas.html',c:'Action'},
-  {n:'Crazy Cattle',u:'Crazy-cattle.html',c:'Arcade'},
-  {n:'Gladi Hoppers',u:'Gladi-hoppers.html',c:'Action'},
-  {n:'Bit Planes',u:'Bit-planes.html',c:'Arcade'},
-  {n:'Final Earth 2',u:'Final-earth2.html',c:'Strategy'},
-  {n:'Cluster Rush',u:'Cluster-rush.html',c:'Arcade'},
-  {n:'Push Your Luck',u:'Push-your-luck.html',c:'Arcade'},
-  {n:'Poly Track',u:'Poly-track.html',c:'Racing'},
-  {n:'Ragdoll Soccer',u:'Ragdoll-soccer.html',c:'2 Player'},
-  {n:'Jetpack Joy Ride',u:'Jetpack-joy-ride.html',c:'Action'},
-  {n:'Learn To Fly 3',u:'Learn-to-fly-3.html',c:'Racing'},
-  {n:'Malidin Stun Cars',u:'Malidin-stun-cars.html',c:'Racing'},
-  {n:'Gun Spin',u:'Gun-spin.html',c:'Action'},
-  {n:'Age Of War',u:'Age-of-war.html',c:'Strategy'},
-  {n:'Moto X3M 2',u:'Moto-x3m-2.html',c:'Racing'},
-  {n:'Moto X3M Winter',u:'Moto-x3m-winter.html',c:'Racing'},
-  {n:'Basketball Stars',u:'Basketball-stars.html',c:'2 Player'},
-  {n:'Idle Breakout',u:'Idle-breakout.html',c:'Arcade'},
-  {n:'Vex 8',u:'Vex-8.html',c:'Action'},
-  {n:'Tiny Fishing',u:'Tiny-fishing.html',c:'Simulation'},
-  {n:'Drive Mad',u:'Drive-mad.html',c:'Racing'},
-  {n:'Stick Man Hook',u:'Stick-man-hook.html',c:'Action'},
-  {n:'Line Rider',u:'Line-rider.html',c:'Racing'},
-  {n:'Unicycle Hero',u:'Unicycle-hero.html',c:'Action'},
-  {n:'Basket Random',u:'Basket-random.html',c:'2 Player'},
-  {n:'1v1 Lol',u:'1v1-lol.html',c:'2 Player'},
-  {n:'Happy Wheels',u:'Happy-wheels.html',c:'Action'},
-  {n:'Idle Miner Tycoon',u:'Idle-miner-tycoon.html',c:'Simulation'},
-  {n:'Jack Smith',u:'Jack-smith.html',c:'Action'},
-  {n:'Tunnel Rush',u:'Tunnel-rush.html',c:'Racing'},
-  {n:'Duck Life 5',u:'Duck-life-5.html',c:'Simulation'},
-  {n:'Duck Life 4',u:'Duck-life-4.html',c:'Simulation'},
-  {n:'Mob Control',u:'Mob-control.html',c:'Action'},
-  {n:'A Small World Cup',u:'A-small-world-cup.html',c:'2 Player'},
-  {n:'Escape Road',u:'Escape-road.html',c:'Racing'},
-  {n:'QWOP',u:'QWOP.html',c:'Simulation'},
-  {n:'Indian Truck Simulator',u:'Indian-truck-simulator.html',c:'Simulation'},
-  {n:'Doge Miner',u:'Doge-miner.html',c:'Simulation'},
-  {n:'Draw Climber',u:'Draw-climber.html',c:'Racing'},
-  {n:'Slope 3',u:'Slope-3.html',c:'Racing'},
-  {n:'Infinite Craft',u:'Infinte-craft.html',c:'Simulation'},
-  {n:'Block Blast',u:'Block-blast.html',c:'Arcade'},
-  {n:'Melon Playground',u:'Melon-playground.html',c:'Simulation'},
-  {n:'House of Hazards',u:'house-of-hazards.html',c:'2 Player'},
-  {n:'Binding of Isaac',u:'Binding-of-issac.html',c:'Action'},
-  {n:'Troll Face Quest 10',u:'Troll-face-10.html',c:'Puzzle'},
-  {n:'Troll Face Quest 11',u:'Troll-face-11.html',c:'Puzzle'},
-  {n:'Troll Face Quest 12',u:'Troll-face-12.html',c:'Puzzle'},
-  {n:'Ultimate Car Simulator 3',u:'ultimate-car-simulator.html',c:'Racing'},
-  {n:'Wordle',u:'Wordle.html',c:'Puzzle'},
-  {n:'Capybara Clicker',u:'Cappybara-clicker.html',c:'Simulation'},
-  {n:'Bob The Robber 5',u:'bob-robber.html',c:'Action'},
-  {n:'Car Crash 3D',u:'Car-crash-3d.html',c:'Racing'},
-  {n:'BitLife',u:'Bit-life.html',c:'Simulation'},
-  {n:'Plants vs Zombies',u:'Plants-vs-zombies.html',c:'Action'},
-  {n:'Tall Man Run',u:'tall-man-run.html',c:'Racing'},
-  {n:'Tag',u:'tag.html',c:'2 Player'},
-  {n:'Subway Surfers Winter',u:'Subway-Winter.html',c:'Racing'},
-  {n:'Subway Surfers Miami',u:'Subway-miami.html',c:'Racing'},
-  {n:'Hole.io',u:'Hole-io.html',c:'Simulation'},
-  {n:'Drift Boss',u:'Drift-boss.html',c:'Racing'},
-  {n:'Subway Surfers Mexico',u:'Subway-mexico.html',c:'Racing'},
-  {n:'Subway Surfers London',u:'Subway-london.html',c:'Racing'},
-  {n:'Subway Surfers Iceland',u:'Subway-iceland.html',c:'Racing'},
-  {n:'Granny 2',u:'Granny2.html',c:'Puzzle'},
-  {n:'Granny 3',u:'Granny3.html',c:'Puzzle'},
-  {n:'Factory Balls 2',u:'Factory-balls2.html',c:'Simulation'},
-  {n:'Factory Balls 3',u:'Factory-balls3.html',c:'Simulation'},
-  {n:'Geometry Dash Lite',u:'Geometry-Dash.html',c:'Racing'},
-  {n:'Hardware Tycoon',u:'Hardware-tycoon.html',c:'Arcade'},
-  {n:'CSGO Clicker',u:'CsGo-clicker.html',c:'Arcade'},
-  {n:'Crossy Road',u:'Crossy-road.html',c:'Arcade'},
-  {n:'Burrito Bison',u:'BB.html',c:'Arcade'},
-  {n:'Burrito Bison Launcha Libre',u:'BL.html',c:'Arcade'},
-  {n:'Burrito Bison Revenge',u:'BR.html',c:'Arcade'},
-  {n:'Space Waves',u:'Space-waves.html',c:'Arcade'},
-  {n:'Zelda Ocarina',u:'Zelda0.html',c:'Arcade'},
-  {n:'Pokemon Emerald Randomized',u:'PER.html',c:'Arcade'},
-  {n:'Rooftop Snipers',u:'RF.html',c:'2 Player'},
-  {n:'Ultimate Car Simulator',u:'Ucarsim.html',c:'Racing'},
-  {n:'Traffic Jam 3D',u:'Tj.html',c:'Arcade'},
-  {n:"Papa's Freezeria",u:'Pf.html',c:'Simulation'},
-  {n:"Papa's Pastaria",u:'Pp.html',c:'Simulation'},
-  {n:"Papa's Sushiria",u:'Ps.html',c:'Simulation'},
-  {n:'Ballz',u:'Ballz.html',c:'Arcade'},
-  {n:'10 Minutes Till Dawn',u:'10min.html',c:'Arcade'},
-  {n:'Minecraft',u:'EaglerCraft 1.12 [wasm].html',c:'Arcade'},
-  {n:'Rocket League',u:'goal.html',c:'Arcade'},
-  {n:'Pixel Battleground',u:'pg.html',c:'Arcade'},
-  {n:'BTD5',u:'BTD5.html',c:'Arcade'},
-  {n:'Brotato',u:'BroT.html',c:'Arcade'},
-  {n:'Dungeons & Degenerate Gamblers',u:'DaDG.html',c:'Arcade'},
-  {n:'Eggy Car',u:'eggy.html',c:'Puzzle'},
-  {n:'Mr. Mine',u:'miner.html',c:'Arcade'},
-  {n:'Jet Rush',u:'jet.html',c:'Racing'},
-  {n:'Moto X3M Spooky Land',u:'motosp.html',c:'Racing'},
-  {n:'Moto X3M Pool Party',u:'motobp.html',c:'Racing'},
-  {n:'Shred Sauce',u:'ShredS.html',c:'Racing'},
-  {n:'Choppy Orc',u:'ChoppyO.html',c:'Arcade'},
-  {n:'Bad Ice Cream 3',u:'BI3.html',c:'Arcade'},
-];
-
+const GAMES=[{n:'Ragdoll Archers',u:'Ragdoll-Archers.html',c:'Action'},{n:'Ragdoll Hit',u:'Ragdoll-hit.html',c:'Action'},{n:'Time Shooter',u:'Time-shooter.html',c:'Action'},{n:'Retro Bowl',u:'Retro-bowl.html',c:'Arcade'},{n:'Snow Rider',u:'Snow-Rider.html',c:'Racing'},{n:'Swords And Sandals',u:'Swords-and-sandlas.html',c:'Action'},{n:'Crazy Cattle',u:'Crazy-cattle.html',c:'Arcade'},{n:'Gladi Hoppers',u:'Gladi-hoppers.html',c:'Action'},{n:'Bit Planes',u:'Bit-planes.html',c:'Arcade'},{n:'Final Earth 2',u:'Final-earth2.html',c:'Strategy'},{n:'Cluster Rush',u:'Cluster-rush.html',c:'Arcade'},{n:'Push Your Luck',u:'Push-your-luck.html',c:'Arcade'},{n:'Poly Track',u:'Poly-track.html',c:'Racing'},{n:'Ragdoll Soccer',u:'Ragdoll-soccer.html',c:'2 Player'},{n:'Jetpack Joy Ride',u:'Jetpack-joy-ride.html',c:'Action'},{n:'Learn To Fly 3',u:'Learn-to-fly-3.html',c:'Racing'},{n:'Malidin Stun Cars',u:'Malidin-stun-cars.html',c:'Racing'},{n:'Gun Spin',u:'Gun-spin.html',c:'Action'},{n:'Age Of War',u:'Age-of-war.html',c:'Strategy'},{n:'Moto X3M 2',u:'Moto-x3m-2.html',c:'Racing'},{n:'Moto X3M Winter',u:'Moto-x3m-winter.html',c:'Racing'},{n:'Basketball Stars',u:'Basketball-stars.html',c:'2 Player'},{n:'Idle Breakout',u:'Idle-breakout.html',c:'Arcade'},{n:'Vex 8',u:'Vex-8.html',c:'Action'},{n:'Tiny Fishing',u:'Tiny-fishing.html',c:'Simulation'},{n:'Drive Mad',u:'Drive-mad.html',c:'Racing'},{n:'Stick Man Hook',u:'Stick-man-hook.html',c:'Action'},{n:'Line Rider',u:'Line-rider.html',c:'Racing'},{n:'Unicycle Hero',u:'Unicycle-hero.html',c:'Action'},{n:'Basket Random',u:'Basket-random.html',c:'2 Player'},{n:'1v1 Lol',u:'1v1-lol.html',c:'2 Player'},{n:'Happy Wheels',u:'Happy-wheels.html',c:'Action'},{n:'Idle Miner Tycoon',u:'Idle-miner-tycoon.html',c:'Simulation'},{n:'Jack Smith',u:'Jack-smith.html',c:'Action'},{n:'Tunnel Rush',u:'Tunnel-rush.html',c:'Racing'},{n:'Duck Life 5',u:'Duck-life-5.html',c:'Simulation'},{n:'Duck Life 4',u:'Duck-life-4.html',c:'Simulation'},{n:'Mob Control',u:'Mob-control.html',c:'Action'},{n:'A Small World Cup',u:'A-small-world-cup.html',c:'2 Player'},{n:'Escape Road',u:'Escape-road.html',c:'Racing'},{n:'QWOP',u:'QWOP.html',c:'Simulation'},{n:'Indian Truck Simulator',u:'Indian-truck-simulator.html',c:'Simulation'},{n:'Doge Miner',u:'Doge-miner.html',c:'Simulation'},{n:'Draw Climber',u:'Draw-climber.html',c:'Racing'},{n:'Slope 3',u:'Slope-3.html',c:'Racing'},{n:'Infinite Craft',u:'Infinte-craft.html',c:'Simulation'},{n:'Block Blast',u:'Block-blast.html',c:'Arcade'},{n:'Melon Playground',u:'Melon-playground.html',c:'Simulation'},{n:'House of Hazards',u:'house-of-hazards.html',c:'2 Player'},{n:'Binding of Isaac',u:'Binding-of-issac.html',c:'Action'},{n:'Troll Face Quest 10',u:'Troll-face-10.html',c:'Puzzle'},{n:'Troll Face Quest 11',u:'Troll-face-11.html',c:'Puzzle'},{n:'Troll Face Quest 12',u:'Troll-face-12.html',c:'Puzzle'},{n:'Ultimate Car Simulator 3',u:'ultimate-car-simulator.html',c:'Racing'},{n:'Wordle',u:'Wordle.html',c:'Puzzle'},{n:'Capybara Clicker',u:'Cappybara-clicker.html',c:'Simulation'},{n:'Bob The Robber 5',u:'bob-robber.html',c:'Action'},{n:'Car Crash 3D',u:'Car-crash-3d.html',c:'Racing'},{n:'BitLife',u:'Bit-life.html',c:'Simulation'},{n:'Plants vs Zombies',u:'Plants-vs-zombies.html',c:'Action'},{n:'Tall Man Run',u:'tall-man-run.html',c:'Racing'},{n:'Tag',u:'tag.html',c:'2 Player'},{n:'Subway Surfers Winter',u:'Subway-Winter.html',c:'Racing'},{n:'Subway Surfers Miami',u:'Subway-miami.html',c:'Racing'},{n:'Hole.io',u:'Hole-io.html',c:'Simulation'},{n:'Drift Boss',u:'Drift-boss.html',c:'Racing'},{n:'Subway Surfers Mexico',u:'Subway-mexico.html',c:'Racing'},{n:'Subway Surfers London',u:'Subway-london.html',c:'Racing'},{n:'Subway Surfers Iceland',u:'Subway-iceland.html',c:'Racing'},{n:'Granny 2',u:'Granny2.html',c:'Puzzle'},{n:'Granny 3',u:'Granny3.html',c:'Puzzle'},{n:'Factory Balls 2',u:'Factory-balls2.html',c:'Simulation'},{n:'Factory Balls 3',u:'Factory-balls3.html',c:'Simulation'},{n:'Geometry Dash Lite',u:'Geometry-Dash.html',c:'Racing'},{n:'Hardware Tycoon',u:'Hardware-tycoon.html',c:'Arcade'},{n:'CSGO Clicker',u:'CsGo-clicker.html',c:'Arcade'},{n:'Crossy Road',u:'Crossy-road.html',c:'Arcade'},{n:'Burrito Bison',u:'BB.html',c:'Arcade'},{n:'Burrito Bison Launcha Libre',u:'BL.html',c:'Arcade'},{n:'Burrito Bison Revenge',u:'BR.html',c:'Arcade'},{n:'Space Waves',u:'Space-waves.html',c:'Arcade'},{n:'Zelda Ocarina',u:'Zelda0.html',c:'Arcade'},{n:'Pokemon Emerald Randomized',u:'PER.html',c:'Arcade'},{n:'Rooftop Snipers',u:'RF.html',c:'2 Player'},{n:'Ultimate Car Simulator',u:'Ucarsim.html',c:'Racing'},{n:'Traffic Jam 3D',u:'Tj.html',c:'Arcade'},{n:"Papa's Freezeria",u:'Pf.html',c:'Simulation'},{n:"Papa's Pastaria",u:'Pp.html',c:'Simulation'},{n:"Papa's Sushiria",u:'Ps.html',c:'Simulation'},{n:'Ballz',u:'Ballz.html',c:'Arcade'},{n:'10 Minutes Till Dawn',u:'10min.html',c:'Arcade'},{n:'Minecraft',u:'EaglerCraft 1.12 [wasm].html',c:'Arcade'},{n:'Rocket League',u:'goal.html',c:'Arcade'},{n:'Pixel Battleground',u:'pg.html',c:'Arcade'},{n:'BTD5',u:'BTD5.html',c:'Arcade'},{n:'Brotato',u:'BroT.html',c:'Arcade'},{n:'Dungeons & Degenerate Gamblers',u:'DaDG.html',c:'Arcade'},{n:'Eggy Car',u:'eggy.html',c:'Puzzle'},{n:'Mr. Mine',u:'miner.html',c:'Arcade'},{n:'Jet Rush',u:'jet.html',c:'Racing'},{n:'Moto X3M Spooky Land',u:'motosp.html',c:'Racing'},{n:'Moto X3M Pool Party',u:'motobp.html',c:'Racing'},{n:'Shred Sauce',u:'ShredS.html',c:'Racing'},{n:'Choppy Orc',u:'ChoppyO.html',c:'Arcade'},{n:'Bad Ice Cream 3',u:'BI3.html',c:'Arcade'}];
 const CAT_ICON={Action:'⚔️',Racing:'🏎️',Arcade:'🕹️',Puzzle:'🧩',Simulation:'🌍',Strategy:'♟️','2 Player':'👥'};
 const ALL=[...GAMES].sort((a,b)=>a.n.localeCompare(b.n));
 const NEW_SET=new Set(GAMES.slice(-6).map(g=>g.n));
 const URL_MAP=new Map(ALL.map(g=>[g.u,g.n]));
-
 const $=id=>document.getElementById(id);
 const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label'),
       search=$('search'),overlay=$('overlay'),gframe=$('gframe'),
       gload=$('gload'),bar=$('bar'),barLbl=$('bar-lbl'),
       fsBtn=$('fs-btn'),bkBtn=$('bk-btn'),
-      browserPage=$('browser-page'),
+      browserPage=$('browser-page'),browserIframe=$('browser-iframe'),
       settingsBtn=$('settings-btn'),drawer=$('drawer'),modal=$('modal'),
       mName=$('m-name'),mCat=$('m-cat'),mPlayed=$('m-played'),
       mLast=$('m-last'),mTime=$('m-time'),mPlay=$('m-play'),
       mClose=$('m-close'),mFav=$('m-fav'),
       brightIn=$('bright-in'),brightNum=$('bright-num'),navCats=$('nav-cats');
-
 let activeCat=get('cat')||'New',activeSearch='',curModal=null,gameStart=null;
 let showPlays=get('showplays')!=='off';
 let showNew=get('shownew')!=='off';
-
 const cats=[...new Set(ALL.map(g=>g.c))].sort();
-cats.forEach(c=>{
-  const btn=document.createElement('button');
-  btn.className='nav-btn';btn.dataset.cat=c;
-  btn.innerHTML=`<span class="nav-icon">${CAT_ICON[c]||'🎮'}</span>${c}`;
-  navCats.appendChild(btn);
-});
+cats.forEach(c=>{const btn=document.createElement('button');btn.className='nav-btn';btn.dataset.cat=c;btn.innerHTML=`<span class="nav-icon">${CAT_ICON[c]||'🎮'}</span>${c}`;navCats.appendChild(btn);});
 function setActiveNavBtn(cat){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));}
 setActiveNavBtn(activeCat);
-document.querySelectorAll('.nav-btn').forEach(btn=>{
-  btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};
-});
-
+document.querySelectorAll('.nav-btn').forEach(btn=>{btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};});
 function makeCard(g,favs){
   const fav=favs.includes(g.n);const s=getStats(g.n);
   const card=document.createElement('div');card.className='card';card.dataset.n=g.n;
   const thumb=document.createElement('div');thumb.className='card-thumb';
   const grad=document.createElement('div');grad.className='card-thumb-grad';grad.style.background=gradForName(g.n);
   const init=document.createElement('div');init.className='card-initials';init.textContent=initialsFor(g.n);
-  const playBadge=document.createElement('div');
-  playBadge.className='card-plays'+(showPlays&&s.p>0?' show':'');
-  playBadge.textContent=`▶ ${s.p}`;
+  const playBadge=document.createElement('div');playBadge.className='card-plays'+(showPlays&&s.p>0?' show':'');playBadge.textContent=`▶ ${s.p}`;
   if(NEW_SET.has(g.n)&&showNew){const nb=document.createElement('div');nb.className='card-new-badge';nb.textContent='NEW';thumb.appendChild(nb);}
   thumb.appendChild(grad);thumb.appendChild(init);thumb.appendChild(playBadge);
-  const favBtn=document.createElement('button');
-  favBtn.className='card-fav'+(fav?' on':'');favBtn.textContent=fav?'★':'☆';
+  const favBtn=document.createElement('button');favBtn.className='card-fav'+(fav?' on':'');favBtn.textContent=fav?'★':'☆';
   favBtn.onclick=e=>{e.stopPropagation();const now=toggleFav(g.n);favBtn.textContent=now?'★':'☆';favBtn.classList.toggle('on',now);renderGames();};
   thumb.appendChild(favBtn);
   const info=document.createElement('div');info.className='card-info';
   const name=document.createElement('div');name.className='card-name';name.textContent=g.n;
   const cat=document.createElement('div');cat.className='card-cat';cat.textContent=g.c;
-  info.appendChild(name);info.appendChild(cat);
-  card.appendChild(thumb);card.appendChild(info);
-  card.onclick=()=>openModal(g.n);
-  return card;
+  info.appendChild(name);info.appendChild(cat);card.appendChild(thumb);card.appendChild(info);card.onclick=()=>openModal(g.n);return card;
 }
-
 function renderGames(){
   const favs=getFavs();let list=ALL;
   if(activeCat==='Recent'){const rec=getRecent();list=rec.map(n=>ALL.find(g=>g.n===n)).filter(Boolean);}
@@ -587,28 +438,22 @@ function renderGames(){
   const rc=document.createElement('div');rc.className='card-cat';rc.textContent='Submit your request';
   rinfo.appendChild(rn);rinfo.appendChild(rc);req.appendChild(rt);req.appendChild(rinfo);
   req.onclick=()=>window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
-  frag.appendChild(req);
-  gameList.replaceChildren(frag);
+  frag.appendChild(req);gameList.replaceChildren(frag);
 }
-
 let searchTimer;
 search.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{activeSearch=e.target.value;if(activeSearch)setActiveNavBtn(null);else setActiveNavBtn(activeCat);renderGames();},160);});
-
 function openModal(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   curModal=name;const s=getStats(name);
-  mName.textContent=name;mCat.textContent=g.c;
-  mPlayed.textContent=s.p||0;mLast.textContent=s.d||'Never';mTime.textContent=fmtTime(s.t||0);
+  mName.textContent=name;mCat.textContent=g.c;mPlayed.textContent=s.p||0;mLast.textContent=s.d||'Never';mTime.textContent=fmtTime(s.t||0);
   mPlay.onclick=()=>launchGame(name);
   const fav=isFav(name);mFav.textContent=fav?'★':'☆';mFav.classList.toggle('on',fav);
   $('m-thumb-grad').style.background=gradForName(name);$('m-thumb-title').textContent=initialsFor(name);
   drawer.classList.remove('on');modal.classList.add('on');
 }
 function closeModal(){modal.classList.remove('on');curModal=null;}
-mClose.onclick=closeModal;
-modal.onclick=e=>{if(e.target===modal)closeModal();};
+mClose.onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal();};
 mFav.onclick=()=>{if(!curModal)return;const now=toggleFav(curModal);mFav.textContent=now?'★':'☆';mFav.classList.toggle('on',now);renderGames();};
-
 function launchGame(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   const s=getStats(name);s.p=(s.p||0)+1;s.d=new Date().toLocaleDateString();saveStats(name,s);addRecent(name);
@@ -617,8 +462,7 @@ function launchGame(name){
   bar.style.width='0';barLbl.textContent='0%';
   const T=3000,t0=performance.now();let barDone=false,ifrDone=false;
   function tick(now){const raw=Math.min((now-t0)/T,1);const pct=Math.round((1-Math.pow(1-raw,2))*100);bar.style.width=pct+'%';barLbl.textContent=pct+'%';if(raw<1)requestAnimationFrame(tick);else{barDone=true;if(ifrDone)gload.classList.add('hide');}}
-  requestAnimationFrame(tick);
-  gameStart=Date.now();gframe.src=g.u;
+  requestAnimationFrame(tick);gameStart=Date.now();gframe.src=g.u;
   gframe.onload=()=>{ifrDone=true;if(barDone)gload.classList.add('hide');};
 }
 function closeGame(){
@@ -628,30 +472,36 @@ function closeGame(){
 }
 bkBtn.onclick=closeGame;
 fsBtn.onclick=()=>{if(gframe.requestFullscreen)gframe.requestFullscreen();};
-
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();}
+  if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();else if(browserPage.classList.contains('on'))goToGames();}
   if((e.key==='f'||e.key==='F')&&overlay.classList.contains('on')){e.preventDefault();fsBtn.click();}
 });
-
 settingsBtn.onclick=e=>{e.stopPropagation();drawer.classList.toggle('on');};
 $('dr-close').onclick=()=>drawer.classList.remove('on');
 document.addEventListener('click',e=>{if(!e.target.closest('#drawer')&&!e.target.closest('#settings-btn'))drawer.classList.remove('on');});
 document.querySelectorAll('.dr-tab').forEach(btn=>{
-  btn.onclick=()=>{
-    document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
-    document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));$('dpanel-'+btn.dataset.dpanel).classList.add('on');
-    if(btn.dataset.dpanel==='stats')refreshStats();
-  };
+  btn.onclick=()=>{document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));$('dpanel-'+btn.dataset.dpanel).classList.add('on');if(btn.dataset.dpanel==='stats')refreshStats();};
 });
+
+// ── BROWSER — full tab with back button ───────────────────────────────────────
+const BROWSER_URL='https://unpkg.com/bluebook-testing@3.1.3/index.html';
+let browserLoaded=false;
+
+function goToBrowser(){
+  // Load iframe only on first visit (lazy load)
+  if(!browserLoaded){browserIframe.src=BROWSER_URL;browserLoaded=true;}
+  browserPage.classList.add('on');
+  drawer.classList.remove('on');
+}
+function goToGames(){
+  browserPage.classList.remove('on');
+}
 
 $('nav-browser-btn').onclick=()=>{$('brw-popup').classList.add('on');};
 $('brw-ok').onclick=()=>{$('brw-popup').classList.remove('on');goToBrowser();};
-function goToBrowser(){browserPage.classList.add('on');$('main').style.display='none';drawer.classList.remove('on');}
+$('browser-back-btn').onclick=goToGames;
 
-function makePicker(sel,attr,cb){
-  document.querySelectorAll(sel).forEach(o=>{o.onclick=()=>{document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));o.classList.add('on');cb(o.getAttribute(attr));};});
-}
+function makePicker(sel,attr,cb){document.querySelectorAll(sel).forEach(o=>{o.onclick=()=>{document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));o.classList.add('on');cb(o.getAttribute(attr));};});}
 makePicker('[data-theme]','data-theme',applyAccent);
 makePicker('[data-card]','data-card',applyCard);
 makePicker('[data-gc]','data-gc',applyBgCol);
@@ -670,7 +520,6 @@ function applyShowCtr(v){$('counter').style.display=v==='off'?'none':'';set('sho
 makePicker('[data-showctr]','data-showctr',applyShowCtr);
 makePicker('[data-showplays]','data-showplays',v=>{showPlays=v==='on';set('showplays',v);renderGames();});
 makePicker('[data-shownew]','data-shownew',v=>{showNew=v==='on';set('shownew',v);renderGames();});
-
 function refreshStats(){
   let totalPlays=0,totalTime=0,uniquePlayed=0;const playData=[];
   ALL.forEach(g=>{const s=getStats(g.n);if(s.p>0){uniquePlayed++;totalPlays+=s.p;totalTime+=s.t||0;playData.push({n:g.n,p:s.p});}});
@@ -680,21 +529,15 @@ function refreshStats(){
   if(!playData.length){tl.innerHTML='<div style="color:rgba(255,255,255,.3);font-size:13px;padding:8px 0;">No games played yet!</div>';return;}
   tl.innerHTML=playData.slice(0,5).map((d,i)=>`<div class="top-game-row"><span class="top-game-rank">#${i+1}</span><span class="top-game-name">${d.n}</span><span class="top-game-plays">${d.p}x</span></div>`).join('');
 }
-$('reset-stats-btn').onclick=()=>{
-  if(!confirm('Reset all play stats?'))return;
-  ALL.forEach(g=>ls.removeItem('mls_'+g.n));ls.removeItem('ml_recent');renderGames();refreshStats();
-};
-
-const canvas=$('bg');
-const ctx=canvas.getContext('2d',{alpha:false});
+$('reset-stats-btn').onclick=()=>{if(!confirm('Reset all play stats?'))return;ALL.forEach(g=>ls.removeItem('mls_'+g.n));ls.removeItem('ml_recent');renderGames();refreshStats();};
+const canvas=$('bg');const ctx=canvas.getContext('2d',{alpha:false});
 let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0;
 function initBg(){
   if(curBg==='stars'){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*cw,y:Math.random()*ch,r:Math.random()*1.8+.3,a:Math.random()*Math.PI*2,spd:Math.random()*.04+.01});}
   if(curBg==='neonrain'){drops=[];const cols=Math.floor(cw/18)||1;for(let i=0;i<cols;i++)drops.push({x:i*18+Math.random()*10,y:Math.random()*ch,spd:Math.random()*2+1,len:Math.random()*80+30,a:Math.random()*.6+.2});}
 }
 function resize(){cw=canvas.width=window.innerWidth;ch=canvas.height=window.innerHeight;initBg();}
-resize();
-let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);});
+resize();let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);});
 function getCol(){const p=GC_PALETTES[curGC]||GC_PALETTES.purple;const ph=(time/150)%3;return ph<1?p.c1:ph<2?p.c2:p.c3;}
 let fc=0;
 function draw(){
@@ -713,15 +556,10 @@ function draw(){
   ctx.globalAlpha=1;
 }
 draw();
-
-// Restore settings
-const sT=get('theme')||'purple',sC=get('card')||'purple',
-      sGC=get('gc')||'purple',sBg=get('bg')||'stars',
-      sBr=parseFloat(get('bright')||'100');
+const sT=get('theme')||'purple',sC=get('card')||'purple',sGC=get('gc')||'purple',sBg=get('bg')||'stars',sBr=parseFloat(get('bright')||'100');
 applyBgCol(sGC);applyBgStyle(sBg);applyAccent(sT);applyCard(sC);applyBrightness(sBr);
 const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>o.classList.toggle('on',o.getAttribute(attr)===val));};
-mark('[data-theme]','data-theme',sT);mark('[data-card]','data-card',sC);
-mark('[data-gc]','data-gc',sGC);mark('[data-bg]','data-bg',sBg);
+mark('[data-theme]','data-theme',sT);mark('[data-card]','data-card',sC);mark('[data-gc]','data-gc',sGC);mark('[data-bg]','data-bg',sBg);
 brightIn.value=sBr;brightNum.textContent=sBr;
 const sGlow=get('glow')||'on';applyGlow(sGlow);mark('[data-glow]','data-glow',sGlow);
 const sHover=get('hover')||'on';applyHover(sHover);mark('[data-hover]','data-hover',sHover);
@@ -730,17 +568,11 @@ const sLC=get('logocol')||'cyan';applyLogoCol(sLC);mark('[data-logocol]','data-l
 const sCtr=get('showctr')||'on';applyShowCtr(sCtr);mark('[data-showctr]','data-showctr',sCtr);
 const sSP=get('showplays')||'on';showPlays=sSP==='on';mark('[data-showplays]','data-showplays',sSP);
 const sSN=get('shownew')||'on';showNew=sSN==='on';mark('[data-shownew]','data-shownew',sSN);
-
-// ── VERSION POPUP ─────────────────────────────────────────────────────────────
-// Change VER to trigger the popup on next load — it compares against localStorage
 const VER='1.5';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
-
-// Tutorial
 if(ls.getItem('ml_tut3')!=='1'){$('tut-box').classList.add('on');}
 $('tut-ok').onclick=()=>{$('tut-box').classList.remove('on');ls.setItem('ml_tut3','1');};
-
 renderGames();
 })();
 </script>
