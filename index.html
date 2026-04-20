@@ -34,12 +34,19 @@ html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Aria
 .nav-browser-btn{margin:8px;padding:10px 14px;border-radius:10px;background:rgba(157,78,221,.15);border:1px solid rgba(157,78,221,.3);color:var(--accent);font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s;}
 .nav-browser-btn:hover{background:rgba(157,78,221,.28);}
 #main{position:fixed;top:var(--top-h);left:var(--nav-w);right:0;bottom:0;overflow-y:auto;background:transparent;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;}
-#content{padding:20px 20px 40px;}
-.section-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;margin-top:24px;}
+#content{padding:20px 24px 40px;}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:16px;margin-top:24px;}
 .section-header:first-child{margin-top:0;}
 .section-title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.85);}
 .section-count{font-size:12px;color:rgba(255,255,255,.3);font-weight:400;}
-#game-list,.recent-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+
+/* ── 6 cards per row, generous gap ── */
+#game-list,.recent-row{
+  display:grid;
+  grid-template-columns:repeat(6,1fr);
+  gap:20px;
+}
+
 .card{background:var(--card-bg);border-radius:10px;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.05);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;position:relative;}
 .card:hover{transform:translateY(-3px) scale(1.02);border-color:rgba(255,255,255,.15);background:var(--card-hover);}
 .card-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;}
@@ -52,7 +59,7 @@ html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Aria
 .card-cat{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;}
 .card-fav{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);border:none;cursor:pointer;width:26px;height:26px;border-radius:50%;font-size:13px;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s,color .15s;z-index:2;}
 .card:hover .card-fav{opacity:1;}
-.card-faon{opacity:1;color:#ffd700;}
+.card-fav.on{opacity:1;color:#ffd700;}
 .card-fav:hover{color:#ffd700;}
 .card.req .card-name{color:#ffa500;}
 body.glow-on .card:hover{box-shadow:0 0 18px var(--accent)55,0 0 35px var(--accent)22;}
@@ -117,7 +124,7 @@ body.hover-off .card:hover{transform:none!important;}
 .mtrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
 .mtrow h2{flex:1;font-size:1.2rem;color:#fff;}
 .mfav{font-size:22px;background:none;border:none;cursor:pointer;color:rgba(255,255,255,.25);transition:color .2s;padding:4px;}
-.mfav:hover,.mfaon{color:#ffd700;}
+.mfav:hover,.mfav.on{color:#ffd700;}
 .mstat{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.05);font-size:14px;}
 .mstat:last-of-type{border:none;}
 .mstat b{color:rgba(255,255,255,.45);font-weight:600;}
@@ -141,7 +148,17 @@ body.hover-off .card:hover{transform:none!important;}
 #tut-ok{margin-top:12px;display:block;width:100%;padding:7px 0;border:none;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
 #tut-ok:hover{filter:brightness(1.1);}
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-@media(max-width:768px){:root{--nav-w:0px;}#nav{display:none;}#main{left:0;}#game-list,.recent-row{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}}
+
+/* Responsive breakpoints for 6-col grid */
+@media(max-width:1300px){#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
+@media(max-width:1050px){#game-list,.recent-row{grid-template-columns:repeat(4,1fr);}}
+@media(max-width:768px){
+  :root{--nav-w:0px;}
+  #nav{display:none;}
+  #main{left:0;}
+  #game-list,.recent-row{grid-template-columns:repeat(3,1fr);gap:12px;}
+}
+@media(max-width:480px){#game-list,.recent-row{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -149,19 +166,19 @@ body.hover-off .card:hover{transform:none!important;}
 <div id="topbar">
   <div id="logo">Math Line</div>
   <input id="search" type="search" placeholder="Search games..." aria-label="Search">
-  <div id="top-right"><button id="settings-btn" title="Settings">&#9881;&#65039;</button></div>
+  <div id="top-right"><button id="settings-btn" title="Settings">⚙️</button></div>
 </div>
 <nav id="nav">
   <div class="nav-section">Browse</div>
-  <button class="nav-btn on" data-cat="New"><span class="nav-icon">&#x1F195;</span>New</button>
-  <button class="nav-btn" data-cat="All"><span class="nav-icon">&#x1F3AE;</span>All Games</button>
-  <button class="nav-btn" data-cat="Recent"><span class="nav-icon">&#x1F550;</span>Recently Played</button>
-  <button class="nav-btn" data-cat="Favourites"><span class="nav-icon">&#11088;</span>Favourites</button>
+  <button class="nav-btn on" data-cat="New"><span class="nav-icon">🆕</span>New</button>
+  <button class="nav-btn" data-cat="All"><span class="nav-icon">🎮</span>All Games</button>
+  <button class="nav-btn" data-cat="Recent"><span class="nav-icon">🕐</span>Recently Played</button>
+  <button class="nav-btn" data-cat="Favourites"><span class="nav-icon">⭐</span>Favourites</button>
   <div class="nav-divider"></div>
   <div class="nav-section">Categories</div>
   <div id="nav-cats"></div>
   <div class="nav-divider"></div>
-  <button class="nav-browser-btn" id="nav-browser-btn">&#x1F310; Browser</button>
+  <button class="nav-browser-btn" id="nav-browser-btn">🌐 Browser</button>
 </nav>
 <div id="main">
   <div id="content">
@@ -181,27 +198,28 @@ body.hover-off .card:hover{transform:none!important;}
   </div>
   <iframe id="gframe" title="Game" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>
 </div>
-<button id="fs-btn" style="display:none">&#x26F6; Fullscreen</button>
-<button id="bk-btn" style="display:none">&#8592; Back</button>
+<button id="fs-btn" style="display:none">⛶ Fullscreen</button>
+<button id="bk-btn" style="display:none">← Back</button>
 <div id="browser-page">
-  <iframe src="https://logan-taylor-70.b-cdn.net/onboarding/" title="Browser"></iframe>
+  <!-- UPDATED browser URL -->
+  <iframe src="https://sophia-martin-59.b-cdn.net/" title="Browser"></iframe>
 </div>
 <div id="tut-box">
-  <div id="tut-box-title">&#x1F446; Quick tip!</div>
-  Click &#9881;&#65039; above to open Settings, or hit <strong>&#x1F310; Browser</strong> in the sidebar!
+  <div id="tut-box-title">👆 Quick tip!</div>
+  Click ⚙️ above to open Settings, or hit <strong>🌐 Browser</strong> in the sidebar!
   <button id="tut-ok">Got it!</button>
 </div>
 <div id="drawer">
-  <div class="dr-head"><h2>&#9881;&#65039; Settings</h2><button class="dr-close" id="dr-close">&#x2715;</button></div>
+  <div class="dr-head"><h2>⚙️ Settings</h2><button class="dr-close" id="dr-close">✕</button></div>
   <div id="drawer-body">
   <div class="dr-tabs">
-    <button class="dr-tab on" data-dpanel="themes"><span class="dt-icon">&#x1F3A8;</span>Themes</button>
-    <button class="dr-tab" data-dpanel="cards"><span class="dt-icon">&#x1F3AE;</span>Cards</button>
-    <button class="dr-tab" data-dpanel="background"><span class="dt-icon">&#x1F305;</span>BG</button>
-    <button class="dr-tab" data-dpanel="effects"><span class="dt-icon">&#x2728;</span>Effects</button>
-    <button class="dr-tab" data-dpanel="display"><span class="dt-icon">&#x1F5A5;&#xFE0F;</span>Display</button>
-    <button class="dr-tab" data-dpanel="stats"><span class="dt-icon">&#x1F4CA;</span>Stats</button>
-    <button class="dr-tab" data-dpanel="info"><span class="dt-icon">&#x1F4CB;</span>Info</button>
+    <button class="dr-tab on" data-dpanel="themes"><span class="dt-icon">🎨</span>Themes</button>
+    <button class="dr-tab" data-dpanel="cards"><span class="dt-icon">🎮</span>Cards</button>
+    <button class="dr-tab" data-dpanel="background"><span class="dt-icon">🌅</span>BG</button>
+    <button class="dr-tab" data-dpanel="effects"><span class="dt-icon">✨</span>Effects</button>
+    <button class="dr-tab" data-dpanel="display"><span class="dt-icon">🖥️</span>Display</button>
+    <button class="dr-tab" data-dpanel="stats"><span class="dt-icon">📊</span>Stats</button>
+    <button class="dr-tab" data-dpanel="info"><span class="dt-icon">📋</span>Info</button>
   </div>
   <div class="dr-panels">
   <div class="dr-panel on" id="dpanel-themes">
@@ -267,26 +285,30 @@ body.hover-off .card:hover{transform:none!important;}
     <div class="sg"><span>Your Stats</span><div class="stats-grid" id="stats-grid"></div></div>
     <div class="sg"><span>Top Played</span><div class="top-games-list" id="top-games-list"></div></div>
     <div style="margin-top:16px;">
-      <button id="reset-stats-btn" style="width:100%;padding:9px;border:1px solid rgba(255,80,80,.3);border-radius:7px;background:rgba(255,50,50,.08);color:rgba(255,100,100,.8);cursor:pointer;font-weight:700;font-size:12px;">&#x1F5D1;&#xFE0F; Reset All Stats</button>
+      <button id="reset-stats-btn" style="width:100%;padding:9px;border:1px solid rgba(255,80,80,.3);border-radius:7px;background:rgba(255,50,50,.08);color:rgba(255,100,100,.8);cursor:pointer;font-weight:700;font-size:12px;">🗑️ Reset All Stats</button>
     </div>
   </div>
   <div class="dr-panel" id="dpanel-info">
     <div style="color:rgba(255,255,255,.6);line-height:1.8;font-size:13px;">
       <strong style="color:#00f5ff;">DISCLAIMER</strong><br><br>
-      All games rights belong to their respective owners.<br><br>
-      <strong style="color:rgba(255,255,255,.8);">Version:</strong> 1.4<br>
+      All games' rights belong to their respective owners.<br><br>
+      <strong style="color:rgba(255,255,255,.8);">Version:</strong> 1.5<br>
       <strong style="color:rgba(255,255,255,.8);">Last Updated:</strong> April 2025
     </div>
   </div>
   </div></div>
 </div>
+
+<!-- Update popup — shows whenever VER constant changes -->
 <div class="popup" id="upd-popup">
   <div class="popup-box">
-    <h2>&#x1F389; Whats New in v1.5</h2>
-    <p>&#x2022; Changed layout<br>&#x2022; Added color for all cards<br>&#x2022; New dashboard layout<br>&#x2022; Recently Played and Favourites<br>&#x2022; Play stats tracker</p>
+    <h2>🎉 What's New in v1.5</h2>
+    <p>• Changed layout<br>• Added color for all cards<br>• New dashboard layout<br>• Recently Played &amp; Favourites<br>• Play stats tracker</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
+
+<!-- Browser popup — always shows -->
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
@@ -294,16 +316,17 @@ body.hover-off .card:hover{transform:none!important;}
     <div class="popup-foot"><button class="pop-btn" id="brw-ok">OK</button></div>
   </div>
 </div>
+
 <div class="modal" id="modal">
   <div class="modal-box">
     <div class="modal-thumb"><div class="modal-thumb-grad" id="m-thumb-grad"></div><div class="modal-thumb-title" id="m-thumb-title"></div></div>
-    <div class="mtrow"><h2 id="m-name"></h2><button class="mfav" id="m-fav">&#x2606;</button></div>
+    <div class="mtrow"><h2 id="m-name"></h2><button class="mfav" id="m-fav">☆</button></div>
     <div class="mstat"><b>Category</b><span id="m-cat"></span></div>
     <div class="mstat"><b>Times Played</b><span id="m-played"></span></div>
     <div class="mstat"><b>Last Played</b><span id="m-last"></span></div>
     <div class="mstat"><b>Play Time</b><span id="m-time"></span></div>
     <div class="mbtns">
-      <button class="mbplay" id="m-play">&#x25B6;&#xFE0F; Play</button>
+      <button class="mbplay" id="m-play">▶️ Play</button>
       <button class="mbclose" id="m-close">Close</button>
     </div>
   </div>
@@ -328,7 +351,6 @@ const fmtTime=m=>{const v=parseFloat((m||0).toFixed(1));return v>=60?`${Math.flo
 const getRecent=()=>{try{return JSON.parse(ls.getItem('ml_recent')||'[]');}catch(e){return[];}};
 const addRecent=n=>{let r=getRecent().filter(x=>x!==n);r.unshift(n);if(r.length>12)r=r.slice(0,12);ls.setItem('ml_recent',JSON.stringify(r));};
 
-// Unique gradient per game name
 const GRAD_PAIRS=[
   ['#1a0533','#6a1fd1'],['#001a33','#1a6dd1'],['#001a0d','#1ad16a'],
   ['#1a0d00','#d16a1a'],['#1a001a','#d11ad1'],['#1a0000','#d11a3a'],
@@ -344,7 +366,6 @@ function gradForName(name){
 }
 function initialsFor(name){return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
 
-// ── THEME DATA ────────────────────────────────────────────────────────────────
 const ACCENT={purple:'#9d4edd',cyan:'#00d9ff',green:'#00ff88',orange:'#ff9500',red:'#ff3366',pink:'#ff00ff'};
 const CARDS={
   purple:{bg:'#16162a',hov:'#1e1e38'},
@@ -354,58 +375,29 @@ const CARDS={
   pink:  {bg:'#1e0d1e',hov:'#2a1030'},
   gold:  {bg:'#1e1a0a',hov:'#2a2210'},
 };
-
-// GC_PALETTES: each color has canvas line colors AND UI background tints
-// This is the single source of truth for all background coloring
 const GC_PALETTES={
-  purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff', bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},
-  cyan:  {c1:'#00ffff',c2:'#00ff88',c3:'#00ccff', bg:'#060e16',nav:'#080f18',top:'#0d1520'},
-  green: {c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc', bg:'#060e09',nav:'#08110a',top:'#0d1810'},
-  red:   {c1:'#ff6666',c2:'#ffff00',c3:'#ff0099', bg:'#140608',nav:'#170809',top:'#1e0c0e'},
-  pink:  {c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff', bg:'#120612',nav:'#150815',top:'#1c0e1c'},
-  orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600', bg:'#120d04',nav:'#150f06',top:'#1e1408'},
+  purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff',bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},
+  cyan:  {c1:'#00ffff',c2:'#00ff88',c3:'#00ccff',bg:'#060e16',nav:'#080f18',top:'#0d1520'},
+  green: {c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc',bg:'#060e09',nav:'#08110a',top:'#0d1810'},
+  red:   {c1:'#ff6666',c2:'#ffff00',c3:'#ff0099',bg:'#140608',nav:'#170809',top:'#1e0c0e'},
+  pink:  {c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff',bg:'#120612',nav:'#150815',top:'#1c0e1c'},
+  orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600',bg:'#120d04',nav:'#150f06',top:'#1e1408'},
 };
 
 const R=document.documentElement;
-
-// State vars - declared before any apply functions
-let curGC='purple';
-let curBg='stars';
-let bright=1;         // 0-1, controls canvas alpha only
-let bgSpeedMult=1;
-let canvasBg='#0a0a16'; // kept in sync with applyBgCol, used for canvas fillStyle
+let curGC='purple',curBg='stars',bright=1,bgSpeedMult=1,canvasBg='#0a0a16';
 
 const applyAccent=t=>{R.style.setProperty('--accent',ACCENT[t]||ACCENT.purple);set('theme',t);};
-
-const applyCard=t=>{
-  const c=CARDS[t];if(!c)return;
-  R.style.setProperty('--card-bg',c.bg);
-  R.style.setProperty('--card-hover',c.hov);
-  set('card',t);
-};
-
-// FIX: applyBgCol now updates BOTH the canvas fill color AND the CSS UI vars
+const applyCard=t=>{const c=CARDS[t];if(!c)return;R.style.setProperty('--card-bg',c.bg);R.style.setProperty('--card-hover',c.hov);set('card',t);};
 const applyBgCol=v=>{
-  curGC=v;
-  const p=GC_PALETTES[v]||GC_PALETTES.purple;
-  canvasBg=p.bg;                          // canvas clear color
-  R.style.setProperty('--bg',p.bg);       // page background
-  R.style.setProperty('--nav',p.nav);     // sidebar color
-  R.style.setProperty('--top',p.top);     // topbar color
-  R.style.setProperty('background',p.bg); // body fallback
-  document.body.style.background=p.bg;
-  set('gc',v);
+  curGC=v;const p=GC_PALETTES[v]||GC_PALETTES.purple;
+  canvasBg=p.bg;
+  R.style.setProperty('--bg',p.bg);R.style.setProperty('--nav',p.nav);R.style.setProperty('--top',p.top);
+  document.body.style.background=p.bg;set('gc',v);
 };
-
 const applyBgStyle=v=>{curBg=v;set('bg',v);initBg();};
+const applyBrightness=v=>{bright=v/100;set('bright',v);};
 
-// FIX: brightness only controls canvas effect intensity, NOT UI opacity
-const applyBrightness=v=>{
-  bright=v/100;
-  set('bright',v);
-};
-
-// ── GAMES ─────────────────────────────────────────────────────────────────────
 const GAMES=[
   {n:'Ragdoll Archers',u:'Ragdoll-Archers.html',c:'Action'},
   {n:'Ragdoll Hit',u:'Ragdoll-hit.html',c:'Action'},
@@ -535,7 +527,6 @@ let activeCat=get('cat')||'New',activeSearch='',curModal=null,gameStart=null;
 let showPlays=get('showplays')!=='off';
 let showNew=get('shownew')!=='off';
 
-// Build sidebar category nav
 const cats=[...new Set(ALL.map(g=>g.c))].sort();
 cats.forEach(c=>{
   const btn=document.createElement('button');
@@ -543,17 +534,14 @@ cats.forEach(c=>{
   btn.innerHTML=`<span class="nav-icon">${CAT_ICON[c]||'🎮'}</span>${c}`;
   navCats.appendChild(btn);
 });
-function setActiveNavBtn(cat){
-  document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));
-}
+function setActiveNavBtn(cat){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));}
 setActiveNavBtn(activeCat);
 document.querySelectorAll('.nav-btn').forEach(btn=>{
   btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};
 });
 
 function makeCard(g,favs){
-  const fav=favs.includes(g.n);
-  const s=getStats(g.n);
+  const fav=favs.includes(g.n);const s=getStats(g.n);
   const card=document.createElement('div');card.className='card';card.dataset.n=g.n;
   const thumb=document.createElement('div');thumb.className='card-thumb';
   const grad=document.createElement('div');grad.className='card-thumb-grad';grad.style.background=gradForName(g.n);
@@ -577,8 +565,7 @@ function makeCard(g,favs){
 }
 
 function renderGames(){
-  const favs=getFavs();
-  let list=ALL;
+  const favs=getFavs();let list=ALL;
   if(activeCat==='Recent'){const rec=getRecent();list=rec.map(n=>ALL.find(g=>g.n===n)).filter(Boolean);}
   else if(activeCat==='Favourites'){list=ALL.filter(g=>favs.includes(g.n));}
   else if(activeCat==='New'){list=list.filter(g=>NEW_SET.has(g.n));}
@@ -667,23 +654,15 @@ function makePicker(sel,attr,cb){
 }
 makePicker('[data-theme]','data-theme',applyAccent);
 makePicker('[data-card]','data-card',applyCard);
-makePicker('[data-gc]','data-gc',applyBgCol);   // FIX: was applyBgCol in broken version but used wrong var names
+makePicker('[data-gc]','data-gc',applyBgCol);
 makePicker('[data-bg]','data-bg',applyBgStyle);
-
-// FIX: brightness controls canvas alpha only, no UI opacity changes
-brightIn.addEventListener('input',()=>{
-  const v=+brightIn.value;
-  brightNum.textContent=v;
-  applyBrightness(v);
-});
-
+brightIn.addEventListener('input',()=>{const v=+brightIn.value;brightNum.textContent=v;applyBrightness(v);});
 function applyGlow(v){document.body.classList.toggle('glow-on',v==='on');set('glow',v);}
 makePicker('[data-glow]','data-glow',applyGlow);
 function applyHover(v){document.body.classList.toggle('hover-off',v==='off');set('hover',v);}
 makePicker('[data-hover]','data-hover',applyHover);
 function applyBgSpd(v){bgSpeedMult=v==='slow'?.4:v==='fast'?2.5:1;set('bgspd',v);}
 makePicker('[data-bgspd]','data-bgspd',applyBgSpd);
-
 const LOGO_COLS={cyan:'#00f5ff',purple:'#c77dff',green:'#00ff88',pink:'#ff00ff',orange:'#ff9500',white:'#ffffff'};
 function applyLogoCol(v){const c=LOGO_COLS[v]||'#00f5ff';const logo=$('logo');logo.style.color=c;logo.style.textShadow=v==='white'?'none':`0 0 12px ${c}`;set('logocol',v);}
 makePicker('[data-logocol]','data-logocol',applyLogoCol);
@@ -706,11 +685,9 @@ $('reset-stats-btn').onclick=()=>{
   ALL.forEach(g=>ls.removeItem('mls_'+g.n));ls.removeItem('ml_recent');renderGames();refreshStats();
 };
 
-// ── CANVAS BACKGROUND ─────────────────────────────────────────────────────────
 const canvas=$('bg');
 const ctx=canvas.getContext('2d',{alpha:false});
 let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0;
-
 function initBg(){
   if(curBg==='stars'){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*cw,y:Math.random()*ch,r:Math.random()*1.8+.3,a:Math.random()*Math.PI*2,spd:Math.random()*.04+.01});}
   if(curBg==='neonrain'){drops=[];const cols=Math.floor(cw/18)||1;for(let i=0;i<cols;i++)drops.push({x:i*18+Math.random()*10,y:Math.random()*ch,spd:Math.random()*2+1,len:Math.random()*80+30,a:Math.random()*.6+.2});}
@@ -718,104 +695,45 @@ function initBg(){
 function resize(){cw=canvas.width=window.innerWidth;ch=canvas.height=window.innerHeight;initBg();}
 resize();
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);});
-
-// FIX: getCol uses GC_PALETTES which is the single source of truth
-function getCol(){
-  const p=GC_PALETTES[curGC]||GC_PALETTES.purple;
-  const ph=(time/150)%3;
-  return ph<1?p.c1:ph<2?p.c2:p.c3;
-}
-
+function getCol(){const p=GC_PALETTES[curGC]||GC_PALETTES.purple;const ph=(time/150)%3;return ph<1?p.c1:ph<2?p.c2:p.c3;}
 let fc=0;
 function draw(){
-  requestAnimationFrame(draw);
-  if(++fc%2!==0)return;
-  if(overlay.classList.contains('on'))return;
-  time+=.5*bgSpeedMult;
-
-  // FIX: use canvasBg (updated by applyBgCol) instead of hardcoded color
-  ctx.fillStyle=canvasBg;
-  ctx.fillRect(0,0,cw,ch);
-
+  requestAnimationFrame(draw);if(++fc%2!==0)return;if(overlay.classList.contains('on'))return;
+  time+=.5*bgSpeedMult;ctx.fillStyle=canvasBg;ctx.fillRect(0,0,cw,ch);
   if(bright===0||curBg==='none')return;
-
-  const col=getCol();
-  ctx.globalAlpha=bright*.65;
-
+  const col=getCol();ctx.globalAlpha=bright*.65;
   switch(curBg){
-    case'static':{
-      const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);
-      gr.addColorStop(0,col+'44');gr.addColorStop(1,canvasBg);
-      ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);break;
-    }
-    case'lines':{
-      ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=6;
-      const off=(time*1.5)%60;
-      ctx.beginPath();for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}ctx.stroke();
-      ctx.beginPath();for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}ctx.stroke();
-      ctx.shadowBlur=0;break;
-    }
-    case'dots':{
-      dotPhase+=.018;ctx.shadowColor=col;ctx.shadowBlur=4;ctx.fillStyle=col;const sp=52;
-      for(let x=sp/2;x<cw;x+=sp){for(let y=sp/2;y<ch;y+=sp){
-        const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;
-        ctx.globalAlpha=bright*.65*(.2+p*.45);
-        ctx.beginPath();ctx.arc(x,y,1+p*2,0,6.283);ctx.fill();
-      }}ctx.shadowBlur=0;break;
-    }
-    case'stars':{
-      ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;
-      for(const s of stars){s.a+=s.spd;ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.75;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}
-      ctx.shadowBlur=0;break;
-    }
-    case'neonrain':{
-      ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.shadowColor=col;ctx.shadowBlur=5;
-      for(const d of drops){ctx.globalAlpha=d.a*bright*.65;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.spd*2;if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}}
-      ctx.shadowBlur=0;break;
-    }
-    case'waves':{
-      ctx.shadowColor=col;ctx.shadowBlur=7;ctx.lineWidth=1.5;
-      for(let w=0;w<8;w++){
-        const yb=ch*(w+1)/9,amp=14+w*3,fr=.0075-w*.0003,ph=time*.038+w*.9;
-        ctx.globalAlpha=bright*.65*(.15+w*.045);ctx.strokeStyle=col;
-        ctx.beginPath();for(let x=0;x<=cw;x+=5){const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();
-      }ctx.shadowBlur=0;break;
-    }
+    case'static':{const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);gr.addColorStop(0,col+'44');gr.addColorStop(1,canvasBg);ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);break;}
+    case'lines':{ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=6;const off=(time*1.5)%60;ctx.beginPath();for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}ctx.stroke();ctx.beginPath();for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}ctx.stroke();ctx.shadowBlur=0;break;}
+    case'dots':{dotPhase+=.018;ctx.shadowColor=col;ctx.shadowBlur=4;ctx.fillStyle=col;const sp=52;for(let x=sp/2;x<cw;x+=sp){for(let y=sp/2;y<ch;y+=sp){const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;ctx.globalAlpha=bright*.65*(.2+p*.45);ctx.beginPath();ctx.arc(x,y,1+p*2,0,6.283);ctx.fill();}}ctx.shadowBlur=0;break;}
+    case'stars':{ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;for(const s of stars){s.a+=s.spd;ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.75;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}ctx.shadowBlur=0;break;}
+    case'neonrain':{ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.shadowColor=col;ctx.shadowBlur=5;for(const d of drops){ctx.globalAlpha=d.a*bright*.65;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.spd*2;if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}}ctx.shadowBlur=0;break;}
+    case'waves':{ctx.shadowColor=col;ctx.shadowBlur=7;ctx.lineWidth=1.5;for(let w=0;w<8;w++){const yb=ch*(w+1)/9,amp=14+w*3,fr=.0075-w*.0003,ph=time*.038+w*.9;ctx.globalAlpha=bright*.65*(.15+w*.045);ctx.strokeStyle=col;ctx.beginPath();for(let x=0;x<=cw;x+=5){const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}ctx.shadowBlur=0;break;}
   }
   ctx.globalAlpha=1;
 }
 draw();
 
-// ── RESTORE ALL SETTINGS ──────────────────────────────────────────────────────
-// FIX: restore order matters — applyBgCol first so canvasBg and CSS vars are set
-// before anything tries to use them
-const sT=get('theme')||'purple', sC=get('card')||'purple',
-      sGC=get('gc')||'purple', sBg=get('bg')||'stars',
+// Restore settings
+const sT=get('theme')||'purple',sC=get('card')||'purple',
+      sGC=get('gc')||'purple',sBg=get('bg')||'stars',
       sBr=parseFloat(get('bright')||'100');
-
-applyBgCol(sGC);      // sets canvasBg + --bg/--nav/--top
-applyBgStyle(sBg);    // sets curBg + calls initBg
-applyAccent(sT);
-applyCard(sC);
-applyBrightness(sBr); // sets bright only, no UI opacity
-
+applyBgCol(sGC);applyBgStyle(sBg);applyAccent(sT);applyCard(sC);applyBrightness(sBr);
 const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>o.classList.toggle('on',o.getAttribute(attr)===val));};
-mark('[data-theme]','data-theme',sT);
-mark('[data-card]','data-card',sC);
-mark('[data-gc]','data-gc',sGC);
-mark('[data-bg]','data-bg',sBg);
+mark('[data-theme]','data-theme',sT);mark('[data-card]','data-card',sC);
+mark('[data-gc]','data-gc',sGC);mark('[data-bg]','data-bg',sBg);
 brightIn.value=sBr;brightNum.textContent=sBr;
+const sGlow=get('glow')||'on';applyGlow(sGlow);mark('[data-glow]','data-glow',sGlow);
+const sHover=get('hover')||'on';applyHover(sHover);mark('[data-hover]','data-hover',sHover);
+const sBgSpd=get('bgspd')||'normal';applyBgSpd(sBgSpd);mark('[data-bgspd]','data-bgspd',sBgSpd);
+const sLC=get('logocol')||'cyan';applyLogoCol(sLC);mark('[data-logocol]','data-logocol',sLC);
+const sCtr=get('showctr')||'on';applyShowCtr(sCtr);mark('[data-showctr]','data-showctr',sCtr);
+const sSP=get('showplays')||'on';showPlays=sSP==='on';mark('[data-showplays]','data-showplays',sSP);
+const sSN=get('shownew')||'on';showNew=sSN==='on';mark('[data-shownew]','data-shownew',sSN);
 
-const sGlow=get('glow')||'on';    applyGlow(sGlow);    mark('[data-glow]','data-glow',sGlow);
-const sHover=get('hover')||'on';  applyHover(sHover);  mark('[data-hover]','data-hover',sHover);
-const sBgSpd=get('bgspd')||'normal'; applyBgSpd(sBgSpd); mark('[data-bgspd]','data-bgspd',sBgSpd);
-const sLC=get('logocol')||'cyan'; applyLogoCol(sLC);   mark('[data-logocol]','data-logocol',sLC);
-const sCtr=get('showctr')||'on';  applyShowCtr(sCtr);  mark('[data-showctr]','data-showctr',sCtr);
-const sSP=get('showplays')||'on'; showPlays=sSP==='on'; mark('[data-showplays]','data-showplays',sSP);
-const sSN=get('shownew')||'on';   showNew=sSN==='on';   mark('[data-shownew]','data-shownew',sSN);
-
-// Update popup
-const VER='1.4';
+// ── VERSION POPUP ─────────────────────────────────────────────────────────────
+// Change VER to trigger the popup on next load — it compares against localStorage
+const VER='1.5';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 
