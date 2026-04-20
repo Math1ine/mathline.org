@@ -15,158 +15,49 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text);background:var(--bg);overflow:hidden;}
-
-/* ── TOPBAR ── */
-#topbar{
-  position:fixed;top:0;left:0;right:0;height:var(--top-h);
-  background:var(--top);z-index:30;
-  display:flex;align-items:center;gap:14px;padding:0 16px;
-  border-bottom:1px solid rgba(255,255,255,.06);
-}
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--top-h);background:var(--top);z-index:30;display:flex;align-items:center;gap:14px;padding:0 16px;border-bottom:1px solid rgba(255,255,255,.06);}
 #logo{font-size:1.3rem;font-weight:800;color:#00f5ff;text-shadow:0 0 12px #00f5ff;white-space:nowrap;letter-spacing:-.5px;}
-#search{
-  flex:1;max-width:480px;
-  background:rgba(255,255,255,.07);color:var(--text);
-  padding:8px 14px;font-size:14px;border-radius:20px;
-  border:1px solid rgba(255,255,255,.1);outline:none;
-  transition:border-color .2s,background .2s;
-}
+#search{flex:1;max-width:480px;background:rgba(255,255,255,.07);color:var(--text);padding:8px 14px;font-size:14px;border-radius:20px;border:1px solid rgba(255,255,255,.1);outline:none;transition:border-color .2s,background .2s;}
 #search:focus{border-color:var(--accent);background:rgba(255,255,255,.1);}
 #search::placeholder{color:rgba(255,255,255,.35);}
 #top-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-#settings-btn{
-  width:36px;height:36px;border-radius:50%;border:none;
-  background:rgba(255,255,255,.08);color:var(--text);
-  font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;
-  transition:background .2s;
-}
+#settings-btn{width:36px;height:36px;border-radius:50%;border:none;background:rgba(255,255,255,.08);color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
 #settings-btn:hover{background:rgba(255,255,255,.15);}
 #settings-btn.hide{display:none;}
-
-/* ── LEFT NAV ── */
-#nav{
-  position:fixed;top:var(--top-h);left:0;bottom:0;
-  width:var(--nav-w);background:var(--nav);
-  z-index:25;overflow-y:auto;overflow-x:hidden;
-  border-right:1px solid rgba(255,255,255,.05);
-  display:flex;flex-direction:column;
-  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
-}
+#nav{position:fixed;top:var(--top-h);left:0;bottom:0;width:var(--nav-w);background:var(--nav);z-index:25;overflow-y:auto;overflow-x:hidden;border-right:1px solid rgba(255,255,255,.05);display:flex;flex-direction:column;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;}
 .nav-section{padding:16px 12px 6px;font-size:11px;font-weight:700;letter-spacing:.08em;color:rgba(255,255,255,.3);text-transform:uppercase;}
-.nav-btn{
-  display:flex;align-items:center;gap:10px;
-  padding:10px 16px;cursor:pointer;
-  font-size:14px;font-weight:600;color:rgba(255,255,255,.7);
-  border-radius:8px;margin:1px 8px;
-  transition:background .15s,color .15s;
-  border:none;background:none;width:calc(100% - 16px);text-align:left;
-}
+.nav-btn{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;font-size:14px;font-weight:600;color:rgba(255,255,255,.7);border-radius:8px;margin:1px 8px;transition:background .15s,color .15s;border:none;background:none;width:calc(100% - 16px);text-align:left;}
 .nav-btn:hover{background:rgba(255,255,255,.07);color:#fff;}
 .nav-btn.on{background:rgba(157,78,221,.2);color:var(--accent);}
 .nav-btn .nav-icon{font-size:16px;width:20px;text-align:center;flex-shrink:0;}
 .nav-divider{height:1px;background:rgba(255,255,255,.05);margin:8px 16px;}
-.nav-browser-btn{
-  margin:8px;padding:10px 14px;border-radius:10px;
-  background:rgba(157,78,221,.15);border:1px solid rgba(157,78,221,.3);
-  color:var(--accent);font-weight:700;font-size:13px;cursor:pointer;
-  display:flex;align-items:center;gap:8px;
-  transition:background .2s;
-}
+.nav-browser-btn{margin:8px;padding:10px 14px;border-radius:10px;background:rgba(157,78,221,.15);border:1px solid rgba(157,78,221,.3);color:var(--accent);font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:background .2s;}
 .nav-browser-btn:hover{background:rgba(157,78,221,.28);}
-
-/* ── MAIN CONTENT ── */
-#main{
-  position:fixed;
-  top:var(--top-h);left:var(--nav-w);right:0;bottom:0;
-  overflow-y:auto;background:var(--bg);
-  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;
-}
+#main{position:fixed;top:var(--top-h);left:var(--nav-w);right:0;bottom:0;overflow-y:auto;background:transparent;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.1) transparent;}
 #content{padding:20px 20px 40px;}
-.section-header{
-  display:flex;align-items:center;gap:8px;
-  margin-bottom:14px;margin-top:24px;
-}
+.section-header{display:flex;align-items:center;gap:8px;margin-bottom:14px;margin-top:24px;}
 .section-header:first-child{margin-top:0;}
 .section-title{font-size:1rem;font-weight:700;color:rgba(255,255,255,.85);}
 .section-count{font-size:12px;color:rgba(255,255,255,.3);font-weight:400;}
-
-/* ── GAME GRID ── */
-#game-list,.recent-row{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:12px;
-}
-.recent-row{margin-bottom:8px;}
-
-/* ── CARDS ── */
-.card{
-  background:var(--card-bg);border-radius:10px;
-  cursor:pointer;overflow:hidden;
-  border:1px solid rgba(255,255,255,.05);
-  transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;
-  position:relative;
-}
-.card:hover{
-  transform:translateY(-3px) scale(1.02);
-  border-color:rgba(255,255,255,.15);
-  background:var(--card-hover);
-}
-/* Gradient thumbnail - no emoji, pure CSS gradient */
-.card-thumb{
-  width:100%;aspect-ratio:16/9;
-  position:relative;overflow:hidden;
-}
-.card-thumb-grad{
-  width:100%;height:100%;
-  position:absolute;inset:0;
-  transition:opacity .3s;
-}
-/* Initials overlay on thumb */
-.card-initials{
-  position:absolute;inset:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:1.4rem;font-weight:800;letter-spacing:-.02em;
-  color:rgba(255,255,255,.18);
-  text-shadow:0 2px 8px rgba(0,0,0,.5);
-  user-select:none;
-  font-family:system-ui;
-}
-/* Play count badge */
-.card-plays{
-  position:absolute;bottom:6px;left:8px;
-  background:rgba(0,0,0,.55);
-  border-radius:4px;padding:2px 6px;
-  font-size:10px;font-weight:700;color:rgba(255,255,255,.6);
-  display:none;
-}
+#game-list,.recent-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
+.card{background:var(--card-bg);border-radius:10px;cursor:pointer;overflow:hidden;border:1px solid rgba(255,255,255,.05);transition:transform .2s,border-color .2s,background .2s,box-shadow .2s;position:relative;}
+.card:hover{transform:translateY(-3px) scale(1.02);border-color:rgba(255,255,255,.15);background:var(--card-hover);}
+.card-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;}
+.card-thumb-grad{width:100%;height:100%;position:absolute;inset:0;}
+.card-initials{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:800;letter-spacing:-.02em;color:rgba(255,255,255,.18);text-shadow:0 2px 8px rgba(0,0,0,.5);user-select:none;}
+.card-plays{position:absolute;bottom:6px;left:8px;background:rgba(0,0,0,.55);border-radius:4px;padding:2px 6px;font-size:10px;font-weight:700;color:rgba(255,255,255,.6);display:none;}
 .card-plays.show{display:block;}
 .card-info{padding:8px 10px 10px;}
 .card-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .card-cat{font-size:11px;color:rgba(255,255,255,.35);margin-top:2px;}
-.card-fav{
-  position:absolute;top:6px;right:6px;
-  background:rgba(0,0,0,.55);border:none;cursor:pointer;
-  width:26px;height:26px;border-radius:50%;
-  font-size:13px;color:rgba(255,255,255,.4);
-  display:flex;align-items:center;justify-content:center;
-  opacity:0;transition:opacity .15s,color .15s;z-index:2;
-}
+.card-fav{position:absolute;top:6px;right:6px;background:rgba(0,0,0,.55);border:none;cursor:pointer;width:26px;height:26px;border-radius:50%;font-size:13px;color:rgba(255,255,255,.4);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .15s,color .15s;z-index:2;}
 .card:hover .card-fav{opacity:1;}
 .card-fav.on{opacity:1;color:#ffd700;}
 .card-fav:hover{color:#ffd700;}
 .card.req .card-name{color:#ffa500;}
 body.glow-on .card:hover{box-shadow:0 0 18px var(--accent)55,0 0 35px var(--accent)22;}
 body.hover-off .card:hover{transform:none!important;}
-
-/* NEW badge */
-.card-new-badge{
-  position:absolute;top:6px;left:6px;
-  background:var(--accent);color:#fff;
-  font-size:9px;font-weight:800;letter-spacing:.05em;
-  padding:2px 6px;border-radius:4px;text-transform:uppercase;z-index:2;
-}
-
-/* ── GAME OVERLAY ── */
+.card-new-badge{position:absolute;top:6px;left:6px;background:var(--accent);color:#fff;font-size:9px;font-weight:800;letter-spacing:.05em;padding:2px 6px;border-radius:4px;text-transform:uppercase;z-index:2;}
 #overlay{display:none;position:fixed;inset:0;z-index:50;background:#000;flex-direction:column;}
 #overlay.on{display:flex;}
 #gframe{flex:1;width:100%;border:none;background:#000;}
@@ -179,21 +70,10 @@ body.hover-off .card:hover{transform:none!important;}
 #bar-lbl{margin-top:10px;font-size:13px;color:rgba(255,255,255,.5);}
 #fs-btn{position:fixed;right:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:var(--accent);color:#fff;}
 #bk-btn{position:fixed;left:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:rgba(0,0,0,.55);color:#fff;}
-
-/* ── BROWSER PAGE ── */
 #browser-page{display:none;position:fixed;inset:0;z-index:10;top:var(--top-h);}
 #browser-page.on{display:flex;flex-direction:column;}
 #browser-page iframe{width:100%;height:100%;border:none;}
-
-/* ── SETTINGS DRAWER ── */
-#drawer{
-  position:fixed;right:-400px;top:0;bottom:0;width:380px;
-  background:#0d0d1a;z-index:40;
-  transition:right .3s;overflow:hidden;
-  border-left:1px solid rgba(255,255,255,.07);
-  box-shadow:-8px 0 30px rgba(0,0,0,.5);
-  display:flex;flex-direction:column;
-}
+#drawer{position:fixed;right:-400px;top:0;bottom:0;width:380px;background:#0d0d1a;z-index:40;transition:right .3s;overflow:hidden;border-left:1px solid rgba(255,255,255,.07);box-shadow:-8px 0 30px rgba(0,0,0,.5);display:flex;flex-direction:column;}
 #drawer.on{right:0;}
 .dr-head{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);}
 .dr-head h2{color:#00f5ff;font-size:1.2rem;}
@@ -218,8 +98,6 @@ body.hover-off .card:hover{transform:none!important;}
 .bright-slider::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;}
 .bright-slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--accent);cursor:pointer;border:none;}
 .bright-val{color:var(--accent);font-weight:700;margin-top:6px;font-size:12px;}
-
-/* Stats panel */
 .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .stat-card{background:rgba(255,255,255,.04);border-radius:8px;padding:12px;border:1px solid rgba(255,255,255,.06);}
 .stat-val{font-size:1.4rem;font-weight:800;color:var(--accent);}
@@ -230,12 +108,9 @@ body.hover-off .card:hover{transform:none!important;}
 .top-game-rank{color:rgba(255,255,255,.25);font-weight:700;width:18px;flex-shrink:0;}
 .top-game-name{flex:1;color:rgba(255,255,255,.8);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .top-game-plays{color:var(--accent);font-weight:700;font-size:12px;}
-
-/* ── MODAL ── */
 .modal{display:none;position:fixed;z-index:55;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(6px);}
 .modal.on{display:flex;align-items:center;justify-content:center;}
 .modal-box{background:#131325;padding:28px;border-radius:14px;max-width:460px;width:90%;color:var(--text);border:1px solid rgba(255,255,255,.08);max-height:80vh;overflow-y:auto;}
-/* Modal thumb */
 .modal-thumb{width:100%;aspect-ratio:16/9;border-radius:8px;overflow:hidden;margin-bottom:18px;position:relative;}
 .modal-thumb-grad{width:100%;height:100%;}
 .modal-thumb-title{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:rgba(255,255,255,.25);letter-spacing:-.02em;}
@@ -252,8 +127,6 @@ body.hover-off .card:hover{transform:none!important;}
 .mbplay:hover{filter:brightness(1.1);}
 .mbclose{background:rgba(255,255,255,.08);color:var(--text);}
 .mbclose:hover{background:rgba(255,255,255,.14);}
-
-/* ── POPUPS ── */
 .popup{display:none;position:fixed;z-index:60;inset:0;background:rgba(0,0,0,.8);backdrop-filter:blur(5px);align-items:center;justify-content:center;}
 .popup.on{display:flex;}
 .popup-box{background:#131325;padding:36px;border-radius:14px;max-width:520px;width:90%;color:var(--text);border:1px solid rgba(255,255,255,.1);max-height:80vh;overflow-y:auto;}
@@ -261,66 +134,35 @@ body.hover-off .card:hover{transform:none!important;}
 .popup-box p{line-height:1.8;color:rgba(255,255,255,.8);margin:14px 0;font-size:14px;}
 .popup-foot{display:flex;gap:10px;margin-top:24px;justify-content:center;}
 .pop-btn{padding:11px 32px;border:none;border-radius:8px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;cursor:pointer;}
-
-/* Tutorial tooltip */
-#tut-box{
-  display:none;position:fixed;
-  top:66px;right:10px;z-index:80;
-  background:#131325;border:1.5px solid var(--accent);
-  border-radius:12px;padding:16px 18px 14px;
-  max-width:220px;box-shadow:0 0 22px rgba(157,78,221,.35);
-  font-size:13px;line-height:1.55;color:rgba(255,255,255,.8);
-}
+#tut-box{display:none;position:fixed;top:66px;right:10px;z-index:80;background:#131325;border:1.5px solid var(--accent);border-radius:12px;padding:16px 18px 14px;max-width:220px;box-shadow:0 0 22px rgba(157,78,221,.35);font-size:13px;line-height:1.55;color:rgba(255,255,255,.8);}
 #tut-box.on{display:block;}
-#tut-box::before{
-  content:'';position:absolute;top:-9px;right:14px;
-  border:8px solid transparent;
-  border-bottom-color:var(--accent);border-top:none;
-}
+#tut-box::before{content:'';position:absolute;top:-9px;right:14px;border:8px solid transparent;border-bottom-color:var(--accent);border-top:none;}
 #tut-box-title{color:#00f5ff;font-weight:700;font-size:14px;margin-bottom:6px;}
-#tut-ok{
-  margin-top:12px;display:block;width:100%;
-  padding:7px 0;border:none;border-radius:6px;
-  background:var(--accent);color:#fff;
-  font-weight:700;font-size:13px;cursor:pointer;
-}
+#tut-ok{margin-top:12px;display:block;width:100%;padding:7px 0;border:none;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
 #tut-ok:hover{filter:brightness(1.1);}
-
-/* ── CANVAS BG ── */
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-
-@media(max-width:768px){
-  :root{--nav-w:0px;}
-  #nav{display:none;}
-  #main{left:0;}
-  #game-list,.recent-row{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}
-}
+@media(max-width:768px){:root{--nav-w:0px;}#nav{display:none;}#main{left:0;}#game-list,.recent-row{grid-template-columns:repeat(auto-fill,minmax(130px,1fr));}}
 </style>
 </head>
 <body>
 <canvas id="bg"></canvas>
-
 <div id="topbar">
   <div id="logo">Math Line</div>
-  <input id="search" type="search" placeholder="🔍  Search games..." aria-label="Search">
-  <div id="top-right">
-    <button id="settings-btn" title="Settings">⚙️</button>
-  </div>
+  <input id="search" type="search" placeholder="Search games..." aria-label="Search">
+  <div id="top-right"><button id="settings-btn" title="Settings">&#9881;&#65039;</button></div>
 </div>
-
 <nav id="nav">
   <div class="nav-section">Browse</div>
-  <button class="nav-btn on" data-cat="New"><span class="nav-icon">🆕</span>New</button>
-  <button class="nav-btn" data-cat="All"><span class="nav-icon">🎮</span>All Games</button>
-  <button class="nav-btn" data-cat="Recent"><span class="nav-icon">🕐</span>Recently Played</button>
-  <button class="nav-btn" data-cat="Favourites"><span class="nav-icon">⭐</span>Favourites</button>
+  <button class="nav-btn on" data-cat="New"><span class="nav-icon">&#x1F195;</span>New</button>
+  <button class="nav-btn" data-cat="All"><span class="nav-icon">&#x1F3AE;</span>All Games</button>
+  <button class="nav-btn" data-cat="Recent"><span class="nav-icon">&#x1F550;</span>Recently Played</button>
+  <button class="nav-btn" data-cat="Favourites"><span class="nav-icon">&#11088;</span>Favourites</button>
   <div class="nav-divider"></div>
   <div class="nav-section">Categories</div>
   <div id="nav-cats"></div>
   <div class="nav-divider"></div>
-  <button class="nav-browser-btn" id="nav-browser-btn">🌐 Browser</button>
+  <button class="nav-browser-btn" id="nav-browser-btn">&#x1F310; Browser</button>
 </nav>
-
 <div id="main">
   <div id="content">
     <div class="section-header">
@@ -330,7 +172,6 @@ body.hover-off .card:hover{transform:none!important;}
     <div id="game-list"></div>
   </div>
 </div>
-
 <div id="overlay">
   <div id="gload">
     <div class="spin"></div>
@@ -340,177 +181,112 @@ body.hover-off .card:hover{transform:none!important;}
   </div>
   <iframe id="gframe" title="Game" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>
 </div>
-<button id="fs-btn" style="display:none">⛶ Fullscreen</button>
-<button id="bk-btn" style="display:none">← Back</button>
-
+<button id="fs-btn" style="display:none">&#x26F6; Fullscreen</button>
+<button id="bk-btn" style="display:none">&#8592; Back</button>
 <div id="browser-page">
   <iframe src="https://logan-taylor-70.b-cdn.net/onboarding/" title="Browser"></iframe>
 </div>
-
-<!-- Tutorial tooltip -->
 <div id="tut-box">
-  <div id="tut-box-title">👆 Quick tip!</div>
-  Click ⚙️ above to open Settings, or hit <strong>🌐 Browser</strong> in the sidebar to browse the web!
+  <div id="tut-box-title">&#x1F446; Quick tip!</div>
+  Click &#9881;&#65039; above to open Settings, or hit <strong>&#x1F310; Browser</strong> in the sidebar!
   <button id="tut-ok">Got it!</button>
 </div>
-
 <div id="drawer">
-  <div class="dr-head">
-    <h2>⚙️ Settings</h2>
-    <button class="dr-close" id="dr-close">✕</button>
-  </div>
+  <div class="dr-head"><h2>&#9881;&#65039; Settings</h2><button class="dr-close" id="dr-close">&#x2715;</button></div>
   <div id="drawer-body">
   <div class="dr-tabs">
-    <button class="dr-tab on" data-dpanel="themes"><span class="dt-icon">🎨</span>Themes</button>
-    <button class="dr-tab" data-dpanel="cards"><span class="dt-icon">🎮</span>Cards</button>
-    <button class="dr-tab" data-dpanel="background"><span class="dt-icon">🌅</span>BG</button>
-    <button class="dr-tab" data-dpanel="effects"><span class="dt-icon">✨</span>Effects</button>
-    <button class="dr-tab" data-dpanel="display"><span class="dt-icon">🖥️</span>Display</button>
-    <button class="dr-tab" data-dpanel="stats"><span class="dt-icon">📊</span>Stats</button>
-    <button class="dr-tab" data-dpanel="info"><span class="dt-icon">📋</span>Info</button>
+    <button class="dr-tab on" data-dpanel="themes"><span class="dt-icon">&#x1F3A8;</span>Themes</button>
+    <button class="dr-tab" data-dpanel="cards"><span class="dt-icon">&#x1F3AE;</span>Cards</button>
+    <button class="dr-tab" data-dpanel="background"><span class="dt-icon">&#x1F305;</span>BG</button>
+    <button class="dr-tab" data-dpanel="effects"><span class="dt-icon">&#x2728;</span>Effects</button>
+    <button class="dr-tab" data-dpanel="display"><span class="dt-icon">&#x1F5A5;&#xFE0F;</span>Display</button>
+    <button class="dr-tab" data-dpanel="stats"><span class="dt-icon">&#x1F4CA;</span>Stats</button>
+    <button class="dr-tab" data-dpanel="info"><span class="dt-icon">&#x1F4CB;</span>Info</button>
   </div>
   <div class="dr-panels">
-
   <div class="dr-panel on" id="dpanel-themes">
-    <div class="sg"><span>Accent Color</span>
-      <div class="opts">
-        <div class="opt on" data-theme="purple">Purple</div>
-        <div class="opt" data-theme="cyan">Cyan</div>
-        <div class="opt" data-theme="green">Green</div>
-        <div class="opt" data-theme="orange">Orange</div>
-        <div class="opt" data-theme="red">Red</div>
-        <div class="opt" data-theme="pink">Pink</div>
-      </div>
-    </div>
+    <div class="sg"><span>Accent Color</span><div class="opts">
+      <div class="opt on" data-theme="purple">Purple</div><div class="opt" data-theme="cyan">Cyan</div>
+      <div class="opt" data-theme="green">Green</div><div class="opt" data-theme="orange">Orange</div>
+      <div class="opt" data-theme="red">Red</div><div class="opt" data-theme="pink">Pink</div>
+    </div></div>
   </div>
-
   <div class="dr-panel" id="dpanel-cards">
-    <div class="sg"><span>Card Glow Color</span>
-      <div class="opts">
-        <div class="opt on" data-card="purple">Purple</div>
-        <div class="opt" data-card="cyan">Cyan</div>
-        <div class="opt" data-card="green">Green</div>
-        <div class="opt" data-card="red">Red</div>
-        <div class="opt" data-card="pink">Pink</div>
-        <div class="opt" data-card="gold">Gold</div>
-      </div>
-    </div>
-    <div class="sg"><span>Show Play Count on Cards</span>
-      <div class="opts">
-        <div class="opt on" data-showplays="on">On</div>
-        <div class="opt" data-showplays="off">Off</div>
-      </div>
-    </div>
+    <div class="sg"><span>Card Color</span><div class="opts">
+      <div class="opt on" data-card="purple">Purple</div><div class="opt" data-card="cyan">Cyan</div>
+      <div class="opt" data-card="green">Green</div><div class="opt" data-card="red">Red</div>
+      <div class="opt" data-card="pink">Pink</div><div class="opt" data-card="gold">Gold</div>
+    </div></div>
+    <div class="sg"><span>Show Play Count</span><div class="opts">
+      <div class="opt on" data-showplays="on">On</div><div class="opt" data-showplays="off">Off</div>
+    </div></div>
   </div>
-
   <div class="dr-panel" id="dpanel-background">
-    <div class="sg"><span>Style</span>
-      <div class="opts">
-        <div class="opt" data-bg="lines">Lines</div>
-        <div class="opt" data-bg="static">Static</div>
-        <div class="opt" data-bg="dots">Dots</div>
-        <div class="opt on" data-bg="stars">Stars</div>
-        <div class="opt" data-bg="neonrain">Neon Rain</div>
-        <div class="opt" data-bg="waves">Waves</div>
-        <div class="opt" data-bg="none">None</div>
-      </div>
-    </div>
-    <div class="sg"><span>Color</span>
-      <div class="opts">
-        <div class="opt on" data-gc="purple">Purple</div>
-        <div class="opt" data-gc="cyan">Cyan</div>
-        <div class="opt" data-gc="green">Green</div>
-        <div class="opt" data-gc="red">Red</div>
-        <div class="opt" data-gc="pink">Pink</div>
-        <div class="opt" data-gc="orange">Orange</div>
-      </div>
-    </div>
+    <div class="sg"><span>Style</span><div class="opts">
+      <div class="opt" data-bg="lines">Lines</div><div class="opt" data-bg="static">Static</div>
+      <div class="opt" data-bg="dots">Dots</div><div class="opt on" data-bg="stars">Stars</div>
+      <div class="opt" data-bg="neonrain">Neon Rain</div><div class="opt" data-bg="waves">Waves</div>
+      <div class="opt" data-bg="none">None</div>
+    </div></div>
+    <div class="sg"><span>Color</span><div class="opts">
+      <div class="opt on" data-gc="purple">Purple</div><div class="opt" data-gc="cyan">Cyan</div>
+      <div class="opt" data-gc="green">Green</div><div class="opt" data-gc="red">Red</div>
+      <div class="opt" data-gc="pink">Pink</div><div class="opt" data-gc="orange">Orange</div>
+    </div></div>
     <div class="sg"><span>Brightness</span>
       <input type="range" id="bright-in" class="bright-slider" min="0" max="100" value="100">
       <div class="bright-val"><span id="bright-num">100</span>%</div>
     </div>
   </div>
-
   <div class="dr-panel" id="dpanel-effects">
-    <div class="sg"><span>Card Glow on Hover</span>
-      <div class="opts">
-        <div class="opt" data-glow="off">Off</div>
-        <div class="opt on" data-glow="on">On</div>
-      </div>
-    </div>
-    <div class="sg"><span>Hover Animation</span>
-      <div class="opts">
-        <div class="opt on" data-hover="on">On</div>
-        <div class="opt" data-hover="off">Off</div>
-      </div>
-    </div>
-    <div class="sg"><span>Background Speed</span>
-      <div class="opts">
-        <div class="opt" data-bgspd="slow">Slow</div>
-        <div class="opt on" data-bgspd="normal">Normal</div>
-        <div class="opt" data-bgspd="fast">Fast</div>
-      </div>
-    </div>
+    <div class="sg"><span>Card Glow on Hover</span><div class="opts">
+      <div class="opt" data-glow="off">Off</div><div class="opt on" data-glow="on">On</div>
+    </div></div>
+    <div class="sg"><span>Hover Animation</span><div class="opts">
+      <div class="opt on" data-hover="on">On</div><div class="opt" data-hover="off">Off</div>
+    </div></div>
+    <div class="sg"><span>Background Speed</span><div class="opts">
+      <div class="opt" data-bgspd="slow">Slow</div><div class="opt on" data-bgspd="normal">Normal</div>
+      <div class="opt" data-bgspd="fast">Fast</div>
+    </div></div>
   </div>
-
   <div class="dr-panel" id="dpanel-display">
-    <div class="sg"><span>Logo Color</span>
-      <div class="opts">
-        <div class="opt on" data-logocol="cyan">Cyan</div>
-        <div class="opt" data-logocol="purple">Purple</div>
-        <div class="opt" data-logocol="green">Green</div>
-        <div class="opt" data-logocol="pink">Pink</div>
-        <div class="opt" data-logocol="orange">Orange</div>
-        <div class="opt" data-logocol="white">White</div>
-      </div>
-    </div>
-    <div class="sg"><span>Show Game Counter</span>
-      <div class="opts">
-        <div class="opt on" data-showctr="on">On</div>
-        <div class="opt" data-showctr="off">Off</div>
-      </div>
-    </div>
-    <div class="sg"><span>Show NEW badge on cards</span>
-      <div class="opts">
-        <div class="opt on" data-shownew="on">On</div>
-        <div class="opt" data-shownew="off">Off</div>
-      </div>
-    </div>
+    <div class="sg"><span>Logo Color</span><div class="opts">
+      <div class="opt on" data-logocol="cyan">Cyan</div><div class="opt" data-logocol="purple">Purple</div>
+      <div class="opt" data-logocol="green">Green</div><div class="opt" data-logocol="pink">Pink</div>
+      <div class="opt" data-logocol="orange">Orange</div><div class="opt" data-logocol="white">White</div>
+    </div></div>
+    <div class="sg"><span>Show Game Counter</span><div class="opts">
+      <div class="opt on" data-showctr="on">On</div><div class="opt" data-showctr="off">Off</div>
+    </div></div>
+    <div class="sg"><span>Show NEW badge</span><div class="opts">
+      <div class="opt on" data-shownew="on">On</div><div class="opt" data-shownew="off">Off</div>
+    </div></div>
   </div>
-
   <div class="dr-panel" id="dpanel-stats">
-    <div class="sg"><span>Your Stats</span>
-      <div class="stats-grid" id="stats-grid"></div>
-    </div>
-    <div class="sg"><span>Top Played</span>
-      <div class="top-games-list" id="top-games-list"></div>
-    </div>
+    <div class="sg"><span>Your Stats</span><div class="stats-grid" id="stats-grid"></div></div>
+    <div class="sg"><span>Top Played</span><div class="top-games-list" id="top-games-list"></div></div>
     <div style="margin-top:16px;">
-      <button id="reset-stats-btn" style="width:100%;padding:9px;border:1px solid rgba(255,80,80,.3);border-radius:7px;background:rgba(255,50,50,.08);color:rgba(255,100,100,.8);cursor:pointer;font-weight:700;font-size:12px;transition:background .2s;">🗑️ Reset All Stats</button>
+      <button id="reset-stats-btn" style="width:100%;padding:9px;border:1px solid rgba(255,80,80,.3);border-radius:7px;background:rgba(255,50,50,.08);color:rgba(255,100,100,.8);cursor:pointer;font-weight:700;font-size:12px;">&#x1F5D1;&#xFE0F; Reset All Stats</button>
     </div>
   </div>
-
   <div class="dr-panel" id="dpanel-info">
     <div style="color:rgba(255,255,255,.6);line-height:1.8;font-size:13px;">
       <strong style="color:#00f5ff;">DISCLAIMER</strong><br><br>
-      All games' rights belong to their respective owners.<br><br>
+      All games rights belong to their respective owners.<br><br>
       <strong style="color:rgba(255,255,255,.8);">Version:</strong> 1.4<br>
       <strong style="color:rgba(255,255,255,.8);">Last Updated:</strong> April 2025
     </div>
   </div>
-</div><!-- dr-panels -->
-</div><!-- drawer-body -->
-
-<!-- Update popup -->
+  </div></div>
+</div>
 <div class="popup" id="upd-popup">
   <div class="popup-box">
-    <h2>🎉 What's New in v1.4</h2>
-    <p>• Added Bad Ice Cream 3<br>• Added Choppy Orc<br>• Added Shred Sauce<br>• New dashboard UI with sidebar categories<br>• Recently Played & Favourites sections<br>• Play stats tracker</p>
+    <h2>&#x1F389; Whats New in v1.4</h2>
+    <p>&#x2022; Added Bad Ice Cream 3<br>&#x2022; Added Choppy Orc<br>&#x2022; Added Shred Sauce<br>&#x2022; New dashboard layout<br>&#x2022; Recently Played and Favourites<br>&#x2022; Play stats tracker</p>
     <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
   </div>
 </div>
-
-<!-- Browser popup — always shows -->
 <div class="popup" id="brw-popup">
   <div class="popup-box">
     <h2>Disclaimer</h2>
@@ -518,24 +294,16 @@ body.hover-off .card:hover{transform:none!important;}
     <div class="popup-foot"><button class="pop-btn" id="brw-ok">OK</button></div>
   </div>
 </div>
-
-<!-- Game modal -->
 <div class="modal" id="modal">
   <div class="modal-box">
-    <div class="modal-thumb">
-      <div class="modal-thumb-grad" id="m-thumb-grad"></div>
-      <div class="modal-thumb-title" id="m-thumb-title"></div>
-    </div>
-    <div class="mtrow">
-      <h2 id="m-name"></h2>
-      <button class="mfav" id="m-fav">☆</button>
-    </div>
+    <div class="modal-thumb"><div class="modal-thumb-grad" id="m-thumb-grad"></div><div class="modal-thumb-title" id="m-thumb-title"></div></div>
+    <div class="mtrow"><h2 id="m-name"></h2><button class="mfav" id="m-fav">&#x2606;</button></div>
     <div class="mstat"><b>Category</b><span id="m-cat"></span></div>
     <div class="mstat"><b>Times Played</b><span id="m-played"></span></div>
     <div class="mstat"><b>Last Played</b><span id="m-last"></span></div>
     <div class="mstat"><b>Play Time</b><span id="m-time"></span></div>
     <div class="mbtns">
-      <button class="mbplay" id="m-play">▶️ Play</button>
+      <button class="mbplay" id="m-play">&#x25B6;&#xFE0F; Play</button>
       <button class="mbclose" id="m-close">Close</button>
     </div>
   </div>
@@ -545,7 +313,6 @@ body.hover-off .card:hover{transform:none!important;}
 (function(){
 'use strict';
 
-// ── STORAGE ───────────────────────────────────────────────────────────────────
 const mem={};
 const ls=(()=>{try{localStorage.setItem('_','1');localStorage.removeItem('_');return localStorage;}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];},get length(){return Object.keys(mem).length;},key:i=>Object.keys(mem)[i]};}})();
 const get=k=>ls.getItem('ml_'+k);
@@ -558,13 +325,10 @@ const setFavs=a=>ls.setItem('ml_favs',JSON.stringify(a));
 const toggleFav=n=>{let f=getFavs();f.includes(n)?f=f.filter(x=>x!==n):f.push(n);setFavs(f);return f.includes(n);};
 const isFav=n=>getFavs().includes(n);
 const fmtTime=m=>{const v=parseFloat((m||0).toFixed(1));return v>=60?`${Math.floor(v/60)}h ${Math.round(v%60)}m`:`${v}m`;};
-
-// Recently played - store last 12 unique
 const getRecent=()=>{try{return JSON.parse(ls.getItem('ml_recent')||'[]');}catch(e){return[];}};
 const addRecent=n=>{let r=getRecent().filter(x=>x!==n);r.unshift(n);if(r.length>12)r=r.slice(0,12);ls.setItem('ml_recent',JSON.stringify(r));};
 
-// ── GRADIENT GENERATOR ────────────────────────────────────────────────────────
-// Deterministic gradient from game name - each game gets a unique colour pair
+// Unique gradient per game name
 const GRAD_PAIRS=[
   ['#1a0533','#6a1fd1'],['#001a33','#1a6dd1'],['#001a0d','#1ad16a'],
   ['#1a0d00','#d16a1a'],['#1a001a','#d11ad1'],['#1a0000','#d11a3a'],
@@ -576,44 +340,69 @@ const GRAD_PAIRS=[
 function gradForName(name){
   let h=0;for(let i=0;i<name.length;i++)h=(h*31+name.charCodeAt(i))>>>0;
   const pair=GRAD_PAIRS[h%GRAD_PAIRS.length];
-  const angle=(h%8)*45;
-  return `linear-gradient(${angle}deg,${pair[0]},${pair[1]})`;
+  return `linear-gradient(${(h%8)*45}deg,${pair[0]},${pair[1]})`;
 }
-function initialsFor(name){
-  return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();
-}
+function initialsFor(name){return name.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase();}
 
-// ── THEMES ────────────────────────────────────────────────────────────────────
+// ── THEME DATA ────────────────────────────────────────────────────────────────
 const ACCENT={purple:'#9d4edd',cyan:'#00d9ff',green:'#00ff88',orange:'#ff9500',red:'#ff3366',pink:'#ff00ff'};
 const CARDS={
-  purple:{cs1:'rgba(157,78,221,.4)',cs2:'rgba(157,78,221,.2)',bg:'#16162a',hov:'#1e1e38'},
-  cyan:  {cs1:'rgba(0,217,255,.4)', cs2:'rgba(0,217,255,.2)', bg:'#0d1e2a',hov:'#132536'},
-  green: {cs1:'rgba(0,255,136,.4)', cs2:'rgba(0,255,136,.2)', bg:'#0d1e16',hov:'#112410'},
-  red:   {cs1:'rgba(255,51,102,.4)',cs2:'rgba(255,51,102,.2)',bg:'#200d14',hov:'#2e1020'},
-  pink:  {cs1:'rgba(255,0,255,.4)', cs2:'rgba(255,0,255,.2)', bg:'#1e0d1e',hov:'#2a1030'},
-  gold:  {cs1:'rgba(255,215,0,.4)', cs2:'rgba(255,215,0,.2)', bg:'#1e1a0a',hov:'#2a2210'},
+  purple:{bg:'#16162a',hov:'#1e1e38'},
+  cyan:  {bg:'#0d1e2a',hov:'#132536'},
+  green: {bg:'#0d1e16',hov:'#112410'},
+  red:   {bg:'#200d14',hov:'#2e1020'},
+  pink:  {bg:'#1e0d1e',hov:'#2a1030'},
+  gold:  {bg:'#1e1a0a',hov:'#2a2210'},
 };
-const GC={
-  purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff'},
-  cyan:  {c1:'#00ffff',c2:'#00ff88',c3:'#00ccff'},
-  green: {c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc'},
-  red:   {c1:'#ff6666',c2:'#ffff00',c3:'#ff0099'},
-  pink:  {c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff'},
-  orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600'},
+
+// GC_PALETTES: each color has canvas line colors AND UI background tints
+// This is the single source of truth for all background coloring
+const GC_PALETTES={
+  purple:{c1:'#c87fff',c2:'#00ffff',c3:'#ff32ff', bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},
+  cyan:  {c1:'#00ffff',c2:'#00ff88',c3:'#00ccff', bg:'#060e16',nav:'#080f18',top:'#0d1520'},
+  green: {c1:'#00ff88',c2:'#ff1493',c3:'#00ffcc', bg:'#060e09',nav:'#08110a',top:'#0d1810'},
+  red:   {c1:'#ff6666',c2:'#ffff00',c3:'#ff0099', bg:'#140608',nav:'#170809',top:'#1e0c0e'},
+  pink:  {c1:'#ff00ff',c2:'#ffff00',c3:'#00ffff', bg:'#120612',nav:'#150815',top:'#1c0e1c'},
+  orange:{c1:'#ff9500',c2:'#00ffff',c3:'#ff6600', bg:'#120d04',nav:'#150f06',top:'#1e1408'},
 };
+
 const R=document.documentElement;
-const applyAccent=t=>{
-  const col=ACCENT[t]||ACCENT.purple;
-  R.style.setProperty('--accent',col);
-  set('theme',t);
-};
+
+// State vars - declared before any apply functions
+let curGC='purple';
+let curBg='stars';
+let bright=1;         // 0-1, controls canvas alpha only
+let bgSpeedMult=1;
+let canvasBg='#0a0a16'; // kept in sync with applyBgCol, used for canvas fillStyle
+
+const applyAccent=t=>{R.style.setProperty('--accent',ACCENT[t]||ACCENT.purple);set('theme',t);};
+
 const applyCard=t=>{
   const c=CARDS[t];if(!c)return;
-  R.style.setProperty('--cs1',c.cs1);
-  R.style.setProperty('--cs2',c.cs2);
   R.style.setProperty('--card-bg',c.bg);
   R.style.setProperty('--card-hover',c.hov);
   set('card',t);
+};
+
+// FIX: applyBgCol now updates BOTH the canvas fill color AND the CSS UI vars
+const applyBgCol=v=>{
+  curGC=v;
+  const p=GC_PALETTES[v]||GC_PALETTES.purple;
+  canvasBg=p.bg;                          // canvas clear color
+  R.style.setProperty('--bg',p.bg);       // page background
+  R.style.setProperty('--nav',p.nav);     // sidebar color
+  R.style.setProperty('--top',p.top);     // topbar color
+  R.style.setProperty('background',p.bg); // body fallback
+  document.body.style.background=p.bg;
+  set('gc',v);
+};
+
+const applyBgStyle=v=>{curBg=v;set('bg',v);initBg();};
+
+// FIX: brightness only controls canvas effect intensity, NOT UI opacity
+const applyBrightness=v=>{
+  bright=v/100;
+  set('bright',v);
 };
 
 // ── GAMES ─────────────────────────────────────────────────────────────────────
@@ -730,7 +519,6 @@ const ALL=[...GAMES].sort((a,b)=>a.n.localeCompare(b.n));
 const NEW_SET=new Set(GAMES.slice(-6).map(g=>g.n));
 const URL_MAP=new Map(ALL.map(g=>[g.u,g.n]));
 
-// ── DOM ───────────────────────────────────────────────────────────────────────
 const $=id=>document.getElementById(id);
 const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label'),
       search=$('search'),overlay=$('overlay'),gframe=$('gframe'),
@@ -741,14 +529,13 @@ const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label
       mName=$('m-name'),mCat=$('m-cat'),mPlayed=$('m-played'),
       mLast=$('m-last'),mTime=$('m-time'),mPlay=$('m-play'),
       mClose=$('m-close'),mFav=$('m-fav'),
-      brightIn=$('bright-in'),brightNum=$('bright-num'),
-      navCats=$('nav-cats');
+      brightIn=$('bright-in'),brightNum=$('bright-num'),navCats=$('nav-cats');
 
 let activeCat=get('cat')||'New',activeSearch='',curModal=null,gameStart=null;
 let showPlays=get('showplays')!=='off';
 let showNew=get('shownew')!=='off';
 
-// ── BUILD SIDEBAR CATEGORIES ──────────────────────────────────────────────────
+// Build sidebar category nav
 const cats=[...new Set(ALL.map(g=>g.c))].sort();
 cats.forEach(c=>{
   const btn=document.createElement('button');
@@ -761,267 +548,139 @@ function setActiveNavBtn(cat){
 }
 setActiveNavBtn(activeCat);
 document.querySelectorAll('.nav-btn').forEach(btn=>{
-  btn.onclick=()=>{
-    activeCat=btn.dataset.cat;set('cat',activeCat);
-    setActiveNavBtn(activeCat);
-    activeSearch='';search.value='';
-    renderGames();
-  };
+  btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};
 });
 
-// ── MAKE CARD ─────────────────────────────────────────────────────────────────
 function makeCard(g,favs){
   const fav=favs.includes(g.n);
   const s=getStats(g.n);
-  const card=document.createElement('div');
-  card.className='card';card.dataset.n=g.n;
-
-  // Gradient thumb — no emoji
-  const thumb=document.createElement('div');
-  thumb.className='card-thumb';
-  const grad=document.createElement('div');
-  grad.className='card-thumb-grad';
-  grad.style.background=gradForName(g.n);
-  // Initials text
-  const init=document.createElement('div');
-  init.className='card-initials';
-  init.textContent=initialsFor(g.n);
-  // Play count badge
+  const card=document.createElement('div');card.className='card';card.dataset.n=g.n;
+  const thumb=document.createElement('div');thumb.className='card-thumb';
+  const grad=document.createElement('div');grad.className='card-thumb-grad';grad.style.background=gradForName(g.n);
+  const init=document.createElement('div');init.className='card-initials';init.textContent=initialsFor(g.n);
   const playBadge=document.createElement('div');
   playBadge.className='card-plays'+(showPlays&&s.p>0?' show':'');
   playBadge.textContent=`▶ ${s.p}`;
-  // NEW badge
-  if(NEW_SET.has(g.n)&&showNew){
-    const nb=document.createElement('div');
-    nb.className='card-new-badge';nb.textContent='NEW';
-    thumb.appendChild(nb);
-  }
+  if(NEW_SET.has(g.n)&&showNew){const nb=document.createElement('div');nb.className='card-new-badge';nb.textContent='NEW';thumb.appendChild(nb);}
   thumb.appendChild(grad);thumb.appendChild(init);thumb.appendChild(playBadge);
-
-  // Fav button
   const favBtn=document.createElement('button');
-  favBtn.className='card-fav'+(fav?' on':'');
-  favBtn.textContent=fav?'★':'☆';
-  favBtn.onclick=e=>{
-    e.stopPropagation();
-    const now=toggleFav(g.n);
-    favBtn.textContent=now?'★':'☆';
-    favBtn.classList.toggle('on',now);
-    renderGames();
-  };
+  favBtn.className='card-fav'+(fav?' on':'');favBtn.textContent=fav?'★':'☆';
+  favBtn.onclick=e=>{e.stopPropagation();const now=toggleFav(g.n);favBtn.textContent=now?'★':'☆';favBtn.classList.toggle('on',now);renderGames();};
   thumb.appendChild(favBtn);
-
   const info=document.createElement('div');info.className='card-info';
   const name=document.createElement('div');name.className='card-name';name.textContent=g.n;
   const cat=document.createElement('div');cat.className='card-cat';cat.textContent=g.c;
   info.appendChild(name);info.appendChild(cat);
-
   card.appendChild(thumb);card.appendChild(info);
   card.onclick=()=>openModal(g.n);
   return card;
 }
 
-// ── RENDER ────────────────────────────────────────────────────────────────────
 function renderGames(){
   const favs=getFavs();
   let list=ALL;
-
-  if(activeCat==='Recent'){
-    const rec=getRecent();
-    list=rec.map(n=>ALL.find(g=>g.n===n)).filter(Boolean);
-  } else if(activeCat==='Favourites'){
-    list=ALL.filter(g=>favs.includes(g.n));
-  } else if(activeCat==='New'){
-    list=list.filter(g=>NEW_SET.has(g.n));
-  } else if(activeCat!=='All'){
-    list=list.filter(g=>g.c===activeCat);
-  }
-
+  if(activeCat==='Recent'){const rec=getRecent();list=rec.map(n=>ALL.find(g=>g.n===n)).filter(Boolean);}
+  else if(activeCat==='Favourites'){list=ALL.filter(g=>favs.includes(g.n));}
+  else if(activeCat==='New'){list=list.filter(g=>NEW_SET.has(g.n));}
+  else if(activeCat!=='All'){list=list.filter(g=>g.c===activeCat);}
   if(activeSearch){const q=activeSearch.toLowerCase();list=list.filter(g=>g.n.toLowerCase().includes(q));}
-
-  // Favs to top (except Recent which keeps recency order)
-  if(activeCat!=='Recent'){
-    list=[...list].sort((a,b)=>{const af=favs.includes(a.n),bf=favs.includes(b.n);return af===bf?0:af?-1:1;});
-  }
-
-  const label=activeCat==='All'?'All Games':activeCat==='New'?'New Games':
-               activeCat==='Recent'?'Recently Played':activeCat==='Favourites'?'Favourites':activeCat;
+  if(activeCat!=='Recent'){list=[...list].sort((a,b)=>{const af=favs.includes(a.n),bf=favs.includes(b.n);return af===bf?0:af?-1:1;});}
+  const label=activeCat==='All'?'All Games':activeCat==='New'?'New Games':activeCat==='Recent'?'Recently Played':activeCat==='Favourites'?'Favourites':activeCat;
   sectionLabel.textContent=activeSearch?`Results for "${activeSearch}"`:label;
   counter.textContent=`${list.length} game${list.length!==1?'s':''}`;
-
   const frag=document.createDocumentFragment();
   for(const g of list)frag.appendChild(makeCard(g,favs));
-
-  // Request a game card
-  const req=document.createElement('div');
-  req.className='card req';
+  const req=document.createElement('div');req.className='card req';
   const rt=document.createElement('div');rt.className='card-thumb';
-  const rg=document.createElement('div');rg.className='card-thumb-grad';
-  rg.style.background='linear-gradient(135deg,#1a0d00,#3a2000)';
+  const rg=document.createElement('div');rg.className='card-thumb-grad';rg.style.background='linear-gradient(135deg,#1a0d00,#3a2000)';
   const ri=document.createElement('div');ri.className='card-initials';ri.textContent='📩';
   rt.appendChild(rg);rt.appendChild(ri);
   const rinfo=document.createElement('div');rinfo.className='card-info';
   const rn=document.createElement('div');rn.className='card-name';rn.textContent='Request A Game';
   const rc=document.createElement('div');rc.className='card-cat';rc.textContent='Submit your request';
-  rinfo.appendChild(rn);rinfo.appendChild(rc);
-  req.appendChild(rt);req.appendChild(rinfo);
+  rinfo.appendChild(rn);rinfo.appendChild(rc);req.appendChild(rt);req.appendChild(rinfo);
   req.onclick=()=>window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
   frag.appendChild(req);
-
   gameList.replaceChildren(frag);
 }
 
 let searchTimer;
-search.addEventListener('input',e=>{
-  clearTimeout(searchTimer);
-  searchTimer=setTimeout(()=>{
-    activeSearch=e.target.value;
-    if(activeSearch)setActiveNavBtn(null);else setActiveNavBtn(activeCat);
-    renderGames();
-  },160);
-});
+search.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{activeSearch=e.target.value;if(activeSearch)setActiveNavBtn(null);else setActiveNavBtn(activeCat);renderGames();},160);});
 
-// ── MODAL ─────────────────────────────────────────────────────────────────────
 function openModal(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
-  curModal=name;
-  const s=getStats(name);
+  curModal=name;const s=getStats(name);
   mName.textContent=name;mCat.textContent=g.c;
-  mPlayed.textContent=s.p||0;mLast.textContent=s.d||'Never';
-  mTime.textContent=fmtTime(s.t||0);
+  mPlayed.textContent=s.p||0;mLast.textContent=s.d||'Never';mTime.textContent=fmtTime(s.t||0);
   mPlay.onclick=()=>launchGame(name);
-  const fav=isFav(name);
-  mFav.textContent=fav?'★':'☆';mFav.classList.toggle('on',fav);
-  // modal gradient thumb
-  $('m-thumb-grad').style.background=gradForName(name);
-  $('m-thumb-title').textContent=initialsFor(name);
-  drawer.classList.remove('on');
-  modal.classList.add('on');
+  const fav=isFav(name);mFav.textContent=fav?'★':'☆';mFav.classList.toggle('on',fav);
+  $('m-thumb-grad').style.background=gradForName(name);$('m-thumb-title').textContent=initialsFor(name);
+  drawer.classList.remove('on');modal.classList.add('on');
 }
 function closeModal(){modal.classList.remove('on');curModal=null;}
 mClose.onclick=closeModal;
 modal.onclick=e=>{if(e.target===modal)closeModal();};
-mFav.onclick=()=>{
-  if(!curModal)return;
-  const now=toggleFav(curModal);
-  mFav.textContent=now?'★':'☆';mFav.classList.toggle('on',now);
-  renderGames();
-};
+mFav.onclick=()=>{if(!curModal)return;const now=toggleFav(curModal);mFav.textContent=now?'★':'☆';mFav.classList.toggle('on',now);renderGames();};
 
-// ── LAUNCH ────────────────────────────────────────────────────────────────────
 function launchGame(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
-  const s=getStats(name);s.p=(s.p||0)+1;s.d=new Date().toLocaleDateString();saveStats(name,s);
-  addRecent(name);
+  const s=getStats(name);s.p=(s.p||0)+1;s.d=new Date().toLocaleDateString();saveStats(name,s);addRecent(name);
   closeModal();drawer.classList.remove('on');settingsBtn.classList.add('hide');
-  overlay.classList.add('on');gload.classList.remove('hide');
-  fsBtn.style.display='block';bkBtn.style.display='block';
+  overlay.classList.add('on');gload.classList.remove('hide');fsBtn.style.display='block';bkBtn.style.display='block';
   bar.style.width='0';barLbl.textContent='0%';
-  const T=3000,t0=performance.now();
-  let barDone=false,ifrDone=false;
-  function tick(now){
-    const raw=Math.min((now-t0)/T,1);
-    const pct=Math.round((1-Math.pow(1-raw,2))*100);
-    bar.style.width=pct+'%';barLbl.textContent=pct+'%';
-    if(raw<1)requestAnimationFrame(tick);
-    else{barDone=true;if(ifrDone)gload.classList.add('hide');}
-  }
+  const T=3000,t0=performance.now();let barDone=false,ifrDone=false;
+  function tick(now){const raw=Math.min((now-t0)/T,1);const pct=Math.round((1-Math.pow(1-raw,2))*100);bar.style.width=pct+'%';barLbl.textContent=pct+'%';if(raw<1)requestAnimationFrame(tick);else{barDone=true;if(ifrDone)gload.classList.add('hide');}}
   requestAnimationFrame(tick);
   gameStart=Date.now();gframe.src=g.u;
   gframe.onload=()=>{ifrDone=true;if(barDone)gload.classList.add('hide');};
 }
 function closeGame(){
-  if(gameStart){
-    const cu=gframe.src.split('/').pop();
-    const gn=URL_MAP.get(decodeURIComponent(cu));
-    if(gn)addTime(gn,Math.floor((Date.now()-gameStart)/1000));
-    gameStart=null;
-  }
-  gframe.onload=null;gframe.src='';
-  overlay.classList.remove('on');gload.classList.remove('hide');
-  bar.style.width='0';barLbl.textContent='0%';
-  fsBtn.style.display='none';bkBtn.style.display='none';
-  settingsBtn.classList.remove('hide');
+  if(gameStart){const cu=gframe.src.split('/').pop();const gn=URL_MAP.get(decodeURIComponent(cu));if(gn)addTime(gn,Math.floor((Date.now()-gameStart)/1000));gameStart=null;}
+  gframe.onload=null;gframe.src='';overlay.classList.remove('on');gload.classList.remove('hide');
+  bar.style.width='0';barLbl.textContent='0%';fsBtn.style.display='none';bkBtn.style.display='none';settingsBtn.classList.remove('hide');
 }
 bkBtn.onclick=closeGame;
 fsBtn.onclick=()=>{if(gframe.requestFullscreen)gframe.requestFullscreen();};
 
-// ── KEYBOARD ──────────────────────────────────────────────────────────────────
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){
-    if(overlay.classList.contains('on'))closeGame();
-    else if(drawer.classList.contains('on'))drawer.classList.remove('on');
-    else if(modal.classList.contains('on'))closeModal();
-  }
+  if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();}
   if((e.key==='f'||e.key==='F')&&overlay.classList.contains('on')){e.preventDefault();fsBtn.click();}
 });
 
-// ── SETTINGS DRAWER ───────────────────────────────────────────────────────────
 settingsBtn.onclick=e=>{e.stopPropagation();drawer.classList.toggle('on');};
 $('dr-close').onclick=()=>drawer.classList.remove('on');
-document.addEventListener('click',e=>{
-  if(!e.target.closest('#drawer')&&!e.target.closest('#settings-btn'))drawer.classList.remove('on');
-});
+document.addEventListener('click',e=>{if(!e.target.closest('#drawer')&&!e.target.closest('#settings-btn'))drawer.classList.remove('on');});
 document.querySelectorAll('.dr-tab').forEach(btn=>{
   btn.onclick=()=>{
-    document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));
-    btn.classList.add('on');
-    document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));
-    $('dpanel-'+btn.dataset.dpanel).classList.add('on');
+    document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+    document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));$('dpanel-'+btn.dataset.dpanel).classList.add('on');
     if(btn.dataset.dpanel==='stats')refreshStats();
   };
 });
 
-// ── BROWSER ───────────────────────────────────────────────────────────────────
 $('nav-browser-btn').onclick=()=>{$('brw-popup').classList.add('on');};
 $('brw-ok').onclick=()=>{$('brw-popup').classList.remove('on');goToBrowser();};
-function goToBrowser(){
-  browserPage.classList.add('on');
-  $('main').style.display='none';
-  drawer.classList.remove('on');
-}
+function goToBrowser(){browserPage.classList.add('on');$('main').style.display='none';drawer.classList.remove('on');}
 
-// ── PICKERS ───────────────────────────────────────────────────────────────────
 function makePicker(sel,attr,cb){
-  document.querySelectorAll(sel).forEach(o=>{
-    o.onclick=()=>{document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));o.classList.add('on');cb(o.getAttribute(attr));};
-  });
+  document.querySelectorAll(sel).forEach(o=>{o.onclick=()=>{document.querySelectorAll(sel).forEach(x=>x.classList.remove('on'));o.classList.add('on');cb(o.getAttribute(attr));};});
 }
 makePicker('[data-theme]','data-theme',applyAccent);
 makePicker('[data-card]','data-card',applyCard);
-let curGC=get('gc')||'purple';
-const BG_TINTS={
-  purple:{bg:'#0a0a16',nav:'#0d0d1a',top:'#111120'},
-  cyan:  {bg:'#060e16',nav:'#080f18',top:'#0d1520'},
-  green: {bg:'#060e09',nav:'#08110a',top:'#0d1810'},
-  red:   {bg:'#140608',nav:'#170809',top:'#1e0c0e'},
-  pink:  {bg:'#120612',nav:'#150815',top:'#1c0e1c'},
-  orange:{bg:'#120d04',nav:'#150f06',top:'#1e1408'},
-};
-function applyBgCol(v){
-  curGC=v;set('gc',v);
-  const t=BG_TINTS[v]||BG_TINTS.purple;
-  R.style.setProperty('--bg',t.bg);
-  R.style.setProperty('--nav',t.nav);
-  R.style.setProperty('--top',t.top);
-}
-makePicker('[data-gc]','data-gc',applyBgCol);
-let curBg=get('bg')||'stars';
-makePicker('[data-bg]','data-bg',v=>{curBg=v;set('bg',v);initBg();});
-let bright=parseFloat(get('bright')||'100')/100;
+makePicker('[data-gc]','data-gc',applyBgCol);   // FIX: was applyBgCol in broken version but used wrong var names
+makePicker('[data-bg]','data-bg',applyBgStyle);
+
+// FIX: brightness controls canvas alpha only, no UI opacity changes
 brightIn.addEventListener('input',()=>{
-  const v=+brightIn.value;brightNum.textContent=v;
-  bright=v/100;set('bright',v);
-  const dim=0.5+bright*0.5;
-  $('nav').style.opacity=dim;
-  $('main').style.opacity=dim;
+  const v=+brightIn.value;
+  brightNum.textContent=v;
+  applyBrightness(v);
 });
 
 function applyGlow(v){document.body.classList.toggle('glow-on',v==='on');set('glow',v);}
 makePicker('[data-glow]','data-glow',applyGlow);
 function applyHover(v){document.body.classList.toggle('hover-off',v==='off');set('hover',v);}
 makePicker('[data-hover]','data-hover',applyHover);
-let bgSpeedMult=1;
 function applyBgSpd(v){bgSpeedMult=v==='slow'?.4:v==='fast'?2.5:1;set('bgspd',v);}
 makePicker('[data-bgspd]','data-bgspd',applyBgSpd);
 
@@ -1033,39 +692,25 @@ makePicker('[data-showctr]','data-showctr',applyShowCtr);
 makePicker('[data-showplays]','data-showplays',v=>{showPlays=v==='on';set('showplays',v);renderGames();});
 makePicker('[data-shownew]','data-shownew',v=>{showNew=v==='on';set('shownew',v);renderGames();});
 
-// ── STATS PANEL ───────────────────────────────────────────────────────────────
 function refreshStats(){
-  let totalPlays=0,totalTime=0,uniquePlayed=0;
-  const playData=[];
-  ALL.forEach(g=>{
-    const s=getStats(g.n);
-    if(s.p>0){uniquePlayed++;totalPlays+=s.p;totalTime+=s.t||0;playData.push({n:g.n,p:s.p});}
-  });
+  let totalPlays=0,totalTime=0,uniquePlayed=0;const playData=[];
+  ALL.forEach(g=>{const s=getStats(g.n);if(s.p>0){uniquePlayed++;totalPlays+=s.p;totalTime+=s.t||0;playData.push({n:g.n,p:s.p});}});
   playData.sort((a,b)=>b.p-a.p);
-  const sg=$('stats-grid');
-  sg.innerHTML=`
-    <div class="stat-card"><div class="stat-val">${totalPlays}</div><div class="stat-lbl">Total Plays</div></div>
-    <div class="stat-card"><div class="stat-val">${uniquePlayed}</div><div class="stat-lbl">Games Played</div></div>
-    <div class="stat-card"><div class="stat-val">${fmtTime(totalTime)}</div><div class="stat-lbl">Time Played</div></div>
-    <div class="stat-card"><div class="stat-val">${getFavs().length}</div><div class="stat-lbl">Favourites</div></div>
-  `;
+  $('stats-grid').innerHTML=`<div class="stat-card"><div class="stat-val">${totalPlays}</div><div class="stat-lbl">Total Plays</div></div><div class="stat-card"><div class="stat-val">${uniquePlayed}</div><div class="stat-lbl">Games Played</div></div><div class="stat-card"><div class="stat-val">${fmtTime(totalTime)}</div><div class="stat-lbl">Time Played</div></div><div class="stat-card"><div class="stat-val">${getFavs().length}</div><div class="stat-lbl">Favourites</div></div>`;
   const tl=$('top-games-list');
-  if(playData.length===0){tl.innerHTML='<div style="color:rgba(255,255,255,.3);font-size:13px;padding:8px 0;">No games played yet!</div>';return;}
-  tl.innerHTML=playData.slice(0,5).map((d,i)=>
-    `<div class="top-game-row"><span class="top-game-rank">#${i+1}</span><span class="top-game-name">${d.n}</span><span class="top-game-plays">${d.p}x</span></div>`
-  ).join('');
+  if(!playData.length){tl.innerHTML='<div style="color:rgba(255,255,255,.3);font-size:13px;padding:8px 0;">No games played yet!</div>';return;}
+  tl.innerHTML=playData.slice(0,5).map((d,i)=>`<div class="top-game-row"><span class="top-game-rank">#${i+1}</span><span class="top-game-name">${d.n}</span><span class="top-game-plays">${d.p}x</span></div>`).join('');
 }
 $('reset-stats-btn').onclick=()=>{
-  if(!confirm('Reset all play stats? This cannot be undone.'))return;
-  ALL.forEach(g=>ls.removeItem('mls_'+g.n));
-  ls.removeItem('ml_recent');
-  renderGames();refreshStats();
+  if(!confirm('Reset all play stats?'))return;
+  ALL.forEach(g=>ls.removeItem('mls_'+g.n));ls.removeItem('ml_recent');renderGames();refreshStats();
 };
 
-// ── CANVAS BG ─────────────────────────────────────────────────────────────────
+// ── CANVAS BACKGROUND ─────────────────────────────────────────────────────────
 const canvas=$('bg');
 const ctx=canvas.getContext('2d',{alpha:false});
 let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0;
+
 function initBg(){
   if(curBg==='stars'){stars=[];for(let i=0;i<180;i++)stars.push({x:Math.random()*cw,y:Math.random()*ch,r:Math.random()*1.8+.3,a:Math.random()*Math.PI*2,spd:Math.random()*.04+.01});}
   if(curBg==='neonrain'){drops=[];const cols=Math.floor(cw/18)||1;for(let i=0;i<cols;i++)drops.push({x:i*18+Math.random()*10,y:Math.random()*ch,spd:Math.random()*2+1,len:Math.random()*80+30,a:Math.random()*.6+.2});}
@@ -1073,61 +718,110 @@ function initBg(){
 function resize(){cw=canvas.width=window.innerWidth;ch=canvas.height=window.innerHeight;initBg();}
 resize();
 let rt;window.addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150);});
-function getCol(){const g=GC[curGC]||GC.purple;const ph=(time/150)%3;return ph<1?g.c1:ph<2?g.c2:g.c3;}
+
+// FIX: getCol uses GC_PALETTES which is the single source of truth
+function getCol(){
+  const p=GC_PALETTES[curGC]||GC_PALETTES.purple;
+  const ph=(time/150)%3;
+  return ph<1?p.c1:ph<2?p.c2:p.c3;
+}
+
 let fc=0;
 function draw(){
   requestAnimationFrame(draw);
   if(++fc%2!==0)return;
   if(overlay.classList.contains('on'))return;
   time+=.5*bgSpeedMult;
-  ctx.fillStyle='#0a0a16';ctx.fillRect(0,0,cw,ch);
+
+  // FIX: use canvasBg (updated by applyBgCol) instead of hardcoded color
+  ctx.fillStyle=canvasBg;
+  ctx.fillRect(0,0,cw,ch);
+
   if(bright===0||curBg==='none')return;
-  const col=getCol();ctx.globalAlpha=bright*.6;
+
+  const col=getCol();
+  ctx.globalAlpha=bright*.65;
+
   switch(curBg){
-    case'static':{const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);gr.addColorStop(0,col+'33');gr.addColorStop(1,'#0a0a16');ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);break;}
-    case'lines':{ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=5;const off=(time*1.5)%60;ctx.beginPath();for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}ctx.stroke();ctx.beginPath();for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}ctx.stroke();ctx.shadowBlur=0;break;}
-    case'dots':{dotPhase+=.018;ctx.shadowColor=col;ctx.shadowBlur=4;ctx.fillStyle=col;const sp=52;for(let x=sp/2;x<cw;x+=sp){for(let y=sp/2;y<ch;y+=sp){const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;ctx.globalAlpha=bright*.6*(.2+p*.45);ctx.beginPath();ctx.arc(x,y,1+p*2,0,6.283);ctx.fill();}}ctx.shadowBlur=0;break;}
-    case'stars':{ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;for(const s of stars){s.a+=s.spd;ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.7;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}ctx.shadowBlur=0;break;}
-    case'neonrain':{ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.shadowColor=col;ctx.shadowBlur=4;for(const d of drops){ctx.globalAlpha=d.a*bright*.6;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.spd*2;if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}}ctx.shadowBlur=0;break;}
-    case'waves':{ctx.shadowColor=col;ctx.shadowBlur=6;ctx.lineWidth=1.5;for(let w=0;w<8;w++){const yb=ch*(w+1)/9,amp=14+w*3,fr=.0075-w*.0003,ph=time*.038+w*.9;ctx.globalAlpha=bright*.6*(.15+w*.045);ctx.strokeStyle=col;ctx.beginPath();for(let x=0;x<=cw;x+=5){const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();}ctx.shadowBlur=0;break;}
+    case'static':{
+      const gr=ctx.createRadialGradient(cw/2,ch/2,0,cw/2,ch/2,Math.max(cw,ch)*.7);
+      gr.addColorStop(0,col+'44');gr.addColorStop(1,canvasBg);
+      ctx.fillStyle=gr;ctx.fillRect(0,0,cw,ch);break;
+    }
+    case'lines':{
+      ctx.strokeStyle=col;ctx.lineWidth=1.5;ctx.shadowColor=col;ctx.shadowBlur=6;
+      const off=(time*1.5)%60;
+      ctx.beginPath();for(let x=-off-ch;x<cw+60;x+=60){ctx.moveTo(x,0);ctx.lineTo(x+ch*.15,ch);}ctx.stroke();
+      ctx.beginPath();for(let y=-off-cw;y<ch+60;y+=60){ctx.moveTo(0,y);ctx.lineTo(cw,y+cw*.08);}ctx.stroke();
+      ctx.shadowBlur=0;break;
+    }
+    case'dots':{
+      dotPhase+=.018;ctx.shadowColor=col;ctx.shadowBlur=4;ctx.fillStyle=col;const sp=52;
+      for(let x=sp/2;x<cw;x+=sp){for(let y=sp/2;y<ch;y+=sp){
+        const p=Math.sin(dotPhase+(x+y)*.018)*.5+.5;
+        ctx.globalAlpha=bright*.65*(.2+p*.45);
+        ctx.beginPath();ctx.arc(x,y,1+p*2,0,6.283);ctx.fill();
+      }}ctx.shadowBlur=0;break;
+    }
+    case'stars':{
+      ctx.shadowColor=col;ctx.shadowBlur=3;ctx.fillStyle=col;
+      for(const s of stars){s.a+=s.spd;ctx.globalAlpha=Math.abs(Math.sin(s.a))*bright*.75;ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.283);ctx.fill();}
+      ctx.shadowBlur=0;break;
+    }
+    case'neonrain':{
+      ctx.strokeStyle=col;ctx.lineWidth=1.2;ctx.shadowColor=col;ctx.shadowBlur=5;
+      for(const d of drops){ctx.globalAlpha=d.a*bright*.65;ctx.beginPath();ctx.moveTo(d.x,d.y);ctx.lineTo(d.x,d.y+d.len);ctx.stroke();d.y+=d.spd*2;if(d.y>ch+d.len){d.y=-d.len;d.x=Math.random()*cw;d.a=Math.random()*.6+.2;}}
+      ctx.shadowBlur=0;break;
+    }
+    case'waves':{
+      ctx.shadowColor=col;ctx.shadowBlur=7;ctx.lineWidth=1.5;
+      for(let w=0;w<8;w++){
+        const yb=ch*(w+1)/9,amp=14+w*3,fr=.0075-w*.0003,ph=time*.038+w*.9;
+        ctx.globalAlpha=bright*.65*(.15+w*.045);ctx.strokeStyle=col;
+        ctx.beginPath();for(let x=0;x<=cw;x+=5){const y=yb+Math.sin(x*fr+ph)*amp+Math.sin(x*fr*1.6-ph*.5)*amp*.3;x===0?ctx.moveTo(x,y):ctx.lineTo(x,y);}ctx.stroke();
+      }ctx.shadowBlur=0;break;
+    }
   }
   ctx.globalAlpha=1;
 }
 draw();
 
-// ── RESTORE ───────────────────────────────────────────────────────────────────
-const sT=get('theme')||'purple',sC=get('card')||'purple',
-      sGC=get('gc')||'purple',sBg=get('bg')||'stars',
+// ── RESTORE ALL SETTINGS ──────────────────────────────────────────────────────
+// FIX: restore order matters — applyBgCol first so canvasBg and CSS vars are set
+// before anything tries to use them
+const sT=get('theme')||'purple', sC=get('card')||'purple',
+      sGC=get('gc')||'purple', sBg=get('bg')||'stars',
       sBr=parseFloat(get('bright')||'100');
-applyAccent(sT);applyCard(sC);
-curGC=sGC;curBg=sBg;bright=sBr/100;
-applyBgCol(sGC);
-const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>o.classList.toggle('on',o.getAttribute(attr)===val));};
-mark('[data-theme]','data-theme',sT);mark('[data-card]','data-card',sC);
-mark('[data-gc]','data-gc',sGC);mark('[data-bg]','data-bg',sBg);
-brightIn.value=sBr;brightNum.textContent=sBr;initBg();
-{const dim=0.5+(sBr/100)*0.5;$('nav').style.opacity=dim;$('main').style.opacity=dim;}
-const sGlow=get('glow')||'off';applyGlow(sGlow);mark('[data-glow]','data-glow',sGlow);
-const sHover=get('hover')||'on';applyHover(sHover);mark('[data-hover]','data-hover',sHover);
-const sBgSpd=get('bgspd')||'normal';applyBgSpd(sBgSpd);mark('[data-bgspd]','data-bgspd',sBgSpd);
-const sLC=get('logocol')||'cyan';applyLogoCol(sLC);mark('[data-logocol]','data-logocol',sLC);
-const sCtr=get('showctr')||'on';applyShowCtr(sCtr);mark('[data-showctr]','data-showctr',sCtr);
-const sSP=get('showplays')||'on';showPlays=sSP==='on';mark('[data-showplays]','data-showplays',sSP);
-const sSN=get('shownew')||'on';showNew=sSN==='on';mark('[data-shownew]','data-shownew',sSN);
 
-// ── UPDATE POPUP ──────────────────────────────────────────────────────────────
+applyBgCol(sGC);      // sets canvasBg + --bg/--nav/--top
+applyBgStyle(sBg);    // sets curBg + calls initBg
+applyAccent(sT);
+applyCard(sC);
+applyBrightness(sBr); // sets bright only, no UI opacity
+
+const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>o.classList.toggle('on',o.getAttribute(attr)===val));};
+mark('[data-theme]','data-theme',sT);
+mark('[data-card]','data-card',sC);
+mark('[data-gc]','data-gc',sGC);
+mark('[data-bg]','data-bg',sBg);
+brightIn.value=sBr;brightNum.textContent=sBr;
+
+const sGlow=get('glow')||'on';    applyGlow(sGlow);    mark('[data-glow]','data-glow',sGlow);
+const sHover=get('hover')||'on';  applyHover(sHover);  mark('[data-hover]','data-hover',sHover);
+const sBgSpd=get('bgspd')||'normal'; applyBgSpd(sBgSpd); mark('[data-bgspd]','data-bgspd',sBgSpd);
+const sLC=get('logocol')||'cyan'; applyLogoCol(sLC);   mark('[data-logocol]','data-logocol',sLC);
+const sCtr=get('showctr')||'on';  applyShowCtr(sCtr);  mark('[data-showctr]','data-showctr',sCtr);
+const sSP=get('showplays')||'on'; showPlays=sSP==='on'; mark('[data-showplays]','data-showplays',sSP);
+const sSN=get('shownew')||'on';   showNew=sSN==='on';   mark('[data-shownew]','data-shownew',sSN);
+
+// Update popup
 const VER='1.4';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 
-// ── TUTORIAL — simple tooltip, one-time ───────────────────────────────────────
-if(ls.getItem('ml_tut3')!=='1'){
-  $('tut-box').classList.add('on');
-}
-$('tut-ok').onclick=()=>{
-  $('tut-box').classList.remove('on');
-  ls.setItem('ml_tut3','1');
-};
+// Tutorial
+if(ls.getItem('ml_tut3')!=='1'){$('tut-box').classList.add('on');}
+$('tut-ok').onclick=()=>{$('tut-box').classList.remove('on');ls.setItem('ml_tut3','1');};
 
 renderGames();
 })();
