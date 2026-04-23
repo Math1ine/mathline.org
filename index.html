@@ -167,7 +167,17 @@ body.hover-off .card:hover{transform:none!important;}
 #tut-ok{margin-top:12px;display:block;width:100%;padding:7px 0;border:none;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
 #tut-ok:hover{filter:brightness(1.1);}
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-@media(max-width:1300px){#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
+/* Survey popup */
+#survey-popup{display:none;position:fixed;z-index:70;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
+#survey-popup.on{display:flex;}
+#survey-box{background:#0d0d1a;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:40px 36px;max-width:480px;width:90%;text-align:center;}
+#survey-box h2{color:#fff;font-size:1.5rem;margin-bottom:16px;line-height:1.35;}
+#survey-box p{color:rgba(255,255,255,.6);font-size:14px;line-height:1.7;margin-bottom:28px;}
+#survey-btn{display:inline-block;padding:13px 36px;border:none;border-radius:9px;background:#1a73e8;color:#fff;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;transition:background .2s;}
+#survey-btn:hover{background:#1558b0;}
+#survey-skip{display:block;margin-top:16px;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;background:none;border:none;width:100%;}
+#survey-skip:hover{color:rgba(255,255,255,.6);}
+{#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
 @media(max-width:1050px){#game-list,.recent-row{grid-template-columns:repeat(4,1fr);}}
 @media(max-width:768px){:root{--nav-w:0px;}#nav{display:none;}#main{left:0;}#game-list,.recent-row{grid-template-columns:repeat(3,1fr);gap:12px;}}
 @media(max-width:480px){#game-list,.recent-row{grid-template-columns:repeat(2,1fr);}}
@@ -344,6 +354,16 @@ body.hover-off .card:hover{transform:none!important;}
     </div>
   </div>
 </div>
+<!-- Survey popup — shows every visit -->
+<div id="survey-popup">
+  <div id="survey-box">
+    <h2>Should I shut down Math Line and try to improve it and make it better?</h2>
+    <p>This will take about a month. Please fill out the form.</p>
+    <a id="survey-btn" href="https://forms.gle/Z8eKQB8oJeY91ebG7" target="_blank" rel="noopener">Take the Survey</a>
+    <button id="survey-skip">Skip for now</button>
+  </div>
+</div>
+
 <script>
 (function(){
 'use strict';
@@ -574,6 +594,11 @@ $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove(
 if(ls.getItem('ml_tut3')!=='1'){$('tut-box').classList.add('on');}
 $('tut-ok').onclick=()=>{$('tut-box').classList.remove('on');ls.setItem('ml_tut3','1');};
 renderGames();
+
+// Survey popup — shows every visit, no localStorage skip
+$('survey-popup').classList.add('on');
+$('survey-btn').onclick=()=>$('survey-popup').classList.remove('on');
+$('survey-skip').onclick=()=>$('survey-popup').classList.remove('on');
 })();
 </script>
 </body>
