@@ -177,7 +177,7 @@ body.hover-off .card:hover{transform:none!important;}
 #survey-btn:hover{background:#1558b0;}
 #survey-skip{display:block;margin-top:16px;color:rgba(255,255,255,.35);font-size:13px;cursor:pointer;background:none;border:none;width:100%;}
 #survey-skip:hover{color:rgba(255,255,255,.6);}
-{#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
+@media(max-width:1300px){#game-list,.recent-row{grid-template-columns:repeat(5,1fr);}}
 @media(max-width:1050px){#game-list,.recent-row{grid-template-columns:repeat(4,1fr);}}
 @media(max-width:768px){:root{--nav-w:0px;}#nav{display:none;}#main{left:0;}#game-list,.recent-row{grid-template-columns:repeat(3,1fr);gap:12px;}}
 @media(max-width:480px){#game-list,.recent-row{grid-template-columns:repeat(2,1fr);}}
@@ -196,6 +196,7 @@ body.hover-off .card:hover{transform:none!important;}
   <button class="nav-btn" data-cat="All"><span class="nav-icon">🎮</span>All Games</button>
   <button class="nav-btn" data-cat="Recent"><span class="nav-icon">🕐</span>Recently Played</button>
   <button class="nav-btn" data-cat="Favourites"><span class="nav-icon">⭐</span>Favourites</button>
+  <button class="nav-btn" id="random-btn"><span class="nav-icon">🎲</span>Random Game</button>
   <div class="nav-divider"></div>
   <div class="nav-section">Categories</div>
   <div id="nav-cats"></div>
@@ -204,6 +205,16 @@ body.hover-off .card:hover{transform:none!important;}
 </nav>
 <div id="main">
   <div id="content">
+    <!-- Game of the Day -->
+    <div id="gotd" style="background:linear-gradient(135deg,rgba(157,78,221,.18),rgba(0,217,255,.10));border:1px solid rgba(157,78,221,.3);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;cursor:pointer;">
+      <div id="gotd-thumb" style="width:80px;height:45px;border-radius:8px;flex-shrink:0;"></div>
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;margin-bottom:3px;">🎯 Game of the Day</div>
+        <div id="gotd-name" style="font-size:15px;font-weight:700;color:#fff;"></div>
+        <div id="gotd-cat" style="font-size:12px;color:rgba(255,255,255,.4);margin-top:2px;"></div>
+      </div>
+      <button id="gotd-play" style="margin-left:auto;padding:8px 18px;border:none;border-radius:7px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;">▶ Play</button>
+    </div>
     <div class="section-header">
       <span class="section-title" id="section-label">New Games</span>
       <span class="section-count" id="counter"></span>
@@ -354,13 +365,28 @@ body.hover-off .card:hover{transform:none!important;}
     </div>
   </div>
 </div>
+<!-- Keyboard shortcuts popup -->
+<div class="popup" id="keys-popup">
+  <div class="popup-box" style="max-width:380px;">
+    <h2 style="font-size:1.3rem;">⌨️ Keyboard Shortcuts</h2>
+    <div style="display:flex;flex-direction:column;gap:0;margin-top:14px;">
+      <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;"><span style="color:var(--accent);font-weight:700;">Esc</span><span style="color:rgba(255,255,255,.7);">Close game / modal / browser</span></div>
+      <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;"><span style="color:var(--accent);font-weight:700;">F</span><span style="color:rgba(255,255,255,.7);">Fullscreen while in a game</span></div>
+      <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;"><span style="color:var(--accent);font-weight:700;">?</span><span style="color:rgba(255,255,255,.7);">Show this shortcut list</span></div>
+      <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:14px;"><span style="color:var(--accent);font-weight:700;">R</span><span style="color:rgba(255,255,255,.7);">Launch a random game</span></div>
+      <div style="display:flex;justify-content:space-between;padding:9px 0;font-size:14px;"><span style="color:var(--accent);font-weight:700;">Alt</span><span style="color:rgba(255,255,255,.7);">Skip browser start screen</span></div>
+    </div>
+    <div class="popup-foot"><button class="pop-btn" id="keys-ok">Got it</button></div>
+  </div>
+</div>
+
 <!-- Survey popup — shows every visit -->
 <div id="survey-popup">
   <div id="survey-box">
-    <h2>Should I shut down Math Line and try to improve it and make it better?</h2>
-    <p>This will take about a month. Please fill out the form.</p>
-    <a id="survey-btn" href="https://forms.gle/Z8eKQB8oJeY91ebG7" target="_blank" rel="noopener">Take the Survey</a>
-    <button id="survey-skip">Skip for now</button>
+    <h2><strong>Votes Are In</strong></h2>
+    <p style="font-size:16px;color:rgba(255,255,255,.85);margin-bottom:8px;">89% said No — Math Line will stay open! 🎉</p>
+    <p>Thank you to everyone who voted. We're staying and working on improvements.</p>
+    <button id="survey-skip" style="display:inline-block;padding:13px 36px;border:none;border-radius:9px;background:#1a73e8;color:#fff;font-weight:700;font-size:15px;cursor:pointer;margin-top:4px;">Let's Go!</button>
   </div>
 </div>
 
@@ -493,8 +519,10 @@ function closeGame(){
 bkBtn.onclick=closeGame;
 fsBtn.onclick=()=>{if(gframe.requestFullscreen)gframe.requestFullscreen();};
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();else if(browserPage.classList.contains('on'))goToGames();}
+  if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();else if(browserPage.classList.contains('on'))goToGames();else if($('keys-popup').classList.contains('on'))$('keys-popup').classList.remove('on');}
   if((e.key==='f'||e.key==='F')&&overlay.classList.contains('on')){e.preventDefault();fsBtn.click();}
+  if(e.key==='?'&&!overlay.classList.contains('on')){$('keys-popup').classList.add('on');}
+  if((e.key==='r'||e.key==='R')&&!overlay.classList.contains('on')&&e.target.tagName!=='INPUT'){launchRandom();}
 });
 settingsBtn.onclick=e=>{e.stopPropagation();drawer.classList.toggle('on');};
 $('dr-close').onclick=()=>drawer.classList.remove('on');
@@ -593,11 +621,28 @@ if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 if(ls.getItem('ml_tut3')!=='1'){$('tut-box').classList.add('on');}
 $('tut-ok').onclick=()=>{$('tut-box').classList.remove('on');ls.setItem('ml_tut3','1');};
+// ── RANDOM GAME ───────────────────────────────────────────────────────────────
+function launchRandom(){const g=ALL[Math.floor(Math.random()*ALL.length)];openModal(g.n);}
+$('random-btn').onclick=launchRandom;
+
+// ── GAME OF THE DAY ───────────────────────────────────────────────────────────
+(function(){
+  const day=Math.floor(Date.now()/86400000);
+  const g=ALL[day%ALL.length];
+  $('gotd-name').textContent=g.n;$('gotd-cat').textContent=g.c;
+  $('gotd-thumb').style.background=gradForName(g.n);
+  $('gotd').onclick=()=>openModal(g.n);
+  $('gotd-play').onclick=e=>{e.stopPropagation();launchGame(g.n);};
+})();
+
+// ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
+$('keys-ok').onclick=()=>$('keys-popup').classList.remove('on');
+$('keys-popup').onclick=e=>{if(e.target===$('keys-popup'))$('keys-popup').classList.remove('on');};
+
 renderGames();
 
-// Survey popup — shows every visit, no localStorage skip
+// Survey popup — shows every visit
 $('survey-popup').classList.add('on');
-$('survey-btn').onclick=()=>$('survey-popup').classList.remove('on');
 $('survey-skip').onclick=()=>$('survey-popup').classList.remove('on');
 })();
 </script>
