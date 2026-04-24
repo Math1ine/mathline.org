@@ -70,35 +70,13 @@ body.hover-off .card:hover{transform:none!important;}
 #bar-lbl{margin-top:10px;font-size:13px;color:rgba(255,255,255,.5);}
 #fs-btn{position:fixed;right:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:var(--accent);color:#fff;}
 #bk-btn{position:fixed;left:18px;top:18px;padding:8px 14px;border-radius:8px;border:none;cursor:pointer;z-index:60;font-weight:700;background:rgba(0,0,0,.55);color:#fff;}
-
-/* ── BROWSER ── */
-#browser-page{
-  display:none;position:fixed;
-  /* cover entire viewport — full tab */
-  inset:0;
-  z-index:35;
-  flex-direction:column;
-  background:#000;
-}
+#browser-page{display:none;position:fixed;inset:0;z-index:35;flex-direction:column;background:#000;}
 #browser-page.on{display:flex;}
-#browser-topbar{
-  height:44px;flex-shrink:0;
-  background:var(--top);
-  border-bottom:1px solid rgba(255,255,255,.07);
-  display:flex;align-items:center;gap:10px;
-  padding:0 14px;
-}
-#browser-back-btn{
-  display:flex;align-items:center;gap:6px;
-  padding:6px 14px;border:none;border-radius:7px;
-  background:rgba(255,255,255,.08);color:var(--text);
-  font-size:13px;font-weight:700;cursor:pointer;
-  transition:background .15s;
-}
+#browser-topbar{height:44px;flex-shrink:0;background:var(--top);border-bottom:1px solid rgba(255,255,255,.07);display:flex;align-items:center;gap:10px;padding:0 14px;}
+#browser-back-btn{display:flex;align-items:center;gap:6px;padding:6px 14px;border:none;border-radius:7px;background:rgba(255,255,255,.08);color:var(--text);font-size:13px;font-weight:700;cursor:pointer;transition:background .15s;}
 #browser-back-btn:hover{background:rgba(255,255,255,.16);}
 #browser-title{font-size:13px;color:rgba(255,255,255,.4);font-weight:600;}
 #browser-iframe{flex:1;width:100%;border:none;background:#fff;}
-
 #drawer{position:fixed;right:-400px;top:0;bottom:0;width:380px;background:#0d0d1a;z-index:40;transition:right .3s;overflow:hidden;border-left:1px solid rgba(255,255,255,.07);box-shadow:-8px 0 30px rgba(0,0,0,.5);display:flex;flex-direction:column;}
 #drawer.on{right:0;}
 .dr-head{padding:18px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);}
@@ -167,7 +145,6 @@ body.hover-off .card:hover{transform:none!important;}
 #tut-ok{margin-top:12px;display:block;width:100%;padding:7px 0;border:none;border-radius:6px;background:var(--accent);color:#fff;font-weight:700;font-size:13px;cursor:pointer;}
 #tut-ok:hover{filter:brightness(1.1);}
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;}
-/* Survey popup */
 #survey-popup{display:none;position:fixed;z-index:70;inset:0;background:rgba(0,0,0,.85);backdrop-filter:blur(6px);align-items:center;justify-content:center;}
 #survey-popup.on{display:flex;}
 #survey-box{background:#0d0d1a;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:40px 36px;max-width:480px;width:90%;text-align:center;}
@@ -205,7 +182,6 @@ body.hover-off .card:hover{transform:none!important;}
 </nav>
 <div id="main">
   <div id="content">
-    <!-- Game of the Day -->
     <div id="gotd" style="background:linear-gradient(135deg,rgba(157,78,221,.18),rgba(0,217,255,.10));border:1px solid rgba(157,78,221,.3);border-radius:12px;padding:14px 18px;margin-bottom:20px;display:flex;align-items:center;gap:14px;cursor:pointer;">
       <div id="gotd-thumb" style="width:80px;height:45px;border-radius:8px;flex-shrink:0;"></div>
       <div>
@@ -234,7 +210,6 @@ body.hover-off .card:hover{transform:none!important;}
 <button id="fs-btn" style="display:none">⛶ Fullscreen</button>
 <button id="bk-btn" style="display:none">← Back</button>
 
-<!-- FULL TAB BROWSER — covers entire screen, has its own top bar with back button -->
 <div id="browser-page">
   <div id="browser-topbar">
     <button id="browser-back-btn">← Back to Games</button>
@@ -365,7 +340,6 @@ body.hover-off .card:hover{transform:none!important;}
     </div>
   </div>
 </div>
-<!-- Keyboard shortcuts popup -->
 <div class="popup" id="keys-popup">
   <div class="popup-box" style="max-width:380px;">
     <h2 style="font-size:1.3rem;">⌨️ Keyboard Shortcuts</h2>
@@ -380,12 +354,12 @@ body.hover-off .card:hover{transform:none!important;}
   </div>
 </div>
 
-<!-- Survey popup — shows every visit -->
+<!-- Survey popup -->
 <div id="survey-popup">
   <div id="survey-box">
     <h2><strong>Votes Are In</strong></h2>
     <p style="font-size:16px;color:rgba(255,255,255,.85);margin-bottom:8px;">89% said No — Math Line will stay open! 🎉</p>
-    <p>Thank you to everyone who voted. We're staying and working on improvements.</p>
+    <p>Thank you to everyone who voted. I'll keep working on improvements.</p>
     <button id="survey-skip" style="display:inline-block;padding:13px 36px;border:none;border-radius:9px;background:#1a73e8;color:#fff;font-weight:700;font-size:15px;cursor:pointer;margin-top:4px;">Let's Go!</button>
   </div>
 </div>
@@ -420,11 +394,8 @@ const applyCard=t=>{const c=CARDS[t];if(!c)return;R.style.setProperty('--card-bg
 const applyBgCol=v=>{curGC=v;const p=GC_PALETTES[v]||GC_PALETTES.purple;canvasBg=p.bg;R.style.setProperty('--bg',p.bg);R.style.setProperty('--nav',p.nav);R.style.setProperty('--top',p.top);document.body.style.background=p.bg;set('gc',v);};
 const applyBgStyle=v=>{curBg=v;set('bg',v);initBg();};
 const applyBrightness=v=>{bright=v/100;set('bright',v);};
-const GAMES=[{n:'Ragdoll Archers',u:'Ragdoll-Archers.html',c:'Action'},{n:'Ragdoll Hit',u:'Ragdoll-hit.html',c:'Action'},{n:'Time Shooter',u:'Time-shooter.html',c:'Action'},{n:'Retro Bowl',u:'Retro-bowl.html',c:'Arcade'},{n:'Snow Rider',u:'Snow-Rider.html',c:'Racing'},{n:'Swords And Sandals',u:'Swords-and-sandlas.html',c:'Action'},{n:'Crazy Cattle',u:'Crazy-cattle.html',c:'Arcade'},{n:'Gladi Hoppers',u:'Gladi-hoppers.html',c:'Action'},{n:'Bit Planes',u:'Bit-planes.html',c:'Arcade'},{n:'Final Earth 2',u:'Final-earth2.html',c:'Strategy'},{n:'Cluster Rush',u:'Cluster-rush.html',c:'Arcade'},{n:'Push Your Luck',u:'Push-your-luck.html',c:'Arcade'},{n:'Poly Track',u:'Poly-track.html',c:'Racing'},{n:'Ragdoll Soccer',u:'Ragdoll-soccer.html',c:'2 Player'},{n:'Jetpack Joy Ride',u:'Jetpack-joy-ride.html',c:'Action'},{n:'Learn To Fly 3',u:'Learn-to-fly-3.html',c:'Racing'},{n:'Malidin Stun Cars',u:'Malidin-stun-cars.html',c:'Racing'},{n:'Gun Spin',u:'Gun-spin.html',c:'Action'},{n:'Age Of War',u:'Age-of-war.html',c:'Strategy'},{n:'Moto X3M 2',u:'Moto-x3m-2.html',c:'Racing'},{n:'Moto X3M Winter',u:'Moto-x3m-winter.html',c:'Racing'},{n:'Basketball Stars',u:'Basketball-stars.html',c:'2 Player'},{n:'Idle Breakout',u:'Idle-breakout.html',c:'Arcade'},{n:'Vex 8',u:'Vex-8.html',c:'Action'},{n:'Tiny Fishing',u:'Tiny-fishing.html',c:'Simulation'},{n:'Drive Mad',u:'Drive-mad.html',c:'Racing'},{n:'Stick Man Hook',u:'Stick-man-hook.html',c:'Action'},{n:'Line Rider',u:'Line-rider.html',c:'Racing'},{n:'Unicycle Hero',u:'Unicycle-hero.html',c:'Action'},{n:'Basket Random',u:'Basket-random.html',c:'2 Player'},{n:'1v1 Lol',u:'1v1-lol.html',c:'2 Player'},{n:'Happy Wheels',u:'Happy-wheels.html',c:'Action'},{n:'Idle Miner Tycoon',u:'Idle-miner-tycoon.html',c:'Simulation'},{n:'Jack Smith',u:'Jack-smith.html',c:'Action'},{n:'Tunnel Rush',u:'Tunnel-rush.html',c:'Racing'},{n:'Duck Life 5',u:'Duck-life-5.html',c:'Simulation'},{n:'Duck Life 4',u:'Duck-life-4.html',c:'Simulation'},{n:'Mob Control',u:'Mob-control.html',c:'Action'},{n:'A Small World Cup',u:'A-small-world-cup.html',c:'2 Player'},{n:'Escape Road',u:'Escape-road.html',c:'Racing'},{n:'QWOP',u:'QWOP.html',c:'Simulation'},{n:'Indian Truck Simulator',u:'Indian-truck-simulator.html',c:'Simulation'},{n:'Doge Miner',u:'Doge-miner.html',c:'Simulation'},{n:'Draw Climber',u:'Draw-climber.html',c:'Racing'},{n:'Slope 3',u:'Slope-3.html',c:'Racing'},{n:'Infinite Craft',u:'Infinte-craft.html',c:'Simulation'},{n:'Block Blast',u:'Block-blast.html',c:'Arcade'},{n:'Melon Playground',u:'Melon-playground.html',c:'Simulation'},{n:'House of Hazards',u:'house-of-hazards.html',c:'2 Player'},{n:'Binding of Isaac',u:'Binding-of-issac.html',c:'Action'},{n:'Troll Face Quest 10',u:'Troll-face-10.html',c:'Puzzle'},{n:'Troll Face Quest 11',u:'Troll-face-11.html',c:'Puzzle'},{n:'Troll Face Quest 12',u:'Troll-face-12.html',c:'Puzzle'},{n:'Ultimate Car Simulator 3',u:'ultimate-car-simulator.html',c:'Racing'},{n:'Wordle',u:'Wordle.html',c:'Puzzle'},{n:'Capybara Clicker',u:'Cappybara-clicker.html',c:'Simulation'},{n:'Bob The Robber 5',u:'bob-robber.html',c:'Action'},{n:'Car Crash 3D',u:'Car-crash-3d.html',c:'Racing'},{n:'BitLife',u:'Bit-life.html',c:'Simulation'},{n:'Plants vs Zombies',u:'Plants-vs-zombies.html',c:'Action'},{n:'Tall Man Run',u:'tall-man-run.html',c:'Racing'},{n:'Tag',u:'tag.html',c:'2 Player'},{n:'Subway Surfers Winter',u:'Subway-Winter.html',c:'Racing'},{n:'Subway Surfers Miami',u:'Subway-miami.html',c:'Racing'},{n:'Hole.io',u:'Hole-io.html',c:'Simulation'},{n:'Drift Boss',u:'Drift-boss.html',c:'Racing'},{n:'Subway Surfers Mexico',u:'Subway-mexico.html',c:'Racing'},{n:'Subway Surfers London',u:'Subway-london.html',c:'Racing'},{n:'Subway Surfers Iceland',u:'Subway-iceland.html',c:'Racing'},{n:'Granny 2',u:'Granny2.html',c:'Puzzle'},{n:'Granny 3',u:'Granny3.html',c:'Puzzle'},{n:'Factory Balls 2',u:'Factory-balls2.html',c:'Simulation'},{n:'Factory Balls 3',u:'Factory-balls3.html',c:'Simulation'},{n:'Geometry Dash Lite',u:'Geometry-Dash.html',c:'Racing'},{n:'Hardware Tycoon',u:'Hardware-tycoon.html',c:'Arcade'},{n:'CSGO Clicker',u:'CsGo-clicker.html',c:'Arcade'},{n:'Crossy Road',u:'Crossy-road.html',c:'Arcade'},{n:'Burrito Bison',u:'BB.html',c:'Arcade'},{n:'Burrito Bison Launcha Libre',u:'BL.html',c:'Arcade'},{n:'Burrito Bison Revenge',u:'BR.html',c:'Arcade'},{n:'Space Waves',u:'Space-waves.html',c:'Arcade'},{n:'Zelda Ocarina',u:'Zelda0.html',c:'Arcade'},{n:'Pokemon Emerald Randomized',u:'PER.html',c:'Arcade'},{n:'Rooftop Snipers',u:'RF.html',c:'2 Player'},{n:'Ultimate Car Simulator',u:'Ucarsim.html',c:'Racing'},{n:'Traffic Jam 3D',u:'Tj.html',c:'Arcade'},{n:"Papa's Freezeria",u:'Pf.html',c:'Simulation'},{n:"Papa's Pastaria",u:'Pp.html',c:'Simulation'},{n:"Papa's Sushiria",u:'Ps.html',c:'Simulation'},{n:'Ballz',u:'Ballz.html',c:'Arcade'},{n:'10 Minutes Till Dawn',u:'10min.html',c:'Arcade'},{n:'Minecraft',u:'EaglerCraft 1.12 [wasm].html',c:'Arcade'},{n:'Rocket League',u:'goal.html',c:'Arcade'},{n:'Pixel Battleground',u:'pg.html',c:'Arcade'},{n:'BTD5',u:'BTD5.html',c:'Arcade'},{n:'Brotato',u:'BroT.html',c:'Arcade'},{n:'Dungeons & Degenerate Gamblers',u:'DaDG.html',c:'Arcade'},{n:'Eggy Car',u:'eggy.html',c:'Puzzle'},{n:'Mr. Mine',u:'miner.html',c:'Arcade'},{n:'Jet Rush',u:'jet.html',c:'Racing'},{n:'Moto X3M Spooky Land',u:'motosp.html',c:'Racing'},{n:'Moto X3M Pool Party',u:'motobp.html',c:'Racing'},{n:'Shred Sauce',u:'ShredS.html',c:'Racing'},{n:'Choppy Orc',u:'ChoppyO.html',c:'Arcade'},{n:'Bad Ice Cream 3',u:'BI3.html',c:'Arcade'}];
+
 const CAT_ICON={Action:'⚔️',Racing:'🏎️',Arcade:'🕹️',Puzzle:'🧩',Simulation:'🌍',Strategy:'♟️','2 Player':'👥'};
-const ALL=[...GAMES].sort((a,b)=>a.n.localeCompare(b.n));
-const NEW_SET=new Set(GAMES.slice(-6).map(g=>g.n));
-const URL_MAP=new Map(ALL.map(g=>[g.u,g.n]));
 const $=id=>document.getElementById(id);
 const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label'),
       search=$('search'),overlay=$('overlay'),gframe=$('gframe'),
@@ -436,14 +407,147 @@ const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label
       mLast=$('m-last'),mTime=$('m-time'),mPlay=$('m-play'),
       mClose=$('m-close'),mFav=$('m-fav'),
       brightIn=$('bright-in'),brightNum=$('bright-num'),navCats=$('nav-cats');
+
+// ── GAMES LIST START ── (auto-generated, do not edit manually)
+const _G=[];
+const g=(n,u,c)=>_G.push({n,u,c});
+g('10 Minutes Till Dawn','10min.html','Arcade');
+g('1v1 Lol','1v1-lol.html','2 Player');
+g('A Small World Cup','A-small-world-cup.html','2 Player');
+g('Age Of War','Age-of-war.html','Strategy');
+g('Bad Ice Cream 3','BI3.html','Arcade');
+g('Ballz','Ballz.html','Arcade');
+g('Basket Random','Basket-random.html','2 Player');
+g('Basketball Stars','Basketball-stars.html','2 Player');
+g('Binding of Isaac','Binding-of-issac.html','Action');
+g('BitLife','Bit-life.html','Simulation');
+g('Bit Planes','Bit-planes.html','Arcade');
+g('Block Blast','Block-blast.html','Arcade');
+g('Bob The Robber 5','bob-robber.html','Action');
+g('Brotato','BroT.html','Arcade');
+g('BTD5','BTD5.html','Arcade');
+g('Burrito Bison','BB.html','Arcade');
+g('Burrito Bison Launcha Libre','BL.html','Arcade');
+g('Burrito Bison Revenge','BR.html','Arcade');
+g('Capybara Clicker','Cappybara-clicker.html','Simulation');
+g('Car Crash 3D','Car-crash-3d.html','Racing');
+g('Choppy Orc','ChoppyO.html','Arcade');
+g('Cluster Rush','Cluster-rush.html','Arcade');
+g('Crazy Cattle','Crazy-cattle.html','Arcade');
+g('Crossy Road','Crossy-road.html','Arcade');
+g('CSGO Clicker','CsGo-clicker.html','Arcade');
+g('Doge Miner','Doge-miner.html','Simulation');
+g('Draw Climber','Draw-climber.html','Racing');
+g('Drift Boss','Drift-boss.html','Racing');
+g('Drive Mad','Drive-mad.html','Racing');
+g('Duck Life 4','Duck-life-4.html','Simulation');
+g('Duck Life 5','Duck-life-5.html','Simulation');
+g('Dungeons & Degenerate Gamblers','DaDG.html','Arcade');
+g('Eggy Car','eggy.html','Puzzle');
+g('Escape Road','Escape-road.html','Racing');
+g('Factory Balls 2','Factory-balls2.html','Simulation');
+g('Factory Balls 3','Factory-balls3.html','Simulation');
+g('Final Earth 2','Final-earth2.html','Strategy');
+g('Geometry Dash Lite','Geometry-Dash.html','Racing');
+g('Gladi Hoppers','Gladi-hoppers.html','Action');
+g('Granny 2','Granny2.html','Puzzle');
+g('Granny 3','Granny3.html','Puzzle');
+g('Gun Spin','Gun-spin.html','Action');
+g('Happy Wheels','Happy-wheels.html','Action');
+g('Hardware Tycoon','Hardware-tycoon.html','Arcade');
+g('Hole.io','Hole-io.html','Simulation');
+g('House of Hazards','house-of-hazards.html','2 Player');
+g('Idle Breakout','Idle-breakout.html','Arcade');
+g('Idle Miner Tycoon','Idle-miner-tycoon.html','Simulation');
+g('Indian Truck Simulator','Indian-truck-simulator.html','Simulation');
+g('Infinite Craft','Infinte-craft.html','Simulation');
+g('Jack Smith','Jack-smith.html','Action');
+g('Jet Rush','jet.html','Racing');
+g('Jetpack Joy Ride','Jetpack-joy-ride.html','Action');
+g('Learn To Fly 3','Learn-to-fly-3.html','Racing');
+g('Line Rider','Line-rider.html','Racing');
+g('Malidin Stun Cars','Malidin-stun-cars.html','Racing');
+g('Melon Playground','Melon-playground.html','Simulation');
+g('Minecraft','EaglerCraft 1.12 [wasm].html','Arcade');
+g('Mob Control','Mob-control.html','Action');
+g('Moto X3M 2','Moto-x3m-2.html','Racing');
+g('Moto X3M Pool Party','motobp.html','Racing');
+g('Moto X3M Spooky Land','motosp.html','Racing');
+g('Moto X3M Winter','Moto-x3m-winter.html','Racing');
+g('Mr. Mine','miner.html','Arcade');
+g('Papa\'s Freezeria','Pf.html','Simulation');
+g('Papa\'s Pastaria','Pp.html','Simulation');
+g('Papa\'s Sushiria','Ps.html','Simulation');
+g('Pixel Battleground','pg.html','Arcade');
+g('Plants vs Zombies','Plants-vs-zombies.html','Action');
+g('Pokemon Emerald Randomized','PER.html','Arcade');
+g('Poly Track','Poly-track.html','Racing');
+g('Push Your Luck','Push-your-luck.html','Arcade');
+g('QWOP','QWOP.html','Simulation');
+g('Ragdoll Archers','Ragdoll-Archers.html','Action');
+g('Ragdoll Hit','Ragdoll-hit.html','Action');
+g('Ragdoll Soccer','Ragdoll-soccer.html','2 Player');
+g('Retro Bowl','Retro-bowl.html','Arcade');
+g('Rocket League','goal.html','Arcade');
+g('Rooftop Snipers','RF.html','2 Player');
+g('Shred Sauce','ShredS.html','Racing');
+g('Slope 3','Slope-3.html','Racing');
+g('Snow Rider','Snow-Rider.html','Racing');
+g('Space Waves','Space-waves.html','Arcade');
+g('Stick Man Hook','Stick-man-hook.html','Action');
+g('Subway Surfers Iceland','Subway-iceland.html','Racing');
+g('Subway Surfers London','Subway-london.html','Racing');
+g('Subway Surfers Mexico','Subway-mexico.html','Racing');
+g('Subway Surfers Miami','Subway-miami.html','Racing');
+g('Subway Surfers Winter','Subway-Winter.html','Racing');
+g('Swords And Sandals','Swords-and-sandlas.html','Action');
+g('Tag','tag.html','2 Player');
+g('Tall Man Run','tall-man-run.html','Racing');
+g('Time Shooter','Time-shooter.html','Action');
+g('Tiny Fishing','Tiny-fishing.html','Simulation');
+g('Traffic Jam 3D','Tj.html','Arcade');
+g('Troll Face Quest 10','Troll-face-10.html','Puzzle');
+g('Troll Face Quest 11','Troll-face-11.html','Puzzle');
+g('Troll Face Quest 12','Troll-face-12.html','Puzzle');
+g('Tunnel Rush','Tunnel-rush.html','Racing');
+g('Ultimate Car Simulator','Ucarsim.html','Racing');
+g('Ultimate Car Simulator 3','ultimate-car-simulator.html','Racing');
+g('Unicycle Hero','Unicycle-hero.html','Action');
+g('Vex 8','Vex-8.html','Action');
+g('Wordle','Wordle.html','Puzzle');
+g('Zelda Ocarina','Zelda0.html','Arcade');
+// The last 6 games get the NEW badge
+const NEW_SET=new Set(_G.slice(-6).map(x=>x.n));
+const ALL=[..._G].sort((a,b)=>a.n.localeCompare(b.n));
+const URL_MAP=new Map(ALL.map(x=>[x.u,x.n]));
+// ── GAMES LIST END ──
+
 let activeCat=get('cat')||'New',activeSearch='',curModal=null,gameStart=null;
 let showPlays=get('showplays')!=='off';
 let showNew=get('shownew')!=='off';
-const cats=[...new Set(ALL.map(g=>g.c))].sort();
-cats.forEach(c=>{const btn=document.createElement('button');btn.className='nav-btn';btn.dataset.cat=c;btn.innerHTML=`<span class="nav-icon">${CAT_ICON[c]||'🎮'}</span>${c}`;navCats.appendChild(btn);});
+
+buildNav();
+initGotd();
+renderGames();
+
+function buildNav(){
+  const cats=[...new Set(ALL.map(g=>g.c))].sort();
+  navCats.innerHTML='';
+  cats.forEach(c=>{
+    const btn=document.createElement('button');
+    btn.className='nav-btn';btn.dataset.cat=c;
+    btn.innerHTML=`<span class="nav-icon">${CAT_ICON[c]||'🎮'}</span>${c}`;
+    navCats.appendChild(btn);
+  });
+  document.querySelectorAll('.nav-btn').forEach(btn=>{
+    btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};
+  });
+  setActiveNavBtn(activeCat);
+  $('random-btn').onclick=launchRandom;
+}
+
 function setActiveNavBtn(cat){document.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('on',b.dataset.cat===cat));}
-setActiveNavBtn(activeCat);
-document.querySelectorAll('.nav-btn').forEach(btn=>{btn.onclick=()=>{activeCat=btn.dataset.cat;set('cat',activeCat);setActiveNavBtn(activeCat);activeSearch='';search.value='';renderGames();};});
+
 function makeCard(g,favs){
   const fav=favs.includes(g.n);const s=getStats(g.n);
   const card=document.createElement('div');card.className='card';card.dataset.n=g.n;
@@ -461,7 +565,9 @@ function makeCard(g,favs){
   const cat=document.createElement('div');cat.className='card-cat';cat.textContent=g.c;
   info.appendChild(name);info.appendChild(cat);card.appendChild(thumb);card.appendChild(info);card.onclick=()=>openModal(g.n);return card;
 }
+
 function renderGames(){
+  if(!ALL.length)return;
   const favs=getFavs();let list=ALL;
   if(activeCat==='Recent'){const rec=getRecent();list=rec.map(n=>ALL.find(g=>g.n===n)).filter(Boolean);}
   else if(activeCat==='Favourites'){list=ALL.filter(g=>favs.includes(g.n));}
@@ -486,8 +592,10 @@ function renderGames(){
   req.onclick=()=>window.open('https://docs.google.com/forms/d/e/1FAIpQLScGV9D3vWWpSj7nmcbH8segX7uh0K8Cbli50mb9LM5QeoQD_Q/viewform?usp=dialog','_blank');
   frag.appendChild(req);gameList.replaceChildren(frag);
 }
+
 let searchTimer;
 search.addEventListener('input',e=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{activeSearch=e.target.value;if(activeSearch)setActiveNavBtn(null);else setActiveNavBtn(activeCat);renderGames();},160);});
+
 function openModal(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   curModal=name;const s=getStats(name);
@@ -500,6 +608,7 @@ function openModal(name){
 function closeModal(){modal.classList.remove('on');curModal=null;}
 mClose.onclick=closeModal;modal.onclick=e=>{if(e.target===modal)closeModal();};
 mFav.onclick=()=>{if(!curModal)return;const now=toggleFav(curModal);mFav.textContent=now?'★':'☆';mFav.classList.toggle('on',now);renderGames();};
+
 function launchGame(name){
   const g=ALL.find(x=>x.n===name);if(!g)return;
   const s=getStats(name);s.p=(s.p||0)+1;s.d=new Date().toLocaleDateString();saveStats(name,s);addRecent(name);
@@ -511,6 +620,7 @@ function launchGame(name){
   requestAnimationFrame(tick);gameStart=Date.now();gframe.src=g.u;
   gframe.onload=()=>{ifrDone=true;if(barDone)gload.classList.add('hide');};
 }
+
 function closeGame(){
   if(gameStart){const cu=gframe.src.split('/').pop();const gn=URL_MAP.get(decodeURIComponent(cu));if(gn)addTime(gn,Math.floor((Date.now()-gameStart)/1000));gameStart=null;}
   gframe.onload=null;gframe.src='';overlay.classList.remove('on');gload.classList.remove('hide');
@@ -518,33 +628,31 @@ function closeGame(){
 }
 bkBtn.onclick=closeGame;
 fsBtn.onclick=()=>{if(gframe.requestFullscreen)gframe.requestFullscreen();};
+
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'){if(overlay.classList.contains('on'))closeGame();else if(drawer.classList.contains('on'))drawer.classList.remove('on');else if(modal.classList.contains('on'))closeModal();else if(browserPage.classList.contains('on'))goToGames();else if($('keys-popup').classList.contains('on'))$('keys-popup').classList.remove('on');}
   if((e.key==='f'||e.key==='F')&&overlay.classList.contains('on')){e.preventDefault();fsBtn.click();}
   if(e.key==='?'&&!overlay.classList.contains('on')){$('keys-popup').classList.add('on');}
   if((e.key==='r'||e.key==='R')&&!overlay.classList.contains('on')&&e.target.tagName!=='INPUT'){launchRandom();}
 });
+
 settingsBtn.onclick=e=>{e.stopPropagation();drawer.classList.toggle('on');};
 $('dr-close').onclick=()=>drawer.classList.remove('on');
 document.addEventListener('click',e=>{if(!e.target.closest('#drawer')&&!e.target.closest('#settings-btn'))drawer.classList.remove('on');});
+
 document.querySelectorAll('.dr-tab').forEach(btn=>{
-  btn.onclick=()=>{document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));$('dpanel-'+btn.dataset.dpanel).classList.add('on');if(btn.dataset.dpanel==='stats')refreshStats();};
+  btn.onclick=()=>{
+    document.querySelectorAll('.dr-tab').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+    document.querySelectorAll('.dr-panel').forEach(p=>p.classList.remove('on'));
+    $('dpanel-'+btn.dataset.dpanel).classList.add('on');
+    if(btn.dataset.dpanel==='stats')refreshStats();
+  };
 });
 
-// ── BROWSER — full tab with back button ───────────────────────────────────────
 const BROWSER_URL='https://unpkg.com/bluebook-testing@3.1.3/index.html';
 let browserLoaded=false;
-
-function goToBrowser(){
-  // Load iframe only on first visit (lazy load)
-  if(!browserLoaded){browserIframe.src=BROWSER_URL;browserLoaded=true;}
-  browserPage.classList.add('on');
-  drawer.classList.remove('on');
-}
-function goToGames(){
-  browserPage.classList.remove('on');
-}
-
+function goToBrowser(){if(!browserLoaded){browserIframe.src=BROWSER_URL;browserLoaded=true;}browserPage.classList.add('on');drawer.classList.remove('on');}
+function goToGames(){browserPage.classList.remove('on');}
 $('nav-browser-btn').onclick=()=>{$('brw-popup').classList.add('on');};
 $('brw-ok').onclick=()=>{$('brw-popup').classList.remove('on');goToBrowser();};
 $('browser-back-btn').onclick=goToGames;
@@ -568,6 +676,7 @@ function applyShowCtr(v){$('counter').style.display=v==='off'?'none':'';set('sho
 makePicker('[data-showctr]','data-showctr',applyShowCtr);
 makePicker('[data-showplays]','data-showplays',v=>{showPlays=v==='on';set('showplays',v);renderGames();});
 makePicker('[data-shownew]','data-shownew',v=>{showNew=v==='on';set('shownew',v);renderGames();});
+
 function refreshStats(){
   let totalPlays=0,totalTime=0,uniquePlayed=0;const playData=[];
   ALL.forEach(g=>{const s=getStats(g.n);if(s.p>0){uniquePlayed++;totalPlays+=s.p;totalTime+=s.t||0;playData.push({n:g.n,p:s.p});}});
@@ -578,6 +687,7 @@ function refreshStats(){
   tl.innerHTML=playData.slice(0,5).map((d,i)=>`<div class="top-game-row"><span class="top-game-rank">#${i+1}</span><span class="top-game-name">${d.n}</span><span class="top-game-plays">${d.p}x</span></div>`).join('');
 }
 $('reset-stats-btn').onclick=()=>{if(!confirm('Reset all play stats?'))return;ALL.forEach(g=>ls.removeItem('mls_'+g.n));ls.removeItem('ml_recent');renderGames();refreshStats();};
+
 const canvas=$('bg');const ctx=canvas.getContext('2d',{alpha:false});
 let cw=0,ch=0,stars=[],drops=[],dotPhase=0,time=0;
 function initBg(){
@@ -604,6 +714,7 @@ function draw(){
   ctx.globalAlpha=1;
 }
 draw();
+
 const sT=get('theme')||'purple',sC=get('card')||'purple',sGC=get('gc')||'purple',sBg=get('bg')||'stars',sBr=parseFloat(get('bright')||'100');
 applyBgCol(sGC);applyBgStyle(sBg);applyAccent(sT);applyCard(sC);applyBrightness(sBr);
 const mark=(sel,attr,val)=>{document.querySelectorAll(sel).forEach(o=>o.classList.toggle('on',o.getAttribute(attr)===val));};
@@ -616,32 +727,28 @@ const sLC=get('logocol')||'cyan';applyLogoCol(sLC);mark('[data-logocol]','data-l
 const sCtr=get('showctr')||'on';applyShowCtr(sCtr);mark('[data-showctr]','data-showctr',sCtr);
 const sSP=get('showplays')||'on';showPlays=sSP==='on';mark('[data-showplays]','data-showplays',sSP);
 const sSN=get('shownew')||'on';showNew=sSN==='on';mark('[data-shownew]','data-shownew',sSN);
+
 const VER='1.5';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 if(ls.getItem('ml_tut3')!=='1'){$('tut-box').classList.add('on');}
 $('tut-ok').onclick=()=>{$('tut-box').classList.remove('on');ls.setItem('ml_tut3','1');};
-// ── RANDOM GAME ───────────────────────────────────────────────────────────────
-function launchRandom(){const g=ALL[Math.floor(Math.random()*ALL.length)];openModal(g.n);}
-$('random-btn').onclick=launchRandom;
 
-// ── GAME OF THE DAY ───────────────────────────────────────────────────────────
-(function(){
+function launchRandom(){if(!ALL.length)return;const g=ALL[Math.floor(Math.random()*ALL.length)];openModal(g.n);}
+
+function initGotd(){
+  if(!ALL.length)return;
   const day=Math.floor(Date.now()/86400000);
   const g=ALL[day%ALL.length];
   $('gotd-name').textContent=g.n;$('gotd-cat').textContent=g.c;
   $('gotd-thumb').style.background=gradForName(g.n);
   $('gotd').onclick=()=>openModal(g.n);
   $('gotd-play').onclick=e=>{e.stopPropagation();launchGame(g.n);};
-})();
+}
 
-// ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
 $('keys-ok').onclick=()=>$('keys-popup').classList.remove('on');
 $('keys-popup').onclick=e=>{if(e.target===$('keys-popup'))$('keys-popup').classList.remove('on');};
 
-renderGames();
-
-// Survey popup — shows every visit
 $('survey-popup').classList.add('on');
 $('survey-skip').onclick=()=>$('survey-popup').classList.remove('on');
 })();
