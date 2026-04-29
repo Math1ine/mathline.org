@@ -1,167 +1,702 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Math Line</title>
-  <style>
-    :root {
-      --accent: #000;
-      --text: #fff;
-      --bg: #0a0a0a;
-      --card-bg: #1a1a1a;
-      --card-hover: #252525;
-      --border: #333;
-    }
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html,body{height:100%;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial;color:var(--text);background:var(--bg);overflow-x:hidden;}
-    #topbar{position:fixed;top:0;left:0;right:0;height:60px;background:#111;z-index:30;display:flex;align-items:center;gap:14px;padding:0 24px;border-bottom:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,.5);}
-    #logo{font-size:1.5rem;font-weight:900;color:#fff;white-space:nowrap;}
-    #search{flex:1;max-width:400px;background:#1a1a1a;color:var(--text);padding:10px 16px;font-size:15px;border-radius:6px;border:1px solid var(--border);outline:none;transition:border-color .2s;}
-    #search:focus{border-color:#fff;background:#252525;}
-    #search::placeholder{color:#666;}
-    #top-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-    #settings-btn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#1a1a1a;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;}
-    #settings-btn:hover{background:#252525;}
-    #main{position:fixed;top:60px;left:0;right:0;bottom:0;overflow-y:auto;background:var(--bg);}
-    #content{padding:32px 24px 40px;max-width:1400px;margin:0 auto;}
-    .section-header{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
-    .section-title{font-size:1.1rem;font-weight:700;color:#fff;}
-    .section-count{font-size:13px;color:#999;}
-    #game-list{display:grid;grid-template-columns:repeat(6,1fr);gap:16px;}
-    .card{background:var(--card-bg);border-radius:8px;cursor:pointer;overflow:hidden;border:1px solid var(--border);transition:all .2s;position:relative;}
-    .card:hover{transform:translateY(-2px);background:var(--card-hover);box-shadow:0 4px 12px rgba(255,255,255,.1);}
-    .card-thumb{width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;background:linear-gradient(135deg,#222,#111);}
-    .card-initials{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:rgba(255,255,255,.15);}
-    .card-info{padding:12px;}
-    /* FULL NAME - no truncation */
-    .card-name{font-size:14px;font-weight:600;color:#fff;word-break:break-word;line-height:1.4;}
-    .card-fav{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.7);border:1px solid var(--border);cursor:pointer;width:32px;height:32px;border-radius:50%;font-size:14px;color:#999;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .2s;}
-    .card:hover .card-fav{opacity:1;}
-    .card-fav.on{opacity:1;color:#ffd700;background:rgba(0,0,0,.9);}
-    /* Request card styling */
-    .card.req .card-name{color:#f59e0b;}
-    #overlay{display:none;position:fixed;inset:0;z-index:50;background:#000;flex-direction:column;}
-    #overlay.on{display:flex;}
-    #gframe{flex:1;width:100%;border:none;}
-    #gload{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#1a1a1a;z-index:2;}
-    #gload.hide{display:none;}
-    .spin{border:4px solid #333;border-top:4px solid #fff;border-radius:50%;width:40px;height:40px;animation:spin 1s linear infinite;margin-bottom:18px;}
-    @keyframes spin{to{transform:rotate(360deg);}}
-    #bar-wrap{width:260px;height:6px;background:#333;border-radius:99px;overflow:hidden;margin-top:14px;}
-    #bar{height:100%;width:0;background:#fff;}
-    #fs-btn,#bk-btn{position:fixed;padding:10px 16px;border-radius:6px;border:1px solid #fff;cursor:pointer;z-index:60;font-weight:700;background:#fff;color:#000;display:none;}
-    #fs-btn{right:18px;top:18px;}
-    #bk-btn{left:18px;top:18px;}
-    #fs-btn:hover,#bk-btn:hover{background:#ddd;}
-    #drawer{position:fixed;right:-420px;top:0;bottom:0;width:400px;background:#111;z-index:40;transition:right .3s;overflow-y:auto;border-left:1px solid var(--border);}
-    #drawer.on{right:0;}
-    .dr-head{padding:20px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
-    .dr-head h2{color:#fff;font-size:1.2rem;}
-    .dr-close{background:none;border:none;color:#999;font-size:24px;cursor:pointer;padding:4px;transition:color .2s;}
-    .dr-close:hover{color:#fff;}
-    .dr-panel{padding:20px 24px;}
-    .sg{margin:16px 0;}
-    .sg>span{display:block;color:#999;font-weight:700;font-size:12px;text-transform:uppercase;margin-bottom:10px;}
-    .opts{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
-    .opt{padding:10px;border:1px solid var(--border);border-radius:6px;background:#1a1a1a;color:#fff;cursor:pointer;font-weight:600;font-size:13px;transition:all .15s;text-align:center;}
-    .opt:hover{background:#252525;border-color:#fff;}
-    .opt.on{background:#fff;color:#000;}
-    .modal{display:none;position:fixed;z-index:55;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(3px);}
-    .modal.on{display:flex;align-items:center;justify-content:center;}
-    .modal-box{background:#1a1a1a;padding:32px;border-radius:8px;max-width:480px;width:90%;color:var(--text);border:1px solid var(--border);max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);}
-    .modal-thumb{width:100%;aspect-ratio:16/9;border-radius:6px;overflow:hidden;margin-bottom:20px;position:relative;background:#252525;}
-    .modal-thumb-title{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:800;color:rgba(255,255,255,.15);}
-    .mtrow{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
-    .mtrow h2{flex:1;font-size:1.2rem;color:#fff;}
-    .mfav{font-size:24px;background:none;border:none;cursor:pointer;color:#999;transition:color .2s;padding:4px;}
-    .mfav:hover,.mfav.on{color:#ffd700;}
-    .mstat{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--border);font-size:14px;}
-    .mstat:last-of-type{border:none;}
-    .mstat b{color:#999;font-weight:600;}
-    .mbtns{display:flex;gap:10px;margin-top:20px;justify-content:center;}
-    .mbtns button{padding:12px 24px;border:none;border-radius:6px;cursor:pointer;font-weight:700;font-size:14px;transition:all .2s;}
-    .mbplay{background:#fff;color:#000;}
-    .mbplay:hover{background:#ddd;}
-    .mbclose{background:#252525;color:var(--text);border:1px solid var(--border);}
-    .mbclose:hover{background:#333;}
-    .popup{display:none;position:fixed;z-index:60;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
-    .popup.on{display:flex;}
-    .popup-box{background:#1a1a1a;padding:40px;border-radius:8px;max-width:520px;width:90%;color:var(--text);border:1px solid var(--border);max-height:80vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.7);}
-    .popup-box h2{margin-top:0;color:#fff;font-size:1.5rem;}
-    .popup-box p{line-height:1.8;color:#ccc;margin:14px 0;font-size:14px;}
-    .popup-foot{display:flex;gap:10px;margin-top:24px;justify-content:center;}
-    .pop-btn{padding:12px 32px;border:none;border-radius:6px;background:#fff;color:#000;font-weight:700;font-size:14px;cursor:pointer;}
-    .pop-btn:hover{background:#ddd;}
-    @media(max-width:1300px){#game-list{grid-template-columns:repeat(5,1fr);}}
-    @media(max-width:1050px){#game-list{grid-template-columns:repeat(4,1fr);}}
-    @media(max-width:768px){#game-list{grid-template-columns:repeat(3,1fr);gap:12px;}}
-    @media(max-width:480px){#game-list{grid-template-columns:repeat(2,1fr);}}
-  </style>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width,initial-scale=1" />
+	<title>Math Line</title>
+	<style>
+		:root {
+			--accent: #000;
+			--text: #fff;
+			--bg: #0a0a0a;
+			--card-bg: #1a1a1a;
+			--card-hover: #252525;
+			--border: #333;
+		}
+
+		*,
+		*::before,
+		*::after {
+			box-sizing: border-box;
+			margin: 0;
+			padding: 0;
+		}
+
+		html,
+		body {
+			height: 100%;
+			font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+			color: var(--text);
+			background: var(--bg);
+			overflow-x: hidden;
+		}
+
+		#topbar {
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			height: 60px;
+			background: #111;
+			z-index: 30;
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			padding: 0 24px;
+			border-bottom: 1px solid var(--border);
+			box-shadow: 0 1px 3px rgba(0, 0, 0, .5);
+		}
+
+		#logo {
+			font-size: 1.5rem;
+			font-weight: 900;
+			color: #fff;
+			white-space: nowrap;
+		}
+
+		#search {
+			flex: 1;
+			max-width: 400px;
+			background: #1a1a1a;
+			color: var(--text);
+			padding: 10px 16px;
+			font-size: 15px;
+			border-radius: 6px;
+			border: 1px solid var(--border);
+			outline: none;
+			transition: border-color .2s;
+		}
+
+		#search:focus {
+			border-color: #fff;
+			background: #252525;
+		}
+
+		#search::placeholder {
+			color: #666;
+		}
+
+		#top-right {
+			margin-left: auto;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		#settings-btn {
+			width: 40px;
+			height: 40px;
+			border-radius: 50%;
+			border: 1px solid var(--border);
+			background: #1a1a1a;
+			color: var(--text);
+			font-size: 18px;
+			cursor: pointer;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			transition: background .2s;
+		}
+
+		#settings-btn:hover {
+			background: #252525;
+		}
+
+		#main {
+			position: fixed;
+			top: 60px;
+			left: 0;
+			right: 0;
+			bottom: 0;
+			overflow-y: auto;
+			background: var(--bg);
+		}
+
+		#content {
+			padding: 32px 24px 40px;
+			max-width: 1400px;
+			margin: 0 auto;
+		}
+
+		.section-header {
+			display: flex;
+			align-items: center;
+			gap: 8px;
+			margin-bottom: 20px;
+		}
+
+		.section-title {
+			font-size: 1.1rem;
+			font-weight: 700;
+			color: #fff;
+		}
+
+		.section-count {
+			font-size: 13px;
+			color: #999;
+		}
+
+		#game-list {
+			display: grid;
+			grid-template-columns: repeat(6, 1fr);
+			gap: 16px;
+		}
+
+		.card {
+			background: var(--card-bg);
+			border-radius: 8px;
+			cursor: pointer;
+			overflow: hidden;
+			border: 1px solid var(--border);
+			transition: all .2s;
+			position: relative;
+		}
+
+		.card:hover {
+			transform: translateY(-2px);
+			background: var(--card-hover);
+			box-shadow: 0 4px 12px rgba(255, 255, 255, .1);
+		}
+
+		.card-thumb {
+			width: 100%;
+			aspect-ratio: 16/9;
+			position: relative;
+			overflow: hidden;
+			background: linear-gradient(135deg, #222, #111);
+		}
+
+		.card-initials {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			font-weight: 800;
+			color: rgba(255, 255, 255, .15);
+		}
+
+		.card-info {
+			padding: 12px;
+		}
+
+		/* FULL NAME - no truncation */
+		.card-name {
+			font-size: 14px;
+			font-weight: 600;
+			color: #fff;
+			word-break: break-word;
+			line-height: 1.4;
+		}
+
+		.card-fav {
+			position: absolute;
+			top: 8px;
+			right: 8px;
+			background: rgba(0, 0, 0, .7);
+			border: 1px solid var(--border);
+			cursor: pointer;
+			width: 32px;
+			height: 32px;
+			border-radius: 50%;
+			font-size: 14px;
+			color: #999;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			opacity: 0;
+			transition: all .2s;
+		}
+
+		.card:hover .card-fav {
+			opacity: 1;
+		}
+
+		.card-fav.on {
+			opacity: 1;
+			color: #ffd700;
+			background: rgba(0, 0, 0, .9);
+		}
+
+		/* Request card styling */
+		.card.req .card-name {
+			color: #f59e0b;
+		}
+
+		#overlay {
+			display: none;
+			position: fixed;
+			inset: 0;
+			z-index: 50;
+			background: #000;
+			flex-direction: column;
+		}
+
+		#overlay.on {
+			display: flex;
+		}
+
+		#gframe {
+			flex: 1;
+			width: 100%;
+			border: none;
+		}
+
+		#gload {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			background: #1a1a1a;
+			z-index: 2;
+		}
+
+		#gload.hide {
+			display: none;
+		}
+
+		.spin {
+			border: 4px solid #333;
+			border-top: 4px solid #fff;
+			border-radius: 50%;
+			width: 40px;
+			height: 40px;
+			animation: spin 1s linear infinite;
+			margin-bottom: 18px;
+		}
+
+		@keyframes spin {
+			to {
+				transform: rotate(360deg);
+			}
+		}
+
+		#bar-wrap {
+			width: 260px;
+			height: 6px;
+			background: #333;
+			border-radius: 99px;
+			overflow: hidden;
+			margin-top: 14px;
+		}
+
+		#bar {
+			height: 100%;
+			width: 0;
+			background: #fff;
+		}
+
+		#fs-btn,
+		#bk-btn {
+			position: fixed;
+			padding: 10px 16px;
+			border-radius: 6px;
+			border: 1px solid #fff;
+			cursor: pointer;
+			z-index: 60;
+			font-weight: 700;
+			background: #fff;
+			color: #000;
+			display: none;
+		}
+
+		#fs-btn {
+			right: 18px;
+			top: 18px;
+		}
+
+		#bk-btn {
+			left: 18px;
+			top: 18px;
+		}
+
+		#fs-btn:hover,
+		#bk-btn:hover {
+			background: #ddd;
+		}
+
+		#drawer {
+			position: fixed;
+			right: -420px;
+			top: 0;
+			bottom: 0;
+			width: 400px;
+			background: #111;
+			z-index: 40;
+			transition: right .3s;
+			overflow-y: auto;
+			border-left: 1px solid var(--border);
+		}
+
+		#drawer.on {
+			right: 0;
+		}
+
+		.dr-head {
+			padding: 20px 24px;
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			border-bottom: 1px solid var(--border);
+		}
+
+		.dr-head h2 {
+			color: #fff;
+			font-size: 1.2rem;
+		}
+
+		.dr-close {
+			background: none;
+			border: none;
+			color: #999;
+			font-size: 24px;
+			cursor: pointer;
+			padding: 4px;
+			transition: color .2s;
+		}
+
+		.dr-close:hover {
+			color: #fff;
+		}
+
+		.dr-panel {
+			padding: 20px 24px;
+		}
+
+		.sg {
+			margin: 16px 0;
+		}
+
+		.sg>span {
+			display: block;
+			color: #999;
+			font-weight: 700;
+			font-size: 12px;
+			text-transform: uppercase;
+			margin-bottom: 10px;
+		}
+
+		.opts {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			gap: 8px;
+		}
+
+		.opt {
+			padding: 10px;
+			border: 1px solid var(--border);
+			border-radius: 6px;
+			background: #1a1a1a;
+			color: #fff;
+			cursor: pointer;
+			font-weight: 600;
+			font-size: 13px;
+			transition: all .15s;
+			text-align: center;
+		}
+
+		.opt:hover {
+			background: #252525;
+			border-color: #fff;
+		}
+
+		.opt.on {
+			background: #fff;
+			color: #000;
+		}
+
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 55;
+			inset: 0;
+			background: rgba(0, 0, 0, .6);
+			backdrop-filter: blur(3px);
+		}
+
+		.modal.on {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.modal-box {
+			background: #1a1a1a;
+			padding: 32px;
+			border-radius: 8px;
+			max-width: 480px;
+			width: 90%;
+			color: var(--text);
+			border: 1px solid var(--border);
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
+		}
+
+		.modal-thumb {
+			width: 100%;
+			aspect-ratio: 16/9;
+			border-radius: 6px;
+			overflow: hidden;
+			margin-bottom: 20px;
+			position: relative;
+			background: #252525;
+		}
+
+		.modal-thumb-title {
+			position: absolute;
+			inset: 0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 1.2rem;
+			font-weight: 800;
+			color: rgba(255, 255, 255, .15);
+		}
+
+		.mtrow {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+			margin-bottom: 14px;
+		}
+
+		.mtrow h2 {
+			flex: 1;
+			font-size: 1.2rem;
+			color: #fff;
+		}
+
+		.mfav {
+			font-size: 24px;
+			background: none;
+			border: none;
+			cursor: pointer;
+			color: #999;
+			transition: color .2s;
+			padding: 4px;
+		}
+
+		.mfav:hover,
+		.mfav.on {
+			color: #ffd700;
+		}
+
+		.mstat {
+			display: flex;
+			justify-content: space-between;
+			padding: 10px 0;
+			border-bottom: 1px solid var(--border);
+			font-size: 14px;
+		}
+
+		.mstat:last-of-type {
+			border: none;
+		}
+
+		.mstat b {
+			color: #999;
+			font-weight: 600;
+		}
+
+		.mbtns {
+			display: flex;
+			gap: 10px;
+			margin-top: 20px;
+			justify-content: center;
+		}
+
+		.mbtns button {
+			padding: 12px 24px;
+			border: none;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: 700;
+			font-size: 14px;
+			transition: all .2s;
+		}
+
+		.mbplay {
+			background: #fff;
+			color: #000;
+		}
+
+		.mbplay:hover {
+			background: #ddd;
+		}
+
+		.mbclose {
+			background: #252525;
+			color: var(--text);
+			border: 1px solid var(--border);
+		}
+
+		.mbclose:hover {
+			background: #333;
+		}
+
+		.popup {
+			display: none;
+			position: fixed;
+			z-index: 60;
+			inset: 0;
+			background: rgba(0, 0, 0, .7);
+			backdrop-filter: blur(4px);
+			align-items: center;
+			justify-content: center;
+		}
+
+		.popup.on {
+			display: flex;
+		}
+
+		.popup-box {
+			background: #1a1a1a;
+			padding: 40px;
+			border-radius: 8px;
+			max-width: 520px;
+			width: 90%;
+			color: var(--text);
+			border: 1px solid var(--border);
+			max-height: 80vh;
+			overflow-y: auto;
+			box-shadow: 0 20px 60px rgba(0, 0, 0, .7);
+		}
+
+		.popup-box h2 {
+			margin-top: 0;
+			color: #fff;
+			font-size: 1.5rem;
+		}
+
+		.popup-box p {
+			line-height: 1.8;
+			color: #ccc;
+			margin: 14px 0;
+			font-size: 14px;
+		}
+
+		.popup-foot {
+			display: flex;
+			gap: 10px;
+			margin-top: 24px;
+			justify-content: center;
+		}
+
+		.pop-btn {
+			padding: 12px 32px;
+			border: none;
+			border-radius: 6px;
+			background: #fff;
+			color: #000;
+			font-weight: 700;
+			font-size: 14px;
+			cursor: pointer;
+		}
+
+		.pop-btn:hover {
+			background: #ddd;
+		}
+
+		@media(max-width:1300px) {
+			#game-list {
+				grid-template-columns: repeat(5, 1fr);
+			}
+		}
+
+		@media(max-width:1050px) {
+			#game-list {
+				grid-template-columns: repeat(4, 1fr);
+			}
+		}
+
+		@media(max-width:768px) {
+			#game-list {
+				grid-template-columns: repeat(3, 1fr);
+				gap: 12px;
+			}
+		}
+
+		@media(max-width:480px) {
+			#game-list {
+				grid-template-columns: repeat(2, 1fr);
+			}
+		}
+	</style>
 </head>
+
 <body>
-  <div id="topbar">
-    <div id="logo">Math Line</div>
-    <input id="search" type="search" placeholder="Search games..." aria-label="Search">
-    <div id="top-right"><button id="settings-btn" title="Settings">⚙️</button></div>
-  </div>
-  <div id="main">
-    <div id="content">
-      <div class="section-header">
-        <span class="section-title" id="section-label">All Games</span>
-        <span class="section-count" id="counter"></span>
-      </div>
-      <div id="game-list"></div>
-    </div>
-  </div>
-  <div id="overlay">
-    <div id="gload">
-      <div class="spin"></div>
-      <p style="color:#fff;font-weight:700;margin:0;">Loading game...</p>
-      <div id="bar-wrap"><div id="bar"></div></div>
-    </div>
-    <iframe id="gframe" title="Game" allow="fullscreen" sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>
-  </div>
-  <button id="fs-btn">⛶ Fullscreen</button>
-  <button id="bk-btn">← Back</button>
-  <div id="drawer">
-    <div class="dr-head">
-      <h2>⚙️ Settings</h2><button class="dr-close" id="dr-close">✕</button>
-    </div>
-    <div class="dr-panel">
-      <div class="sg"><span>Show Favorites Button</span>
-        <div class="opts">
-          <div class="opt on" data-showfav="on">On</div>
-          <div class="opt" data-showfav="off">Off</div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="modal" id="modal">
-    <div class="modal-box">
-      <div class="modal-thumb">
-        <div id="m-thumb-grad" style="width:100%;height:100%;"></div>
-        <div class="modal-thumb-title" id="m-thumb-title"></div>
-      </div>
-      <div class="mtrow"><h2 id="m-name"></h2><button class="mfav" id="m-fav">☆</button></div>
-      <div class="mstat"><b>Times Played</b><span id="m-played"></span></div>
-      <div class="mstat"><b>Last Played</b><span id="m-last"></span></div>
-      <div class="mstat"><b>Play Time</b><span id="m-time"></span></div>
-      <div class="mbtns">
-        <button class="mbplay" id="m-play">▶️ Play</button>
-        <button class="mbclose" id="m-close">Close</button>
-      </div>
-    </div>
-  </div>
-  <div class="popup" id="upd-popup">
-    <div class="popup-box">
-      <h2>🎉 What's New</h2>
-      <p>• Clean, desgin next I will work on adding games and fixing them <br> also if you come across any broken game please send in a form "game request form"
-      <div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
-    </div>
-  </div>
-<script>
-(function(){
+	<div id="topbar">
+		<div id="logo">Math Line</div>
+		<input id="search" type="search" placeholder="Search games..." aria-label="Search">
+		<div id="top-right"><button id="settings-btn" title="Settings">⚙️</button></div>
+	</div>
+	<div id="main">
+		<div id="content">
+			<div class="section-header">
+				<span class="section-title" id="section-label">All Games</span>
+				<span class="section-count" id="counter"></span>
+			</div>
+			<div id="game-list"></div>
+		</div>
+	</div>
+	<div id="overlay">
+		<div id="gload">
+			<div class="spin"></div>
+			<p style="color:#fff;font-weight:700;margin:0;">Loading game...</p>
+			<div id="bar-wrap">
+				<div id="bar"></div>
+			</div>
+		</div>
+		<iframe id="gframe" title="Game" allow="fullscreen"
+			sandbox="allow-scripts allow-same-origin allow-pointer-lock"></iframe>
+	</div>
+	<button id="fs-btn">⛶ Fullscreen</button>
+	<button id="bk-btn">← Back</button>
+	<div id="drawer">
+		<div class="dr-head">
+			<h2>⚙️ Settings</h2><button class="dr-close" id="dr-close">✕</button>
+		</div>
+		<div class="dr-panel">
+			<div class="sg"><span>Show Favorites Button</span>
+				<div class="opts">
+					<div class="opt on" data-showfav="on">On</div>
+					<div class="opt" data-showfav="off">Off</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal" id="modal">
+		<div class="modal-box">
+			<div class="modal-thumb">
+				<div id="m-thumb-grad" style="width:100%;height:100%;"></div>
+				<div class="modal-thumb-title" id="m-thumb-title"></div>
+			</div>
+			<div class="mtrow">
+				<h2 id="m-name"></h2><button class="mfav" id="m-fav">☆</button>
+			</div>
+			<div class="mstat"><b>Times Played</b><span id="m-played"></span></div>
+			<div class="mstat"><b>Last Played</b><span id="m-last"></span></div>
+			<div class="mstat"><b>Play Time</b><span id="m-time"></span></div>
+			<div class="mbtns">
+				<button class="mbplay" id="m-play">▶️ Play</button>
+				<button class="mbclose" id="m-close">Close</button>
+			</div>
+		</div>
+	</div>
+	<div class="popup" id="upd-popup">
+		<div class="popup-box">
+			<h2>🎉 What's New</h2>
+			<p>• Clean, desgin next I will work on adding games and fixing them <br> also if you come across any broken game please send in a form "game request form"<br> Also all games should be fixed if you find one that doenst work send in a form
+				<div class="popup-foot"><button class="pop-btn" id="upd-ok">Got it!</button></div>
+		</div>
+	</div>
+	<script>
+		(function(){
 'use strict';
 const mem={};
 const ls=(()=>{try{localStorage.setItem('_','1');localStorage.removeItem('_');return localStorage;}catch(e){return{getItem:k=>mem[k]??null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];}}}})();
@@ -180,9 +715,119 @@ function initialsFor(name){return name.split(' ').slice(0,2).map(w=>w[0]||'').jo
 const $=id=>document.getElementById(id);
 const gameList=$('game-list'),counter=$('counter'),sectionLabel=$('section-label'),search=$('search'),overlay=$('overlay'),gframe=$('gframe'),gload=$('gload'),bar=$('bar'),fsBtn=$('fs-btn'),bkBtn=$('bk-btn'),settingsBtn=$('settings-btn'),drawer=$('drawer'),modal=$('modal'),mName=$('m-name'),mPlayed=$('m-played'),mLast=$('m-last'),mTime=$('m-time'),mPlay=$('m-play'),mClose=$('m-close'),mFav=$('m-fav');
 
-const _G=[{n:'10 Minutes Till Dawn',u:'10min.html'},{n:'1v1 Lol',u:'1v1-lol.html'},{n:'A Small World Cup',u:'A-small-world-cup.html'},{n:'Age Of War',u:'Age-of-war.html'},{n:'Bad Ice Cream 3',u:'BI3.html'},{n:'Ballz',u:'Ballz.html'},{n:'Basket Random',u:'Basket-random.html'},{n:'Basketball Stars',u:'Basketball-stars.html'},{n:'Binding of Isaac',u:'Binding-of-issac.html'},{n:'BitLife',u:'Bit-life.html'},{n:'Bit Planes',u:'Bit-planes.html'},{n:'Block Blast',u:'Block-blast.html'},{n:'Bob The Robber 5',u:'bob-robber.html'},{n:'Brotato',u:'BroT.html'},{n:'BTD5',u:'BTD5.html'},{n:'Burrito Bison',u:'BB.html'},{n:'Burrito Bison Launcha Libre',u:'BL.html'},{n:'Burrito Bison Revenge',u:'BR.html'},{n:'Capybara Clicker',u:'Cappybara-clicker.html'},{n:'Car Crash 3D',u:'Car-crash-3d.html'},{n:'Choppy Orc',u:'ChoppyO.html'},{n:'Cluster Rush',u:'Cluster-rush.html'},{n:'Crazy Cattle',u:'Crazy-cattle.html'},{n:'Crossy Road',u:'Crossy-road.html'},{n:'CSGO Clicker',u:'CsGo-clicker.html'},{n:'Doge Miner',u:'Doge-miner.html'},{n:'Draw Climber',u:'Draw-climber.html'},{n:'Drift Boss',u:'Drift-boss.html'},{n:'Drive Mad',u:'Drive-mad.html'},{n:'Duck Life 4',u:'Duck-life-4.html'},{n:'Duck Life 5',u:'Duck-life-5.html'},{n:'Dungeons & Degenerate Gamblers',u:'DaDG.html'},{n:'Eggy Car',u:'eggy.html'},{n:'Escape Road',u:'Escape-road.html'},{n:'Factory Balls 2',u:'Factory-balls2.html'},{n:'Factory Balls 3',u:'Factory-balls3.html'},{n:'Final Earth 2',u:'Final-earth2.html'},{n:'Geometry Dash Lite',u:'Geometry-Dash.html'},{n:'Gladi Hoppers',u:'Gladi-hoppers.html'},{n:'Granny 2',u:'Granny2.html'},{n:'Granny 3',u:'Granny3.html'},{n:'Gun Spin',u:'Gun-spin.html'},{n:'Happy Wheels',u:'Happy-wheels.html'},{n:'Hardware Tycoon',u:'Hardware-tycoon.html'},{n:'Hole.io',u:'Hole-io.html'},{n:'House of Hazards',u:'house-of-hazards.html'},{n:'Idle Breakout',u:'Idle-breakout.html'},{n:'Idle Miner Tycoon',u:'Idle-miner-tycoon.html'},{n:'Indian Truck Simulator',u:'Indian-truck-simulator.html'},{n:'Infinite Craft',u:'Infinte-craft.html'},{n:'Jack Smith',u:'Jack-smith.html'},{n:'Jet Rush',u:'jet.html'},{n:'Jetpack Joy Ride',u:'Jetpack-joy-ride.html'},{n:'Learn To Fly 3',u:'Learn-to-fly-3.html'},{n:'Line Rider',u:'Line-rider.html'},{n:'Malidin Stun Cars',u:'Malidin-stun-cars.html'},{n:'Melon Playground',u:'Melon-playground.html'},{n:'Minecraft',u:'EaglerCraft 1.12 [wasm].html'},{n:'Mob Control',u:'Mob-control.html'},{n:'Moto X3M 2',u:'Moto-x3m-2.html'},{n:'Moto X3M Pool Party',u:'motobp.html'},{n:'Moto X3M Spooky Land',u:'motosp.html'},{n:'Moto X3M Winter',u:'Moto-x3m-winter.html'},{n:'Mr. Mine',u:'miner.html'},{n:"Papa's Freezeria",u:'Pf.html'},{n:"Papa's Pastaria",u:'Pp.html'},{n:"Papa's Sushiria",u:'Ps.html'},{n:'Pixel Battleground',u:'pg.html'},{n:'Plants vs Zombies',u:'Plants-vs-zombies.html'},{n:'Pokemon Emerald Randomized',u:'PER.html'},{n:'Poly Track',u:'Poly-track.html'},{n:'Push Your Luck',u:'Push-your-luck.html'},{n:'QWOP',u:'QWOP.html'},{n:'Ragdoll Archers',u:'Ragdoll-Archers.html'},{n:'Ragdoll Hit',u:'Ragdoll-hit.html'},{n:'Ragdoll Soccer',u:'Ragdoll-soccer.html'},{n:'Retro Bowl',u:'Retro-bowl.html'},{n:'Rocket League',u:'goal.html'},{n:'Rooftop Snipers',u:'RF.html'},{n:'Shred Sauce',u:'ShredS.html'},{n:'Slope 3',u:'Slope-3.html'},{n:'Snow Rider',u:'Snow-Rider.html'},{n:'Space Waves',u:'Space-waves.html'},{n:'Stick Man Hook',u:'Stick-man-hook.html'},{n:'Subway Surfers Iceland',u:'Subway-iceland.html'},{n:'Subway Surfers London',u:'Subway-london.html'},{n:'Subway Surfers Mexico',u:'Subway-mexico.html'},{n:'Subway Surfers Miami',u:'Subway-miami.html'},{n:'Subway Surfers Winter',u:'Subway-Winter.html'},{n:'Swords And Sandals',u:'Swords-and-sandlas.html'},{n:'Tag',u:'tag.html'},{n:'Tall Man Run',u:'tall-man-run.html'},{n:'Time Shooter',u:'Time-shooter.html'},{n:'Tiny Fishing',u:'Tiny-fishing.html'},{n:'Traffic Jam 3D',u:'Tj.html'},{n:'Troll Face Quest 10',u:'Troll-face-10.html'},{n:'Troll Face Quest 11',u:'Troll-face-11.html'},{n:'Troll Face Quest 12',u:'Troll-face-12.html'},{n:'Tunnel Rush',u:'Tunnel-rush.html'},{n:'Ultimate Car Simulator',u:'Ucarsim.html'},{n:'Ultimate Car Simulator 3',u:'ultimate-car-simulator.html'},{n:'Unicycle Hero',u:'Unicycle-hero.html'},{n:'Vex 8',u:'Vex-8.html'},{n:'Wordle',u:'Wordle.html'},{n:'Zelda Ocarina',u:'Zelda0.html'}];
-const ALL=[..._G].sort((a,b)=>a.n.localeCompare(b.n));
-const URL_MAP=new Map(ALL.map(x=>[x.u,x.n]));
+const _G = [
+{ n: "10 Minutes Till Dawn", u: "10min.html" },
+{ n: "1v1 Lol", u: "1v1-lol.html" },
+{ n: "A Small World Cup", u: "A-small-world-cup.html" },
+{ n: "Age Of War", u: "Age-of-war.html" },
+{ n: "Bad Ice Cream 3", u: "BI3.html" },
+{ n: "Ballz", u: "Ballz.html" },
+{ n: "Basket Random", u: "Basket-random.html" },
+{ n: "Basketball Stars", u: "Basketball-stars.html" },
+{ n: "Binding of Isaac", u: "Binding-of-issac.html" },
+{ n: "Bit Planes", u: "Bit-planes.html" },
+{ n: "BitLife", u: "Bit-life.html" },
+{ n: "Block Blast", u: "Block-blast.html" },
+{ n: "Bob The Robber 5", u: "bob-robber.html" },
+{ n: "Brotato", u: "BroT.html" },
+{ n: "BTD5", u: "BTD5.html" },
+{ n: "Burrito Bison", u: "BB.html" },
+{ n: "Burrito Bison Launcha Libre", u: "BL.html" },
+{ n: "Burrito Bison Revenge", u: "BR.html" },
+{ n: "Capybara Clicker", u: "Cappybara-clicker.html" },
+{ n: "Car Crash 3D", u: "Car-crash-3d.html" },
+{ n: "Choppy Orc", u: "ChoppyO.html" },
+{ n: "Cluster Rush", u: "Cluster-rush.html" },
+{ n: "Crazy Cattle", u: "Crazy-cattle.html" },
+{ n: "Crossy Road", u: "Crossy-road.html" },
+{ n: "CSGO Clicker", u: "CsGo-clicker.html" },
+{ n: "Doge Miner", u: "Doge-miner.html" },
+{ n: "Draw Climber", u: "Draw-climber.html" },
+{ n: "Drift Boss", u: "Drift-boss.html" },
+{ n: "Drive Mad", u: "Drive-mad.html" },
+{ n: "Duck Life 4", u: "Duck-life-4.html" },
+{ n: "Duck Life 5", u: "Duck-life-5.html" },
+{ n: "Dungeons & Degenerate Gamblers", u: "DaDG.html" },
+{ n: "Eggy Car", u: "eggy.html" },
+{ n: "Escape Road", u: "Escape-road.html" },
+{ n: "Factory Balls 2", u: "Factory-balls2.html" },
+{ n: "Factory Balls 3", u: "Factory-balls3.html" },
+{ n: "Final Earth 2", u: "Final-earth2.html" },
+{ n: "Geometry Dash Lite", u: "Geometry-Dash.html" },
+{ n: "Gladi Hoppers", u: "Gladi-hoppers.html" },
+{ n: "Granny 2", u: "Granny2.html" },
+{ n: "Granny 3", u: "Granny3.html" },
+{ n: "Gun Spin", u: "Gun-spin.html" },
+{ n: "Happy Wheels", u: "Happy-wheels.html" },
+{ n: "Hardware Tycoon", u: "Hardware-tycoon.html" },
+{ n: "Hole.io", u: "Hole-io.html" },
+{ n: "House of Hazards", u: "house-of-hazards.html" },
+{ n: "Idle Breakout", u: "Idle-breakout.html" },
+{ n: "Idle Miner Tycoon", u: "Idle-miner-tycoon.html" },
+{ n: "Indian Truck Simulator", u: "Indian-truck-simulator.html" },
+{ n: "Infinite Craft", u: "Infinte-craft.html" },
+{ n: "Jack Smith", u: "Jack-smith.html" },
+{ n: "Jet Rush", u: "jet.html" },
+{ n: "Jetpack Joy Ride", u: "Jetpack-joy-ride.html" },
+{ n: "Learn To Fly 3", u: "Learn-to-fly-3.html" },
+{ n: "Line Rider", u: "Line-rider.html" },
+{ n: "Melon Playground", u: "Melon-playground.html" },
+{ n: "Minecraft", u: "EaglerCraft 1.12 [wasm].html" },
+{ n: "Mob Control", u: "Mob-control.html" },
+{ n: "Moto X3M 2", u: "Moto-x3m-2.html" },
+{ n: "Moto X3M Pool Party", u: "motobp.html" },
+{ n: "Moto X3M Spooky Land", u: "motosp.html" },
+{ n: "Moto X3M Winter", u: "Moto-x3m-winter.html" },
+{ n: "Mr. Mine", u: "miner.html" },
+{ n: "Papa's Freezeria", u: "Pf.html" },
+{ n: "Papa's Pastaria", u: "Pp.html" },
+{ n: "Papa's Sushiria", u: "Ps.html" },
+{ n: "Pixel Battleground", u: "pg.html" },
+{ n: "Plants vs Zombies", u: "Plants-vs-zombies.html" },
+{ n: "Poly Track", u: "Poly-track.html" },
+{ n: "QWOP", u: "QWOP.html" },
+{ n: "Ragdoll Archers", u: "Ragdoll-Archers.html" },
+{ n: "Ragdoll Hit", u: "Ragdoll-hit.html" },
+{ n: "Ragdoll Soccer", u: "Ragdoll-soccer.html" },
+{ n: "Retro Bowl", u: "Retro-bowl.html" },
+{ n: "Rocket League", u: "goal.html" },
+{ n: "Rooftop Snipers", u: "RF.html" },
+{ n: "Shred Sauce", u: "ShredS.html" },
+{ n: "Slope 3", u: "Slope-3.html" },
+{ n: "Snow Rider", u: "Snow-Rider.html" },
+{ n: "Space Waves", u: "Space-waves.html" },
+{ n: "Stick Man Hook", u: "Stick-man-hook.html" },
+{ n: "Subway Surfers Iceland", u: "Subway-iceland.html" },
+{ n: "Subway Surfers London", u: "Subway-london.html" },
+{ n: "Subway Surfers Mexico", u: "Subway-mexico.html" },
+{ n: "Subway Surfers Miami", u: "Subway-miami.html" },
+{ n: "Subway Surfers Winter", u: "Subway-Winter.html" },
+{ n: "Swords And Sandals", u: "Swords-and-sandlas.html" },
+{ n: "Tag", u: "tag.html" },
+{ n: "Tall Man Run", u: "tall-man-run.html" },
+{ n: "Time Shooter", u: "Time-shooter.html" },
+{ n: "Tiny Fishing", u: "Tiny-fishing.html" },
+{ n: "Traffic Jam 3D", u: "Tj.html" },
+{ n: "Troll Face Quest 10", u: "Troll-face-10.html" },
+{ n: "Troll Face Quest 11", u: "Troll-face-11.html" },
+{ n: "Troll Face Quest 12", u: "Troll-face-12.html" },
+{ n: "Tunnel Rush", u: "Tunnel-rush.html" },
+{ n: "Ultimate Car Simulator", u: "Ucarsim.html" },
+{ n: "Ultimate Car Simulator 3", u: "ultimate-car-simulator.html" },
+{ n: "Unicycle Hero", u: "Unicycle-hero.html" },
+{ n: "Vex 8", u: "Vex-8.html" },
+{ n: "Wordle", u: "Wordle.html" },
+{ n: "Zelda Ocarina", u: "Zelda0.html" },
+{ n: "Malidin Stun Cars", u: "Malidin-stun-cars.html" },
+{ n: "Pokemon Emerald Randomized", u: "PER.html" },
+{ n: "Push Your Luck", u: "Push-your-luck.html" },
+{ n: "Unicycle Hero", u: "Unicycle-hero.html" },
+{ n: "Shred Sauce", u: "ShredS.html" },
+{ n: "Swords And Sandals", u: "Swords-and-sandlas.html" }
+];
+
+const ALL = [..._G].sort((a, b) => a.n.localeCompare(b.n));
+const URL_MAP = new Map(ALL.map(x => [x.u, x.n]));
 
 let activeSearch='',curModal=null,gameStart=null;
 let showFav=get('showfav')!=='off';
@@ -281,6 +926,7 @@ const VER='2.0';
 if(ls.getItem('ml_v')!==VER){$('upd-popup').classList.add('on');}
 $('upd-ok').onclick=()=>{ls.setItem('ml_v',VER);$('upd-popup').classList.remove('on');};
 })();
-</script>
+	</script>
 </body>
+
 </html>
